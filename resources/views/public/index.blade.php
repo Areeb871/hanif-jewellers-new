@@ -643,6 +643,7 @@ towering peaks</div>
             </button>
         </div>
     </section>
+    
     <section class="onlineStore d-none d-md-block" style="background-color:#f6f3ee;">
     <h2 class="text-center" style="font-family:Cormorant Garamond, serif;">
         Bespoke Collections

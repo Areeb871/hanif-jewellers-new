@@ -4,6 +4,11 @@
 # Ignore uploaded files
 /uploads/
 
+
+.env
+.vendor/
+
+
 # Keep uploads folder if needed
 # /uploads/*
 # !/uploads/.gitkeep
