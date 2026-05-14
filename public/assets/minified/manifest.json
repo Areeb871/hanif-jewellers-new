@@ -1,0 +1,63 @@
+{
+    "js": {
+        "js\/custom\/landing.js": {
+            "original": "public\/assets\/js\/custom\/landing.js",
+            "minified": "public\/assets\/minified\/js\/custom\/landing.js",
+            "originalSize": 172,
+            "minifiedSize": 172,
+            "savings": "0%"
+        },
+        "js\/custom\/widgets.js": {
+            "original": "public\/assets\/js\/custom\/widgets.js",
+            "minified": "public\/assets\/minified\/js\/custom\/widgets.js",
+            "originalSize": 37015,
+            "minifiedSize": 36728,
+            "savings": "0.78%"
+        },
+        "js\/scripts.bundle.js": {
+            "original": "public\/assets\/js\/scripts.bundle.js",
+            "minified": "public\/assets\/minified\/js\/scripts.bundle.js",
+            "originalSize": 98438,
+            "minifiedSize": 98262,
+            "savings": "0.18%"
+        },
+        "js\/widgets.bundle.js": {
+            "original": "public\/assets\/js\/widgets.bundle.js",
+            "minified": "public\/assets\/minified\/js\/widgets.bundle.js",
+            "originalSize": 225532,
+            "minifiedSize": 54396,
+            "savings": "75.88%"
+        },
+        "f_assets\/js\/style.js": {
+            "original": "public\/assets\/f_assets\/js\/style.js",
+            "minified": "public\/assets\/minified\/f_assets\/js\/style.js",
+            "originalSize": 2428,
+            "minifiedSize": 1100,
+            "savings": "54.7%"
+        }
+    },
+    "css": {
+        "css\/custom.css": {
+            "original": "public\/assets\/css\/custom.css",
+            "minified": "public\/assets\/minified\/css\/custom.css",
+            "originalSize": 2602,
+            "minifiedSize": 1581,
+            "savings": "39.24%"
+        },
+        "css\/style.bundle.css": {
+            "original": "public\/assets\/css\/style.bundle.css",
+            "minified": "public\/assets\/minified\/css\/style.bundle.css",
+            "originalSize": 1293140,
+            "minifiedSize": 1292288,
+            "savings": "0.07%"
+        },
+        "f_assets\/css\/style.css": {
+            "original": "public\/assets\/f_assets\/css\/style.css",
+            "minified": "public\/assets\/minified\/f_assets\/css\/style.css",
+            "originalSize": 22646,
+            "minifiedSize": 15786,
+            "savings": "30.29%"
+        }
+    },
+    "generated": "2025-10-27 12:37:10"
+}

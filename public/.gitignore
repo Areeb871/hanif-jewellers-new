@@ -1,0 +1,9 @@
+# Ignore frontend image folder
+/assets/f_assets/image/
+
+# Ignore uploaded files
+/uploads/
+
+# Keep uploads folder if needed
+# /uploads/*
+# !/uploads/.gitkeep

@@ -1,0 +1,165 @@
+warning: in the working copy of 'app/Http/Controllers/HomeController.php', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/app/Http/Controllers/HomeController.php b/app/Http/Controllers/HomeController.php[m
+[1mindex 895b032..6889c3c 100644[m
+[1m--- a/app/Http/Controllers/HomeController.php[m
+[1m+++ b/app/Http/Controllers/HomeController.php[m
+[36m@@ -1,6 +1,8 @@[m
+ <?php[m
+ [m
+ namespace App\Http\Controllers;[m
+[32m+[m[32muse Illuminate\Support\Collection;[m
+[32m+[m[32muse Illuminate\Database\Eloquent\Builder;[m
+ use Illuminate\Support\Facades\Auth;[m
+ use App\Models\Categories;[m
+ use App\Models\Subcategory;[m
+[36m@@ -11,12 +13,60 @@[m [muse Illuminate\Support\Facades\Log;[m
+ use App\Models\ProductImages;[m
+ use App\Models\ProductTags;[m
+ use App\Models\Tags;[m
+[32m+[m[32muse App\Models\EhedGalleryImage;[m
+ use Illuminate\Support\Str;[m
+ [m
+ use Illuminate\Http\Request;[m
+ [m
+ class HomeController extends Controller[m
+ {[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Add tag matching clauses for slug and (optionally) strict word-boundary names.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    protected function addTagMatchCondition($query, string $variant, bool $useWordBoundary = false): void[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $normalized = strtolower($variant);[m
+[32m+[m
+[32m+[m[32m        $query->orWhereRaw('LOWER(slug) = ?', [$normalized]);[m
+[32m+[m
+[32m+[m[32m        if ($useWordBoundary) {[m
+[32m+[m[32m            $query->orWhereRaw('LOWER(name) REGEXP ?', [$this->buildWordBoundaryPattern($normalized)]);[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m            $query->orWhereRaw('LOWER(name) LIKE ?', ["%{$normalized}%"]);[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Build a case-insensitive word-boundary regexp for gender tags.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    protected function buildWordBoundaryPattern(string $variant): string[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $safeVariant = preg_quote(strtolower($variant), '/');[m
+[32m+[m
+[32m+[m[32m        return '(^|[^a-z0-9])' . $safeVariant . '([^a-z0-9]|$)';[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Apply a gender-specific filter that guards against partial substring matches.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    protected function applyGenderFilter(Builder $query, Collection $genderTags, callable $expandToSlugVariants): void[m
+[32m+[m[32m    {[m
+[32m+[m[32m        if ($genderTags->isEmpty()) {[m
+[32m+[m[32m            return;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        $query->whereHas('tags', function($q) use ($genderTags, $expandToSlugVariants) {[m
+[32m+[m[32m            $q->where(function($qq) use ($genderTags, $expandToSlugVariants) {[m
+[32m+[m[32m                foreach ($genderTags as $g) {[m
+[32m+[m[32m                    $variants = $expandToSlugVariants($g);[m
+[32m+[m[32m                    foreach ($variants as $variant) {[m
+[32m+[m[32m                        $this->addTagMatchCondition($qq, $variant, true);[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m            });[m
+[32m+[m[32m        });[m
+[32m+[m[32m    }[m
+[32m+[m
+     public function index()[m
+     {[m
+         try {[m
+[36m@@ -342,7 +392,26 @@[m [mclass HomeController extends Controller[m
+     }[m
+     public function ehed()[m
+     {[m
+[31m-        return view('public.ehed');[m
+[32m+[m[32m        // Get all active gallery images ordered by display_order (we need up to 14 images)[m
+[32m+[m[32m        $allImages = EhedGalleryImage::where('is_active', true)[m
+[32m+[m[32m            ->orderBy('display_order', 'asc')[m
+[32m+[m[32m            ->orderBy('created_at', 'desc')[m
+[32m+[m[32m            ->limit(14)[m
+[32m+[m[32m            ->get();[m
+[32m+[m[41m        [m
+[32m+[m[32m        // First 4 images for gallery[m
+[32m+[m[32m        $galleryImages = $allImages->take(4);[m
+[32m+[m[41m        [m
+[32m+[m[32m        // Next 2 images for side by side (images 5-6, index 4-5)[m
+[32m+[m[32m        $productImages = $allImages->slice(4, 2);[m
+[32m+[m[41m        [m
+[32m+[m[32m        // Next 4 images for bottom section first row (images 7-10, index 6-9)[m
+[32m+[m[32m        $bottomImages = $allImages->slice(6, 4);[m
+[32m+[m[41m        [m
+[32m+[m[32m        // Next 4 images for bottom section second row (images 11-14, index 10-13)[m
+[32m+[m[32m        $bottomImagesRow2 = $allImages->slice(10, 4);[m
+[32m+[m[41m        [m
+[32m+[m[32m        return view('public.ehed', compact('galleryImages', 'productImages', 'bottomImages', 'bottomImagesRow2'));[m
+     }[m
+     public function cleopatra()[m
+     {[m
+[36m@@ -1096,19 +1165,7 @@[m [mclass HomeController extends Controller[m
+         };[m
+ [m
+         // Apply filters[m
+[31m-        if ($gender->isNotEmpty()) {[m
+[31m-            $productsQuery->whereHas('tags', function($q) use ($gender, $expandToSlugVariants) {[m
+[31m-                $q->where(function($qq) use ($gender, $expandToSlugVariants) {[m
+[31m-                    foreach ($gender as $g) {[m
+[31m-                        $variants = $expandToSlugVariants($g);[m
+[31m-                        foreach ($variants as $variant) {[m
+[31m-                            $qq->orWhereRaw('LOWER(slug) = ?', [$variant])[m
+[31m-                               ->orWhereRaw('LOWER(name) LIKE ?', ["%{$variant}%"]);[m
+[31m-                        }[m
+[31m-                    }[m
+[31m-                });[m
+[31m-            });[m
+[31m-        }[m
+[32m+[m[32m        $this->applyGenderFilter($productsQuery, $gender, $expandToSlugVariants);[m
+ [m
+         if ($collection->isNotEmpty()) {[m
+             $productsQuery->whereHas('tags', function($q) use ($collection, $expandToSlugVariants) {[m
+[36m@@ -1259,19 +1316,7 @@[m [mclass HomeController extends Controller[m
+         };[m
+ [m
+         // Apply filters[m
+[31m-        if ($gender->isNotEmpty()) {[m
+[31m-            $productsQuery->whereHas('tags', function($q) use ($gender, $expandToSlugVariants) {[m
+[31m-                $q->where(function($qq) use ($gender, $expandToSlugVariants) {[m
+[31m-                    foreach ($gender as $g) {[m
+[31m-                        $variants = $expandToSlugVariants($g);[m
+[31m-                        foreach ($variants as $variant) {[m
+[31m-                            $qq->orWhereRaw('LOWER(slug) = ?', [$variant])[m
+[31m-                               ->orWhereRaw('LOWER(name) LIKE ?', ["%{$variant}%"]);[m
+[31m-                        }[m
+[31m-                    }[m
+[31m-                });[m
+[31m-            });[m
+[31m-        }[m
+[32m+[m[32m        $this->applyGenderFilter($productsQuery, $gender, $expandToSlugVariants);[m
+ [m
+         if ($series->isNotEmpty()) {[m
+             $productsQuery->whereHas('tags', function($q) use ($series, $expandToSlugVariants) {[m
+[36m@@ -1422,19 +1467,7 @@[m [mclass HomeController extends Controller[m
+         };[m
+ [m
+         // Apply filters[m
+[31m-        if ($gender->isNotEmpty()) {[m
+[31m-            $productsQuery->whereHas('tags', function($q) use ($gender, $expandToSlugVariants) {[m
+[31m-                $q->where(function($qq) use ($gender, $expandToSlugVariants) {[m
+[31m-                    foreach ($gender as $g) {[m
+[31m-                        $variants = $expandToSlugVariants($g);[m
+[31m-                        foreach ($variants as $variant) {[m
+[31m-                            $qq->orWhereRaw('LOWER(slug) = ?', [$variant])[m
+[31m-                               ->orWhereRaw('LOWER(name) LIKE ?', ["%{$variant}%"]);[m
+[31m-                        }[m
+[31m-                    }[m
+[31m-                });[m
+[31m-            });[m
+[31m-        }[m
+[32m+[m[32m        $this->applyGenderFilter($productsQuery, $gender, $expandToSlugVariants);[m
+ [m
+         if ($series->isNotEmp
