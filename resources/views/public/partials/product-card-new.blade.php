@@ -39,22 +39,13 @@
         min-height: fit-content;
     }
     
-    /* Button spacing */
+    /* Button spacing — transform/opacity only (same easing as image zoom) */
     .addToCartProductDetailsTop .card-body .discover-more-btn {
         margin-top: 0.5rem;
-        opacity: 0.8;
-        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                    opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        transform: translateY(2px);
         backface-visibility: hidden;
-    }
-    
-    /* Show Discover More button prominently on hover - like Chopard */
-    .addToCartProductDetailsTop:hover .card-body .discover-more-btn {
-        opacity: 1;
-        transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        -webkit-backface-visibility: hidden;
+        transform-origin: center center;
+        will-change: transform, opacity;
     }
     
     /* Consistent spacing for name and price */
@@ -65,12 +56,14 @@
         margin-bottom: 0.35rem;
     }
     
-    .addToCartProductDetailsTop .carousel .carousel-item img {
-        transition: transform 0.3s ease;
+    .addToCartProductDetailsTop .carousel .carousel-item img,
+    .addToCartProductDetailsTop .product-image {
+        transition: transform 0.5s ease;
         transform-origin: center center;
     }
     
-    .addToCartProductDetailsTop:hover .carousel .carousel-item img {
+    .addToCartProductDetailsTop:hover .carousel .carousel-item img,
+    .addToCartProductDetailsTop:hover .product-image {
         transform: scale(1.05);
     }
     
@@ -97,12 +90,37 @@
             transform: translateY(-2px);
         }
         
-        .addToCartProductDetailsTop:hover .card-body .card-text + .discover-more-btn {
-            transform: translateY(0) !important;
-            opacity: 1 !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Online store: very subtle card depth */
+    .onlineStore .addToCartProductDetailsTop {
+        contain: layout style;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    /*
+     * Online store: override global style.css (visibility:hidden + 1.2s fade)
+     * so Discover More uses the same smooth transform as the product image.
+     */
+    @media (min-width: 768px) {
+        .onlineStore .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn {
+            visibility: visible !important;
+            opacity: 0;
+            pointer-events: none;
+            transform: none;
+            box-shadow: none !important;
+            transition: opacity 0.5s ease !important;
         }
-        
+
+        .onlineStore .addToCartProductDetailsTop:hover .addToCartProductDetails.discover-more-btn,
+        .onlineStore .addToCartProductDetailsTop:hover .card-body .discover-more-btn {
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: none !important;
+            box-shadow: none !important;
+            transition: opacity 0.5s ease !important;
+        }
     }
     
     /* Swiper-style pagination container */

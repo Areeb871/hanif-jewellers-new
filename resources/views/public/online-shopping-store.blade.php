@@ -2,159 +2,17 @@
 
 @section('content')
 <style>
-    /* =========================
-   Banner Container
-========================= */
-.custom-banner{
-    position: relative;
-    width: 100%;
-    height: 130vh;
-    overflow: hidden;
-    margin-top: -10rem;
-}
-
-/* Video Background */
-.custom-banner-video{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-}
-
-/* Image Background */
-.custom-banner-image{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-}
-                /* =========================
-   Overlay Content (Haphazard + Discover + Location)
-   Button starts from the "H" of Haphazard (left aligned)
-========================= */
-.banner-content {
-    position: absolute;
-    right: 10%;   /* try 10%–20% */
-    top: 63%;
-    transform: translateY(-50%);
-    z-index: 5;
-    max-width: 500px;
-    color: #fff;
-    text-align: left;
-}
-
-
-.banner-location{
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 21px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Montserrat';
-    color:#FFD59A;
-
-
-}
-
-.banner-title{
-    font-family: 'Cinzel Decorative';
-    font-size: 38px;
-    font-weight: 400;
-    letter-spacing: 6px;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap; 
-}
-/* Responsive tweaks */
-@media (max-width: 991px){
-    .banner-content{ right: 6%; }
-    .banner-title{ font-size: 36px; }
-}
-@media (min-width: 1600px) {
-    .banner-content {
-        top: 58%;
-        right:8%;
-    }
-     .banner-title{ font-size: 46px; }
-}
-                .offcanvas.offcanvas-modern{
+.offcanvas.offcanvas-modern{
   z-index: 20000 !important;
 }
-
-/* Offcanvas must be above any fixed header */
 .offcanvas{
   z-index: 20000 !important;
 }
-
-/* Backdrop should stay below offcanvas */
 .offcanvas-backdrop{
   z-index: 19999 !important;
 }
-.mobileStackHero{
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-}
-
-.mobileStackImgWrap{
-    width:100%;
-}
-
-.mobileStackVideo{
-    width:100%;
-    height:auto;
-    display:block;
-}
-
-/* TEXT OVERLAY */
-.mobileStackContent{
-    position:absolute;
-    bottom:10%;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
-    color:#fff;
-    z-index:2;
-    padding:0 20px;
-    width:100%;
-}
-
-.mobileTitle{
-      font-family: 'Cinzel Decorative';
-    font-size: 34px;
-    font-weight: 400;
-    letter-spacing: 6px;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap; 
-}
-
-.mobileSub{
-    font-size:14px;
-    letter-spacing:2px;
-    margin-bottom:6px;
-}
-
-.mobileText{
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 21px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Montserrat';
-    color:#FFD59A;
-}
-
-
 </style>
+@if(false)
 <section class="custom-banner d-none d-lg-block position-relative">
         <video autoplay loop muted playsinline class="custom-banner-video">
             <source src="{{ asset('assets/f_assets/image/online shopping store/desktop.mp4') }}" type="video/mp4">
@@ -184,8 +42,9 @@
   </div>
 
 </section>
+@endif
     <section>
-        <div class="py-5">
+        <div class="os-store-wrap">
             <style>
 /* ================================
    PROMO ROW - FIXED (NO GAP ON iPAD)
@@ -402,23 +261,6 @@
                     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
                 }
                 
-                /* Smaller SORT & FILTER toggle */
-                .filter .navbar-toggler {
-                    font-size: 16px;
-                    padding: 4px 10px;
-                    line-height: 1.1;
-                    border: none !important;
-                    border-radius: 4px;
-                    outline: none !important;
-                    box-shadow: none !important;
-                }
-                .filter .navbar-toggler:focus,
-                .filter .navbar-toggler:hover,
-                .filter .navbar-toggler:active {
-                    border: none !important;
-                    outline: none !important;
-                    box-shadow: none !important;
-                }
                 /* Make image area fully clickable */
                 .card .card-img a { display: block; }
                 .card .card-img img { width: 100%; height: auto; }
@@ -636,13 +478,179 @@
                     margin-top: 1.5rem !important;
                     margin-bottom: 1rem !important;
                 }
+                .os-store-wrap {
+                    padding-top: 1.25rem;
+                    padding-bottom: 2.5rem;
+                }
+                /* Filter bar fixed below site header (sticky was unreliable in this layout) */
+                .os-filter-bar {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                    top: var(--os-header-offset, 120px);
+                    z-index: 9990;
+                    background: #fff;
+                    padding: 0.5rem 0 0.35rem;
+                    text-align: center;
+                    border-bottom: 1px solid #ecebe7;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                }
+                .os-filter-bar-spacer {
+                    display: block;
+                    width: 100%;
+                    height: 0;
+                }
+                @media (max-width: 991.98px) {
+                    .os-filter-bar {
+                        top: var(--os-mobile-header-offset, 64px);
+                        z-index: 990;
+                    }
+                }
+                .os-filter-bar .os-tabs-row {
+                    min-height: 32px;
+                    margin-bottom: 0.6rem;
+                }
+                .os-filter-bar .os-main-tabs {
+                    display: flex;
+                    justify-content: center;
+                    gap: 2.5rem;
+                    margin-bottom: 0;
+                }
+                .os-tab {
+                    background: none;
+                    border: none;
+                    border-bottom: 2px solid transparent;
+                    font-family: inherit;
+                    font-size: 0.82rem;
+                    letter-spacing: 0.19em;
+                    text-transform: uppercase;
+                    color: #999;
+                    padding: 0 0 5px;
+                    cursor: pointer;
+                    line-height: 1.25;
+                }
+                .os-tab.os-tab-active {
+                    color: #111;
+                    border-bottom-color: #111;
+                }
+                .os-sub-filters {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 0.4rem 1.15rem;
+                    padding: 0 0.5rem 0.65rem;
+                }
+                .filter-tag-btn {
+                    background: none;
+                    border: none;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #666;
+                    padding: 3px 0;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    line-height: 1.35;
+                }
+                .filter-tag-btn.active {
+                    color: #111;
+                    font-weight: 600;
+                    text-decoration: underline;
+                    text-underline-offset: 4px;
+                }
+                @media (max-width: 767px) {
+                    .os-sub-filters {
+                        flex-wrap: nowrap;
+                        justify-content: flex-start;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                    }
+                }
+                .os-sort-filter-btn {
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background: transparent;
+                    border: none;
+                    padding: 4px 0;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 0.72rem;
+                    font-weight: 400;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #666;
+                    cursor: pointer;
+                    line-height: 1.2;
+                }
+                .os-sort-filter-btn:hover,
+                .os-sort-filter-btn:focus,
+                .os-sort-filter-btn:active {
+                    color: #111;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    box-shadow: none;
+                }
+                .os-sort-filter-lines {
+                    display: inline-flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 17px;
+                    height: 11px;
+                    flex-shrink: 0;
+                }
+                .os-sort-filter-lines span {
+                    display: block;
+                    height: 1.5px;
+                    background-color: currentColor;
+                    border-radius: 1px;
+                    transition: width 0.2s ease, opacity 0.2s ease;
+                }
+                .os-sort-filter-lines span:nth-child(1) { width: 100%; }
+                .os-sort-filter-lines span:nth-child(2) { width: 65%; margin-left: auto; }
+                .os-sort-filter-lines span:nth-child(3) { width: 100%; }
+                .os-sort-filter-btn:hover .os-sort-filter-lines span:nth-child(2),
+                .os-sort-filter-btn:focus .os-sort-filter-lines span:nth-child(2) {
+                    width: 100%;
+                }
 </style>
-            <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
-                <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span> SORT & FILTER
-                </button>
+            <div class="os-filter-bar filter">
+                <div class="position-relative d-flex align-items-center justify-content-center os-tabs-row">
+                    <div class="os-main-tabs">
+                        <button type="button" class="os-tab" data-tab="gold">GOLD</button>
+                        <button type="button" class="os-tab" data-tab="diamonds">DIAMONDS</button>
+                    </div>
+                    <button type="button" class="os-sort-filter-btn" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Sort and filter">
+                        <span class="os-sort-filter-lines" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span>Sort &amp; Filter</span>
+                    </button>
+                </div>
+                <div class="os-sub-filters d-none" id="goldSubFilters">
+                    <button type="button" class="filter-tag-btn" data-tag="mens_rings">MEN RINGS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_rings">RINGS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_tops">TOPS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_chains">CHAINS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_pendants">PENDANTS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_bangles">BANGLES</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_bracelets">BRACELETS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="gold_earrings">EARRINGS</button>
+                </div>
+                <div class="os-sub-filters d-none" id="diamondSubFilters">
+                    <button type="button" class="filter-tag-btn" data-tag="diamond_rings">RINGS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="diamond_pendants">PENDANTS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="diamond_earrings">EARRINGS</button>
+                    <button type="button" class="filter-tag-btn" data-tag="diamond_bands">BANDS</button>
+                </div>
             </div>
+            <div id="osFilterBarSpacer" class="os-filter-bar-spacer" aria-hidden="true"></div>
             <div class="offcanvas offcanvas-end offcanvas-modern" tabindex="-1" id="offcanvasFilter"
                 aria-labelledby="offcanvasFilterLabel" data-bs-backdrop="true" data-bs-scroll="false">
                 <div class="offcanvas-header">
@@ -856,17 +864,102 @@
                         const defaultsInput = filterForm ? filterForm.querySelector('input[name="use_defaults"]') : null;
                         if (!filterForm) return;
 
+                        const DIAMOND_TAG_KEYS = ['diamond_rings', 'diamond_pendants', 'diamond_earrings', 'diamond_bands', 'diamond_all'];
+
+                        function tagsFromInput() {
+                            return (tagsInput?.value || '').split(',').map(s => s.trim()).filter(Boolean);
+                        }
+
+                        function hasDiamondFilter(tags) {
+                            return tags.some(t => DIAMOND_TAG_KEYS.includes(t) || t.startsWith('diamond_'));
+                        }
+
+                        function normalizeDiamondTags(tags) {
+                            const nonDiamond = tags.filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
+                            if (hasDiamondFilter(tags)) {
+                                return [...nonDiamond, 'diamond_all'];
+                            }
+                            return nonDiamond;
+                        }
+
+                        function syncCheckboxesFromTags() {
+                            const tags = tagsFromInput();
+                            tagCheckboxes.forEach(cb => {
+                                if (DIAMOND_TAG_KEYS.includes(cb.value)) {
+                                    cb.checked = false;
+                                    return;
+                                }
+                                cb.checked = tags.includes(cb.value);
+                            });
+                        }
+
+                        function syncBtnFromCheckbox() {
+                            const tags = tagsFromInput();
+                            const allDiamonds = hasDiamondFilter(tags);
+                            document.querySelectorAll('#goldSubFilters .filter-tag-btn').forEach(btn => {
+                                btn.classList.toggle('active', tags.includes(btn.dataset.tag));
+                            });
+                            document.querySelectorAll('#diamondSubFilters .filter-tag-btn').forEach(btn => {
+                                btn.classList.toggle('active', allDiamonds);
+                            });
+                        }
+
+                        function syncUiFromTags() {
+                            const normalized = normalizeDiamondTags(tagsFromInput());
+                            if (tagsInput) tagsInput.value = normalized.join(',');
+                            syncCheckboxesFromTags();
+                            syncBtnFromCheckbox();
+                        }
+
+                        function applyAllDiamondsFilter() {
+                            const nonDiamond = tagsFromInput().filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
+                            if (tagsInput) tagsInput.value = [...nonDiamond, 'diamond_all'].join(',');
+                            if (defaultsInput) defaultsInput.value = '0';
+                            syncUiFromTags();
+                        }
+
+                        function clearDiamondFilter() {
+                            const remaining = tagsFromInput().filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
+                            if (tagsInput) tagsInput.value = remaining.join(',');
+                            if (defaultsInput) defaultsInput.value = remaining.length ? '0' : '1';
+                            syncUiFromTags();
+                        }
+
+                        function syncCheckboxFromBtn(tag) {
+                            const cb = document.querySelector('.filter-tag-checkbox[value="' + tag + '"]');
+                            if (cb) cb.checked = !cb.checked;
+                        }
+
+                        const GOLD_TAG_KEYS = ['mens_rings', 'gold_rings', 'gold_tops', 'gold_chains', 'gold_pendants', 'gold_bangles', 'gold_bracelets', 'gold_earrings'];
+
+                        function hasGoldFilter(tags) {
+                            return tags.some(t => GOLD_TAG_KEYS.includes(t));
+                        }
+
+                        function setActiveTab(tabName) {
+                            const isGold = tabName === 'gold';
+                            const isDiamonds = tabName === 'diamonds';
+                            document.querySelectorAll('.os-tab').forEach(t => {
+                                t.classList.toggle('os-tab-active', tabName && t.dataset.tab === tabName);
+                            });
+                            const goldRow = document.getElementById('goldSubFilters');
+                            const diamondRow = document.getElementById('diamondSubFilters');
+                            if (goldRow) goldRow.classList.toggle('d-none', !isGold);
+                            if (diamondRow) diamondRow.classList.toggle('d-none', !isDiamonds);
+                        }
+
                         function writeSelectionsToInputs() {
                             if (pairsInput) pairsInput.value = '';
-                            const tagValues = [];
+                            let tagValues = [];
                             tagCheckboxes.forEach(cb => { if (cb.checked) tagValues.push(cb.value); });
-                            if (tagsInput) tagsInput.value = tagValues.join(',');
+                            if (tagsInput) tagsInput.value = normalizeDiamondTags(tagValues).join(',');
                             // Clear single-select fields
                             const subcatInput = document.getElementById('subcatInput');
                             const catInput = document.getElementById('catInput');
                             if (subcatInput) subcatInput.value = '';
                             if (catInput) catInput.value = '';
                             if (defaultsInput) defaultsInput.value = (tagsInput && tagsInput.value) ? '0' : '1';
+                            syncUiFromTags();
                         }
 
                         function buildUrlWithFormParams() {
@@ -949,17 +1042,69 @@
                         // Restore and bind tag checkboxes
                         if (tagsInput) {
                             const existingTags = (tagsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
-                            const existingTagsSet = new Set(existingTags);
+                            tagsInput.value = normalizeDiamondTags(existingTags).join(',');
+                            syncUiFromTags();
                             tagCheckboxes.forEach(cb => {
-                                if (existingTagsSet.has(cb.value)) cb.checked = true;
                                 cb.addEventListener('click', function(e) {
                                     e.stopPropagation();
-                                    writeSelectionsToInputs();
+                                    if (DIAMOND_TAG_KEYS.includes(this.value)) {
+                                        if (this.checked) {
+                                            applyAllDiamondsFilter();
+                                        } else {
+                                            clearDiamondFilter();
+                                        }
+                                    } else {
+                                        writeSelectionsToInputs();
+                                    }
                                     removeFooterNow();
                                     fetchAndRender();
                                 });
                             });
+                            if (hasDiamondFilter(existingTags)) {
+                                setActiveTab('diamonds');
+                            } else if (hasGoldFilter(existingTags)) {
+                                setActiveTab('gold');
+                            } else {
+                                setActiveTab('');
+                            }
                         }
+
+                        // GOLD / DIAMONDS tab switch
+                        document.querySelectorAll('.os-tab').forEach(tab => {
+                            tab.addEventListener('click', function() {
+                                setActiveTab(this.dataset.tab);
+                                if (this.dataset.tab === 'diamonds') {
+                                    applyAllDiamondsFilter();
+                                    removeFooterNow();
+                                    fetchAndRender();
+                                } else {
+                                    clearDiamondFilter();
+                                    removeFooterNow();
+                                    fetchAndRender();
+                                }
+                            });
+                        });
+
+                        // Horizontal filter buttons
+                        document.querySelectorAll('.filter-tag-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const tag = this.dataset.tag;
+                                if (DIAMOND_TAG_KEYS.includes(tag) || tag.startsWith('diamond_')) {
+                                    if (hasDiamondFilter(tagsFromInput())) {
+                                        clearDiamondFilter();
+                                    } else {
+                                        applyAllDiamondsFilter();
+                                    }
+                                    removeFooterNow();
+                                    fetchAndRender();
+                                    return;
+                                }
+                                syncCheckboxFromBtn(tag);
+                                writeSelectionsToInputs();
+                                removeFooterNow();
+                                fetchAndRender();
+                            });
+                        });
                     })();
                 });
             </script>
@@ -970,8 +1115,8 @@
         $absoluteStart = ($products->perPage() * ($products->currentPage() - 1)) + 1;
         $cursor = 0;
 
-        // Promo injection points
-        $promoPoints = [9, 21];  // after 8th => at 9, after 20th => at 21
+        // Promo injection points (disabled)
+        // $promoPoints = [9, 21];
     @endphp
 
     @while($cursor < $products->count())
@@ -979,7 +1124,7 @@
             $absIndex = $absoluteStart + $cursor;
         @endphp
 
-        {{-- ✅ PROMO BLOCK 1 (after 8th product => absIndex 9) --}}
+        @if(false)
         @if($absIndex === 9)
             <div class="w-100"></div>
 
@@ -1017,9 +1162,9 @@
             @php $cursor += 2; @endphp
             @continue
         @endif
+        @endif
 
-
-        {{-- ✅ PROMO BLOCK 2 (after 20th product => absIndex 21) --}}
+        @if(false)
         @if($absIndex === 19)
             <div class="w-100"></div>
 
@@ -1057,20 +1202,11 @@
             @php $cursor += 2; @endphp
             @continue
         @endif
+        @endif
 
-
-        {{-- ✅ STANDARD PRODUCTS (2 per row on mobile/tablet, 4 on xl desktop) --}}
+        {{-- STANDARD PRODUCTS (2 per row on mobile/tablet, 4 on xl desktop) --}}
         @php
-            $nextPromo = null;
-            foreach ($promoPoints as $p) {
-                if ($p > $absIndex) { $nextPromo = $p; break; }
-            }
-
             $limit = 4;
-            if ($nextPromo !== null) {
-                $remainUntilPromo = $nextPromo - $absIndex;
-                if ($remainUntilPromo < 4) $limit = max(0, $remainUntilPromo);
-            }
         @endphp
 
         @for($col = 0; $col < $limit && $cursor < $products->count(); $col++)
@@ -1132,6 +1268,92 @@
 @endif
     </div>
         <script>
+    (function () {
+        function getVisibleHeaderHeight() {
+            if (window.matchMedia('(min-width: 992px)').matches) {
+                const header = document.querySelector('.luxury-header');
+                if (header) {
+                    const bottom = Math.ceil(header.getBoundingClientRect().bottom);
+                    if (bottom > 0) return bottom;
+                }
+                const spacer = document.querySelector('.header-spacer');
+                if (spacer && spacer.offsetHeight > 0) {
+                    return spacer.offsetHeight;
+                }
+                return 120;
+            }
+            const mobileHeader = document.querySelector('header.mobile-header-main');
+            if (mobileHeader) {
+                const bottom = Math.ceil(mobileHeader.getBoundingClientRect().bottom);
+                if (bottom > 0) return bottom;
+            }
+            return 64;
+        }
+
+        function syncFilterBarOffset() {
+            const h = getVisibleHeaderHeight();
+            if (window.matchMedia('(min-width: 992px)').matches) {
+                document.documentElement.style.setProperty('--os-header-offset', h + 'px');
+            } else {
+                document.documentElement.style.setProperty('--os-mobile-header-offset', h + 'px');
+            }
+        }
+
+        function updateFilterBarSpacer() {
+            const bar = document.querySelector('.os-filter-bar');
+            const spacer = document.getElementById('osFilterBarSpacer');
+            if (!bar || !spacer) return;
+            syncFilterBarOffset();
+            spacer.style.height = bar.offsetHeight + 'px';
+        }
+
+        let filterLayoutTimer = null;
+        function scheduleFilterLayout(delay) {
+            updateFilterBarSpacer();
+            if (filterLayoutTimer) clearTimeout(filterLayoutTimer);
+            filterLayoutTimer = setTimeout(updateFilterBarSpacer, delay || 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            scheduleFilterLayout(50);
+            scheduleFilterLayout(400);
+
+            const bar = document.querySelector('.os-filter-bar');
+            if (bar && typeof ResizeObserver !== 'undefined') {
+                new ResizeObserver(function () {
+                    updateFilterBarSpacer();
+                }).observe(bar);
+            }
+
+            const header = document.querySelector('.luxury-header');
+            if (header) {
+                header.addEventListener('transitionend', function () {
+                    scheduleFilterLayout(0);
+                });
+            }
+
+            window.addEventListener('resize', function () {
+                scheduleFilterLayout(100);
+            });
+
+            let filterScrollTick = false;
+            window.addEventListener('scroll', function () {
+                if (filterScrollTick) return;
+                filterScrollTick = true;
+                requestAnimationFrame(function () {
+                    updateFilterBarSpacer();
+                    filterScrollTick = false;
+                });
+            }, { passive: true });
+
+            document.querySelectorAll('.os-tab').forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    scheduleFilterLayout(50);
+                });
+            });
+        });
+    })();
+
     // Function to scroll to products section
     function scrollToProducts() {
         const productsSection = document.querySelector('.onlineStore');
