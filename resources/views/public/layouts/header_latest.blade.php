@@ -114,7 +114,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
 /* Cartier-like centered “shell” so left/logo/right stay together */
 .luxury-shell{
-  max-width: var(--shellMax);
+  /* max-width: var(--shellMax); */
   margin: 0 auto;
   padding: 0 var(--shellPad);
   background: #3c230d;

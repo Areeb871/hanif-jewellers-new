@@ -770,11 +770,12 @@ public function Online_Shopping_Store(Request $request)
                         return;
                     }
 
-                    // GOLD RINGS
+                    // GOLD RINGS (exclude men's — use mens_rings filter for those)
                     if ($tag === 'gold_rings') {
                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]'])
-                          ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+                          ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold'])
+                          ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['[[:<:]]men[[:>:]]|[[:<:]]mens[[:>:]]|[[:<:]]gents?[[:>:]]']);
                         return;
                     }
 
@@ -832,10 +833,11 @@ public function Online_Shopping_Store(Request $request)
                         return;
                     }
 
-                    // DIAMOND RINGS
+                    // DIAMOND RINGS (exclude men's — use mens_rings filter for those)
                     if ($tag === 'diamond_rings') {
                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
-                          ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]']);
+                          ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]'])
+                          ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['[[:<:]]men[[:>:]]|[[:<:]]mens[[:>:]]|[[:<:]]gents?[[:>:]]']);
                         return;
                     }
 
