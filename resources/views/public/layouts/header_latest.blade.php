@@ -2,8 +2,7 @@
 <html lang="en">
 
 <head>
-<link rel="canonical" href="{{ request()->url() }}">
-<!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -90,14 +89,22 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
 /* Fixed Header (no layout vibration) */
 .luxury-header{
-  position: fixed;        /* ✅ changed from sticky */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 9999;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  will-change: transform;
+  background: #3c230d;
+  padding: 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+/* Logo + menu — one row, vertically centered */
+.header-bar{
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-height: 64px;
 }
 
 /* Spacer keeps page from jumping */
@@ -110,7 +117,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   max-width: var(--shellMax);
   margin: 0 auto;
   padding: 0 var(--shellPad);
-  background: #fff;
+  background: #3c230d;
+  position: relative;
 }
 
 /* One-row header (left | centered logo | right) */
@@ -120,7 +128,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   align-items: center;
   padding: 18px 0;
   column-gap: 24px;
-  background: #fff;
+  background: #3c230d;
 }
 
 /* LEFT */
@@ -176,33 +184,57 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   align-items: center;
 }
 
-/* NAV (below header row) */
+/* NAV */
 .main-nav{
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;
-  padding: 14px 0 18px;
-  background: #fff;
-
+  padding: 0;
+  margin: 0;
+  background: transparent;
   font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   white-space: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
+  min-height: 40px;
 }
 .main-nav::-webkit-scrollbar{ display:none; }
-.main-nav a{
+.main-nav > .dropdown{
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.main-nav a,
+.main-nav .dropdown-toggle{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
   text-decoration: none;
   color: var(--text);
   opacity: .9;
   flex: 0 0 auto;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.main-nav .dropdown-toggle::after{
+  vertical-align: middle;
+  margin-left: 0.35em;
 }
 .nav-divider{
   width: 1px;
-  height: 14px;
-  background: #000;
+  height: 12px;
+  align-self: center;
+  background: white;
   opacity: .9;
   margin: 0 6px;
   flex: 0 0 auto;
@@ -225,7 +257,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
   .luxury-header,
   .luxury-header:hover{
-    background-color:#fff !important;
+    background-color:#3c230d !important;
   }
 
   /* IMPORTANT: do NOT set * background transparent (it kills badge) */
@@ -239,7 +271,6 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .luxury-header a:focus,
   .luxury-header a:active,
   .luxury-header a:visited{
-    color:#000 !important;
     opacity:1 !important;
     text-decoration:none !important;
     outline:none !important;
@@ -249,7 +280,6 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .luxury-header i,
   .luxury-header a:hover i,
   .luxury-header a:focus i{
-    color:#000 !important;
     opacity:1 !important;
   }
 
@@ -268,41 +298,10 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 /* Prevent badge clipping */
 .luxury-header,
 .luxury-shell,
+.header-bar,
 .header-row,
 .header-right{
   overflow: visible !important;
-}
-.top-header,
-.main-nav{
-  transition: 
-    padding 0.35s cubic-bezier(.4,0,.2,1),
-    max-height 0.35s cubic-bezier(.4,0,.2,1),
-    opacity 0.25s ease,
-    letter-spacing 0.3s ease;
-  will-change: padding, max-height;
-}
-
-.top-header{
-  max-height: 120px;
-  overflow: hidden;
-}
-.luxury-header.scrolled .top-header{
-  max-height: 0 !important;
-  padding: 0 !important;
-  opacity: 0;
-}
-
-/* ✅ ON SCROLL: NAVBAR HEIGHT INCREASE (more premium) */
-.luxury-header.scrolled .main-nav{
-  padding: 20px 0 22px !important;   /* ✅ increased height */
-  gap: 30px !important;              /* keep luxury spacing */
-  font-size: 12px !important;        /* keep same size */
-  letter-spacing: 1.5px !important;  /* keep same */
-}
-
-/* Optional: shadow only */
-.luxury-header.scrolled{
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 /* ==============================
    FIX: MODAL ABOVE FIXED HEADER
@@ -319,54 +318,24 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   position: relative;
   z-index: 10001;
   pointer-events: auto;
+  font-size: 14px;
+  line-height: 1;
 }
-/* Smooth transition */
-.luxury-header,
-.header-logo,
+/* Left logo */
 .scroll-logo {
-  transition: all 0.35s ease;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 0;
+}
+.scroll-logo img {
+  width: auto;
+  height: 40px;
+  object-fit: contain;
+  display: block;
 }
 
-/* Base state */
-.scroll-logo {
-  position: absolute;
-  left: 24px;
-  top: 20px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-5px);
-  
-  /* FAST hide */
-  transition: opacity 0.05s ease, 
-              visibility 0.05s ease,
-              transform 0.05s ease;
-}
-
-/* When scrolled (slow smooth show) */
-.luxury-header.scrolled .scroll-logo {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-
-  /* SLOW show */
-  transition: opacity 0.35s ease, 
-              transform 0.35s ease;
-}
-
-/* Hide Center Logo when Scrolled */
-.luxury-header.scrolled .header-logo {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Optional shrink header */
-.luxury-header.scrolled {
-  padding: 8px 0;
-}
-/* Optional nav spacing */
-.luxury-header.scrolled .main-nav {
-  margin-top: 10px;
-}
 /* =========================
    FIX NAV OVERFLOW (IMPORTANT)
    dropdown was getting clipped
@@ -376,7 +345,51 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
     overflow: visible !important;
   }
 }
+/* ==============================
+   TOP NAVBAR TEXT WHITE
+   Normal + Hover
+================================ */
 
+/* Main navbar links white */
+.luxury-header .main-nav > a,
+.luxury-header .main-nav > .nav-link,
+.luxury-header .main-nav > .dropdown > a,
+.luxury-header .main-nav > .dropdown > .nav-link,
+.luxury-header .main-nav > .dropdown > .dropdown-toggle,
+.luxury-header .main-nav > ul > li > a,
+.luxury-header .main-nav .navbar-nav > li > a,
+.luxury-header .main-nav .navbar-nav > li > .nav-link {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Main navbar hover also white */
+.luxury-header .main-nav > a:hover,
+.luxury-header .main-nav > .nav-link:hover,
+.luxury-header .main-nav > .dropdown:hover > a,
+.luxury-header .main-nav > .dropdown:hover > .nav-link,
+.luxury-header .main-nav > .dropdown:hover > .dropdown-toggle,
+.luxury-header .main-nav > .dropdown > a:hover,
+.luxury-header .main-nav > .dropdown > .nav-link:hover,
+.luxury-header .main-nav > .dropdown > .dropdown-toggle:hover,
+.luxury-header .main-nav > ul > li > a:hover,
+.luxury-header .main-nav .navbar-nav > li > a:hover,
+.luxury-header .main-nav .navbar-nav > li > .nav-link:hover {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Dropdown arrow white */
+.luxury-header .main-nav > .dropdown > .dropdown-toggle::after,
+.luxury-header .main-nav > .dropdown:hover > .dropdown-toggle::after,
+.luxury-header .main-nav > .dropdown > .dropdown-toggle:hover::after {
+    border-top-color: #ffffff !important;
+}
+
+/* Navbar divider white */
+.luxury-header .main-nav .nav-divider {
+    background-color: #ffffff !important;
+}
 /* =========================
    MEGA MENU TEXT-ONLY (2 COLUMNS)
    Like screenshot
@@ -636,12 +649,34 @@ header .dropdown-menu.mega-menu .carousel-underline-wrapper::after{
         display: block;
     }
 }
- 
+.region-switch {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+}
 
+.region-link {
+    text-decoration: none;
+    color: #777;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.region-link:hover {
+    color: #000;
+}
+
+.region-link.active {
+    color: #000;
+    font-weight: 600;
+}
   </style>
 </head>
 
-<body data-currency="pkr">
+<body data-currency="pkr" @class(['page-online-store' => request()->is('collections/online-shopping-store')])>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- Google Tag Manager (noscript) -->
@@ -654,81 +689,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @include('public.partials.mobile-header')
 <header class="luxury-header d-none d-lg-block">
   <div class="luxury-shell">
+    <div class="header-bar">
 
   <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
-  <img
-    src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
-    alt="Hanif Jewellers"
-   style="width:auto; height:40px; object-fit:contain;"
-  >
-</a>
-    <!-- ✅ ROW 1: top line -->
-<div class="header-row top-header">
-      <div class="header-left">
-        <!-- <a href="#">United States</a> -->
-        <a href="{{ url('/pages/contact-us')}}">Contact Us</a>
-        <!-- <a href="#">Services</a> -->
-      </div>
-
-      <a href="/" class="header-logo" aria-label="Hanif Jewellers Home">
-        <img
-          src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
-          alt="Hanif Jewellers"
-          class="header-logo-img"
-          width="200"
-          height="60"
-          loading="eager"
-        >
-      </a>
-
-      <div class="header-right d-flex align-items-center gap-3">
-
-        <!-- <a href="#" aria-label="Wishlist">
-          <i class="fa-regular fa-heart"></i>
-        </a>
-
-        <a href="#" aria-label="Account">
-          <i class="fa-regular fa-user"></i>
-        </a> -->
-
-        {{-- CART SECTION --}}
-        <span id="cartHeader" class="d-inline-flex align-items-center">
-          @include('public.partials.cart-header')
-        </span>
-
-        {{-- SETTINGS DROPDOWN --}}
-        <div class="dropdown position-relative"
-          onmouseenter="this.classList.add('show'); this.querySelector('.dropdown-menu').classList.add('show');"
-          onmouseleave="this.classList.remove('show'); this.querySelector('.dropdown-menu').classList.remove('show');">
-
-          <a href="/checkout" aria-label="Settings">
-            <i class="fa-solid fa-gear"></i>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end px-3 py-2"
-            style="left:-140px; top:40px; background:#ffffff;">
-            <li class="mb-2">
-              <a class="dropdown-item" href="/checkout">
-                <i class="fa fa-check-circle px-2"></i>Check Out
-              </a>
-            </li>
-          </ul>
-
-        </div>
-
-      </div><!-- ✅ CLOSE header-right -->
-
-    </div><!-- ✅ CLOSE header-row -->
+    <img
+      src="{{ asset('assets/f_assets/image/logo.png') }}"
+      alt="Hanif Jewellers"
+      width="200"
+      height="40"
+      loading="eager"
+    >
+  </a>
 
     <!-- ✅ ROW 2: nav -->
     <nav class="main-nav" aria-label="Main navigation">
-                            <a href="{{ url('/highend-jewellery') }}">HIGH END</a>
+      
+                    <a href="{{ url('/highend-jewellery') }}">HIGH JEWELLRY</a>
 
     <div class="dropdown hj-mega position-static">
   <a class="dropdown-toggle" href="#" id="JEWELLERYDropdown"
      role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Jewellery
   </a>
+
 
   <div class="dropdown-menu mega-menu p-0 border-0 rounded-0 w-100"
        aria-labelledby="JEWELLERYDropdown">
@@ -767,24 +750,21 @@ $menus = [
      'Festive' => [
         ['label' => 'Eid Par Sone ki Choriyan', 'url' => url('collections/eid-par-sony-ki-choriyan')],
         ['label'=> 'Valentine Hearts', 'url' => url('collections/valentine-jewels')],
-
-
     ],
 
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/tawoos/009.jpg',
+    'img' => 'assets/f_assets/image/eid/2.jpg',
     'btn' => 'EXPLORE COLLECTION',
-    'url' => url('collections/tawoos'),
+    'url' => url('collections/eid-par-sony-ki-choriyan'),
 ];
 @endphp
 
 
 <div class="row g-0 align-items-start mt-4 mega-inner-wrap">
 
-    <!-- LEFT SIDE (BRIDAL + LIFESTYLE) -->
- <!-- LEFT SIDE (3 COLUMNS) -->
+    <!-- LEFT SIDE (3 COLUMNS) -->
     <div class="col-md-8">
 
         <div class="row">
@@ -828,7 +808,8 @@ $card = [
         </div>
 
     </div>
-    <!-- RIGHT SIDE IMAGE -->
+
+ <!-- RIGHT SIDE IMAGE -->
 <div class="col-md-4 ps-md-4">
     <div class="hanif-mega-card">      
         <!-- IMAGE -->
@@ -837,7 +818,7 @@ $card = [
         </a>
         <br>
         <div class="hanif-mega-title">
-              TAWOOS
+            Eid Par Sone ki Choriyan
         </div>
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
@@ -845,6 +826,7 @@ $card = [
         </a>
     </div>
 </div>
+
 </div>
 
           
@@ -857,7 +839,7 @@ $card = [
 
   </div>
 </div>
-      <a href="{{ url('solitaire') }}">Solitaire</a>
+      <a href="{{ url('solitaire') }}">Solitare</a>
       <a href="{{ url('/collections/online-shopping-store') }}">Online Shopping Store</a>
       <a href="{{ url('watches') }}">Watches</a>
       <span class="nav-divider" aria-hidden="true"></span>
@@ -869,12 +851,13 @@ $card = [
 </a>
  </nav>
 
+    </div>
   </div>
 </header>
 
 <div class="header-spacer"></div>
 
-  @php
+@php
     $searchItems = \App\Models\Products::with('images')
         ->where('status', 1)
         ->select('id', 'name', 'slug', 'image', 'hover_image', 'description')
@@ -896,7 +879,6 @@ $card = [
         ->values()
         ->toArray();
 @endphp
-
     <style>
         .nav-search-wrapper {
             max-width: 1200px;
@@ -1047,11 +1029,14 @@ $card = [
 
     @yield('content')
 
-@if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
+    {{-- Single footer sitewide (route-based switch disabled)
+    @if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
+        @include('public.layouts.footer_home_page')
+    @else
+        @include('public.layouts.footer')
+    @endif
+    --}}
     @include('public.layouts.footer_home_page')
-@else
-    @include('public.layouts.footer')
-@endif
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1087,24 +1072,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
-</script>
-<script>
-  let lastScroll = 0;
-  const header = document.querySelector(".luxury-header");
-
-  window.addEventListener("scroll", function () {
-    const currentScroll = window.scrollY;
-
-    if (currentScroll > lastScroll && currentScroll > 50) {
-      // Scrolling down → show logo
-      header.classList.add("scrolled");
-    } else {
-      // Scrolling up → hide immediately
-      header.classList.remove("scrolled");
-    }
-
-    lastScroll = currentScroll;
-  });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -1219,48 +1186,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!header || !spacer) return;
 
-  // ✅ Two thresholds = no flicker/vibration near the edge
-  const ADD_AT = 140;     // add "scrolled" after this
-  const REMOVE_AT = 90;   // remove only when below this
-
-  let isScrolled = false;
-  let ticking = false;
-
   function setSpacerHeight() {
     spacer.style.height = header.offsetHeight + "px";
   }
 
-  function update() {
-    const y = window.scrollY || 0;
-
-    if (!isScrolled && y > ADD_AT) {
-      header.classList.add("scrolled");
-      isScrolled = true;
-      setSpacerHeight(); // header height changed after animation start
-    } else if (isScrolled && y < REMOVE_AT) {
-      header.classList.remove("scrolled");
-      isScrolled = false;
-      setSpacerHeight();
-    }
-
-    ticking = false;
-  }
-
-  // initial spacer
   setSpacerHeight();
-
-  // update spacer on resize / fonts load
-  window.addEventListener("resize", () => {
-    setSpacerHeight();
-    update();
-  });
-
-  window.addEventListener("scroll", function () {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
+  window.addEventListener("resize", setSpacerHeight);
 });
 </script>
 <script>

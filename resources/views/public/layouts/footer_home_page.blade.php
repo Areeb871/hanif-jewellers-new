@@ -179,8 +179,7 @@ footer h4 {
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
-  opacity: .75;
-  color: black;
+  background-color:#3c230d;
 
 }
 
@@ -718,26 +717,26 @@ footer h4 {
                 <span class="hanif-action-label">Find a boutique</span>
             </a>
 
-            <!--<a href="/track-order" class="hanif-action-btn">-->
-            <!--    <span class="hanif-action-icon">-->
-            <!--        <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">-->
-            <!--            <path d="M7 8h10l1.3 10H5.7L7 8z" fill="none" stroke="#fdfdfd" stroke-width="1.8"/>-->
-            <!--            <path d="M9 9V7a3 3 0 016 0v2" fill="white" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round"/>-->
-            <!--        </svg>-->
-            <!--    </span>-->
-            <!--    <span class="hanif-action-label">Track your order</span>-->
-            <!--</a>-->
+            <a href="/track-order" class="hanif-action-btn">
+                <span class="hanif-action-icon">
+                    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+                        <path d="M7 8h10l1.3 10H5.7L7 8z" fill="none" stroke="#fdfdfd" stroke-width="1.8"/>
+                        <path d="M9 9V7a3 3 0 016 0v2" fill="white" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="hanif-action-label">Track your order</span>
+            </a>
 
-            <!--<a href="/service-request" class="hanif-action-btn hanif-action-btn-wide">-->
-            <!--    <span class="hanif-action-icon">-->
-            <!--        <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">-->
-            <!--            <path d="M3.5 15.5h4l2.5-2.2a2.3 2.3 0 011.5-.6h2.3a1.7 1.7 0 010 3.4H11" fill="none" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>-->
-            <!--            <path d="M14.5 14.2l2.8-2.4a2 2 0 012.7 3l-4.3 4A3.5 3.5 0 0113.3 20H7.5" fill="none" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>-->
-            <!--            <rect x="2.5" y="14" width="3" height="5.5" rx="1" fill="white" stroke="#fdfdfd" stroke-width="1.8"/>-->
-            <!--        </svg>-->
-            <!--    </span>-->
-            <!--    <span class="hanif-action-label">Request or track a service</span>-->
-            <!--</a>-->
+            <a href="/service-request" class="hanif-action-btn hanif-action-btn-wide">
+                <span class="hanif-action-icon">
+                    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+                        <path d="M3.5 15.5h4l2.5-2.2a2.3 2.3 0 011.5-.6h2.3a1.7 1.7 0 010 3.4H11" fill="none" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 14.2l2.8-2.4a2 2 0 012.7 3l-4.3 4A3.5 3.5 0 0113.3 20H7.5" fill="none" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="2.5" y="14" width="3" height="5.5" rx="1" fill="white" stroke="#fdfdfd" stroke-width="1.8"/>
+                    </svg>
+                </span>
+                <span class="hanif-action-label">Request or track a service</span>
+            </a>
         </div>
 
         <p class="hanif-popup-footer">

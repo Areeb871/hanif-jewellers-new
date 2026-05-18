@@ -275,6 +275,24 @@
             {{-- filter --}}
 
             <style>
+                /* Online store: header scrolls; filter bar sticks at viewport top */
+                body.page-online-store .luxury-header {
+                    position: relative;
+                    top: auto;
+                    left: auto;
+                    right: auto;
+                }
+                body.page-online-store .header-spacer {
+                    display: none;
+                    height: 0 !important;
+                }
+                body.page-online-store header.mobile-header-main {
+                    position: relative;
+                    top: auto;
+                }
+                body.page-online-store .os-store-wrap {
+                    padding-top: 0.5rem;
+                }
                 .offcanvas-modern {
                     font-family: 'Inter', Arial, sans-serif;
                     background: rgb(255, 255, 255) !important;
@@ -312,29 +330,40 @@
                     height: 1em;
                     cursor: pointer;
                     transition: opacity 0.2s;
+                    box-shadow: none;
+                    outline: none;
                 }
                 .offcanvas-modern .btn-close:hover {
                     opacity: 0.7;
                 }
-                .filter-section-title {
+                .offcanvas-modern .btn-close:focus,
+                .offcanvas-modern .btn-close:focus-visible,
+                .offcanvas-modern .btn-close:active {
+                    opacity: 1;
+                    outline: none;
+                    box-shadow: 0 0 0 2px #3c230d;
+                }
+                .offcanvas-modern .filter-section-title {
                     font-size: 0.98rem;
                     font-weight: 300;
                     letter-spacing: 0.01em;
-                    margin-bottom: 0.8rem;
-                    margin-top: 1.5rem;
+                    margin: 0 0 0.5rem;
                     text-transform: uppercase;
                     color: #222;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     border-bottom: 1px solid #ecebe7;
-                    padding-bottom: 0.5rem;
+                    padding-bottom: 0.4rem;
                     cursor: pointer;
+                }
+                .offcanvas-modern .filter-section + .filter-section {
+                    margin-top: 1rem;
                 }
                 .sort-list, .category-list, .subcategory-list {
                     list-style: none;
                     padding-left: 0;
-                    margin-bottom: 0;
+                    margin: 0;
                 }
                 .sort-list {
                     max-height: 0;
@@ -355,22 +384,26 @@
                     max-height: 0;
                     transition: max-height 0.3s ease-in;
                 }
-                .sort-list li, .category-list > li {
-                    padding: 0.4rem 0;
+                .offcanvas-modern .sort-list li,
+                .offcanvas-modern .category-list.collapsible > li {
+                    padding: 0.3rem 0;
+                    margin: 0;
                     font-size: 0.97rem;
+                    line-height: 1.35;
                     display: flex;
                     align-items: center;
+                    gap: 0.5rem;
                     cursor: pointer;
-
                     color: #222;
                 }
                 .sort-list li.selected {
                     font-weight: 600;
                     color: #111;
                 }
-                .sort-list li .diamond {
+                .offcanvas-modern .sort-list li .diamond {
                     font-size: 0.7em;
-                    margin-right: 0.7em;
+                    margin: 0;
+                    flex-shrink: 0;
                     color: #b2b2b2;
                 }
                 .sort-list li.selected .diamond {
@@ -379,15 +412,12 @@
                 .sort-list li:not(.selected) .diamond {
                     color: #b2b2b2;
                 }
-                .category-list > li {
-                    display: flex;
-                    align-items: flex-start;
-                    color: #222;
-                    flex-wrap: wrap;
-                    cursor: pointer;
+                .offcanvas-modern .category-list.collapsible > li .filter-tag-checkbox {
+                    margin: 0;
+                    flex-shrink: 0;
                 }
-                .category-list > li > span:first-child {
-                    flex: 1;
+                .offcanvas-modern .category-list.collapsible > li .subcat-label {
+                    margin: 0;
                 }
                 .category-toggle {
                     font-size: 1.1em;
@@ -450,8 +480,7 @@
                     color: #111;
                 }
                 .offcanvas-modern hr {
-                    border-color:rgb(255, 255, 255);
-                    margin: 1.2rem 0 1rem 0;
+                    display: none;
                 }
                 .filter-actions {
                     position: sticky;
@@ -482,19 +511,35 @@
                     padding-top: 1.25rem;
                     padding-bottom: 2.5rem;
                 }
-                /* Filter bar fixed below site header (sticky was unreliable in this layout) */
+                /* Filter bar fixed; JS sets top below header, then 0 when header scrolls away */
                 .os-filter-bar {
                     position: fixed;
                     left: 0;
                     right: 0;
                     width: 100%;
-                    top: var(--os-header-offset, 120px);
+                    top: 0;
                     z-index: 9990;
-                    background: #fff;
-                    padding: 0.5rem 0 0.35rem;
+                    background:#FFFFFF;
+                
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+                    justify-content: center;
+                    padding: 0.75rem 1rem;
                     text-align: center;
-                    border-bottom: 1px solid #ecebe7;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                    /* border-bottom: 1px solid #000000; */
+                    /* border-top: 1px solid #e8d9a8; */
+                    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+                    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); */
+                }
+                .os-filter-bar-top-gap {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    height: 0;
+                    z-index: 9989;
+                    background: #fff;
+                    pointer-events: none;
                 }
                 .os-filter-bar-spacer {
                     display: block;
@@ -503,75 +548,74 @@
                 }
                 @media (max-width: 991.98px) {
                     .os-filter-bar {
-                        top: var(--os-mobile-header-offset, 64px);
                         z-index: 990;
                     }
                 }
-                .os-filter-bar .os-tabs-row {
-                    min-height: 32px;
-                    margin-bottom: 0.6rem;
-                }
-                .os-filter-bar .os-main-tabs {
+                .os-filter-bar-inner {
                     display: flex;
-                    justify-content: center;
-                    gap: 2.5rem;
-                    margin-bottom: 0;
-                }
-                .os-tab {
-                    background: none;
-                    border: none;
-                    border-bottom: 2px solid transparent;
-                    font-family: inherit;
-                    font-size: 0.82rem;
-                    letter-spacing: 0.19em;
-                    text-transform: uppercase;
-                    color: #999;
-                    padding: 0 0 5px;
-                    cursor: pointer;
-                    line-height: 1.25;
-                }
-                .os-tab.os-tab-active {
-                    color: #111;
-                    border-bottom-color: #111;
+                    align-items: center;
+                    width: 100%;
+                    gap: 0.75rem;
                 }
                 .os-sub-filters {
                     display: flex;
+                    flex: 1;
+                    min-width: 0;
                     flex-wrap: wrap;
-                    justify-content: center;
-                    gap: 0.4rem 1.15rem;
-                    padding: 0 0.5rem 0.65rem;
+                    justify-content: flex-start;
+                    align-items: center;
+                    gap: 1rem 2.75rem;
+                    padding: 0;
+                    margin: 0;
                 }
                 .filter-tag-btn {
                     background: none;
                     border: none;
-                    font-size: 0.7rem;
-                    letter-spacing: 0.15em;
+                    font-size: calc(0.82rem - 1px);
+                    font-weight: 500;
+                    letter-spacing: 0.14em;
                     text-transform: uppercase;
-                    color: #666;
-                    padding: 3px 0;
+                    color: #000;
+                    padding: 10px 8px;
                     cursor: pointer;
                     white-space: nowrap;
-                    line-height: 1.35;
+                    line-height: 1.5;
                 }
                 .filter-tag-btn.active {
-                    color: #111;
-                    font-weight: 600;
-                    text-decoration: underline;
-                    text-underline-offset: 4px;
+                    color: #000;
+                    font-weight: 700;
+                    text-decoration: none;
                 }
-                @media (max-width: 767px) {
+                @media (max-width: 991.98px) {
+                    .os-filter-bar {
+                        padding: 0.65rem 0.5rem 0.65rem 0.75rem;
+                    }
+                    .os-filter-bar-inner {
+                        gap: 0.5rem;
+                        overflow: visible;
+                    }
                     .os-sub-filters {
                         flex-wrap: nowrap;
                         justify-content: flex-start;
+                        gap: 0.9rem 1.35rem;
+                        padding: 0 0.35rem 0 0;
                         overflow-x: auto;
+                        overflow-y: hidden;
                         -webkit-overflow-scrolling: touch;
+                        scroll-padding-left: 0.5rem;
+                        scrollbar-width: none;
+                    }
+                    .os-sub-filters::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .filter-tag-btn {
+                        flex-shrink: 0;
+                        padding: 8px 4px;
                     }
                 }
                 .os-sort-filter-btn {
-                    position: absolute;
-                    right: 0;
-                    top: 50%;
-                    transform: translateY(-50%);
+                    position: static;
+                    flex-shrink: 0;
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
@@ -583,14 +627,14 @@
                     font-weight: 400;
                     letter-spacing: 0.15em;
                     text-transform: uppercase;
-                    color: #666;
+                    color: #000;
                     cursor: pointer;
                     line-height: 1.2;
                 }
                 .os-sort-filter-btn:hover,
                 .os-sort-filter-btn:focus,
                 .os-sort-filter-btn:active {
-                    color: #111;
+                    color: #000;
                     background: transparent;
                     border: none;
                     outline: none;
@@ -618,36 +662,37 @@
                 .os-sort-filter-btn:focus .os-sort-filter-lines span:nth-child(2) {
                     width: 100%;
                 }
+                @media (max-width: 991.98px) {
+                    .os-sort-filter-label {
+                        display: none;
+                    }
+                    .os-sort-filter-btn {
+                        gap: 0;
+                        padding: 8px;
+                    }
+                }
 </style>
+            <div id="osFilterBarTopGap" class="os-filter-bar-top-gap" aria-hidden="true"></div>
             <div class="os-filter-bar filter">
-                <div class="position-relative d-flex align-items-center justify-content-center os-tabs-row">
-                    <div class="os-main-tabs">
-                        <button type="button" class="os-tab" data-tab="gold">GOLD</button>
-                        <button type="button" class="os-tab" data-tab="diamonds">DIAMONDS</button>
+                <div class="os-filter-bar-inner">
+                    <div id="osSubFilters" class="os-sub-filters">
+                        <button type="button" class="filter-tag-btn" data-tags="mens_rings">MEN RINGS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings">RINGS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_tops">TOPS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_chains">CHAINS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants">PENDANTS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets">BRACELETS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings">EARRINGS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button>
                     </div>
                     <button type="button" class="os-sort-filter-btn" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Sort and filter">
                         <span class="os-sort-filter-lines" aria-hidden="true">
                             <span></span><span></span><span></span>
                         </span>
-                        <span>Sort &amp; Filter</span>
+                        <span class="os-sort-filter-label">Sort &amp; Filter</span>
                     </button>
-                </div>
-                <div class="os-sub-filters d-none" id="goldSubFilters">
-                    <button type="button" class="filter-tag-btn" data-tag="mens_rings">MEN RINGS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_rings">RINGS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_tops">TOPS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_chains">CHAINS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_pendants">PENDANTS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_bangles">BANGLES</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_bracelets">BRACELETS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="gold_earrings">EARRINGS</button>
-                </div>
-                <div class="os-sub-filters d-none" id="diamondSubFilters">
-                    <button type="button" class="filter-tag-btn" data-tag="diamond_rings">RINGS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="diamond_pendants">PENDANTS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="diamond_earrings">EARRINGS</button>
-                    <button type="button" class="filter-tag-btn" data-tag="diamond_bands">BANDS</button>
                 </div>
             </div>
             <div id="osFilterBarSpacer" class="os-filter-bar-spacer" aria-hidden="true"></div>
@@ -665,8 +710,8 @@
                         <input type="hidden" name="cat_name" id="catInput" value="{{ request('cat_name') }}">
                         <input type="hidden" name="subcat_pairs" id="subcatPairsInput" value="{{ request('subcat_pairs') }}">
                         <input type="hidden" name="tags" id="tagsInput" value="{{ request('tags') }}">
-                        <div>
-                            <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))">
                                 Sort By
                                 <span class="category-toggle">+</span>
                             </div>
@@ -695,15 +740,10 @@
                             </ul>
                             <input type="hidden" name="sort" id="sortInput" value="{{ request('sort') }}">
                         </div>
-                        <hr>
-                        <hr>
-                        <div>
-                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">GOLD <span class="category-toggle">+</span></div>
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))">GOLD <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListGold">
-                                <li>
-    <input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();">
-    <span class="subcat-label">Mens Rings</span>
-</li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();"><span class="subcat-label">Mens Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_tops" onclick="event.stopPropagation();"> <span class="subcat-label">Tops</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_chains" onclick="event.stopPropagation();"> <span class="subcat-label">Chains</span></li>
@@ -713,8 +753,8 @@
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">Earrings</span></li>
                             </ul>
                         </div>
-                        <div class="mt-3">
-                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">DIAMONDS <span class="category-toggle">+</span></div>
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))">DIAMONDS <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListDiamonds">
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">Pendants</span></li>
@@ -722,7 +762,6 @@
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_bands" onclick="event.stopPropagation();"> <span class="subcat-label">Bands</span></li>
                             </ul>
                         </div>
-                            </div>
                         </form>
                     </div>
                 </div>
@@ -864,62 +903,64 @@
                         const defaultsInput = filterForm ? filterForm.querySelector('input[name="use_defaults"]') : null;
                         if (!filterForm) return;
 
-                        const DIAMOND_TAG_KEYS = ['diamond_rings', 'diamond_pendants', 'diamond_earrings', 'diamond_bands', 'diamond_all'];
+                        const GOLD_TAG_KEYS = ['mens_rings', 'gold_rings', 'gold_tops', 'gold_chains', 'gold_pendants', 'gold_bangles', 'gold_bracelets', 'gold_earrings'];
+                        const DIAMOND_SUB_TAGS = ['diamond_rings', 'diamond_pendants', 'diamond_earrings', 'diamond_bands'];
 
                         function tagsFromInput() {
                             return (tagsInput?.value || '').split(',').map(s => s.trim()).filter(Boolean);
                         }
 
-                        function hasDiamondFilter(tags) {
-                            return tags.some(t => DIAMOND_TAG_KEYS.includes(t) || t.startsWith('diamond_'));
+                        function isDiamondTag(tag) {
+                            return tag === 'diamond_all' || DIAMOND_SUB_TAGS.includes(tag);
                         }
 
-                        function normalizeDiamondTags(tags) {
-                            const nonDiamond = tags.filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
-                            if (hasDiamondFilter(tags)) {
-                                return [...nonDiamond, 'diamond_all'];
-                            }
-                            return nonDiamond;
+                        function isGoldTag(tag) {
+                            return GOLD_TAG_KEYS.includes(tag);
+                        }
+
+                        function hasDiamondFilter(tags) {
+                            return tags.some(t => isDiamondTag(t));
+                        }
+
+                        function hasGoldFilter(tags) {
+                            return tags.some(t => isGoldTag(t));
                         }
 
                         function syncCheckboxesFromTags() {
                             const tags = tagsFromInput();
                             tagCheckboxes.forEach(cb => {
-                                if (DIAMOND_TAG_KEYS.includes(cb.value)) {
-                                    cb.checked = false;
-                                    return;
-                                }
                                 cb.checked = tags.includes(cb.value);
                             });
                         }
 
-                        function syncBtnFromCheckbox() {
+                        function barTagsFromBtn(btn) {
+                            return (btn.dataset.tags || '').split(',').map(s => s.trim()).filter(Boolean);
+                        }
+
+                        function syncBarBtnsFromTags() {
                             const tags = tagsFromInput();
-                            const allDiamonds = hasDiamondFilter(tags);
-                            document.querySelectorAll('#goldSubFilters .filter-tag-btn').forEach(btn => {
-                                btn.classList.toggle('active', tags.includes(btn.dataset.tag));
-                            });
-                            document.querySelectorAll('#diamondSubFilters .filter-tag-btn').forEach(btn => {
-                                btn.classList.toggle('active', allDiamonds);
+                            document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
+                                const btnTags = barTagsFromBtn(btn);
+                                const active = btnTags.length > 0
+                                    && btnTags.length === tags.length
+                                    && btnTags.every(t => tags.includes(t));
+                                btn.classList.toggle('active', active);
                             });
                         }
 
                         function syncUiFromTags() {
-                            const normalized = normalizeDiamondTags(tagsFromInput());
-                            if (tagsInput) tagsInput.value = normalized.join(',');
                             syncCheckboxesFromTags();
-                            syncBtnFromCheckbox();
+                            syncBarBtnsFromTags();
                         }
 
                         function applyAllDiamondsFilter() {
-                            const nonDiamond = tagsFromInput().filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
-                            if (tagsInput) tagsInput.value = [...nonDiamond, 'diamond_all'].join(',');
+                            if (tagsInput) tagsInput.value = 'diamond_all';
                             if (defaultsInput) defaultsInput.value = '0';
                             syncUiFromTags();
                         }
 
                         function clearDiamondFilter() {
-                            const remaining = tagsFromInput().filter(t => !DIAMOND_TAG_KEYS.includes(t) && !t.startsWith('diamond_'));
+                            const remaining = tagsFromInput().filter(t => !isDiamondTag(t));
                             if (tagsInput) tagsInput.value = remaining.join(',');
                             if (defaultsInput) defaultsInput.value = remaining.length ? '0' : '1';
                             syncUiFromTags();
@@ -930,29 +971,32 @@
                             if (cb) cb.checked = !cb.checked;
                         }
 
-                        const GOLD_TAG_KEYS = ['mens_rings', 'gold_rings', 'gold_tops', 'gold_chains', 'gold_pendants', 'gold_bangles', 'gold_bracelets', 'gold_earrings'];
-
-                        function hasGoldFilter(tags) {
-                            return tags.some(t => GOLD_TAG_KEYS.includes(t));
-                        }
-
-                        function setActiveTab(tabName) {
-                            const isGold = tabName === 'gold';
-                            const isDiamonds = tabName === 'diamonds';
-                            document.querySelectorAll('.os-tab').forEach(t => {
-                                t.classList.toggle('os-tab-active', tabName && t.dataset.tab === tabName);
-                            });
-                            const goldRow = document.getElementById('goldSubFilters');
-                            const diamondRow = document.getElementById('diamondSubFilters');
-                            if (goldRow) goldRow.classList.toggle('d-none', !isGold);
-                            if (diamondRow) diamondRow.classList.toggle('d-none', !isDiamonds);
+                        function toggleSubTag(tag) {
+                            let tags = tagsFromInput();
+                            if (tags.includes(tag)) {
+                                tags = tags.filter(t => t !== tag);
+                            } else {
+                                if (isDiamondTag(tag) && tag !== 'diamond_all') {
+                                    tags = tags.filter(t => t !== 'diamond_all');
+                                }
+                                tags.push(tag);
+                            }
+                            if (tagsInput) tagsInput.value = tags.join(',');
+                            if (defaultsInput) defaultsInput.value = tags.length ? '0' : '1';
+                            syncUiFromTags();
                         }
 
                         function writeSelectionsToInputs() {
                             if (pairsInput) pairsInput.value = '';
                             let tagValues = [];
                             tagCheckboxes.forEach(cb => { if (cb.checked) tagValues.push(cb.value); });
-                            if (tagsInput) tagsInput.value = normalizeDiamondTags(tagValues).join(',');
+                            if (tagValues.some(t => isDiamondTag(t))) {
+                                tagValues = tagValues.filter(t => !isGoldTag(t));
+                            }
+                            if (tagValues.some(t => isGoldTag(t))) {
+                                tagValues = tagValues.filter(t => !isDiamondTag(t));
+                            }
+                            if (tagsInput) tagsInput.value = tagValues.join(',');
                             // Clear single-select fields
                             const subcatInput = document.getElementById('subcatInput');
                             const catInput = document.getElementById('catInput');
@@ -1041,66 +1085,30 @@
 
                         // Restore and bind tag checkboxes
                         if (tagsInput) {
-                            const existingTags = (tagsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
-                            tagsInput.value = normalizeDiamondTags(existingTags).join(',');
                             syncUiFromTags();
                             tagCheckboxes.forEach(cb => {
                                 cb.addEventListener('click', function(e) {
                                     e.stopPropagation();
-                                    if (DIAMOND_TAG_KEYS.includes(this.value)) {
-                                        if (this.checked) {
-                                            applyAllDiamondsFilter();
-                                        } else {
-                                            clearDiamondFilter();
-                                        }
-                                    } else {
-                                        writeSelectionsToInputs();
-                                    }
+                                    writeSelectionsToInputs();
                                     removeFooterNow();
                                     fetchAndRender();
                                 });
                             });
-                            if (hasDiamondFilter(existingTags)) {
-                                setActiveTab('diamonds');
-                            } else if (hasGoldFilter(existingTags)) {
-                                setActiveTab('gold');
-                            } else {
-                                setActiveTab('');
-                            }
+                            syncBarBtnsFromTags();
                         }
 
-                        // GOLD / DIAMONDS tab switch
-                        document.querySelectorAll('.os-tab').forEach(tab => {
-                            tab.addEventListener('click', function() {
-                                setActiveTab(this.dataset.tab);
-                                if (this.dataset.tab === 'diamonds') {
-                                    applyAllDiamondsFilter();
-                                    removeFooterNow();
-                                    fetchAndRender();
-                                } else {
-                                    clearDiamondFilter();
-                                    removeFooterNow();
-                                    fetchAndRender();
-                                }
-                            });
-                        });
-
-                        // Horizontal filter buttons
-                        document.querySelectorAll('.filter-tag-btn').forEach(btn => {
+                        // Horizontal filter bar (combined tags; offcanvas unchanged)
+                        document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
                             btn.addEventListener('click', function() {
-                                const tag = this.dataset.tag;
-                                if (DIAMOND_TAG_KEYS.includes(tag) || tag.startsWith('diamond_')) {
-                                    if (hasDiamondFilter(tagsFromInput())) {
-                                        clearDiamondFilter();
-                                    } else {
-                                        applyAllDiamondsFilter();
-                                    }
-                                    removeFooterNow();
-                                    fetchAndRender();
-                                    return;
-                                }
-                                syncCheckboxFromBtn(tag);
-                                writeSelectionsToInputs();
+                                const list = barTagsFromBtn(this);
+                                if (!list.length) return;
+                                const current = tagsFromInput();
+                                const isSame = list.length === current.length
+                                    && list.every(t => current.includes(t));
+                                if (tagsInput) tagsInput.value = isSame ? '' : list.join(',');
+                                if (defaultsInput) defaultsInput.value = isSame ? '1' : '0';
+                                syncCheckboxesFromTags();
+                                syncBarBtnsFromTags();
                                 removeFooterNow();
                                 fetchAndRender();
                             });
@@ -1269,59 +1277,48 @@
     </div>
         <script>
     (function () {
-        function getVisibleHeaderHeight() {
-            if (window.matchMedia('(min-width: 992px)').matches) {
-                const header = document.querySelector('.luxury-header');
-                if (header) {
-                    const bottom = Math.ceil(header.getBoundingClientRect().bottom);
-                    if (bottom > 0) return bottom;
-                }
-                const spacer = document.querySelector('.header-spacer');
-                if (spacer && spacer.offsetHeight > 0) {
-                    return spacer.offsetHeight;
-                }
-                return 120;
-            }
-            const mobileHeader = document.querySelector('header.mobile-header-main');
-            if (mobileHeader) {
-                const bottom = Math.ceil(mobileHeader.getBoundingClientRect().bottom);
-                if (bottom > 0) return bottom;
-            }
-            return 64;
+        function getHeaderBottom() {
+            const isDesktop = window.matchMedia('(min-width: 992px)').matches;
+            const header = isDesktop
+                ? document.querySelector('.luxury-header')
+                : document.querySelector('header.mobile-header-main');
+            if (!header) return 0;
+            return Math.max(0, Math.ceil(header.getBoundingClientRect().bottom));
         }
 
-        function syncFilterBarOffset() {
-            const h = getVisibleHeaderHeight();
-            if (window.matchMedia('(min-width: 992px)').matches) {
-                document.documentElement.style.setProperty('--os-header-offset', h + 'px');
-            } else {
-                document.documentElement.style.setProperty('--os-mobile-header-offset', h + 'px');
-            }
-        }
-
-        function updateFilterBarSpacer() {
+        function updateFilterBar() {
             const bar = document.querySelector('.os-filter-bar');
             const spacer = document.getElementById('osFilterBarSpacer');
-            if (!bar || !spacer) return;
-            syncFilterBarOffset();
-            spacer.style.height = bar.offsetHeight + 'px';
+            if (!bar) return;
+
+            const headerBottom = getHeaderBottom();
+            const topGap = document.getElementById('osFilterBarTopGap');
+            if (topGap) {
+                topGap.style.height = headerBottom > 0 ? '15px' : '0';
+                topGap.style.top = headerBottom + 'px';
+            }
+            bar.style.top = (headerBottom > 0 ? headerBottom + 15 : 0) + 'px';
+
+            if (spacer) {
+                spacer.style.height = bar.offsetHeight + 'px';
+            }
         }
 
         let filterLayoutTimer = null;
         function scheduleFilterLayout(delay) {
-            updateFilterBarSpacer();
+            updateFilterBar();
             if (filterLayoutTimer) clearTimeout(filterLayoutTimer);
-            filterLayoutTimer = setTimeout(updateFilterBarSpacer, delay || 0);
+            filterLayoutTimer = setTimeout(updateFilterBar, delay || 0);
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             scheduleFilterLayout(50);
-            scheduleFilterLayout(400);
+            scheduleFilterLayout(300);
 
             const bar = document.querySelector('.os-filter-bar');
             if (bar && typeof ResizeObserver !== 'undefined') {
                 new ResizeObserver(function () {
-                    updateFilterBarSpacer();
+                    scheduleFilterLayout(0);
                 }).observe(bar);
             }
 
@@ -1334,20 +1331,20 @@
 
             window.addEventListener('resize', function () {
                 scheduleFilterLayout(100);
-            });
+            }, { passive: true });
 
             let filterScrollTick = false;
             window.addEventListener('scroll', function () {
                 if (filterScrollTick) return;
                 filterScrollTick = true;
                 requestAnimationFrame(function () {
-                    updateFilterBarSpacer();
+                    updateFilterBar();
                     filterScrollTick = false;
                 });
             }, { passive: true });
 
-            document.querySelectorAll('.os-tab').forEach(function (tab) {
-                tab.addEventListener('click', function () {
+            document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
                     scheduleFilterLayout(50);
                 });
             });
@@ -1574,6 +1571,5 @@
         }
     });
 </script>
-        </div>
     </section>
 @endsection

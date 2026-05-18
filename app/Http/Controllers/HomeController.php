@@ -826,6 +826,12 @@ public function Online_Shopping_Store(Request $request)
                         return;
                     }
 
+                    // ALL DIAMONDS
+                    if ($tag === 'diamond_all') {
+                        $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]']);
+                        return;
+                    }
+
                     // DIAMOND RINGS
                     if ($tag === 'diamond_rings') {
                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
