@@ -810,11 +810,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     @yield('content')
 
+    {{-- Single footer sitewide (route-based switch disabled)
     @if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
+        @include('public.layouts.footer_home_page')
+    @else
+        @include('public.layouts.footer')
+    @endif
+    --}}
     @include('public.layouts.footer_home_page')
-@else
-    @include('public.layouts.footer')
-@endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

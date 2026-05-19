@@ -904,8 +904,8 @@ padding:15px;
 
 @php
 $brands = [
-['name'=> 'Cuervo-Y-Sobrinos', 'slug' => 'cuervo-y-sobrinos', 'img' => 'CYS.avif'],
 ['name'=> 'Chronoswiss', 'slug' => 'chronoswiss', 'img' => 'Chronoswiss.avif'],
+['name'=> 'Cuervo-Y-Sobrinos', 'slug' => 'cuervo-y-sobrinos', 'img' => 'CYS.avif'],
 ['name'=> 'Favre Leuba', 'slug' => 'favre-leuba', 'img' => 'favre-leuba.avif'],
 ['name'=> 'Perrelet', 'slug' => 'perrelet', 'img' => 'Perrelet.avif'],
 ['name'=> 'Maurice Lacroix', 'slug' => 'maurice-lacroix', 'img' => 'Maurice Lacroix.avif'],

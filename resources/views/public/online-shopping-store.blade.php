@@ -2,159 +2,17 @@
 
 @section('content')
 <style>
-    /* =========================
-   Banner Container
-========================= */
-.custom-banner{
-    position: relative;
-    width: 100%;
-    height: 130vh;
-    overflow: hidden;
-    margin-top: -10rem;
-}
-
-/* Video Background */
-.custom-banner-video{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-}
-
-/* Image Background */
-.custom-banner-image{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-}
-                /* =========================
-   Overlay Content (Haphazard + Discover + Location)
-   Button starts from the "H" of Haphazard (left aligned)
-========================= */
-.banner-content {
-    position: absolute;
-    right: 10%;   /* try 10%–20% */
-    top: 63%;
-    transform: translateY(-50%);
-    z-index: 5;
-    max-width: 500px;
-    color: #fff;
-    text-align: left;
-}
-
-
-.banner-location{
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 21px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Montserrat';
-    color:#FFD59A;
-
-
-}
-
-.banner-title{
-    font-family: 'Cinzel Decorative';
-    font-size: 38px;
-    font-weight: 400;
-    letter-spacing: 6px;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap; 
-}
-/* Responsive tweaks */
-@media (max-width: 991px){
-    .banner-content{ right: 6%; }
-    .banner-title{ font-size: 36px; }
-}
-@media (min-width: 1600px) {
-    .banner-content {
-        top: 58%;
-        right:8%;
-    }
-     .banner-title{ font-size: 46px; }
-}
-                .offcanvas.offcanvas-modern{
+.offcanvas.offcanvas-modern{
   z-index: 20000 !important;
 }
-
-/* Offcanvas must be above any fixed header */
 .offcanvas{
   z-index: 20000 !important;
 }
-
-/* Backdrop should stay below offcanvas */
 .offcanvas-backdrop{
   z-index: 19999 !important;
 }
-.mobileStackHero{
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-}
-
-.mobileStackImgWrap{
-    width:100%;
-}
-
-.mobileStackVideo{
-    width:100%;
-    height:auto;
-    display:block;
-}
-
-/* TEXT OVERLAY */
-.mobileStackContent{
-    position:absolute;
-    bottom:10%;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
-    color:#fff;
-    z-index:2;
-    padding:0 20px;
-    width:100%;
-}
-
-.mobileTitle{
-      font-family: 'Cinzel Decorative';
-    font-size: 34px;
-    font-weight: 400;
-    letter-spacing: 6px;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap; 
-}
-
-.mobileSub{
-    font-size:14px;
-    letter-spacing:2px;
-    margin-bottom:6px;
-}
-
-.mobileText{
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 21px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-family: 'Montserrat';
-    color:#FFD59A;
-}
-
-
 </style>
+@if(false)
 <section class="custom-banner d-none d-lg-block position-relative">
         <video autoplay loop muted playsinline class="custom-banner-video">
             <source src="{{ asset('assets/f_assets/image/online shopping store/desktop.mp4') }}" type="video/mp4">
@@ -184,8 +42,9 @@
   </div>
 
 </section>
+@endif
     <section>
-        <div class="py-5">
+        <div class="os-store-wrap">
             <style>
 /* ================================
    PROMO ROW - FIXED (NO GAP ON iPAD)
@@ -402,23 +261,6 @@
                     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
                 }
                 
-                /* Smaller SORT & FILTER toggle */
-                .filter .navbar-toggler {
-                    font-size: 16px;
-                    padding: 4px 10px;
-                    line-height: 1.1;
-                    border: none !important;
-                    border-radius: 4px;
-                    outline: none !important;
-                    box-shadow: none !important;
-                }
-                .filter .navbar-toggler:focus,
-                .filter .navbar-toggler:hover,
-                .filter .navbar-toggler:active {
-                    border: none !important;
-                    outline: none !important;
-                    box-shadow: none !important;
-                }
                 /* Make image area fully clickable */
                 .card .card-img a { display: block; }
                 .card .card-img img { width: 100%; height: auto; }
@@ -433,6 +275,24 @@
             {{-- filter --}}
 
             <style>
+                /* Online store: header scrolls; filter bar sticks at viewport top */
+                .luxury-header {
+                    position: relative !important;
+                    top: auto;
+                    left: auto;
+                    right: auto;
+                }
+                .header-spacer {
+                    display: none !important;
+                    height: 0 !important;
+                }
+                header.mobile-header-main {
+                    position: relative !important;
+                    top: auto;
+                }
+                .os-store-wrap {
+                    padding-top: 0.5rem;
+                }
                 .offcanvas-modern {
                     font-family: 'Inter', Arial, sans-serif;
                     background: rgb(255, 255, 255) !important;
@@ -470,29 +330,40 @@
                     height: 1em;
                     cursor: pointer;
                     transition: opacity 0.2s;
+                    box-shadow: none;
+                    outline: none;
                 }
                 .offcanvas-modern .btn-close:hover {
                     opacity: 0.7;
                 }
-                .filter-section-title {
+                .offcanvas-modern .btn-close:focus,
+                .offcanvas-modern .btn-close:focus-visible,
+                .offcanvas-modern .btn-close:active {
+                    opacity: 1;
+                    outline: none;
+                    box-shadow: 0 0 0 2px #3c230d;
+                }
+                .offcanvas-modern .filter-section-title {
                     font-size: 0.98rem;
                     font-weight: 300;
                     letter-spacing: 0.01em;
-                    margin-bottom: 0.8rem;
-                    margin-top: 1.5rem;
+                    margin: 0 0 0.5rem;
                     text-transform: uppercase;
                     color: #222;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     border-bottom: 1px solid #ecebe7;
-                    padding-bottom: 0.5rem;
+                    padding-bottom: 0.4rem;
                     cursor: pointer;
+                }
+                .offcanvas-modern .filter-section + .filter-section {
+                    margin-top: 1rem;
                 }
                 .sort-list, .category-list, .subcategory-list {
                     list-style: none;
                     padding-left: 0;
-                    margin-bottom: 0;
+                    margin: 0;
                 }
                 .sort-list {
                     max-height: 0;
@@ -513,22 +384,26 @@
                     max-height: 0;
                     transition: max-height 0.3s ease-in;
                 }
-                .sort-list li, .category-list > li {
-                    padding: 0.4rem 0;
+                .offcanvas-modern .sort-list li,
+                .offcanvas-modern .category-list.collapsible > li {
+                    padding: 0.3rem 0;
+                    margin: 0;
                     font-size: 0.97rem;
+                    line-height: 1.35;
                     display: flex;
                     align-items: center;
+                    gap: 0.5rem;
                     cursor: pointer;
-
                     color: #222;
                 }
                 .sort-list li.selected {
                     font-weight: 600;
                     color: #111;
                 }
-                .sort-list li .diamond {
+                .offcanvas-modern .sort-list li .diamond {
                     font-size: 0.7em;
-                    margin-right: 0.7em;
+                    margin: 0;
+                    flex-shrink: 0;
                     color: #b2b2b2;
                 }
                 .sort-list li.selected .diamond {
@@ -537,15 +412,12 @@
                 .sort-list li:not(.selected) .diamond {
                     color: #b2b2b2;
                 }
-                .category-list > li {
-                    display: flex;
-                    align-items: flex-start;
-                    color: #222;
-                    flex-wrap: wrap;
-                    cursor: pointer;
+                .offcanvas-modern .category-list.collapsible > li .filter-tag-checkbox {
+                    margin: 0;
+                    flex-shrink: 0;
                 }
-                .category-list > li > span:first-child {
-                    flex: 1;
+                .offcanvas-modern .category-list.collapsible > li .subcat-label {
+                    margin: 0;
                 }
                 .category-toggle {
                     font-size: 1.1em;
@@ -608,8 +480,7 @@
                     color: #111;
                 }
                 .offcanvas-modern hr {
-                    border-color:rgb(255, 255, 255);
-                    margin: 1.2rem 0 1rem 0;
+                    display: none;
                 }
                 .filter-actions {
                     position: sticky;
@@ -636,13 +507,265 @@
                     margin-top: 1.5rem !important;
                     margin-bottom: 1rem !important;
                 }
+                .os-store-wrap {
+                    padding-top: 1.75rem;
+                    padding-bottom: 2.5rem;
+                }
+                /* Filter bar fixed; JS sets top below header, then 0 when header scrolls away */
+                .os-filter-bar {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                    top: 0;
+                    z-index: 9990;
+                    background:#FFFFFF;
+                
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+                    justify-content: center;
+                    padding: 0.75rem 1rem;
+                    text-align: center;
+                    /* border-bottom: 1px solid #000000; */
+                    /* border-top: 1px solid #e8d9a8; */
+                    box-shadow: none;
+                }
+                .os-filter-bar-top-gap {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    height: 0;
+                    z-index: 9989;
+                    background: #fff;
+                    pointer-events: none;
+                }
+                .os-filter-bar-spacer {
+                    display: block;
+                    width: 100%;
+                    height: 0;
+                }
+                @media (max-width: 991.98px) {
+                    .os-filter-bar {
+                        z-index: 990;
+                    }
+                }
+                .os-filter-bar-inner {
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+                    align-items: center;
+                    width: 100%;
+                }
+                .os-sub-filters-wrap {
+                    grid-column: 2;
+                    min-width: 0;
+                    max-width: 100%;
+                }
+                .os-filter-scroll-btn {
+                    display: none;
+                }
+                .os-sub-filters {
+                    display: flex;
+                    width: max-content;
+                    max-width: 100%;
+                    min-width: 0;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1rem 2.75rem;
+                    padding: 0;
+                    margin: 0;
+                }
+                .filter-tag-btn {
+                    background: none;
+                    border: none;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: calc(0.72rem + 1pt);
+                    font-weight: 400;
+                    letter-spacing: 0.15em;
+                    text-transform: none;
+                    color: #000;
+                    padding: 14px 8px;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    line-height: 1.2;
+                    box-shadow: none;
+                }
+                .filter-tag-btn:hover,
+                .filter-tag-btn:focus,
+                .filter-tag-btn:active,
+                .filter-tag-btn.active {
+                    box-shadow: none;
+                    outline: none;
+                }
+                .filter-tag-btn.active {
+                    color: #000;
+                    font-weight: 700;
+                    text-decoration: none;
+                }
+                /* Tablet: same centered layout as desktop */
+                @media (max-width: 991.98px) and (min-width: 768px) {
+                    .os-filter-bar {
+                        padding: 0.65rem 0.75rem;
+                    }
+                    .os-sub-filters {
+                        gap: 0.75rem 1.5rem;
+                    }
+                    .filter-tag-btn {
+                        font-size: calc(0.7rem + 1pt);
+                        padding: 12px 4px;
+                    }
+                }
+                /* Mobile only: arrows + one-line scroll */
+                @media (max-width: 767.98px) {
+                    .os-filter-bar {
+                        padding: 0.65rem 0.5rem 0.65rem 0.75rem;
+                    }
+                    .os-filter-bar-inner {
+                        grid-template-columns: minmax(0, 1fr) auto;
+                    }
+                    .os-sub-filters-wrap {
+                        grid-column: 1;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        gap: 0.15rem;
+                    }
+                    .os-filter-scroll-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        width: 1.25rem;
+                        padding: 0;
+                        border: none;
+                        background: transparent;
+                        color: rgba(0, 0, 0, 0.28);
+                        font-size: 1.35rem;
+                        line-height: 1;
+                        cursor: pointer;
+                    }
+                    .os-filter-scroll-btn:active {
+                        color: rgba(0, 0, 0, 0.5);
+                    }
+                    .os-sub-filters {
+                        flex: 1;
+                        width: auto;
+                        max-width: none;
+                        flex-wrap: nowrap;
+                        justify-content: flex-start;
+                        gap: 0.9rem 1.1rem;
+                        overflow-x: auto;
+                        overflow-y: hidden;
+                        -webkit-overflow-scrolling: touch;
+                        scroll-behavior: smooth;
+                        scrollbar-width: none;
+                    }
+                    .os-sub-filters::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .filter-tag-btn {
+                        flex-shrink: 0;
+                        font-size: calc(0.68rem + 1pt);
+                        letter-spacing: 0.1em;
+                        padding: 10px 3px;
+                    }
+                }
+                .os-sort-filter-btn {
+                    grid-column: 3;
+                    justify-self: end;
+                    flex-shrink: 0;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background: transparent;
+                    border: none;
+                    padding: 4px 0;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 0.72rem;
+                    font-weight: 400;
+                    letter-spacing: 0.15em;
+                    text-transform: uppercase;
+                    color: #000;
+                    cursor: pointer;
+                    line-height: 1.2;
+                }
+                .os-sort-filter-btn:hover,
+                .os-sort-filter-btn:focus,
+                .os-sort-filter-btn:active {
+                    color: #000;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    box-shadow: none;
+                }
+                .os-sort-filter-lines {
+                    display: inline-flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 17px;
+                    height: 11px;
+                    flex-shrink: 0;
+                }
+                .os-sort-filter-lines span {
+                    display: block;
+                    height: 1.5px;
+                    background-color: currentColor;
+                    border-radius: 1px;
+                    transition: width 0.2s ease, opacity 0.2s ease;
+                }
+                .os-sort-filter-lines span:nth-child(1) { width: 100%; }
+                .os-sort-filter-lines span:nth-child(2) { width: 65%; margin-left: auto; }
+                .os-sort-filter-lines span:nth-child(3) { width: 100%; }
+                .os-sort-filter-btn:hover .os-sort-filter-lines span:nth-child(2),
+                .os-sort-filter-btn:focus .os-sort-filter-lines span:nth-child(2) {
+                    width: 100%;
+                }
+                @media (max-width: 991.98px) {
+                    .os-sort-filter-label {
+                        display: none;
+                    }
+                }
+                @media (max-width: 767.98px) {
+                    .os-sort-filter-btn {
+                        grid-column: 2;
+                        align-self: center;
+                        gap: 0;
+                        padding: 8px;
+                    }
+                }
 </style>
-            <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
-                <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span> SORT & FILTER
-                </button>
+            <div id="osFilterBarTopGap" class="os-filter-bar-top-gap" aria-hidden="true"></div>
+            <div class="os-filter-bar filter">
+                <div class="os-filter-bar-inner">
+                    <div class="os-sub-filters-wrap">
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
+                        <div id="osSubFilters" class="os-sub-filters">
+                    <button type="button" class="filter-tag-btn" data-tags="mens_rings,gold_rings,diamond_rings,diamond_bands">Wedding Bands</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="mens_rings">MEN RINGS</button> -->
+
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings">RINGS</button> -->
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_tops">TOPS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
+
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_chains">CHAINS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">Pendants</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
+                        </div>
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
+                    </div>
+                    <button type="button" class="os-sort-filter-btn" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Sort and filter">
+                        <span class="os-sort-filter-lines" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </span>
+                        <span class="os-sort-filter-label">Sort &amp; Filter</span>
+                    </button>
+                </div>
             </div>
+            <div id="osFilterBarSpacer" class="os-filter-bar-spacer" aria-hidden="true"></div>
             <div class="offcanvas offcanvas-end offcanvas-modern" tabindex="-1" id="offcanvasFilter"
                 aria-labelledby="offcanvasFilterLabel" data-bs-backdrop="true" data-bs-scroll="false">
                 <div class="offcanvas-header">
@@ -657,8 +780,8 @@
                         <input type="hidden" name="cat_name" id="catInput" value="{{ request('cat_name') }}">
                         <input type="hidden" name="subcat_pairs" id="subcatPairsInput" value="{{ request('subcat_pairs') }}">
                         <input type="hidden" name="tags" id="tagsInput" value="{{ request('tags') }}">
-                        <div>
-                            <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))">
                                 Sort By
                                 <span class="category-toggle">+</span>
                             </div>
@@ -687,15 +810,10 @@
                             </ul>
                             <input type="hidden" name="sort" id="sortInput" value="{{ request('sort') }}">
                         </div>
-                        <hr>
-                        <hr>
-                        <div>
-                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">GOLD <span class="category-toggle">+</span></div>
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))">GOLD <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListGold">
-                                <li>
-    <input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();">
-    <span class="subcat-label">Mens Rings</span>
-</li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();"><span class="subcat-label">Mens Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_tops" onclick="event.stopPropagation();"> <span class="subcat-label">Tops</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_chains" onclick="event.stopPropagation();"> <span class="subcat-label">Chains</span></li>
@@ -705,8 +823,8 @@
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">Earrings</span></li>
                             </ul>
                         </div>
-                        <div class="mt-3">
-                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">DIAMONDS <span class="category-toggle">+</span></div>
+                        <div class="filter-section">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))">DIAMONDS <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListDiamonds">
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">Pendants</span></li>
@@ -714,7 +832,6 @@
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_bands" onclick="event.stopPropagation();"> <span class="subcat-label">Bands</span></li>
                             </ul>
                         </div>
-                            </div>
                         </form>
                     </div>
                 </div>
@@ -856,10 +973,99 @@
                         const defaultsInput = filterForm ? filterForm.querySelector('input[name="use_defaults"]') : null;
                         if (!filterForm) return;
 
+                        const GOLD_TAG_KEYS = ['mens_rings', 'gold_rings', 'gold_tops', 'gold_chains', 'gold_pendants', 'gold_bangles', 'gold_bracelets', 'gold_earrings'];
+                        const DIAMOND_SUB_TAGS = ['diamond_rings', 'diamond_pendants', 'diamond_earrings', 'diamond_bands'];
+
+                        function tagsFromInput() {
+                            return (tagsInput?.value || '').split(',').map(s => s.trim()).filter(Boolean);
+                        }
+
+                        function isDiamondTag(tag) {
+                            return tag === 'diamond_all' || DIAMOND_SUB_TAGS.includes(tag);
+                        }
+
+                        function isGoldTag(tag) {
+                            return GOLD_TAG_KEYS.includes(tag);
+                        }
+
+                        function hasDiamondFilter(tags) {
+                            return tags.some(t => isDiamondTag(t));
+                        }
+
+                        function hasGoldFilter(tags) {
+                            return tags.some(t => isGoldTag(t));
+                        }
+
+                        function syncCheckboxesFromTags() {
+                            const tags = tagsFromInput();
+                            tagCheckboxes.forEach(cb => {
+                                cb.checked = tags.includes(cb.value);
+                            });
+                        }
+
+                        function barTagsFromBtn(btn) {
+                            return (btn.dataset.tags || '').split(',').map(s => s.trim()).filter(Boolean);
+                        }
+
+                        function syncBarBtnsFromTags() {
+                            const tags = tagsFromInput();
+                            document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
+                                const btnTags = barTagsFromBtn(btn);
+                                const active = btnTags.length > 0
+                                    && btnTags.length === tags.length
+                                    && btnTags.every(t => tags.includes(t));
+                                btn.classList.toggle('active', active);
+                            });
+                        }
+
+                        function syncUiFromTags() {
+                            syncCheckboxesFromTags();
+                            syncBarBtnsFromTags();
+                        }
+
+                        function applyAllDiamondsFilter() {
+                            if (tagsInput) tagsInput.value = 'diamond_all';
+                            if (defaultsInput) defaultsInput.value = '0';
+                            syncUiFromTags();
+                        }
+
+                        function clearDiamondFilter() {
+                            const remaining = tagsFromInput().filter(t => !isDiamondTag(t));
+                            if (tagsInput) tagsInput.value = remaining.join(',');
+                            if (defaultsInput) defaultsInput.value = remaining.length ? '0' : '1';
+                            syncUiFromTags();
+                        }
+
+                        function syncCheckboxFromBtn(tag) {
+                            const cb = document.querySelector('.filter-tag-checkbox[value="' + tag + '"]');
+                            if (cb) cb.checked = !cb.checked;
+                        }
+
+                        function toggleSubTag(tag) {
+                            let tags = tagsFromInput();
+                            if (tags.includes(tag)) {
+                                tags = tags.filter(t => t !== tag);
+                            } else {
+                                if (isDiamondTag(tag) && tag !== 'diamond_all') {
+                                    tags = tags.filter(t => t !== 'diamond_all');
+                                }
+                                tags.push(tag);
+                            }
+                            if (tagsInput) tagsInput.value = tags.join(',');
+                            if (defaultsInput) defaultsInput.value = tags.length ? '0' : '1';
+                            syncUiFromTags();
+                        }
+
                         function writeSelectionsToInputs() {
                             if (pairsInput) pairsInput.value = '';
-                            const tagValues = [];
+                            let tagValues = [];
                             tagCheckboxes.forEach(cb => { if (cb.checked) tagValues.push(cb.value); });
+                            if (tagValues.some(t => isDiamondTag(t))) {
+                                tagValues = tagValues.filter(t => !isGoldTag(t));
+                            }
+                            if (tagValues.some(t => isGoldTag(t))) {
+                                tagValues = tagValues.filter(t => !isDiamondTag(t));
+                            }
                             if (tagsInput) tagsInput.value = tagValues.join(',');
                             // Clear single-select fields
                             const subcatInput = document.getElementById('subcatInput');
@@ -867,6 +1073,7 @@
                             if (subcatInput) subcatInput.value = '';
                             if (catInput) catInput.value = '';
                             if (defaultsInput) defaultsInput.value = (tagsInput && tagsInput.value) ? '0' : '1';
+                            syncUiFromTags();
                         }
 
                         function buildUrlWithFormParams() {
@@ -948,10 +1155,8 @@
 
                         // Restore and bind tag checkboxes
                         if (tagsInput) {
-                            const existingTags = (tagsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
-                            const existingTagsSet = new Set(existingTags);
+                            syncUiFromTags();
                             tagCheckboxes.forEach(cb => {
-                                if (existingTagsSet.has(cb.value)) cb.checked = true;
                                 cb.addEventListener('click', function(e) {
                                     e.stopPropagation();
                                     writeSelectionsToInputs();
@@ -959,7 +1164,25 @@
                                     fetchAndRender();
                                 });
                             });
+                            syncBarBtnsFromTags();
                         }
+
+                        // Horizontal filter bar (combined tags; offcanvas unchanged)
+                        document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const list = barTagsFromBtn(this);
+                                if (!list.length) return;
+                                const current = tagsFromInput();
+                                const isSame = list.length === current.length
+                                    && list.every(t => current.includes(t));
+                                if (tagsInput) tagsInput.value = isSame ? '' : list.join(',');
+                                if (defaultsInput) defaultsInput.value = isSame ? '1' : '0';
+                                syncCheckboxesFromTags();
+                                syncBarBtnsFromTags();
+                                removeFooterNow();
+                                fetchAndRender();
+                            });
+                        });
                     })();
                 });
             </script>
@@ -970,8 +1193,8 @@
         $absoluteStart = ($products->perPage() * ($products->currentPage() - 1)) + 1;
         $cursor = 0;
 
-        // Promo injection points
-        $promoPoints = [9, 21];  // after 8th => at 9, after 20th => at 21
+        // Promo injection points (disabled)
+        // $promoPoints = [9, 21];
     @endphp
 
     @while($cursor < $products->count())
@@ -979,7 +1202,7 @@
             $absIndex = $absoluteStart + $cursor;
         @endphp
 
-        {{-- ✅ PROMO BLOCK 1 (after 8th product => absIndex 9) --}}
+        @if(false)
         @if($absIndex === 9)
             <div class="w-100"></div>
 
@@ -1017,9 +1240,9 @@
             @php $cursor += 2; @endphp
             @continue
         @endif
+        @endif
 
-
-        {{-- ✅ PROMO BLOCK 2 (after 20th product => absIndex 21) --}}
+        @if(false)
         @if($absIndex === 19)
             <div class="w-100"></div>
 
@@ -1057,20 +1280,11 @@
             @php $cursor += 2; @endphp
             @continue
         @endif
+        @endif
 
-
-        {{-- ✅ STANDARD PRODUCTS (2 per row on mobile/tablet, 4 on xl desktop) --}}
+        {{-- STANDARD PRODUCTS (2 per row on mobile/tablet, 4 on xl desktop) --}}
         @php
-            $nextPromo = null;
-            foreach ($promoPoints as $p) {
-                if ($p > $absIndex) { $nextPromo = $p; break; }
-            }
-
             $limit = 4;
-            if ($nextPromo !== null) {
-                $remainUntilPromo = $nextPromo - $absIndex;
-                if ($remainUntilPromo < 4) $limit = max(0, $remainUntilPromo);
-            }
         @endphp
 
         @for($col = 0; $col < $limit && $cursor < $products->count(); $col++)
@@ -1132,6 +1346,96 @@
 @endif
     </div>
         <script>
+    (function () {
+        const HEADER_FILTER_GAP = 28;
+
+        function getHeaderBottom() {
+            const isDesktop = window.matchMedia('(min-width: 992px)').matches;
+            const header = isDesktop
+                ? document.querySelector('.luxury-header')
+                : document.querySelector('header.mobile-header-main');
+            if (!header) return 0;
+            return Math.max(0, Math.ceil(header.getBoundingClientRect().bottom));
+        }
+
+        function updateFilterBar() {
+            const bar = document.querySelector('.os-filter-bar');
+            const spacer = document.getElementById('osFilterBarSpacer');
+            if (!bar) return;
+
+            const headerBottom = getHeaderBottom();
+            const topGap = document.getElementById('osFilterBarTopGap');
+            if (topGap) {
+                topGap.style.height = headerBottom > 0 ? HEADER_FILTER_GAP + 'px' : '0';
+                topGap.style.top = headerBottom + 'px';
+            }
+            bar.style.top = (headerBottom > 0 ? headerBottom + HEADER_FILTER_GAP : 0) + 'px';
+
+            if (spacer) {
+                spacer.style.height = bar.offsetHeight + 'px';
+            }
+        }
+
+        let filterLayoutTimer = null;
+        function scheduleFilterLayout(delay) {
+            updateFilterBar();
+            if (filterLayoutTimer) clearTimeout(filterLayoutTimer);
+            filterLayoutTimer = setTimeout(updateFilterBar, delay || 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            scheduleFilterLayout(50);
+            scheduleFilterLayout(300);
+
+            const bar = document.querySelector('.os-filter-bar');
+            if (bar && typeof ResizeObserver !== 'undefined') {
+                new ResizeObserver(function () {
+                    scheduleFilterLayout(0);
+                }).observe(bar);
+            }
+
+            const header = document.querySelector('.luxury-header');
+            if (header) {
+                header.addEventListener('transitionend', function () {
+                    scheduleFilterLayout(0);
+                });
+            }
+
+            window.addEventListener('resize', function () {
+                scheduleFilterLayout(100);
+            }, { passive: true });
+
+            let filterScrollTick = false;
+            window.addEventListener('scroll', function () {
+                if (filterScrollTick) return;
+                filterScrollTick = true;
+                requestAnimationFrame(function () {
+                    updateFilterBar();
+                    filterScrollTick = false;
+                });
+            }, { passive: true });
+
+            document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    scheduleFilterLayout(50);
+                });
+            });
+
+            const filterScroll = document.getElementById('osSubFilters');
+            const filterScrollPrev = document.querySelector('.os-filter-scroll-prev');
+            const filterScrollNext = document.querySelector('.os-filter-scroll-next');
+            if (filterScroll && filterScrollPrev && filterScrollNext) {
+                const scrollStep = 140;
+                filterScrollPrev.addEventListener('click', function () {
+                    filterScroll.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+                });
+                filterScrollNext.addEventListener('click', function () {
+                    filterScroll.scrollBy({ left: scrollStep, behavior: 'smooth' });
+                });
+            }
+        });
+    })();
+
     // Function to scroll to products section
     function scrollToProducts() {
         const productsSection = document.querySelector('.onlineStore');
@@ -1352,6 +1656,5 @@
         }
     });
 </script>
-        </div>
     </section>
 @endsection
