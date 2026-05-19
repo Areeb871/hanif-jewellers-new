@@ -276,21 +276,21 @@
 
             <style>
                 /* Online store: header scrolls; filter bar sticks at viewport top */
-                body.page-online-store .luxury-header {
-                    position: relative;
+                .luxury-header {
+                    position: relative !important;
                     top: auto;
                     left: auto;
                     right: auto;
                 }
-                body.page-online-store .header-spacer {
-                    display: none;
+                .header-spacer {
+                    display: none !important;
                     height: 0 !important;
                 }
-                body.page-online-store header.mobile-header-main {
-                    position: relative;
+                header.mobile-header-main {
+                    position: relative !important;
                     top: auto;
                 }
-                body.page-online-store .os-store-wrap {
+                .os-store-wrap {
                     padding-top: 0.5rem;
                 }
                 .offcanvas-modern {

@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    <!-- Meta Pixel Code -->
+<link rel="canonical" href="{{ request()->url() }}">
+<!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -75,8 +76,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
 :root{
-  --bg:#fff;
-  --text:#000;
+  --bg:#3c230d;
+  --text:#ffffff;
   --border:#e5e5e5;
 
   /* Controls how “close” icons/left links feel to HANIF */
@@ -89,35 +90,27 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
 /* Fixed Header (no layout vibration) */
 .luxury-header{
-  position: fixed;
+  position: fixed;        /* ✅ changed from sticky */
   top: 0;
   left: 0;
   right: 0;
   z-index: 9999;
-  background: #3c230d;
-  padding: 0;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-}
-
-/* Menu row — logo is absolute inside .luxury-shell so nav can center on screen */
-.header-bar{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 64px;
+  background: var(--bg);
+  will-change: transform;
 }
 
 /* Spacer keeps page from jumping */
 .header-spacer{
   height: 0;              /* JS will set exact height */
+  background: var(--bg);
 }
 
 /* Cartier-like centered “shell” so left/logo/right stay together */
 .luxury-shell{
-  /* max-width: var(--shellMax); */
+  max-width: var(--shellMax);
   margin: 0 auto;
   padding: 0 var(--shellPad);
-  background: #3c230d;
+  background: var(--bg);
   position: relative;
 }
 
@@ -128,7 +121,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   align-items: center;
   padding: 18px 0;
   column-gap: 24px;
-  background: #3c230d;
+  background: var(--bg);
 }
 
 /* LEFT */
@@ -184,56 +177,43 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   align-items: center;
 }
 
-/* NAV */
+/* NAV (below header row) */
 .main-nav{
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;
-  padding: 0;
-  margin: 0;
-  background: transparent;
+  padding: 14px 170px 18px 190px;
+  background: var(--bg);
+
   font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   white-space: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
-  min-height: 40px;
 }
 .main-nav::-webkit-scrollbar{ display:none; }
-.main-nav > .dropdown{
-  display: flex;
-  align-items: center;
-  flex: 0 0 auto;
-}
-.main-nav a,
-.main-nav .dropdown-toggle{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
+.main-nav a{
   text-decoration: none;
   color: var(--text);
   opacity: .9;
   flex: 0 0 auto;
-  font-size: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
 }
-.main-nav .dropdown-toggle::after{
-  vertical-align: middle;
-  margin-left: 0.35em;
+.header-static-tools{
+  position: absolute;
+  right: var(--shellPad);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 10020;
 }
 .nav-divider{
   width: 1px;
-  height: 12px;
-  align-self: center;
-  background: white;
+  height: 14px;
+  background: #ffffff;
   opacity: .9;
   margin: 0 6px;
   flex: 0 0 auto;
@@ -249,6 +229,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   :root{ --shellPad: 18px; --shellMax: 1200px; }
   .header-left{ font-size: 10.5px; gap: 14px; }
   .header-right{ gap: 14px; }
+  .header-static-tools{ gap: 10px; }
+  .main-nav{ padding-left: 170px; padding-right: 145px; }
 }
 
 /* ✅ No hover / no transparency effects on DESKTOP */
@@ -259,26 +241,81 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
     background-color:#3c230d !important;
   }
 
-  /* IMPORTANT: do NOT set * background transparent (it kills badge) */
-  .luxury-header a,
-  .luxury-header a *{
+  /* Keep top-level header links transparent without forcing dropdown internals */
+  .luxury-header .header-left > a,
+  .luxury-header .header-right > a,
+  .luxury-header .main-nav > a,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle,
+  .luxury-header .header-static-tools > a,
+  .luxury-header .header-static-tools > .dropdown > a,
+  .luxury-header .header-static-tools > .dropdown > a *{
     background-color: transparent !important;
   }
 
-  .luxury-header a,
-  .luxury-header a:hover,
-  .luxury-header a:focus,
-  .luxury-header a:active,
-  .luxury-header a:visited{
+  .luxury-header .header-left > a,
+  .luxury-header .header-left > a:hover,
+  .luxury-header .header-left > a:focus,
+  .luxury-header .header-left > a:active,
+  .luxury-header .header-left > a:visited,
+  .luxury-header .header-right > a,
+  .luxury-header .header-right > a:hover,
+  .luxury-header .header-right > a:focus,
+  .luxury-header .header-right > a:active,
+  .luxury-header .header-right > a:visited,
+  .luxury-header .main-nav > a,
+  .luxury-header .main-nav > a:hover,
+  .luxury-header .main-nav > a:focus,
+  .luxury-header .main-nav > a:active,
+  .luxury-header .main-nav > a:visited,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:hover,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:focus,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:active,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:visited,
+  .luxury-header .header-static-tools > a,
+  .luxury-header .header-static-tools > a:hover,
+  .luxury-header .header-static-tools > a:focus,
+  .luxury-header .header-static-tools > a:active,
+  .luxury-header .header-static-tools > a:visited,
+  .luxury-header .header-static-tools #cartHeader a,
+  .luxury-header .header-static-tools #cartHeader a:hover,
+  .luxury-header .header-static-tools #cartHeader a:focus,
+  .luxury-header .header-static-tools #cartHeader a:active,
+  .luxury-header .header-static-tools #cartHeader a:visited,
+  .luxury-header .header-static-tools > .dropdown > a,
+  .luxury-header .header-static-tools > .dropdown > a:hover,
+  .luxury-header .header-static-tools > .dropdown > a:focus,
+  .luxury-header .header-static-tools > .dropdown > a:active,
+  .luxury-header .header-static-tools > .dropdown > a:visited{
+    color:#ffffff !important;
     opacity:1 !important;
     text-decoration:none !important;
     outline:none !important;
     box-shadow:none !important;
   }
 
-  .luxury-header i,
-  .luxury-header a:hover i,
-  .luxury-header a:focus i{
+  .luxury-header .header-left > a i,
+  .luxury-header .header-right > a i,
+  .luxury-header .main-nav > a i,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle i,
+  .luxury-header .header-static-tools > a i,
+  .luxury-header .header-static-tools > .dropdown > a i,
+  .luxury-header .header-left > a:hover i,
+  .luxury-header .header-right > a:hover i,
+  .luxury-header .main-nav > a:hover i,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:hover i,
+  .luxury-header .header-static-tools > a:hover i,
+  .luxury-header .header-static-tools #cartHeader a i,
+  .luxury-header .header-static-tools #cartHeader a:hover i,
+  .luxury-header .header-static-tools #cartHeader a:focus i,
+  .luxury-header .header-static-tools > .dropdown > a:hover i,
+  .luxury-header .header-left > a:focus i,
+  .luxury-header .header-right > a:focus i,
+  .luxury-header .main-nav > a:focus i,
+  .luxury-header .main-nav > .dropdown > .dropdown-toggle:focus i,
+  .luxury-header .header-static-tools > a:focus i,
+  .luxury-header .header-static-tools > .dropdown > a:focus i{
+    color:#ffffff !important;
     opacity:1 !important;
   }
 
@@ -292,15 +329,56 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .luxury-header a{
     -webkit-tap-highlight-color: transparent;
   }
+
+  .luxury-header .header-static-tools .dropdown-menu .dropdown-item{
+    color:#000 !important;
+  }
+  .luxury-header .header-static-tools .dropdown-menu .dropdown-item:hover,
+  .luxury-header .header-static-tools .dropdown-menu .dropdown-item:focus,
+  .luxury-header .header-static-tools .dropdown-menu .dropdown-item:active{
+    color:#000 !important;
+    background-color:#f7f7f7 !important;
+  }
 }
 
 /* Prevent badge clipping */
 .luxury-header,
 .luxury-shell,
-.header-bar,
 .header-row,
 .header-right{
   overflow: visible !important;
+}
+.top-header,
+.main-nav{
+  transition: 
+    padding 0.35s cubic-bezier(.4,0,.2,1),
+    max-height 0.35s cubic-bezier(.4,0,.2,1),
+    opacity 0.25s ease,
+    letter-spacing 0.3s ease;
+  will-change: padding, max-height;
+}
+
+.top-header{
+  max-height: 120px;
+  overflow: hidden;
+}
+.luxury-header.scrolled .top-header{
+  max-height: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+}
+
+/* ✅ ON SCROLL: NAVBAR HEIGHT INCREASE (more premium) */
+.luxury-header.scrolled .main-nav{
+  padding: 20px 0 22px !important;   /* ✅ increased height */
+  gap: 30px !important;              /* keep luxury spacing */
+  font-size: 12px !important;        /* keep same size */
+  letter-spacing: 1.5px !important;  /* keep same */
+}
+
+/* Optional: shadow only */
+.luxury-header.scrolled{
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 /* ==============================
    FIX: MODAL ABOVE FIXED HEADER
@@ -317,30 +395,55 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   position: relative;
   z-index: 10001;
   pointer-events: auto;
-  font-size: 14px;
-  line-height: 1;
 }
-/* Logo: inside shell, left — does not shift centered menu */
+/* Smooth transition */
+.luxury-header,
+.header-logo,
 .scroll-logo {
-  position: absolute;
-  left: var(--shellPad);
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  line-height: 0;
-}
-.scroll-logo img {
-  width: auto;
-  height: 40px;
-  max-width: 180px;
-  object-fit: contain;
-  object-position: left center;
-  display: block;
+  transition: all 0.35s ease;
 }
 
+/* Base state */
+.scroll-logo {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%);
+  z-index: 10020;
+  
+  /* FAST hide */
+  transition: opacity 0.05s ease, 
+              visibility 0.05s ease,
+              transform 0.05s ease;
+}
+
+/* When scrolled (slow smooth show) */
+.luxury-header.scrolled .scroll-logo {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%);
+
+  /* SLOW show */
+  transition: opacity 0.35s ease, 
+              transform 0.35s ease;
+}
+
+/* Hide Center Logo when Scrolled */
+.luxury-header.scrolled .header-logo {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Optional shrink header */
+.luxury-header.scrolled {
+  padding: 8px 0;
+}
+/* Optional nav spacing */
+.luxury-header.scrolled .main-nav {
+  margin-top: 0;
+}
 /* =========================
    FIX NAV OVERFLOW (IMPORTANT)
    dropdown was getting clipped
@@ -349,52 +452,22 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .main-nav{
     overflow: visible !important;
   }
-}
-/* ==============================
-   TOP NAVBAR TEXT WHITE
-   Normal + Hover
-================================ */
 
-/* Main navbar links white */
-.luxury-header .main-nav > a,
-.luxury-header .main-nav > .nav-link,
-.luxury-header .main-nav > .dropdown > a,
-.luxury-header .main-nav > .dropdown > .nav-link,
-.luxury-header .main-nav > .dropdown > .dropdown-toggle,
-.luxury-header .main-nav > ul > li > a,
-.luxury-header .main-nav .navbar-nav > li > a,
-.luxury-header .main-nav .navbar-nav > li > .nav-link {
-    color: #ffffff !important;
-    opacity: 1 !important;
+  header .hj-mega .dropdown-menu.mega-menu{
+    /* margin-top: 10px; !important; */
+    /* width: 100% !important; */
+    position: fixed !important;
+    /* left: 0 !important; */
+    /* right: 0 !important; */
+    /* width: 100% !important; */
+    /* top: calc(var(--megaTop) + 24px) !important; */
+    /* transform: none !important; */
+    /* inset: auto 0 auto 0 !important; */
+    /* z-index: 10000 !important; */
+    /* border: 1px solid red !important; */
+  }
 }
 
-/* Main navbar hover also white */
-.luxury-header .main-nav > a:hover,
-.luxury-header .main-nav > .nav-link:hover,
-.luxury-header .main-nav > .dropdown:hover > a,
-.luxury-header .main-nav > .dropdown:hover > .nav-link,
-.luxury-header .main-nav > .dropdown:hover > .dropdown-toggle,
-.luxury-header .main-nav > .dropdown > a:hover,
-.luxury-header .main-nav > .dropdown > .nav-link:hover,
-.luxury-header .main-nav > .dropdown > .dropdown-toggle:hover,
-.luxury-header .main-nav > ul > li > a:hover,
-.luxury-header .main-nav .navbar-nav > li > a:hover,
-.luxury-header .main-nav .navbar-nav > li > .nav-link:hover {
-    color: #ffffff !important;
-    opacity: 1 !important;
-}
-
-/* Dropdown arrow white */
-.luxury-header .main-nav > .dropdown > .dropdown-toggle::after,
-.luxury-header .main-nav > .dropdown:hover > .dropdown-toggle::after,
-.luxury-header .main-nav > .dropdown > .dropdown-toggle:hover::after {
-    border-top-color: #ffffff !important;
-}
-
-/* Navbar divider white */
-.luxury-header .main-nav .nav-divider {
-    background-color: #ffffff !important;
-}
 /* =========================
    MEGA MENU TEXT-ONLY (2 COLUMNS)
    Like screenshot
@@ -654,34 +727,12 @@ header .dropdown-menu.mega-menu .carousel-underline-wrapper::after{
         display: block;
     }
 }
-.region-switch {
-    position: absolute;
-    right: 80px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    letter-spacing: 1.5px;
-}
+ 
 
-.region-link {
-    text-decoration: none;
-    color: #777;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-}
-
-.region-link:hover {
-    color: #000;
-}
-
-.region-link.active {
-    color: #000;
-    font-weight: 600;
-}
   </style>
 </head>
 
-<body data-currency="pkr" @class(['page-online-store' => request()->is('collections/online-shopping-store')])>
+<body data-currency="pkr">
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
     <!-- Google Tag Manager (noscript) -->
@@ -692,28 +743,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <!-- Include Mobile Header -->
     @include('public.partials.mobile-header')
-<header class="luxury-header d-none d-lg-block">
+<header class="luxury-header scrolled d-none d-lg-block">
   <div class="luxury-shell">
-    <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
-      <img
-        src="{{ asset('assets/f_assets/image/logo.png') }}"
-        alt="Hanif Jewellers"
-        width="200"
-        height="40"
-        loading="eager"
-      >
-    </a>
-    <div class="header-bar">
+
+  <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
+  <img
+    src="{{ asset('assets/f_assets/image/logo.png') }}"
+    alt="Hanif Jewellers"
+   style="width:auto; height:40px; object-fit:contain;"
+  >
+</a>
+    <!-- ✅ ROW 1: top line -->
+<div class="header-row top-header">
+      <div class="header-left">
+        <!-- <a href="#">United States</a> -->
+        <a href="{{ url('/pages/contact-us')}}">Contact Us</a>
+        <!-- <a href="#">Services</a> -->
+      </div>
+
+      <a href="/" class="header-logo" aria-label="Hanif Jewellers Home">
+        <img
+          src="{{ asset('assets/f_assets/image/logo.png') }}"
+          alt="Hanif Jewellers"
+          class="header-logo-img"
+          width="200"
+          height="60"
+          loading="eager"
+        >
+      </a>
+
+    </div><!-- ✅ CLOSE header-row -->
+
+    <!-- ✅ ROW 2: nav -->
     <nav class="main-nav" aria-label="Main navigation">
-      
-                    <a href="{{ url('/highend-jewellery') }}">HIGH JEWELLRY</a>
+                            <a href="{{ url('/highend-jewellery') }}">HIGH END</a>
 
     <div class="dropdown hj-mega position-static">
   <a class="dropdown-toggle" href="#" id="JEWELLERYDropdown"
      role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Jewellery
   </a>
-
 
   <div class="dropdown-menu mega-menu p-0 border-0 rounded-0 w-100"
        aria-labelledby="JEWELLERYDropdown">
@@ -752,21 +821,24 @@ $menus = [
      'Festive' => [
         ['label' => 'Eid Par Sone ki Choriyan', 'url' => url('collections/eid-par-sony-ki-choriyan')],
         ['label'=> 'Valentine Hearts', 'url' => url('collections/valentine-jewels')],
+
+
     ],
 
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/eid/2.jpg',
+    'img' => 'assets/f_assets/image/tawoos/009.jpg',
     'btn' => 'EXPLORE COLLECTION',
-    'url' => url('collections/eid-par-sony-ki-choriyan'),
+    'url' => url('collections/tawoos'),
 ];
 @endphp
 
 
 <div class="row g-0 align-items-start mt-4 mega-inner-wrap">
 
-    <!-- LEFT SIDE (3 COLUMNS) -->
+    <!-- LEFT SIDE (BRIDAL + LIFESTYLE) -->
+ <!-- LEFT SIDE (3 COLUMNS) -->
     <div class="col-md-8">
 
         <div class="row">
@@ -810,8 +882,7 @@ $card = [
         </div>
 
     </div>
-
- <!-- RIGHT SIDE IMAGE -->
+    <!-- RIGHT SIDE IMAGE -->
 <div class="col-md-4 ps-md-4">
     <div class="hanif-mega-card">      
         <!-- IMAGE -->
@@ -820,7 +891,7 @@ $card = [
         </a>
         <br>
         <div class="hanif-mega-title">
-            Eid Par Sone ki Choriyan
+              TAWOOS
         </div>
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
@@ -828,7 +899,6 @@ $card = [
         </a>
     </div>
 </div>
-
 </div>
 
           
@@ -841,7 +911,7 @@ $card = [
 
   </div>
 </div>
-      <a href="{{ url('solitaire') }}">Solitare</a>
+      <a href="{{ url('solitaire') }}">Solitaire</a>
       <a href="{{ url('/collections/online-shopping-store') }}">Online Shopping Store</a>
       <a href="{{ url('watches') }}">Watches</a>
       <span class="nav-divider" aria-hidden="true"></span>
@@ -853,13 +923,37 @@ $card = [
 </a>
  </nav>
 
+  <div class="header-static-tools">
+    {{-- CART SECTION --}}
+    <span id="cartHeader" class="d-inline-flex align-items-center">
+      @include('public.partials.cart-header')
+    </span>
+
+    {{-- SETTINGS DROPDOWN --}}
+    <div class="dropdown position-relative">
+
+      <a href="/checkout" aria-label="Settings">
+        <i class="fa-solid fa-gear"></i>
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-end px-3 py-2"
+        style="left:-140px; top:40px; background:#ffffff;">
+        <li class="mb-2">
+          <a class="dropdown-item" href="/checkout">
+            <i class="fa fa-check-circle px-2"></i>Check Out
+          </a>
+        </li>
+      </ul>
+
     </div>
+  </div>
+
   </div>
 </header>
 
 <div class="header-spacer"></div>
 
-@php
+  @php
     $searchItems = \App\Models\Products::with('images')
         ->where('status', 1)
         ->select('id', 'name', 'slug', 'image', 'hover_image', 'description')
@@ -881,6 +975,7 @@ $card = [
         ->values()
         ->toArray();
 @endphp
+
     <style>
         .nav-search-wrapper {
             max-width: 1200px;
@@ -1031,14 +1126,11 @@ $card = [
 
     @yield('content')
 
-    {{-- Single footer sitewide (route-based switch disabled)
-    @if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
-        @include('public.layouts.footer_home_page')
-    @else
-        @include('public.layouts.footer')
-    @endif
-    --}}
+@if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
     @include('public.layouts.footer_home_page')
+@else
+    @include('public.layouts.footer')
+@endif
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1072,6 +1164,20 @@ document.addEventListener('DOMContentLoaded', function () {
         bootstrap.Dropdown.getOrCreateInstance(toggle).hide();
       });
     });
+
+    const settingsDropdown = document.querySelector('header .header-static-tools .dropdown');
+    if (settingsDropdown) {
+      const settingsToggle = settingsDropdown.querySelector('a[aria-label="Settings"]');
+      if (settingsToggle) {
+        settingsDropdown.addEventListener('mouseenter', function () {
+          bootstrap.Dropdown.getOrCreateInstance(settingsToggle).show();
+        });
+
+        settingsDropdown.addEventListener('mouseleave', function () {
+          bootstrap.Dropdown.getOrCreateInstance(settingsToggle).hide();
+        });
+      }
+    }
   }
 });
 </script>
@@ -1192,8 +1298,13 @@ document.addEventListener("DOMContentLoaded", function () {
     spacer.style.height = header.offsetHeight + "px";
   }
 
+  // initial spacer
   setSpacerHeight();
-  window.addEventListener("resize", setSpacerHeight);
+
+  // update spacer on resize
+  window.addEventListener("resize", () => {
+    setSpacerHeight();
+  });
 });
 </script>
 <script>
