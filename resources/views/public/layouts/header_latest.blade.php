@@ -76,8 +76,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
 :root{
-  --bg:#fff;
-  --text:#000;
+  --bg:#3c230d;
+  --text:#ffffff;
   --border:#e5e5e5;
 
   /* Controls how “close” icons/left links feel to HANIF */
@@ -96,13 +96,13 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   right: 0;
   z-index: 9999;
   background: var(--bg);
-  border-bottom: 1px solid var(--border);
   will-change: transform;
 }
 
 /* Spacer keeps page from jumping */
 .header-spacer{
   height: 0;              /* JS will set exact height */
+  background: var(--bg);
 }
 
 /* Cartier-like centered “shell” so left/logo/right stay together */
@@ -110,7 +110,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   max-width: var(--shellMax);
   margin: 0 auto;
   padding: 0 var(--shellPad);
-  background: #fff;
+  background: var(--bg);
+  position: relative;
 }
 
 /* One-row header (left | centered logo | right) */
@@ -120,7 +121,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   align-items: center;
   padding: 18px 0;
   column-gap: 24px;
-  background: #fff;
+  background: var(--bg);
 }
 
 /* LEFT */
@@ -182,8 +183,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   justify-content: center;
   align-items: center;
   gap: 30px;
-  padding: 14px 0 18px;
-  background: #fff;
+  padding: 14px 170px 18px 190px;
+  background: var(--bg);
 
   font-size: 12px;
   letter-spacing: 1.5px;
@@ -199,10 +200,20 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   opacity: .9;
   flex: 0 0 auto;
 }
+.header-static-tools{
+  position: absolute;
+  right: var(--shellPad);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 10020;
+}
 .nav-divider{
   width: 1px;
   height: 14px;
-  background: #000;
+  background: #ffffff;
   opacity: .9;
   margin: 0 6px;
   flex: 0 0 auto;
@@ -218,6 +229,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   :root{ --shellPad: 18px; --shellMax: 1200px; }
   .header-left{ font-size: 10.5px; gap: 14px; }
   .header-right{ gap: 14px; }
+  .header-static-tools{ gap: 10px; }
+  .main-nav{ padding-left: 170px; padding-right: 145px; }
 }
 
 /* ✅ No hover / no transparency effects on DESKTOP */
@@ -225,7 +238,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
   .luxury-header,
   .luxury-header:hover{
-    background-color:#fff !important;
+    background-color:#3c230d !important;
   }
 
   /* IMPORTANT: do NOT set * background transparent (it kills badge) */
@@ -239,7 +252,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .luxury-header a:focus,
   .luxury-header a:active,
   .luxury-header a:visited{
-    color:#000 !important;
+    color:#ffffff !important;
     opacity:1 !important;
     text-decoration:none !important;
     outline:none !important;
@@ -249,7 +262,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   .luxury-header i,
   .luxury-header a:hover i,
   .luxury-header a:focus i{
-    color:#000 !important;
+    color:#ffffff !important;
     opacity:1 !important;
   }
 
@@ -262,6 +275,14 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
   .luxury-header a{
     -webkit-tap-highlight-color: transparent;
+  }
+
+  .luxury-header .dropdown-menu a,
+  .luxury-header .dropdown-menu .dropdown-toggle{
+    color:#222 !important;
+  }
+  .luxury-header .dropdown-menu .dropdown-item{
+    color:#000 !important;
   }
 }
 
@@ -331,10 +352,11 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 .scroll-logo {
   position: absolute;
   left: 24px;
-  top: 20px;
+  top: 50%;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-5px);
+  transform: translateY(-50%);
+  z-index: 10020;
   
   /* FAST hide */
   transition: opacity 0.05s ease, 
@@ -346,7 +368,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 .luxury-header.scrolled .scroll-logo {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(-50%);
 
   /* SLOW show */
   transition: opacity 0.35s ease, 
@@ -365,7 +387,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 }
 /* Optional nav spacing */
 .luxury-header.scrolled .main-nav {
-  margin-top: 10px;
+  margin-top: 0;
 }
 /* =========================
    FIX NAV OVERFLOW (IMPORTANT)
@@ -374,6 +396,20 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 @media (min-width: 992px){
   .main-nav{
     overflow: visible !important;
+  }
+
+  header .hj-mega .dropdown-menu.mega-menu{
+    /* margin-top: 10px; !important; */
+    /* width: 100% !important; */
+    position: fixed !important;
+    /* left: 0 !important; */
+    /* right: 0 !important; */
+    /* width: 100% !important; */
+    /* top: calc(var(--megaTop) + 24px) !important; */
+    /* transform: none !important; */
+    /* inset: auto 0 auto 0 !important; */
+    /* z-index: 10000 !important; */
+    /* border: 1px solid red !important; */
   }
 }
 
@@ -652,12 +688,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <!-- Include Mobile Header -->
     @include('public.partials.mobile-header')
-<header class="luxury-header d-none d-lg-block">
+<header class="luxury-header scrolled d-none d-lg-block">
   <div class="luxury-shell">
 
   <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
   <img
-    src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
+    src="{{ asset('assets/f_assets/image/logo.png') }}"
     alt="Hanif Jewellers"
    style="width:auto; height:40px; object-fit:contain;"
   >
@@ -672,7 +708,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <a href="/" class="header-logo" aria-label="Hanif Jewellers Home">
         <img
-          src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
+          src="{{ asset('assets/f_assets/image/logo.png') }}"
           alt="Hanif Jewellers"
           class="header-logo-img"
           width="200"
@@ -680,43 +716,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           loading="eager"
         >
       </a>
-
-      <div class="header-right d-flex align-items-center gap-3">
-
-        <!-- <a href="#" aria-label="Wishlist">
-          <i class="fa-regular fa-heart"></i>
-        </a>
-
-        <a href="#" aria-label="Account">
-          <i class="fa-regular fa-user"></i>
-        </a> -->
-
-        {{-- CART SECTION --}}
-        <span id="cartHeader" class="d-inline-flex align-items-center">
-          @include('public.partials.cart-header')
-        </span>
-
-        {{-- SETTINGS DROPDOWN --}}
-        <div class="dropdown position-relative"
-          onmouseenter="this.classList.add('show'); this.querySelector('.dropdown-menu').classList.add('show');"
-          onmouseleave="this.classList.remove('show'); this.querySelector('.dropdown-menu').classList.remove('show');">
-
-          <a href="/checkout" aria-label="Settings">
-            <i class="fa-solid fa-gear"></i>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end px-3 py-2"
-            style="left:-140px; top:40px; background:#ffffff;">
-            <li class="mb-2">
-              <a class="dropdown-item" href="/checkout">
-                <i class="fa fa-check-circle px-2"></i>Check Out
-              </a>
-            </li>
-          </ul>
-
-        </div>
-
-      </div><!-- ✅ CLOSE header-right -->
 
     </div><!-- ✅ CLOSE header-row -->
 
@@ -868,6 +867,33 @@ $card = [
    <i class="fa-solid fa-magnifying-glass"></i>
 </a>
  </nav>
+
+  <div class="header-static-tools">
+    {{-- CART SECTION --}}
+    <span id="cartHeader" class="d-inline-flex align-items-center">
+      @include('public.partials.cart-header')
+    </span>
+
+    {{-- SETTINGS DROPDOWN --}}
+    <div class="dropdown position-relative"
+      onmouseenter="this.classList.add('show'); this.querySelector('.dropdown-menu').classList.add('show');"
+      onmouseleave="this.classList.remove('show'); this.querySelector('.dropdown-menu').classList.remove('show');">
+
+      <a href="/checkout" aria-label="Settings">
+        <i class="fa-solid fa-gear"></i>
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-end px-3 py-2"
+        style="left:-140px; top:40px; background:#ffffff;">
+        <li class="mb-2">
+          <a class="dropdown-item" href="/checkout">
+            <i class="fa fa-check-circle px-2"></i>Check Out
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
 
   </div>
 </header>
@@ -1089,24 +1115,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <script>
-  let lastScroll = 0;
-  const header = document.querySelector(".luxury-header");
-
-  window.addEventListener("scroll", function () {
-    const currentScroll = window.scrollY;
-
-    if (currentScroll > lastScroll && currentScroll > 50) {
-      // Scrolling down → show logo
-      header.classList.add("scrolled");
-    } else {
-      // Scrolling up → hide immediately
-      header.classList.remove("scrolled");
-    }
-
-    lastScroll = currentScroll;
-  });
-</script>
-<script>
 document.addEventListener("DOMContentLoaded", function () {
   const trigger = document.getElementById('navSearchTrigger');
   const modalEl = document.getElementById('navSearchModal');
@@ -1219,48 +1227,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!header || !spacer) return;
 
-  // ✅ Two thresholds = no flicker/vibration near the edge
-  const ADD_AT = 140;     // add "scrolled" after this
-  const REMOVE_AT = 90;   // remove only when below this
-
-  let isScrolled = false;
-  let ticking = false;
-
   function setSpacerHeight() {
     spacer.style.height = header.offsetHeight + "px";
-  }
-
-  function update() {
-    const y = window.scrollY || 0;
-
-    if (!isScrolled && y > ADD_AT) {
-      header.classList.add("scrolled");
-      isScrolled = true;
-      setSpacerHeight(); // header height changed after animation start
-    } else if (isScrolled && y < REMOVE_AT) {
-      header.classList.remove("scrolled");
-      isScrolled = false;
-      setSpacerHeight();
-    }
-
-    ticking = false;
   }
 
   // initial spacer
   setSpacerHeight();
 
-  // update spacer on resize / fonts load
+  // update spacer on resize
   window.addEventListener("resize", () => {
     setSpacerHeight();
-    update();
   });
-
-  window.addEventListener("scroll", function () {
-    if (!ticking) {
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
 });
 </script>
 <script>
