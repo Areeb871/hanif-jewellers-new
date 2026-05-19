@@ -99,11 +99,11 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 
-/* Logo + menu — one row, vertically centered */
+/* Menu row — logo is absolute inside .luxury-shell so nav can center on screen */
 .header-bar{
   display: flex;
   align-items: center;
-  gap: 28px;
+  justify-content: center;
   min-height: 64px;
 }
 
@@ -186,7 +186,6 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
 /* NAV */
 .main-nav{
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -321,9 +320,13 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   font-size: 14px;
   line-height: 1;
 }
-/* Left logo */
+/* Logo: inside shell, left — does not shift centered menu */
 .scroll-logo {
-  flex: 0 0 auto;
+  position: absolute;
+  left: var(--shellPad);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
@@ -332,7 +335,9 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 .scroll-logo img {
   width: auto;
   height: 40px;
+  max-width: 180px;
   object-fit: contain;
+  object-position: left center;
   display: block;
 }
 
@@ -689,19 +694,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @include('public.partials.mobile-header')
 <header class="luxury-header d-none d-lg-block">
   <div class="luxury-shell">
+    <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
+      <img
+        src="{{ asset('assets/f_assets/image/logo.png') }}"
+        alt="Hanif Jewellers"
+        width="200"
+        height="40"
+        loading="eager"
+      >
+    </a>
     <div class="header-bar">
-
-  <a href="/" class="scroll-logo" aria-label="Hanif Jewellers Home">
-    <img
-      src="{{ asset('assets/f_assets/image/logo.png') }}"
-      alt="Hanif Jewellers"
-      width="200"
-      height="40"
-      loading="eager"
-    >
-  </a>
-
-    <!-- ✅ ROW 2: nav -->
     <nav class="main-nav" aria-label="Main navigation">
       
                     <a href="{{ url('/highend-jewellery') }}">HIGH JEWELLRY</a>

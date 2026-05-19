@@ -508,7 +508,7 @@
                     margin-bottom: 1rem !important;
                 }
                 .os-store-wrap {
-                    padding-top: 1.25rem;
+                    padding-top: 1.75rem;
                     padding-bottom: 2.5rem;
                 }
                 /* Filter bar fixed; JS sets top below header, then 0 when header scrolls away */
@@ -529,8 +529,7 @@
                     text-align: center;
                     /* border-bottom: 1px solid #000000; */
                     /* border-top: 1px solid #e8d9a8; */
-                    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
-                    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); */
+                    box-shadow: none;
                 }
                 .os-filter-bar-top-gap {
                     position: fixed;
@@ -552,17 +551,26 @@
                     }
                 }
                 .os-filter-bar-inner {
-                    display: flex;
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
                     align-items: center;
                     width: 100%;
-                    gap: 0.75rem;
+                }
+                .os-sub-filters-wrap {
+                    grid-column: 2;
+                    min-width: 0;
+                    max-width: 100%;
+                }
+                .os-filter-scroll-btn {
+                    display: none;
                 }
                 .os-sub-filters {
                     display: flex;
-                    flex: 1;
+                    width: max-content;
+                    max-width: 100%;
                     min-width: 0;
                     flex-wrap: wrap;
-                    justify-content: flex-start;
+                    justify-content: center;
                     align-items: center;
                     gap: 1rem 2.75rem;
                     padding: 0;
@@ -571,38 +579,86 @@
                 .filter-tag-btn {
                     background: none;
                     border: none;
-                    font-size: calc(0.82rem - 1px);
-                    font-weight: 500;
-                    letter-spacing: 0.14em;
-                    text-transform: uppercase;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: calc(0.72rem + 1pt);
+                    font-weight: 400;
+                    letter-spacing: 0.15em;
+                    text-transform: none;
                     color: #000;
-                    padding: 10px 8px;
+                    padding: 14px 8px;
                     cursor: pointer;
                     white-space: nowrap;
-                    line-height: 1.5;
+                    line-height: 1.2;
+                    box-shadow: none;
+                }
+                .filter-tag-btn:hover,
+                .filter-tag-btn:focus,
+                .filter-tag-btn:active,
+                .filter-tag-btn.active {
+                    box-shadow: none;
+                    outline: none;
                 }
                 .filter-tag-btn.active {
                     color: #000;
                     font-weight: 700;
                     text-decoration: none;
                 }
-                @media (max-width: 991.98px) {
+                /* Tablet: same centered layout as desktop */
+                @media (max-width: 991.98px) and (min-width: 768px) {
+                    .os-filter-bar {
+                        padding: 0.65rem 0.75rem;
+                    }
+                    .os-sub-filters {
+                        gap: 0.75rem 1.5rem;
+                    }
+                    .filter-tag-btn {
+                        font-size: calc(0.7rem + 1pt);
+                        padding: 12px 4px;
+                    }
+                }
+                /* Mobile only: arrows + one-line scroll */
+                @media (max-width: 767.98px) {
                     .os-filter-bar {
                         padding: 0.65rem 0.5rem 0.65rem 0.75rem;
                     }
                     .os-filter-bar-inner {
-                        gap: 0.5rem;
-                        overflow: visible;
+                        grid-template-columns: minmax(0, 1fr) auto;
+                    }
+                    .os-sub-filters-wrap {
+                        grid-column: 1;
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        gap: 0.15rem;
+                    }
+                    .os-filter-scroll-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        width: 1.25rem;
+                        padding: 0;
+                        border: none;
+                        background: transparent;
+                        color: rgba(0, 0, 0, 0.28);
+                        font-size: 1.35rem;
+                        line-height: 1;
+                        cursor: pointer;
+                    }
+                    .os-filter-scroll-btn:active {
+                        color: rgba(0, 0, 0, 0.5);
                     }
                     .os-sub-filters {
+                        flex: 1;
+                        width: auto;
+                        max-width: none;
                         flex-wrap: nowrap;
                         justify-content: flex-start;
-                        gap: 0.9rem 1.35rem;
-                        padding: 0 0.35rem 0 0;
+                        gap: 0.9rem 1.1rem;
                         overflow-x: auto;
                         overflow-y: hidden;
                         -webkit-overflow-scrolling: touch;
-                        scroll-padding-left: 0.5rem;
+                        scroll-behavior: smooth;
                         scrollbar-width: none;
                     }
                     .os-sub-filters::-webkit-scrollbar {
@@ -610,11 +666,14 @@
                     }
                     .filter-tag-btn {
                         flex-shrink: 0;
-                        padding: 8px 4px;
+                        font-size: calc(0.68rem + 1pt);
+                        letter-spacing: 0.1em;
+                        padding: 10px 3px;
                     }
                 }
                 .os-sort-filter-btn {
-                    position: static;
+                    grid-column: 3;
+                    justify-self: end;
                     flex-shrink: 0;
                     display: inline-flex;
                     align-items: center;
@@ -666,7 +725,11 @@
                     .os-sort-filter-label {
                         display: none;
                     }
+                }
+                @media (max-width: 767.98px) {
                     .os-sort-filter-btn {
+                        grid-column: 2;
+                        align-self: center;
                         gap: 0;
                         padding: 8px;
                     }
@@ -675,16 +738,23 @@
             <div id="osFilterBarTopGap" class="os-filter-bar-top-gap" aria-hidden="true"></div>
             <div class="os-filter-bar filter">
                 <div class="os-filter-bar-inner">
-                    <div id="osSubFilters" class="os-sub-filters">
-                        <button type="button" class="filter-tag-btn" data-tags="mens_rings">MEN RINGS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings">RINGS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_tops">TOPS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_chains">CHAINS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants">PENDANTS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets">BRACELETS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings">EARRINGS</button>
-                        <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button>
+                    <div class="os-sub-filters-wrap">
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
+                        <div id="osSubFilters" class="os-sub-filters">
+                    <button type="button" class="filter-tag-btn" data-tags="mens_rings,gold_rings,diamond_rings,diamond_bands">Wedding Bands</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="mens_rings">MEN RINGS</button> -->
+
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings">RINGS</button> -->
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_tops">TOPS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
+
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_chains">CHAINS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">Pendants</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
+                        </div>
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
                     </div>
                     <button type="button" class="os-sort-filter-btn" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Sort and filter">
@@ -1277,6 +1347,8 @@
     </div>
         <script>
     (function () {
+        const HEADER_FILTER_GAP = 28;
+
         function getHeaderBottom() {
             const isDesktop = window.matchMedia('(min-width: 992px)').matches;
             const header = isDesktop
@@ -1294,10 +1366,10 @@
             const headerBottom = getHeaderBottom();
             const topGap = document.getElementById('osFilterBarTopGap');
             if (topGap) {
-                topGap.style.height = headerBottom > 0 ? '15px' : '0';
+                topGap.style.height = headerBottom > 0 ? HEADER_FILTER_GAP + 'px' : '0';
                 topGap.style.top = headerBottom + 'px';
             }
-            bar.style.top = (headerBottom > 0 ? headerBottom + 15 : 0) + 'px';
+            bar.style.top = (headerBottom > 0 ? headerBottom + HEADER_FILTER_GAP : 0) + 'px';
 
             if (spacer) {
                 spacer.style.height = bar.offsetHeight + 'px';
@@ -1348,6 +1420,19 @@
                     scheduleFilterLayout(50);
                 });
             });
+
+            const filterScroll = document.getElementById('osSubFilters');
+            const filterScrollPrev = document.querySelector('.os-filter-scroll-prev');
+            const filterScrollNext = document.querySelector('.os-filter-scroll-next');
+            if (filterScroll && filterScrollPrev && filterScrollNext) {
+                const scrollStep = 140;
+                filterScrollPrev.addEventListener('click', function () {
+                    filterScroll.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+                });
+                filterScrollNext.addEventListener('click', function () {
+                    filterScroll.scrollBy({ left: scrollStep, behavior: 'smooth' });
+                });
+            }
         });
     })();
 
