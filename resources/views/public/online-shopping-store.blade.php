@@ -741,7 +741,7 @@
                     <div class="os-sub-filters-wrap">
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
                         <div id="osSubFilters" class="os-sub-filters">
-                        <button type="button" class="filter-tag-btn" data-tags="ehed,gold_rings,diamond_rings">EHED + Diamond/Gold RINGS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="ehed,gold_rings,diamond_rings">Rings</button>
 
                 
                         <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
@@ -750,7 +750,7 @@
                         <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
-                        <button type="button" class="filter-tag-btn" data-tags="ehed,mens_rings">EHED + MEN RINGS</button>
+                        <button type="button" class="filter-tag-btn" data-tags="ehed,mens_rings">Wedding Bands</button>
 
                         </div>
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
