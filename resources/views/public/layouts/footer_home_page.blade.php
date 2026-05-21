@@ -598,8 +598,8 @@ footer h4 {
     text-decoration: none;
     z-index: 9999;
     transition: transform .25s ease;
-    color: #32231f;
-    fill: #32231f;
+    color: #3c230d;
+    fill: #3c230d;
 }
 
 .hanif-whatsapp-btn:hover{
@@ -627,7 +627,7 @@ footer h4 {
     
 }
 .hanif-bubble-shape path{
-    fill:  #32231f !important;   /* full red fill */
+    fill:  #3c230d !important;
     stroke: white;
     stroke-width: 1;
 }
@@ -978,8 +978,8 @@ footer h4 {
     text-decoration: none;
     z-index: 9999;
     transition: transform .25s ease;
-       color: #7a5c3e;
-    fill: #7a5c3e;
+       color: #3c230d;
+    fill: #3c230d;
 }
 }
 .hanif-chat-ended-screen{
