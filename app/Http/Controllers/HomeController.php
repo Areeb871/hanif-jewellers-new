@@ -2542,22 +2542,21 @@ public function Online_Shopping_Store(Request $request)
             return false;
         }
     }
-    
-public function solitaire()
-    {
-        $products = Products::with('category', 'subcategory', 'images')->where([
-            ['status', 'published'],
-            ['category_id', 7],
-            ['subcategory_id', 40]
-        ])->get();
-        return view('public.solitaire_new', compact('products'));
-    }
+public function solitaire_details()
+{
+    return view('public.solitaire_product_details');
+}
 
+ public function solitaire()
+{
+    $products = Products::paginate(9);
+
+    return view('public.solitaire_new', compact('products'));
+}
  public function solitaire_new()
 {
     return view('public.solitaire');
 }
-
 
 
 public function ehedCollection(Request $request)
