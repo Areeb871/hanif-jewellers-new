@@ -741,18 +741,17 @@
                     <div class="os-sub-filters-wrap">
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
                         <div id="osSubFilters" class="os-sub-filters">
-                    <button type="button" class="filter-tag-btn" data-tags="mens_rings,gold_rings,diamond_rings,diamond_bands">Wedding Bands</button>
-                        <!-- <button type="button" class="filter-tag-btn" data-tags="mens_rings">MEN RINGS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="ehed,gold_rings,diamond_rings">Rings</button>
 
-                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings">RINGS</button> -->
-                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_tops">TOPS</button> -->
+                
                         <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
 
-                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_chains">CHAINS</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">Pendants</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
+                        <button type="button" class="filter-tag-btn" data-tags="ehed,mens_rings">Wedding Bands</button>
+
                         </div>
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
                     </div>
@@ -764,7 +763,11 @@
                         <span class="os-sort-filter-label">Sort &amp; Filter</span>
                     </button>
                 </div>
+                <!-- <div style="display:flex;justify-content:center;width:100%;margin-top:4px;">
+                    <span style="display:block;height:2px;width:70vw;background:#e6ded3;"></span>
+                </div> -->
             </div>
+            <!-- SORT & FILTER OFFCANVAS -->
             <div id="osFilterBarSpacer" class="os-filter-bar-spacer" aria-hidden="true"></div>
             <div class="offcanvas offcanvas-end offcanvas-modern" tabindex="-1" id="offcanvasFilter"
                 aria-labelledby="offcanvasFilterLabel" data-bs-backdrop="true" data-bs-scroll="false">

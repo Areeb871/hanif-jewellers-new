@@ -256,6 +256,11 @@
                                                             </div>
                                                             <div class="text-muted fs-7">Price in Pakistani Rupee.</div>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Diamond Price</label>
+                                                            <input type="number" name="diamond_price" class="form-control" placeholder="e.g. 97" value="{{ old('diamond_price') }}" min="0" step="0.01" />
+                                                            <div class="text-muted fs-7">For diamond products only (used in auto pricing).</div>
+                                                        </div>
                                                         <!-- <div class="col-md-6">
                                                             <label class="form-label required">AED</label>
                                                             <div class="input-group mb-2">
