@@ -76,6 +76,7 @@ Route::get('/collections/gulposh', [HomeController::class, 'gulposh'])->name('gu
 // Temporary direct route for Pure Lock page view
 Route::get('/collections/pure-lock', [HomeController::class, 'pureLock'])->name('pure-lock');
 Route::get('watches', [HomeController::class, 'watches']);
+Route::get('solitaire/details', [HomeController::class, 'solitaire_details'])->name('solitaire.details');
 Route::get('solitaire', [HomeController::class, 'solitaire'])->name('solitaire');
 Route::get('products/{slug}', [HomeController::class, 'product_details'])->name('product.details');
 Route::get('/collections/farah-khan', [HomeController::class, 'farahKhan'])->name('farah-khan');

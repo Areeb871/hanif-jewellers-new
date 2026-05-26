@@ -92,6 +92,14 @@ html, body{
             /* Center all text on desktop as well */
             p {
                 text-align: center !important;
+                font-family: "Lato", sans-serif;
+                font-weight: 300;
+                font-size: 16px;
+            }
+            h4{
+         font-family: "Lato", sans-serif;
+    font-weight: 300;
+        font-size: 18px;
             }
         </style>
         <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
@@ -119,7 +127,9 @@ html, body{
             </div>
             <div class="col-md-5 m-0">
                 <div class="text-center px-5">
-                    <p class="m-0">Brilliantly Handcrafted Bespoke Pieces, an ensemble of Gold and opulent Gemstones combined with a touch of class. A hallmark of The Art of handcrafted, bespoke jewellery.</p>
+<p class="m-0">
+    Brilliantly Handcrafted Bespoke Pieces, an ensemble of Gold and opulent Gemstones combined with a touch of class. A hallmark of The Art of handcrafted, bespoke jewellery.
+</p>
                 </div>
             </div>
         </div>
