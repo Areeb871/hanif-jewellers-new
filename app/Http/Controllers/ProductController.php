@@ -93,6 +93,7 @@ class ProductController extends Controller
                'image' => 'required|file|mimetypes:image/jpeg,image/png,image/avif',
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
+                'diamond_price' => 'nullable|numeric|min:0',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
             ]);
@@ -133,6 +134,7 @@ class ProductController extends Controller
             $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
+            $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discounted_price = $discounted_price??0;
@@ -197,6 +199,7 @@ class ProductController extends Controller
                 'name' => 'required',
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
+                'diamond_price' => 'nullable|numeric|min:0',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
                 'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/avif',
@@ -304,6 +307,7 @@ class ProductController extends Controller
             $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
+            $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discount_type = $request->discount_option ?? 1;
