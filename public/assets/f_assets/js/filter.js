@@ -104,42 +104,119 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ===============================
-   DESKTOP CUSTOM SORT DROPDOWN
-=============================== */
+       UNIFIED SORT (Desktop + Mobile)
+    =============================== */
 
-const desktopSort = document.getElementById("hjDesktopSort");
-const desktopSortToggle = document.getElementById("hjDesktopSortToggle");
-const desktopSortText = document.getElementById("hjDesktopSortText");
-const desktopSortOptions = document.querySelectorAll("#hjDesktopSortDropdown button");
+    const sortState = {
+        desktopSort: document.getElementById("hjDesktopSort"),
+        desktopSortToggle: document.getElementById("hjDesktopSortToggle"),
+        desktopSortText: document.getElementById("hjDesktopSortText"),
+        modalSortWrap: document.getElementById("hjModalSortWrap"),
+        modalSortToggle: document.getElementById("hjModalSortToggle"),
+        modalSortText: document.getElementById("hjModalSortText"),
+        sortValueInput: document.getElementById("hjSortValue")
+    };
 
-if (desktopSort && desktopSortToggle) {
-    desktopSortToggle.addEventListener("click", function (event) {
-        event.stopPropagation();
-        desktopSort.classList.toggle("show");
-    });
-}
-
-desktopSortOptions.forEach(function (option) {
-    option.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        const selectedValue = option.dataset.sort || option.textContent.trim();
-
-        if (desktopSortText) {
-            desktopSortText.textContent = selectedValue;
-        }
-
-        if (desktopSort) {
-            desktopSort.classList.remove("show");
-        }
-    });
-});
-
-document.addEventListener("click", function (event) {
-    if (desktopSort && !desktopSort.contains(event.target)) {
-        desktopSort.classList.remove("show");
+    function getSortOptions() {
+        return document.querySelectorAll("[data-sort-value]");
     }
-});
+
+    function closeSortDropdowns() {
+        if (sortState.desktopSort) {
+            sortState.desktopSort.classList.remove("show");
+        }
+        if (sortState.modalSortWrap) {
+            sortState.modalSortWrap.classList.remove("show");
+        }
+    }
+
+    function setSort(value) {
+        const sortValue = value || "featured";
+        let toggleLabel = "Sort: Featured";
+
+        getSortOptions().forEach(function (option) {
+            const optionValue = option.dataset.sortValue;
+            const isSelected = optionValue === sortValue;
+
+            option.classList.toggle("is-selected", isSelected);
+
+            if (isSelected) {
+                toggleLabel = option.dataset.sortLabel || option.textContent.trim();
+            }
+        });
+
+        if (sortState.sortValueInput) {
+            sortState.sortValueInput.value = sortValue;
+        }
+
+        if (sortState.desktopSortText) {
+            sortState.desktopSortText.textContent = toggleLabel;
+        }
+
+        if (sortState.modalSortText) {
+            sortState.modalSortText.textContent = toggleLabel;
+        }
+
+        closeSortDropdowns();
+    }
+
+    function initSort() {
+        const initialValue =
+            (sortState.sortValueInput && sortState.sortValueInput.value) || "featured";
+
+        if (sortState.desktopSortToggle && sortState.desktopSort) {
+            sortState.desktopSortToggle.addEventListener("click", function (event) {
+                event.stopPropagation();
+                const isOpen = sortState.desktopSort.classList.contains("show");
+
+                closeSortDropdowns();
+
+                if (!isOpen) {
+                    sortState.desktopSort.classList.add("show");
+                }
+            });
+        }
+
+        if (sortState.modalSortToggle && sortState.modalSortWrap) {
+            sortState.modalSortToggle.addEventListener("click", function (event) {
+                event.stopPropagation();
+                const isOpen = sortState.modalSortWrap.classList.contains("show");
+
+                closeSortDropdowns();
+
+                if (!isOpen) {
+                    sortState.modalSortWrap.classList.add("show");
+                }
+            });
+        }
+
+        getSortOptions().forEach(function (option) {
+            option.addEventListener("click", function (event) {
+                event.stopPropagation();
+
+                const value = option.dataset.sortValue;
+
+                if (value) {
+                    setSort(value);
+                }
+            });
+        });
+
+        document.addEventListener("click", function (event) {
+            const inDesktop =
+                sortState.desktopSort && sortState.desktopSort.contains(event.target);
+            const inMobile =
+                sortState.modalSortWrap && sortState.modalSortWrap.contains(event.target);
+
+            if (!inDesktop && !inMobile) {
+                closeSortDropdowns();
+            }
+        });
+
+        setSort(initialValue);
+    }
+
+    initSort();
 
     /* ===============================
        UNIFIED PRICE RANGE (Desktop & Mobile)
@@ -272,7 +349,7 @@ const mobileOverlay = $("#hjMobileFilterOverlay");
 const closeMobileFilters = $("#hjCloseMobileFilters");
 const mobileCloseHeader = $(".hj-mobile-filter-head");
 const viewProductsBtn = $(".hj-mobile-view-products");
-const modalSortWrap = $(".hj-modal-sort-wrap");
+const modalSortWrap = document.getElementById("hjModalSortWrap");
 
 function openMobileDrawer() {
     if (!mobileDrawer || !mobileOverlay) return;
@@ -331,50 +408,6 @@ mobileFilterTitles.forEach(function (title) {
         if (!block) return;
         block.classList.toggle("active");
     });
-});
-
-
-/* ===============================
-   MODAL SORT DROPDOWN
-=============================== */
-
-const modalSortToggle = $("#hjModalSortToggle");
-const modalSortText = $("#hjModalSortText");
-const modalSortInput = $("#mobileSortInput");
-const modalSortOptions = $all(".hj-modal-sort-dropdown button");
-
-if (modalSortToggle && modalSortWrap) {
-    modalSortToggle.addEventListener("click", function (event) {
-        event.stopPropagation();
-        modalSortWrap.classList.toggle("show");
-    });
-}
-
-modalSortOptions.forEach(function (option) {
-    option.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        const label = option.dataset.label || option.textContent.trim();
-        const value = option.dataset.value || option.textContent.trim();
-
-        if (modalSortText) {
-            modalSortText.textContent = label;
-        }
-
-        if (modalSortInput) {
-            modalSortInput.value = value;
-        }
-
-        if (modalSortWrap) {
-            modalSortWrap.classList.remove("show");
-        }
-    });
-});
-
-document.addEventListener("click", function (event) {
-    if (modalSortWrap && !modalSortWrap.contains(event.target)) {
-        modalSortWrap.classList.remove("show");
-    }
 });
 
 document.addEventListener("keydown", function (event) {

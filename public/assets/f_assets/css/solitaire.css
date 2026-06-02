@@ -370,8 +370,10 @@ font-family: "Barlow", sans-serif;
     padding: 0;
 }
 
-.hj-filter-btn {
+.hj-filter-btn,
+.hj-sort-toggle {
     height: 32px;
+    min-height: 32px;
     min-width: 150px;
     padding: 0 16px;
     border: 1px solid #d7d7d7;
@@ -385,6 +387,13 @@ font-family: "Barlow", sans-serif;
     cursor: pointer;
     font-size: 13px;
     font-weight: 400;
+    box-sizing: border-box;
+}
+
+.hj-sort-toggle {
+    width: 100%;
+    position: relative;
+    z-index: 3;
 }
 
 /* active shapes button */
@@ -505,10 +514,18 @@ font-family: "Barlow", sans-serif;
         font-size: 14px;
     }
 
-    .hj-filter-btn {
+    .hj-filter-btn,
+    .hj-sort-toggle {
         height: 36px;
+        min-height: 36px;
         min-width: 165px;
+        padding: 0 16px;
         font-size: 14px;
+    }
+
+    .hj-sort-dropdown {
+        top: 18px;
+        padding: 20px 16px 10px;
     }
 
     .hj-shape-btn.active {
@@ -535,11 +552,18 @@ font-family: "Barlow", sans-serif;
         margin-right: 25px;
     }
 
-    .hj-filter-btn {
+    .hj-filter-btn,
+    .hj-sort-toggle {
         height: 32px;
+        min-height: 32px;
         min-width: 140px;
-        font-size: 12px;
         padding: 0 14px;
+        font-size: 12px;
+    }
+
+    .hj-sort-dropdown {
+        top: 16px;
+        padding: 18px 14px 10px;
     }
 
     .hj-shape-btn.active {
@@ -609,11 +633,19 @@ font-family: "Barlow", sans-serif;
         font-size: 11px;
     }
 
-    .hj-filter-btn {
+    .hj-filter-btn,
+    .hj-sort-toggle {
         width: 100%;
         min-width: 100%;
         height: 34px;
+        min-height: 34px;
+        padding: 0 16px;
         font-size: 11px;
+    }
+
+    .hj-sort-dropdown {
+        top: 17px;
+        padding: 19px 16px 10px;
     }
 
     .hj-shape-btn.active {
@@ -1506,81 +1538,92 @@ font-family: "Barlow", sans-serif;
     z-index: 30;
 }
 
-.hj-sort-toggle {
-    width: 100%;
-    height: 36px;
-    border: 1px solid #cfcfcf;
-    background: #fff;
-    border-radius: 26px;
-    padding: 0 18px;
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    color: #111;
-    font-size: 14px;
-    cursor: pointer;
-    position: relative;
-    z-index: 32;
-    font-weight: 500;
+.hj-custom-sort.show {
+    z-index: 50;
 }
 
-.hj-sort-toggle i {
-    width: 9px;
-    height: 9px;
-    border-right: 2px solid #111;
-    border-bottom: 2px solid #111;
-    transform: rotate(45deg);
-    margin-top: -6px;
-    transition: 0.25s ease;
+.hj-sort-toggle .hj-chevron {
+    margin-top: -4px;
 }
 
 .hj-custom-sort.show .hj-sort-toggle {
-    border-radius: 24px 24px 0 0;
-    border-bottom-color: transparent;
-    font-weight:500;
+    z-index: 3;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.hj-custom-sort.show .hj-sort-toggle i {
+.hj-custom-sort.show .hj-sort-toggle .hj-chevron {
     transform: rotate(-135deg);
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .hj-sort-dropdown {
     display: none;
     position: absolute;
-    top: 49px;
+    top: 16px;
     left: 0;
     width: 100%;
+    margin: 0;
     background: #fff;
-    border: 1px solid #cfcfcf;
-    border-top: none;
-    border-radius: 0 0 24px 24px;
-    padding: 0 20px 14px;
-    z-index: 31;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
-    font-weight:500;
+    border: 1px solid #d7d7d7;
+    border-radius: 20px;
+    padding: 18px 16px 10px;
+    z-index: 1;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1);
+    font-family: "Barlow", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    box-sizing: border-box;
 }
 
 .hj-custom-sort.show .hj-sort-dropdown {
     display: block;
+    z-index: 2;
+}
+
+/* Desktop only: sort menu floats over product grid */
+@media (min-width: 992px) {
+    .hj-filter-section:has(.hj-custom-sort.show) {
+        z-index: 40;
+    }
+
+    .hj-product-grid {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 .hj-sort-dropdown button {
     width: 100%;
-    height: 43px;
+    height: 44px;
+    min-height: 44px;
     border: none !important;
     border-bottom: 1px solid #d6d6d6 !important;
     background: transparent !important;
     padding: 0 !important;
+    margin: 0;
+    display: flex;
+    align-items: center;
     text-align: left;
     color: #111;
+    font-family: "Barlow", sans-serif;
     font-size: 14px;
+    line-height: 1.2;
     cursor: pointer;
-    font-weight:500;
+    font-weight: 500;
+    box-sizing: border-box;
 }
 
 .hj-sort-dropdown button:last-child {
     border-bottom: none !important;
+}
+
+.hj-sort-dropdown button.is-selected,
+.hj-modal-sort-dropdown button.is-selected {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 !important;
+    line-height: 1.2;
+    font-weight: 600;
 }
 
 /* Header should always stay above dropdown */
@@ -1744,85 +1787,96 @@ header,
     /* SORT DROPDOWN */
 
     .hj-modal-sort-wrap {
-        width: calc(100% + 40px);
-        margin-left: -20px;
-        margin-right: -20px;
-        max-width: none;
+        width: 100%;
+        margin: 0 0 8px;
         position: relative;
         z-index: 10;
-        margin-bottom: 8px;
+        box-sizing: border-box;
     }
 
-   .hj-modal-sort-toggle {
-    width: calc(100% - 24px);
-    margin-left: 12px;
-    margin-right: 12px;
-    height: 37px;
-    border: 1px solid #cfcfcf;
-    background: #fff;
-    border-radius: 22px;
-    padding: 0 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #111;
-    font-size: 13px;
-    font-weight: 400;
-    cursor: pointer;
-    font-family: "Barlow", sans-serif;
-    box-sizing: border-box;
-}
-
-    .hj-modal-sort-toggle i {
-        width: 10px;
-        height: 10px;
-        border-right: 2px solid #111;
-        border-bottom: 2px solid #111;
-        transform: rotate(45deg);
-        margin-top: -5px;
-        transition: 0.25s ease;
+    .hj-modal-sort-toggle {
+        width: 100%;
+        margin: 0;
+        height: 38px;
+        min-height: 38px;
+        border: 1px solid #d7d7d7;
+        background: #fff;
+        border-radius: 25px;
+        padding: 0 16px;
+        gap: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #111;
+        font-size: 13px;
+        font-weight: 400;
+        cursor: pointer;
+        font-family: "Barlow", sans-serif;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 3;
     }
 
-    .hj-modal-sort-wrap.show {
-        max-width: 334px;
+    .hj-modal-sort-toggle .hj-chevron {
+        margin-top: -4px;
     }
 
     .hj-modal-sort-wrap.show .hj-modal-sort-toggle {
-        border-radius: 22px 22px 0 0;
+        border-radius: 25px 25px 0 0;
         border-bottom-color: transparent;
+        z-index: 3;
+        box-shadow: none;
     }
 
-    .hj-modal-sort-wrap.show .hj-modal-sort-toggle i {
+    .hj-modal-sort-wrap.show .hj-modal-sort-toggle .hj-chevron {
         transform: rotate(-135deg);
-        margin-top: 5px;
+        margin-top: 4px;
     }
 
     .hj-modal-sort-dropdown {
         display: none;
+        position: relative;
+        top: auto;
+        left: auto;
         width: 100%;
-        border: 1px solid #cfcfcf;
+        margin: 0;
+        border: 1px solid #d7d7d7;
         border-top: none;
         background: #fff;
-        border-radius: 0 0 22px 22px;
-        padding: 0 22px 12px;
+        border-radius: 0 0 20px 20px;
+        padding: 6px 16px 10px;
+        box-sizing: border-box;
+        box-shadow: none;
+        font-family: "Barlow", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        z-index: auto;
     }
 
     .hj-modal-sort-wrap.show .hj-modal-sort-dropdown {
         display: block;
+        margin-top: -1px;
     }
 
     .hj-modal-sort-dropdown button {
         width: 100%;
-        height: 42px;
+        height: 44px;
+        min-height: 44px;
         border: none;
-        border-bottom: 1px solid #cfcfcf;
+        border-bottom: 1px solid #d6d6d6;
         background: transparent;
         padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
         text-align: left;
+        font-family: "Barlow", sans-serif;
         font-size: 13px;
+        line-height: 1.2;
         color: #111;
         cursor: pointer;
-        font-family: "Barlow", sans-serif;
+        font-weight: 500;
+        box-sizing: border-box;
     }
 
     .hj-modal-sort-dropdown button:last-child {

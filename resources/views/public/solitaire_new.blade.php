@@ -33,6 +33,7 @@
 
 <!-- FILTER SECTION -->
 <div class="hj-filter-section">
+    <input type="hidden" id="hjSortValue" value="featured">
 
     <!-- DESKTOP FILTER BAR -->
     <div class="hj-filter-top hj-desktop-filter-top">
@@ -69,9 +70,10 @@
     </button>
 
     <div class="hj-sort-dropdown" id="hjDesktopSortDropdown">
-        <button type="button" data-sort="Sort: Newest first">Newest first</button>
-        <button type="button" data-sort="Sort: Price: low to high">Price: low to high</button>
-        <button type="button" data-sort="Sort: Price: high to low">Price: high to low</button>
+        <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
+        <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
+        <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
+        <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
     </div>
 
 </div>
@@ -218,16 +220,15 @@
         <div class="hj-modal-sort-wrap" id="hjModalSortWrap">
             <button class="hj-modal-sort-toggle" type="button" id="hjModalSortToggle">
                 <span id="hjModalSortText">Sort: Featured</span>
-                <i></i>
+                <i class="hj-chevron"></i>
             </button>
 
             <div class="hj-modal-sort-dropdown" id="hjModalSortDropdown">
-                <button type="button" data-label="Sort: Featured" data-value="featured">Newest first</button>
-                <button type="button" data-label="Sort: Price: low to high" data-value="price_low_high">Price: low to high</button>
-                <button type="button" data-label="Sort: Price: high to low" data-value="price_high_low">Price: high to low</button>
+                <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
+                <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
+                <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
+                <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
             </div>
-
-            <input type="hidden" name="sort" id="mobileSortInput" value="featured">
         </div>
 
 
