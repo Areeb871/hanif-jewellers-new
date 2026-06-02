@@ -2546,7 +2546,9 @@ public function Online_Shopping_Store(Request $request)
 
 public function solitaire()
 {
-    $products = SolitaireProduct::where('status', 1)->paginate(4);
+   $products = SolitaireProduct::where('status', 1)
+        ->latest()
+        ->paginate(4);
 
     return view('public.solitaire_new', compact('products'));
 }
