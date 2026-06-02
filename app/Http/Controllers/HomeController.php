@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\SolitaireProduct;
 class HomeController extends Controller
 {
     /**
@@ -650,6 +650,545 @@ $products = $products->values(); // reset keys
             return response()->json(['message' => 'SOMETHING WENT WRONG', 'error' => $th->getMessage()], 500);
         }
     }
+    
+// public function Online_Shopping_Store(Request $request)
+// {
+//     $categories = Categories::with('subcategories')
+//         ->where('name', 'not like', '%watch%')
+//         ->get();
+
+//     $watchCategories = Categories::with('subcategories')
+//         ->where('name', 'like', '%watch%')
+//         ->get();
+
+//     $productsQuery = Products::with(['category', 'subcategory', 'images', 'tags'])
+//         ->where('status', 'published');
+
+//     $hasExplicitFilters = $request->filled('tags')
+//         || $request->filled('subcat_pairs')
+//         || $request->filled('subcat_name')
+//         || $request->filled('cat_name');
+
+//     $useDefaults = !$hasExplicitFilters;
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | DEFAULT GOLD FILTER
+//     |--------------------------------------------------------------------------
+//     */
+//     $applyDefaultGold = function ($q) {
+//         $goldRegex = '(?i)[[:<:]]gold[[:>:]]';
+//         $excludeGoldVariants = '(?i)(rose[-[:space:]]*gold|white[-[:space:]]*gold)';
+
+//         $itemPatterns = [
+//             '(?i)[[:<:]]mens[-[:space:]_]*rings?[[:>:]]',
+//             '(?i)[[:<:]]rings?[[:>:]]',
+//             '(?i)[[:<:]]earrings?[[:>:]]',
+//             '(?i)[[:<:]]tops?[[:>:]]',
+//             '(?i)[[:<:]]pendants?[[:>:]]',
+//             '(?i)[[:<:]]chains?[[:>:]]',
+//             '(?i)[[:<:]]bangles?[[:>:]]',
+//             '(?i)[[:<:]]bracelets?[[:>:]]',
+//         ];
+
+//         $q->where(function ($qq) use ($goldRegex, $itemPatterns, $excludeGoldVariants) {
+//             foreach ($itemPatterns as $pattern) {
+//                 $qq->orWhere(function ($qqq) use ($goldRegex, $pattern, $excludeGoldVariants) {
+//                     $orderedPattern = $goldRegex . '.*' . $pattern;
+
+//                     $qqq->whereRaw('products.name REGEXP ?', [$orderedPattern])
+//                         ->whereRaw('products.name NOT REGEXP ?', [$excludeGoldVariants]);
+//                 });
+//             }
+//         });
+//     };
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | DEFAULT MODE
+//     |--------------------------------------------------------------------------
+//     */
+//     if ($useDefaults) {
+//         $productsQuery->where(function ($q) use ($applyDefaultGold) {
+//             $q->where(function ($qq) use ($applyDefaultGold) {
+//                 $applyDefaultGold($qq);
+//             });
+
+//             $q->orWhereHas('subcategory', function ($qs) {
+//                 $qs->whereRaw('LOWER(name) = ?', ['haphazard']);
+//             });
+//         });
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | TAG FILTER
+//     |--------------------------------------------------------------------------
+//     */
+//     if ($request->filled('tags')) {
+//         $tagValues = array_filter(array_map('trim', explode(',', $request->input('tags'))));
+
+//         $productsQuery->where(function ($mainQuery) use ($tagValues) {
+//             foreach ($tagValues as $tag) {
+//                 $tag = strtolower(trim($tag));
+
+//                 $mainQuery->orWhere(function ($q) use ($tag) {
+
+//                     // MEN RINGS
+//                     if ($tag === 'mens_rings') {
+//                         $q->where(function ($qq) {
+//                             $qq->whereHas('subcategory', function ($subQ) {
+//                                 $subQ->where(function ($sq) {
+//                                     $sq->whereRaw('LOWER(name) IN (?, ?, ?, ?)', [
+//                                         'mens rings',
+//                                         'mens ring',
+//                                         'men rings',
+//                                         'men ring'
+//                                     ])->orWhereRaw('LOWER(slug) IN (?, ?, ?, ?)', [
+//                                         'mens-rings',
+//                                         'mens_ring',
+//                                         'men-rings',
+//                                         'mens_rings'
+//                                     ]);
+//                                 });
+//                             })
+//                             ->orWhereHas('tags', function ($tagQ) {
+//                                 $tagQ->where(function ($tq) {
+//                                     $tq->whereRaw('LOWER(slug) IN (?, ?)', ['mens_rings', 'mens-rings'])
+//                                       ->orWhereRaw('LOWER(name) IN (?, ?, ?, ?)', [
+//                                           'mens rings',
+//                                           'mens ring',
+//                                           'men rings',
+//                                           'men ring'
+//                                       ]);
+//                                 });
+//                             })
+//                             ->orWhere(function ($nameQ) {
+//                                 $nameQ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]men[[:>:]]|[[:<:]]mens[[:>:]]'])
+//                                       ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]']);
+//                             });
+//                         });
+//                         return;
+//                     }
+
+//                     // GOLD RINGS (exclude men's — use mens_rings filter for those)
+//                     if ($tag === 'gold_rings') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['[[:<:]]men[[:>:]]|[[:<:]]mens[[:>:]]|[[:<:]]gents?[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // GOLD TOPS
+//                     if ($tag === 'gold_tops') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]top[[:>:]]|[[:<:]]tops[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // GOLD CHAINS
+//                     if ($tag === 'gold_chains') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]chain[[:>:]]|[[:<:]]chains[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // GOLD PENDANTS
+//                     if ($tag === 'gold_pendants') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]pendant[[:>:]]|[[:<:]]pendants[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // GOLD BANGLES
+//                     if ($tag === 'gold_bangles') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]bangle[[:>:]]|[[:<:]]bangles[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // GOLD BRACELETS
+//                     if ($tag === 'gold_bracelets') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]bracelet[[:>:]]|[[:<:]]bracelets[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // GOLD EARRINGS
+//                     if ($tag === 'gold_earrings') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]gold[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]earring[[:>:]]|[[:<:]]earrings[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['rose[[:space:]-]*gold|white[[:space:]-]*gold']);
+//                         return;
+//                     }
+
+//                     // ALL DIAMONDS
+//                     if ($tag === 'diamond_all') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // DIAMOND RINGS (exclude men's — use mens_rings filter for those)
+//                     if ($tag === 'diamond_rings') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]ring[[:>:]]|[[:<:]]rings[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) NOT REGEXP ?', ['[[:<:]]men[[:>:]]|[[:<:]]mens[[:>:]]|[[:<:]]gents?[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // DIAMOND PENDANTS
+//                     if ($tag === 'diamond_pendants') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]pendant[[:>:]]|[[:<:]]pendants[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // DIAMOND EARRINGS
+//                     if ($tag === 'diamond_earrings') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]earring[[:>:]]|[[:<:]]earrings[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // DIAMOND BANDS
+//                     if ($tag === 'diamond_bands') {
+//                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
+//                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]band[[:>:]]|[[:<:]]bands[[:>:]]']);
+//                         return;
+//                     }
+
+//                     // NORMAL TAG MATCH
+//                     $q->whereHas('tags', function ($tagQ) use ($tag) {
+//                         $tagQ->whereRaw('LOWER(slug) = ?', [$tag])
+//                              ->orWhereRaw('LOWER(name) = ?', [$tag]);
+//                     });
+//                 });
+//             }
+//         });
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | MULTI SUBCATEGORY FILTER
+//     |--------------------------------------------------------------------------
+//     */
+//     if ($request->filled('subcat_pairs')) {
+//         $pairs = collect(explode(',', $request->input('subcat_pairs')))
+//             ->map(fn ($s) => trim($s))
+//             ->filter();
+
+//         if ($pairs->isNotEmpty()) {
+//             $subcatIds = [];
+
+//             foreach ($pairs as $pair) {
+//                 [$catLabel, $subLabel] = array_pad(explode('|', $pair, 2), 2, '');
+//                 $catLabel = trim($catLabel);
+//                 $subLabel = trim($subLabel);
+
+//                 if ($subLabel === '') {
+//                     continue;
+//                 }
+
+//                 $map = [
+//                     'mens_rings' => ['mens_rings', 'mens', 'men rings', 'men ring'],
+//                     'rings'      => ['rings', 'ring'],
+//                     'earrings'   => ['earrings', 'earring'],
+//                     'bangles'    => ['bangles', 'bangle'],
+//                     'bracelets'  => ['bracelets', 'bracelet'],
+//                     'bands'      => ['bands', 'band'],
+//                     'tops'       => ['tops', 'top'],
+//                     'pendants'   => ['pendants', 'pendant'],
+//                     'chains'     => ['chains', 'chain'],
+//                 ];
+
+//                 $low = strtolower($subLabel);
+//                 $alts = $map[$low] ?? [$subLabel];
+
+//                 $subQuery = Subcategory::query()->where(function ($q) use ($alts) {
+//                     foreach ($alts as $a) {
+//                         $q->orWhereRaw('LOWER(name) = ?', [strtolower($a)]);
+//                         $q->orWhereRaw('LOWER(slug) = ?', [strtolower(str_replace(' ', '-', $a))]);
+//                     }
+//                 });
+
+//                 if ($catLabel !== '') {
+//                     $subQuery->whereHas('category', function ($q) use ($catLabel) {
+//                         $q->whereRaw('LOWER(name) = ?', [strtolower($catLabel)]);
+//                     });
+//                 }
+
+//                 $found = $subQuery->first();
+
+//                 if ($found) {
+//                     $subcatIds[] = $found->id;
+//                 }
+//             }
+
+//             if (!empty($subcatIds)) {
+//                 $productsQuery->whereIn('subcategory_id', $subcatIds);
+//             }
+//         }
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | SINGLE SUBCATEGORY FILTER
+//     |--------------------------------------------------------------------------
+//     */
+//     if ($request->filled('subcat_name')) {
+//         $subName = trim($request->input('subcat_name'));
+//         $catName = trim($request->input('cat_name', ''));
+
+//         $map = [
+//             'mens_rings' => ['mens_rings', 'mens', 'men rings', 'men ring'],
+//             'rings'      => ['rings', 'ring'],
+//             'earrings'   => ['earrings', 'earring'],
+//             'bangles'    => ['bangles', 'bangle'],
+//             'bracelets'  => ['bracelets', 'bracelet'],
+//             'bands'      => ['bands', 'band'],
+//             'tops'       => ['tops', 'top'],
+//             'pendants'   => ['pendants', 'pendant'],
+//             'chains'     => ['chains', 'chain'],
+//         ];
+
+//         $lower = strtolower($subName);
+//         $alternates = $map[$lower] ?? [$subName];
+
+//         $subQuery = Subcategory::query()->where(function ($q) use ($alternates) {
+//             foreach ($alternates as $a) {
+//                 $q->orWhereRaw('LOWER(name) = ?', [strtolower($a)]);
+//                 $q->orWhereRaw('LOWER(slug) = ?', [strtolower(str_replace(' ', '-', $a))]);
+//             }
+//         });
+
+//         if ($catName !== '') {
+//             $subQuery->whereHas('category', function ($q) use ($catName) {
+//                 $q->whereRaw('LOWER(name) = ?', [strtolower($catName)]);
+//             });
+//         }
+
+//         $sub = $subQuery->first();
+
+//         if ($sub) {
+//             $productsQuery->where('subcategory_id', $sub->id);
+//         }
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | SORT
+//     |--------------------------------------------------------------------------
+//     */
+//     $sort = $request->input('sort');
+
+//     $applySorting = function ($query) use ($sort) {
+//         if ($sort === 'price_low_high' || $sort === 'price_high_low') {
+//             return $query;
+//         }
+
+//         switch ($sort) {
+//             case 'az':
+//                 $query->orderBy('name', 'asc');
+//                 break;
+
+//             case 'za':
+//                 $query->orderBy('name', 'desc');
+//                 break;
+
+//             case 'old_new':
+//                 $query->orderBy('created_at', 'asc');
+//                 break;
+
+//             case 'new_old':
+//             default:
+//                 $query->orderBy('created_at', 'desc');
+//                 break;
+//         }
+
+//         return $query;
+//     };
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | SPLIT PRODUCTS
+//     |--------------------------------------------------------------------------
+//     */
+//     $haphazardQuery = (clone $productsQuery)->whereHas('subcategory', function ($q) {
+//         $q->whereRaw('LOWER(name) = ?', ['haphazard']);
+//     });
+
+//     $onlineShoppingQuery = (clone $productsQuery)->where(function ($q) {
+//         $q->whereDoesntHave('subcategory', function ($qs) {
+//             $qs->whereRaw('LOWER(name) = ?', ['haphazard']);
+//         });
+//     });
+
+//     $haphazardQuery = $applySorting($haphazardQuery);
+//     $onlineShoppingQuery = $applySorting($onlineShoppingQuery);
+
+//     $haphazardProducts = $haphazardQuery->get();
+//     $onlineShoppingProducts = $onlineShoppingQuery->get();
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | PRICE SORTING
+//     |--------------------------------------------------------------------------
+//     */
+//     if ($sort === 'price_low_high') {
+//         $haphazardProducts = $haphazardProducts->sortBy(function ($product) {
+//             return (float) ($product->final_price ?? 0);
+//         })->values();
+
+//         $onlineShoppingProducts = $onlineShoppingProducts->sortBy(function ($product) {
+//             return (float) ($product->final_price ?? 0);
+//         })->values();
+//     } elseif ($sort === 'price_high_low') {
+//         $haphazardProducts = $haphazardProducts->sortByDesc(function ($product) {
+//             return (float) ($product->final_price ?? 0);
+//         })->values();
+
+//         $onlineShoppingProducts = $onlineShoppingProducts->sortByDesc(function ($product) {
+//             return (float) ($product->final_price ?? 0);
+//         })->values();
+//     } else {
+//         $haphazardProducts = $haphazardProducts->values();
+//         $onlineShoppingProducts = $onlineShoppingProducts->values();
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | CUSTOM PRIORITY SORTING
+//     |--------------------------------------------------------------------------
+//     */
+//     $sortByGoldPriority = function ($products) {
+//         return $products->sortBy(function ($product) {
+//             $name = strtolower($product->name ?? '');
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\bmens?\b/', $name) && preg_match('/\brings?\b/', $name)) {
+//                 return 0;
+//             }
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\brings?\b/', $name)) {
+//                 return 1;
+//             }
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\btops?\b/', $name)) {
+//                 return 2;
+//             }
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\bearrings?\b/', $name)) {
+//                 return 3;
+//             }
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\bpendants?\b/', $name)) {
+//                 return 4;
+//             }
+
+//             if (preg_match('/\bgold\b/', $name) && preg_match('/\bbracelets?\b/', $name)) {
+//                 return 5;
+//             }
+
+//             return 999;
+//         })->values();
+//     };
+
+//     if ($useDefaults) {
+//         $onlineShoppingProducts = $sortByGoldPriority($onlineShoppingProducts);
+//         $haphazardProducts = $sortByGoldPriority($haphazardProducts);
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | MERGE PATTERN
+//     |--------------------------------------------------------------------------
+//     */
+//     $mergedProducts = collect();
+
+//     $oChunks = $onlineShoppingProducts->chunk(4)->values();
+//     $hChunks = $haphazardProducts->chunk(4)->values();
+
+//     $maxChunks = max($oChunks->count(), $hChunks->count());
+
+//     for ($i = 0; $i < $maxChunks; $i++) {
+//         if (isset($oChunks[$i])) {
+//             $mergedProducts = $mergedProducts->merge($oChunks[$i]);
+//         }
+
+//         if (isset($hChunks[$i])) {
+//             $mergedProducts = $mergedProducts->merge($hChunks[$i]);
+//         }
+//     }
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | PAGINATION
+//     |--------------------------------------------------------------------------
+//     */
+//     $perPage = 24;
+//     $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
+
+//     $currentItems = $mergedProducts
+//         ->slice(($currentPage - 1) * $perPage, $perPage)
+//         ->values();
+
+//     $products = new \Illuminate\Pagination\LengthAwarePaginator(
+//         $currentItems,
+//         $mergedProducts->count(),
+//         $perPage,
+//         $currentPage,
+//         [
+//             'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+//             'query' => $request->query(),
+//         ]
+//     );
+
+//     $currentPageProducts = $products->count();
+//     $totalFilteredProducts = $products->total();
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | AVAILABLE TAGS
+//     |--------------------------------------------------------------------------
+//     */
+//     $availableTags = Tags::select('tags.id', 'tags.name', 'tags.slug')
+//         ->join('product_tags', 'product_tags.tag_id', '=', 'tags.id')
+//         ->join('products', 'products.id', '=', 'product_tags.product_id')
+//         ->whereRaw('LOWER(products.status) = ?', ['published'])
+//         ->when($useDefaults, function ($q) use ($applyDefaultGold) {
+//             $q->where(function ($qq) use ($applyDefaultGold) {
+//                 $applyDefaultGold($qq);
+//             });
+//         })
+//         ->distinct()
+//         ->orderBy('tags.name')
+//         ->get();
+
+//     if (!$availableTags->contains(function ($tag) {
+//         return strtolower($tag->slug) === 'mens_rings';
+//     })) {
+//         $availableTags->prepend((object) [
+//             'id' => 'mens_rings',
+//             'name' => 'Men Rings',
+//             'slug' => 'mens_rings',
+//         ]);
+//     }
+
+//     return view('public.online-shopping-store', compact(
+//         'categories',
+//         'watchCategories',
+//         'products',
+//         'availableTags',
+//         'currentPageProducts',
+//         'totalFilteredProducts'
+//     ));
+// }
+
 public function Online_Shopping_Store(Request $request)
 {
     $categories = Categories::with('subcategories')
@@ -669,6 +1208,13 @@ public function Online_Shopping_Store(Request $request)
         || $request->filled('cat_name');
 
     $useDefaults = !$hasExplicitFilters;
+    // Optional forced default tags on first load (keep empty to preserve current default behavior).
+    // Examples: 'ehed' or 'mens_rings' or 'ehed,mens_rings' or 'heritage' etc
+    $forcedDefaultTags = 'monalisa,purelook,jewelsphabet,ehed,selene,hasht';
+    $activeTags = trim((string) $request->input('tags', ''));
+    if ($activeTags === '' && $useDefaults && $forcedDefaultTags !== '') {
+        $activeTags = $forcedDefaultTags;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -707,7 +1253,7 @@ public function Online_Shopping_Store(Request $request)
     | DEFAULT MODE
     |--------------------------------------------------------------------------
     */
-    if ($useDefaults) {
+    if ($useDefaults && $activeTags === '') {
         $productsQuery->where(function ($q) use ($applyDefaultGold) {
             $q->where(function ($qq) use ($applyDefaultGold) {
                 $applyDefaultGold($qq);
@@ -724,8 +1270,8 @@ public function Online_Shopping_Store(Request $request)
     | TAG FILTER
     |--------------------------------------------------------------------------
     */
-    if ($request->filled('tags')) {
-        $tagValues = array_filter(array_map('trim', explode(',', $request->input('tags'))));
+    if ($activeTags !== '') {
+        $tagValues = array_filter(array_map('trim', explode(',', $activeTags)));
 
         $productsQuery->where(function ($mainQuery) use ($tagValues) {
             foreach ($tagValues as $tag) {
@@ -859,6 +1405,17 @@ public function Online_Shopping_Store(Request $request)
                     if ($tag === 'diamond_bands') {
                         $q->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]diamond[[:>:]]|[[:<:]]diamonds[[:>:]]'])
                           ->whereRaw('LOWER(products.name) REGEXP ?', ['[[:<:]]band[[:>:]]|[[:<:]]bands[[:>:]]']);
+                        return;
+                    }
+
+                    // EHED COLLECTION
+                    if ($tag === 'ehed') {
+                        $q->whereHas('category', function ($catQ) {
+                                $catQ->whereRaw('LOWER(name) LIKE ?', ['%jewellery%']);
+                            })
+                            ->whereHas('subcategory', function ($subQ) {
+                                $subQ->whereRaw('LOWER(name) LIKE ?', ['%love engagement%']);
+                            });
                         return;
                     }
 
@@ -1015,24 +1572,14 @@ public function Online_Shopping_Store(Request $request)
 
     /*
     |--------------------------------------------------------------------------
-    | SPLIT PRODUCTS
+    | SIMPLE ARRANGEMENT (MIXING DISABLED)
     |--------------------------------------------------------------------------
+    | NOTE:
+    | Previous haphazard/non-haphazard split + chunk merge logic is intentionally
+    | disabled so products render in a straightforward single ordered list.
     */
-    $haphazardQuery = (clone $productsQuery)->whereHas('subcategory', function ($q) {
-        $q->whereRaw('LOWER(name) = ?', ['haphazard']);
-    });
-
-    $onlineShoppingQuery = (clone $productsQuery)->where(function ($q) {
-        $q->whereDoesntHave('subcategory', function ($qs) {
-            $qs->whereRaw('LOWER(name) = ?', ['haphazard']);
-        });
-    });
-
-    $haphazardQuery = $applySorting($haphazardQuery);
-    $onlineShoppingQuery = $applySorting($onlineShoppingQuery);
-
-    $haphazardProducts = $haphazardQuery->get();
-    $onlineShoppingProducts = $onlineShoppingQuery->get();
+    $orderedProductsQuery = $applySorting(clone $productsQuery);
+    $orderedProducts = $orderedProductsQuery->get();
 
     /*
     |--------------------------------------------------------------------------
@@ -1040,24 +1587,15 @@ public function Online_Shopping_Store(Request $request)
     |--------------------------------------------------------------------------
     */
     if ($sort === 'price_low_high') {
-        $haphazardProducts = $haphazardProducts->sortBy(function ($product) {
-            return (float) ($product->final_price ?? 0);
-        })->values();
-
-        $onlineShoppingProducts = $onlineShoppingProducts->sortBy(function ($product) {
+        $orderedProducts = $orderedProducts->sortBy(function ($product) {
             return (float) ($product->final_price ?? 0);
         })->values();
     } elseif ($sort === 'price_high_low') {
-        $haphazardProducts = $haphazardProducts->sortByDesc(function ($product) {
-            return (float) ($product->final_price ?? 0);
-        })->values();
-
-        $onlineShoppingProducts = $onlineShoppingProducts->sortByDesc(function ($product) {
+        $orderedProducts = $orderedProducts->sortByDesc(function ($product) {
             return (float) ($product->final_price ?? 0);
         })->values();
     } else {
-        $haphazardProducts = $haphazardProducts->values();
-        $onlineShoppingProducts = $onlineShoppingProducts->values();
+        $orderedProducts = $orderedProducts->values();
     }
 
     /*
@@ -1097,32 +1635,73 @@ public function Online_Shopping_Store(Request $request)
         })->values();
     };
 
-    if ($useDefaults) {
-        $onlineShoppingProducts = $sortByGoldPriority($onlineShoppingProducts);
-        $haphazardProducts = $sortByGoldPriority($haphazardProducts);
+    if ($useDefaults && $activeTags === '') {
+        $orderedProducts = $sortByGoldPriority($orderedProducts);
     }
 
     /*
     |--------------------------------------------------------------------------
-    | MERGE PATTERN
+    | ENFORCE TAG SEQUENCE ORDER (AS WRITTEN IN tags PARAM)
     |--------------------------------------------------------------------------
+    | Keep products grouped by incoming tag order, e.g.
+    | heritage,monalisa,purelook => heritage first, then monalisa, then purelook.
     */
-    $mergedProducts = collect();
+    if ($activeTags !== '') {
+        $tagSequence = array_values(array_unique(array_filter(array_map(function ($tag) {
+            return strtolower(trim($tag));
+        }, explode(',', $activeTags)))));
 
-    $oChunks = $onlineShoppingProducts->chunk(4)->values();
-    $hChunks = $haphazardProducts->chunk(4)->values();
+        if (!empty($tagSequence)) {
+            $matchesTag = function ($product, $tag) {
+                // Special EHED rule (same intent as query filter).
+                if ($tag === 'ehed') {
+                    $categoryName = strtolower(optional($product->category)->name ?? '');
+                    $subcategoryName = strtolower(optional($product->subcategory)->name ?? '');
+                    return str_contains($categoryName, 'jewellery') && str_contains($subcategoryName, 'love engagement');
+                }
 
-    $maxChunks = max($oChunks->count(), $hChunks->count());
+                // Default exact tag match by slug/name (case-insensitive).
+                return collect($product->tags ?? [])->contains(function ($productTag) use ($tag) {
+                    return strtolower((string) ($productTag->slug ?? '')) === $tag
+                        || strtolower((string) ($productTag->name ?? '')) === $tag;
+                });
+            };
 
-    for ($i = 0; $i < $maxChunks; $i++) {
-        if (isset($oChunks[$i])) {
-            $mergedProducts = $mergedProducts->merge($oChunks[$i]);
-        }
+            $orderedBySequence = collect();
+            $seenProductIds = [];
 
-        if (isset($hChunks[$i])) {
-            $mergedProducts = $mergedProducts->merge($hChunks[$i]);
+            foreach ($tagSequence as $tag) {
+                $matched = $orderedProducts->filter(function ($product) use ($matchesTag, $tag, &$seenProductIds) {
+                    $id = (int) ($product->id ?? 0);
+                    if ($id <= 0 || isset($seenProductIds[$id])) {
+                        return false;
+                    }
+                    if (!$matchesTag($product, $tag)) {
+                        return false;
+                    }
+                    $seenProductIds[$id] = true;
+                    return true;
+                });
+
+                $orderedBySequence = $orderedBySequence->merge($matched);
+            }
+
+            // Keep non-matching items at the end without dropping anything.
+            $remaining = $orderedProducts->filter(function ($product) use ($seenProductIds) {
+                $id = (int) ($product->id ?? 0);
+                return $id <= 0 || !isset($seenProductIds[$id]);
+            });
+
+            $orderedProducts = $orderedBySequence->merge($remaining)->values();
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | FINAL PRODUCT LIST
+    |--------------------------------------------------------------------------
+    */
+    $mergedProducts = $orderedProducts->values();
 
     /*
     |--------------------------------------------------------------------------
@@ -1159,7 +1738,7 @@ public function Online_Shopping_Store(Request $request)
         ->join('product_tags', 'product_tags.tag_id', '=', 'tags.id')
         ->join('products', 'products.id', '=', 'product_tags.product_id')
         ->whereRaw('LOWER(products.status) = ?', ['published'])
-        ->when($useDefaults, function ($q) use ($applyDefaultGold) {
+        ->when($useDefaults && $activeTags === '', function ($q) use ($applyDefaultGold) {
             $q->where(function ($qq) use ($applyDefaultGold) {
                 $applyDefaultGold($qq);
             });
@@ -1187,6 +1766,8 @@ public function Online_Shopping_Store(Request $request)
         'totalFilteredProducts'
     ));
 }
+
+
 //   public function Online_Shopping_Store(Request $request)
 // {
 //     $categories = Categories::with('subcategories')
@@ -1961,17 +2542,23 @@ public function Online_Shopping_Store(Request $request)
             return false;
         }
     }
-public function solitaire_details()
-{
-    return view('public.solitaire_product_details');
-}
 
- public function solitaire()
+
+public function solitaire()
 {
-    $products = Products::paginate(9);
+    $products = SolitaireProduct::where('status', 1)->paginate(9);
 
     return view('public.solitaire_new', compact('products'));
 }
+public function solitaireDetail($slug)
+{
+    $product = SolitaireProduct::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+
+    return view('public.solitaire_product_details', compact('product'));
+}
+
 
 
 

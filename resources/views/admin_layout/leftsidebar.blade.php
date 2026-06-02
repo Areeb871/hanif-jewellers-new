@@ -277,6 +277,26 @@ data-kt-menu-trigger="click"
                                 </div>
                             </div>
 
+                             <div data-kt-menu-trigger="click" class="menu-item {{ request()->routeIs('admin.diamond-rates.index') ? 'here show' : '' }} menu-accordion">
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+                                        <i class="ki-outline ki-star fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Diamond Rates</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <div class="menu-sub menu-sub-accordion">
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ request()->routeIs('admin.diamond-rates.index') ? 'active' : '' }}" href="{{ route('admin.diamond-rates.index') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Manage Diamond Rates</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- <div data-kt-menu-trigger="click" class="menu-item {{ request()->is('settings/*') ? 'here show' : '' }} menu-accordion">
                                 <span class="menu-link">
                                     <span class="menu-icon">

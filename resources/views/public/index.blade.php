@@ -432,6 +432,11 @@ padding:10px 4px 10px 4px;
 }
 
 </style>
+
+<div style="display:flex;justify-content:center;width:100%;">
+  <span style="display:block;height:2px;width:100vw;background:#e6ded3;"></span>
+</div>
+
 <section class="custom-banner d-none d-md-block position-relative">
     <img 
         src="{{ asset('assets/f_assets/image/misterio_data/new3.jpeg') }}" 

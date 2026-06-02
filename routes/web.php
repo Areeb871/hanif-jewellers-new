@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\GoldRateController;
+use App\Http\Controllers\Admin\DiamondRateController;
 use App\Http\Controllers\CheckoutLeadController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
@@ -230,6 +231,10 @@ Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
     // Gold rate settings
     Route::get('/gold-rates', [GoldRateController::class, 'index'])->name('admin.gold-rates.index');
     Route::post('/gold-rates', [GoldRateController::class, 'update'])->name('admin.gold-rates.update');
+
+    // Diamond rate settings (admin storage only; does not change product pricing yet)
+    Route::get('/diamond-rates', [DiamondRateController::class, 'index'])->name('admin.diamond-rates.index');
+    Route::post('/diamond-rates', [DiamondRateController::class, 'update'])->name('admin.diamond-rates.update');
     
 
 });
