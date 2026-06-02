@@ -1216,7 +1216,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-size-options button {
-        min-width: 38px;
+        min-width: 36px;
         height: 24px;
         font-size: 12px;
     }
@@ -1331,6 +1331,9 @@ font-family: "Barlow", sans-serif;
         height: 25px;
         font-size: 9px;
         border-width: 2px;
+        border: 3px solid #d8d8d8;
+
+
     }
 
     .hj-metal.active {
@@ -1342,8 +1345,8 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-size-options button {
-        min-width: 32px;
-        height: 21px;
+        min-width: 36px;
+        height: 24px;
         font-size: 10px;
         padding: 0 8px;
     }

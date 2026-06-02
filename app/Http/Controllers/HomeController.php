@@ -2552,13 +2552,10 @@ public function solitaire()
 
     return view('public.solitaire_new', compact('products'));
 }
-public function solitaireDetail($slug)
+public function solitaire_details()
 {
-    $product = SolitaireProduct::where('slug', $slug)
-        ->where('status', 1)
-        ->firstOrFail();
 
-    return view('public.solitaire_product_details', compact('product'));
+    return view('public.solitaire_product_details');
 }
 
  public function solitaire_new()
