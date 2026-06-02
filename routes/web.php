@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DiamondRateController;
 use App\Http\Controllers\CheckoutLeadController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\SolitaireProductAdminController;
 
 
 
@@ -153,6 +154,10 @@ Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show')
 // });
 
 Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
+
+
+    Route::resource('solitaire-products', SolitaireProductAdminController::class);
+
      Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/blogs', [BlogController::class, 'adminIndex'])->name('admin.blogs.index');

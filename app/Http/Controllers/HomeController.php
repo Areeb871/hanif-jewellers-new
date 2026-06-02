@@ -2542,35 +2542,27 @@ public function Online_Shopping_Store(Request $request)
             return false;
         }
     }
-<<<<<<<<< Temporary merge branch 1
-    
+
+
 public function solitaire()
-    {
-        $products = Products::with('category', 'subcategory', 'images')->where([
-            ['status', 'published'],
-            ['category_id', 7],
-            ['subcategory_id', 40]
-        ])->get();
-        return view('public.solitaire_new', compact('products'));
-    }
+{
+    $products = SolitaireProduct::where('status', 1)->paginate(4);
+
+    return view('public.solitaire_new', compact('products'));
+}
+public function solitaireDetail($slug)
+{
+    $product = SolitaireProduct::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+
+    return view('public.solitaire_product_details', compact('product'));
+}
 
  public function solitaire_new()
 {
     return view('public.solitaire');
-=========
-public function solitaire_details()
-{
-    return view('public.solitaire_product_details');
 }
-
- public function solitaire()
-{
-    $products = Products::paginate(9);
-
-    return view('public.solitaire_new', compact('products'));
->>>>>>>>> Temporary merge branch 2
-}
-
 
 
 public function ehedCollection(Request $request)
