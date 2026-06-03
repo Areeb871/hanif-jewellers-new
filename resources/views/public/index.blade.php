@@ -1021,7 +1021,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <p class="hero-subtitle">
            Every De Beers Forevermark diamond undergoes a journey of rigorous selection. Our unique inscription is an assurance that every De Beers Forevermark diamond meets the exceptional standards of beauty, rarity and is responsibly sourced
           </p>
-          <a href="#" class="hero-btn">DISCOVER</a>
+          <!-- <a href="#" class="hero-btn">DISCOVER</a> -->
+          <a href="{{ url('/forevermark') }}" class="hero-btn">DISCOVER</a>
         </div>
       </div>
     </div>

@@ -140,6 +140,12 @@ public function masterpiece()
   return view('public.masterpiece');
  
 }
+
+public function forevermark()
+{
+    return view('public.forevermark');
+}
+
  public function corumCollection()
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
