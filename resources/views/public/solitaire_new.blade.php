@@ -371,7 +371,7 @@
                 1 => 'rose',
                 2 => 'silver',
                 3 => 'rose',
-                4 => 'platinum',
+                4 => 'silver',
             ];
 
             $cardData = [
@@ -393,8 +393,11 @@
             $discount = $defaultVariant['discount_percent'] ?? null;
         @endphp
 
-        <article class="hj-product-card" data-product-card>
-
+<article 
+    class="hj-product-card" 
+    data-product-card
+    data-product-url="{{ route('solitaire.details', $product->slug) }}"
+>
             <script type="application/json" class="hj-product-json">
                 @json($cardData)
             </script>
@@ -470,7 +473,6 @@
 
 </section>
 
- <!-- PAGINATION -->
 <!-- PAGINATION -->
 @if ($products->hasPages())
     @php
@@ -653,6 +655,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let imagePath = findMetalImage(data, selectedMetalCode);
 
+            card.dataset.selectedMetal = selectedMetalCode;
+
             if (imageEl) {
                 imageEl.src = makeAssetUrl(imagePath, data.fallback_image);
             }
@@ -709,6 +713,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-product-card]').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+
+            if (
+                e.target.closest('.hj-metal') ||
+                e.target.closest('.hj-size-options') ||
+                e.target.closest('button') ||
+                e.target.closest('a')
+            ) {
+                return;
+            }
+
+            let url = card.dataset.productUrl;
+            let metal = card.dataset.selectedMetal;
+
+            if (metal) {
+                url = url + '?metal=' + encodeURIComponent(metal);
+            }
+
+            window.location.href = url;
+        });
+    });
 });
 </script>
 @endsection

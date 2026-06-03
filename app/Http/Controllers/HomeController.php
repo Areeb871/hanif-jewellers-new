@@ -2552,10 +2552,42 @@ public function solitaire()
 
     return view('public.solitaire_new', compact('products'));
 }
-public function solitaire_details()
+public function solitaire_details($slug, Request $request)
 {
+    $product = SolitaireProduct::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
 
-    return view('public.solitaire_product_details');
+    $selectedMetal = $request->query('metal');
+
+    $galleryImages = collect($product->gallery_images ?? []);
+    $metalImages = collect($product->metal_images ?? []);
+
+    $detailImages = collect();
+
+    if ($selectedMetal) {
+        $selectedMetalGroup = $metalImages->firstWhere('metal_code', $selectedMetal);
+
+        if (!empty($selectedMetalGroup['images'])) {
+            foreach ($selectedMetalGroup['images'] as $image) {
+                $detailImages->push($image);
+            }
+        }
+    }
+
+    if ($detailImages->isEmpty()) {
+        foreach ($metalImages as $group) {
+            foreach (($group['images'] ?? []) as $image) {
+                $detailImages->push($image);
+            }
+        }
+    }
+
+    foreach ($galleryImages as $image) {
+        $detailImages->push($image);
+    }
+
+    return view('public.solitaire_product_details', compact('product', 'detailImages'));
 }
 
  public function solitaire_new()

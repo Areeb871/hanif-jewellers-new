@@ -5,49 +5,145 @@
 <script src="{{ asset('assets/f_assets/js/filter.js') }}" defer></script>
 <section class="hj-product-detail-page">
 
-    <div class="hj-product-container">
+<div class="hj-product-container">
 
      {{-- LEFT IMAGE GALLERY --}}
-<div class="hj-gallery-slider-wrap">
+     <div class="hj-gallery-slider-wrap">
+@php
+    $metals = collect($product->metals ?? [])->values();
+    $carats = collect($product->diamond_carats ?? [])->values();
+    $variants = collect($product->variants ?? [])->values();
+    $metalImages = collect($product->metal_images ?? [])->values();
+    $galleryImages = collect($product->gallery_images ?? [])->values();
 
-    <div class="hj-product-gallery" id="hjProductGallery">
+    $activeVariants = $variants->filter(function ($variant) {
+        return !isset($variant['status'])
+            || $variant['status'] === true
+            || $variant['status'] === 1
+            || $variant['status'] === '1';
+    })->values();
 
+    $firstMetal = $metals->first();
+    $firstCarat = $carats->first();
+
+    $selectedMetalCode = request('metal')
+        ?: ($product->default_metal_code ?: data_get($firstMetal, 'code', ''));
+
+    $selectedCarat = request('carat')
+        ?: ($product->default_diamond_carat ?: data_get($firstCarat, 'value', ''));
+
+    $selectedMetal = $metals->firstWhere('code', $selectedMetalCode) ?: $firstMetal;
+
+    if ($selectedMetal) {
+        $selectedMetalCode = $selectedMetal['code'] ?? '';
+    }
+
+    $selectedCaratIndex = $carats->search(function ($carat) use ($selectedCarat) {
+        return number_format((float)($carat['value'] ?? 0), 2, '.', '') === number_format((float)$selectedCarat, 2, '.', '');
+    });
+
+    if ($selectedCaratIndex === false) {
+        $selectedCaratIndex = 0;
+        $selectedCarat = data_get($firstCarat, 'value', '');
+    }
+
+    $selectedVariant = $activeVariants->first(function ($variant) use ($selectedMetalCode, $selectedCarat) {
+        return ($variant['metal_code'] ?? '') === $selectedMetalCode
+            && number_format((float)($variant['diamond_carat'] ?? 0), 2, '.', '') === number_format((float)$selectedCarat, 2, '.', '');
+    });
+
+    /*
+        Image condition:
+        1. Selected metal images show first.
+        2. If selected metal has no images, gallery images show.
+        3. If gallery images are also empty, show no image message.
+    */
+    $selectedMetalImageGroup = $metalImages->firstWhere('metal_code', $selectedMetalCode);
+    $detailImages = collect(data_get($selectedMetalImageGroup, 'images', []));
+
+    if ($detailImages->isEmpty() && $galleryImages->isNotEmpty()) {
+        $detailImages = $galleryImages;
+    }
+
+    $currency = $product->currency ?? 'AED';
+
+    $formatMoney = function ($value) use ($currency) {
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        return $currency . ' ' . number_format((float)$value, 0);
+    };
+
+    /*
+        Important:
+        This is a closure variable, so use:
+        $hjMetalClass($metal)
+        Not:
+        hjMetalClass($metal)
+    */
+    $hjMetalClass = function ($metal) {
+        $purity = strtolower($metal['purity'] ?? $metal['short_label'] ?? '');
+        $tone = strtolower($metal['tone'] ?? $metal['name'] ?? '');
+
+        if (str_contains($tone, 'rose') || str_contains($tone, 'pink')) {
+            return str_contains($purity, '18') ? 'metal-pink' : 'metal-rose';
+        }
+
+        if (str_contains($tone, 'yellow') || str_contains($tone, 'gold')) {
+            return str_contains($purity, '18') ? 'metal-gold' : 'metal-yellow';
+        }
+
+        if (str_contains($tone, 'white') || str_contains($tone, 'silver')) {
+            return str_contains($purity, '18') ? 'metal-light' : 'metal-silver';
+        }
+
+        if (str_contains($tone, 'platinum') || str_contains($purity, 'pt')) {
+            return 'metal-light';
+        }
+
+        return 'metal-silver';
+    };
+
+    $detailData = [
+        'name' => $product->name,
+        'currency' => $currency,
+        'metals' => $metals->toArray(),
+        'carats' => $carats->toArray(),
+        'variants' => $activeVariants->toArray(),
+        'metal_images' => $metalImages->toArray(),
+        'gallery_images' => $galleryImages->toArray(),
+        'selected_metal_code' => $selectedMetalCode,
+        'selected_carat_index' => (int) $selectedCaratIndex,
+    ];
+@endphp
+
+<script type="application/json" id="hjDetailProductData">
+    @json($detailData)
+</script>
+
+
+{{-- PRODUCT DETAIL GALLERY --}}
+<div class="hj-product-gallery" id="hjProductGallery">
+
+    @forelse($detailImages as $index => $image)
         <div class="hj-gallery-item">
-            <span class="hj-badge">TRADE IN AVAILABLE</span>
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring1.png') }}" alt="Ring">
-            <!-- <p class="hj-img-caption">Shown with 2 Carat Diamond</p> -->
+            @if($index === 0)
+                <span class="hj-badge">TRADE IN AVAILABLE</span>
+            @endif
+
+            <img 
+                src="{{ asset($image['image_path']) }}" 
+                alt="{{ $image['alt_text'] ?? $product->name }}"
+            >
         </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring2.png') }}" alt="Model wearing ring">
+    @empty
+        <div class="hj-gallery-no-image">
+            No images available for this metal.
         </div>
+    @endforelse
 
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring3.png') }}" alt="Ring lifestyle">
-        </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring4.png') }}" alt="Ring side">
-        </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring5.png') }}" alt="Ring closeup">
-        </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring6.png') }}" alt="Ring hand">
-        </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring7.png') }}" alt="Ring model">
-        </div>
-
-        <div class="hj-gallery-item">
-            <img src="{{ asset('assets/f_assets/image/solitaire/ring8.png') }}" alt="Ring">
-        </div>
-
-    </div>
-
+</div>
     {{-- MOBILE SLIDER CONTROLS --}}
     <button type="button" class="hj-gallery-arrow" aria-label="Next image" id="hjGalleryNext">
     <img src="{{ asset('assets/f_assets/image/reviews/Vector.svg') }}" alt="Next" class="hj-gallery-arrow-img hj-arrow-right">
@@ -83,80 +179,102 @@
         <span>/</span>
         <a href="#">Solitaire Rings</a>
         <span>/</span>
-        <a href="#">Solitaire Engagement Ring -14K White Gold</a>
+<a href="#" id="selectedMetalTitle">
+    Solitaire Engagement Ring - {{ $selectedMetal['name'] ?? '14K White Gold' }}
+</a>
     </div>
 
-    <h1>Julia Solitaire Ring</h1>
+    <h1>{{ $product->name ?? 'Julia Solitaire Ring' }}</h1>
 
     <p class="hj-sku">
-        SKU: M10116W14_3 | Lab Created | Gemological certificate included
+        SKU: {{ $product->sku ?? 'N/A' }} | {{ $product->tag_label ?? 'N/A' }} | Gemological certificate included
     </p>
 
 </div>
-    <div class="hj-option-card">
+ {{-- OPTION CARD --}}
+<div class="hj-option-card">
 
-        <!-- METAL -->
-        <div class="hj-row hj-metal-row">
-            <span class="hj-label">METAL</span>
+    {{-- METAL --}}
+    <div class="hj-row hj-metal-row">
+    <span class="hj-label">METAL</span>
 
-            <div class="hj-middle hj-metal-options">
-                <button class="metal-chip metal-silver">14K</button>
-                <button class="metal-chip metal-rose">14K</button>
-                <button class="metal-chip metal-yellow active">14K</button>
-                <button class="metal-chip metal-light">18K</button>
-                <button class="metal-chip metal-pink">18K</button>
-                <button class="metal-chip metal-gold">18K</button>
-            </div>
-
-            <button class="hj-side-btn">14K YELLOW</button>
-        </div>
-
-       <!-- CARAT -->
-<div class="hj-row hj-carat-row">
-    <span class="hj-label">
-        TOTAL CARAT
-        <small>(+Rs 100,000)</small>
-    </span>
-
-    <div class="hj-middle hj-slider-box">
-        <div class="hj-slider-text">
-            <span>0.25 Carat</span>
-            <span>1.00 Carat</span>
-        </div>
-
-        <input
-            class="hj-range hj-carat-range"
-            id="caratRange"
-            type="range"
-            min="0"
-            max="8"
-            step="1"
-            value="0"
-        >
+    <div class="hj-middle hj-metal-options">
+        @foreach($metals as $metal)
+            <button 
+                type="button"
+                class="metal-chip {{ $hjMetalClass($metal) }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
+                data-metal-code="{{ $metal['code'] ?? '' }}"
+            >
+                {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
+            </button>
+        @endforeach
     </div>
 
-    <button class="hj-side-btn" id="caratBtn">0.25 CARAT</button>
+    <button type="button" class="hj-side-btn" id="selectedMetalBtn">
+        {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
+    </button>
 </div>
 
-        <!-- RING SIZE -->
-        <div class="hj-row hj-size-row">
-            <span class="hj-label">RING SIZE</span>
 
-            <p class="hj-middle hj-select-text">Please select</p>
+    {{-- CARAT --}}
+    <div class="hj-row hj-carat-row">
+        <span class="hj-label">
+            TOTAL CARAT
+            <small id="caratPriceDiff"></small>
+        </span>
 
-            <button class="hj-side-btn">SELECT</button>
+        <div class="hj-middle hj-slider-box">
+            <div class="hj-slider-text">
+                <span>{{ data_get($carats->first(), 'label', '0.25') }} Carat</span>
+                <span>{{ data_get($carats->last(), 'label', '1.00') }} Carat</span>
+            </div>
+
+            <input
+                class="hj-range hj-carat-range"
+                id="caratRange"
+                type="range"
+                min="0"
+                max="{{ max($carats->count() - 1, 0) }}"
+                step="1"
+                value="{{ $selectedCaratIndex }}"
+            >
         </div>
 
+        <button type="button" class="hj-side-btn" id="caratBtn">
+            {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
+        </button>
     </div>
 
-  <div class="hj-price-row">
+
+    {{-- RING SIZE --}}
+    <div class="hj-row hj-size-row">
+        <span class="hj-label">RING SIZE</span>
+
+        <p class="hj-middle hj-select-text">Please select</p>
+
+        <button type="button" class="hj-side-btn">SELECT</button>
+    </div>
+
+</div>
+
+
+{{-- PRICE ROW --}}
+<div class="hj-price-row">
     <div class="hj-price-left">
-        <del>$1,550</del>
-        <strong>$1,130</strong>
-        <span>You save 34 %</span>
+        <del id="detailOldPrice">
+            {{ $selectedVariant && !empty($selectedVariant['old_price']) ? $formatMoney($selectedVariant['old_price']) : '' }}
+        </del>
+
+        <strong id="detailNewPrice">
+            {{ $selectedVariant && !empty($selectedVariant['price']) ? $formatMoney($selectedVariant['price']) : 'Unavailable' }}
+        </strong>
+
+        <span id="detailSavingText">
+            {{ $selectedVariant && !empty($selectedVariant['discount_percent']) ? 'You save ' . $selectedVariant['discount_percent'] . ' %' : '' }}
+        </span>
     </div>
 
-    <button class="hj-cart-btn">ADD TO CART</button>
+    <button type="button" class="hj-cart-btn">ADD TO CART</button>
 </div>
 
 <button class="hj-engraving">
@@ -624,5 +742,247 @@
 
     </div>
 </section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const dataScript = document.getElementById('hjDetailProductData');
+    const gallery = document.getElementById('hjProductGallery');
 
+    if (!dataScript || !gallery) return;
+
+    const data = JSON.parse(dataScript.textContent);
+
+    let selectedMetalCode = data.selected_metal_code;
+    let selectedCaratIndex = Number(data.selected_carat_index || 0);
+
+    const caratRange = document.getElementById('caratRange');
+    const caratBtn = document.getElementById('caratBtn');
+    const selectedMetalBtn = document.getElementById('selectedMetalBtn');
+    const selectedMetalTitle = document.getElementById('selectedMetalTitle');
+
+    const oldPriceEl = document.getElementById('detailOldPrice');
+    const newPriceEl = document.getElementById('detailNewPrice');
+    const savingTextEl = document.getElementById('detailSavingText');
+    const caratPriceDiffEl = document.getElementById('caratPriceDiff');
+
+    function normalizeCarat(value) {
+        const number = Number(value);
+
+        if (isNaN(number)) {
+            return String(value);
+        }
+
+        return number.toFixed(2);
+    }
+
+    function makeAssetUrl(path) {
+        if (!path) {
+            return '';
+        }
+
+        if (path.startsWith('http') || path.startsWith('/')) {
+            return path;
+        }
+
+        return window.location.origin + '/' + path;
+    }
+
+    function formatMoney(value) {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+
+        const number = Number(value);
+
+        if (isNaN(number)) {
+            return data.currency + ' ' + value;
+        }
+
+        return data.currency + ' ' + number.toLocaleString(undefined, {
+            maximumFractionDigits: 0
+        });
+    }
+
+    function getSelectedCarat() {
+        return data.carats[selectedCaratIndex] || data.carats[0] || null;
+    }
+
+    function findMetal(metalCode) {
+        return (data.metals || []).find(function (metal) {
+            return String(metal.code) === String(metalCode);
+        });
+    }
+
+    function findVariant(metalCode, caratValue) {
+        return (data.variants || []).find(function (variant) {
+            const status = variant.status === undefined
+                || variant.status === true
+                || variant.status === 1
+                || variant.status === '1';
+
+            return status
+                && String(variant.metal_code) === String(metalCode)
+                && normalizeCarat(variant.diamond_carat) === normalizeCarat(caratValue);
+        });
+    }
+
+    function findBaseVariant(metalCode) {
+        const firstCarat = data.carats[0];
+
+        if (!firstCarat) return null;
+
+        return findVariant(metalCode, firstCarat.value);
+    }
+
+    function getMetalImages(metalCode) {
+        const group = (data.metal_images || []).find(function (item) {
+            return String(item.metal_code) === String(metalCode);
+        });
+
+        if (group && group.images && group.images.length > 0) {
+            return group.images;
+        }
+
+        if (data.gallery_images && data.gallery_images.length > 0) {
+            return data.gallery_images;
+        }
+
+        return [];
+    }
+
+    function renderGallery(metalCode) {
+        const images = getMetalImages(metalCode);
+
+        let html = '';
+
+        if (!images || images.length === 0) {
+            html = `
+                <div class="hj-gallery-no-image">
+                    No images available for this metal.
+                </div>
+            `;
+        } else {
+            images.forEach(function (image, index) {
+                const imagePath = makeAssetUrl(image.image_path);
+
+                html += `
+                    <div class="hj-gallery-item">
+                        ${index === 0 ? '<span class="hj-badge">TRADE IN AVAILABLE</span>' : ''}
+                        <img 
+                            src="${imagePath}" 
+                            alt="${image.alt_text || data.name || 'Product image'}"
+                        >
+                    </div>
+                `;
+            });
+        }
+
+        gallery.innerHTML = html;
+    }
+
+    function updateUrl() {
+        const carat = getSelectedCarat();
+        const url = new URL(window.location.href);
+
+        if (selectedMetalCode) {
+            url.searchParams.set('metal', selectedMetalCode);
+        }
+
+        if (carat && carat.value) {
+            url.searchParams.set('carat', carat.value);
+        }
+
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    function updateDetail() {
+        const metal = findMetal(selectedMetalCode);
+        const carat = getSelectedCarat();
+
+        if (!carat) return;
+
+        const variant = findVariant(selectedMetalCode, carat.value);
+        const baseVariant = findBaseVariant(selectedMetalCode);
+
+        renderGallery(selectedMetalCode);
+
+        document.querySelectorAll('.metal-chip').forEach(function (btn) {
+            btn.classList.toggle(
+                'active',
+                String(btn.dataset.metalCode) === String(selectedMetalCode)
+            );
+        });
+
+        const metalName = metal && metal.name
+            ? metal.name
+            : selectedMetalCode;
+
+        if (selectedMetalBtn) {
+            selectedMetalBtn.textContent = metalName.toUpperCase();
+        }
+
+        if (selectedMetalTitle) {
+            selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
+        }
+
+        if (caratRange) {
+            caratRange.value = selectedCaratIndex;
+        }
+
+        if (caratBtn) {
+            caratBtn.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
+        }
+
+        if (variant) {
+            if (oldPriceEl) {
+                oldPriceEl.textContent = variant.old_price
+                    ? formatMoney(variant.old_price)
+                    : '';
+            }
+
+            if (newPriceEl) {
+                newPriceEl.textContent = variant.price
+                    ? formatMoney(variant.price)
+                    : 'Unavailable';
+            }
+
+            if (savingTextEl) {
+                savingTextEl.textContent = variant.discount_percent
+                    ? 'You save ' + variant.discount_percent + ' %'
+                    : '';
+            }
+
+            if (caratPriceDiffEl && baseVariant && variant.price && baseVariant.price) {
+                const diff = Number(variant.price) - Number(baseVariant.price);
+
+                caratPriceDiffEl.textContent = diff > 0
+                    ? '(+' + formatMoney(diff) + ')'
+                    : '';
+            }
+        } else {
+            if (oldPriceEl) oldPriceEl.textContent = '';
+            if (newPriceEl) newPriceEl.textContent = 'Unavailable';
+            if (savingTextEl) savingTextEl.textContent = '';
+            if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
+        }
+
+        updateUrl();
+    }
+
+    document.querySelectorAll('.metal-chip').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            selectedMetalCode = this.dataset.metalCode;
+            updateDetail();
+        });
+    });
+
+    if (caratRange) {
+        caratRange.addEventListener('input', function () {
+            selectedCaratIndex = Number(this.value);
+            updateDetail();
+        });
+    }
+
+    updateDetail();
+});
+</script>
 @endsection
