@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\SolitaireProduct;
 class HomeController extends Controller
 {
     /**
@@ -2548,17 +2548,64 @@ public function Online_Shopping_Store(Request $request)
             return false;
         }
     }
-public function solitaire_details()
-{
-    return view('public.solitaire_product_details');
-}
 
- public function solitaire()
+
+public function solitaire()
 {
-    $products = Products::paginate(9);
+   $products = SolitaireProduct::where('status', 1)
+        ->latest()
+        ->paginate(4);
 
     return view('public.solitaire_new', compact('products'));
 }
+public function solitaire_details($slug, Request $request)
+{
+    $product = SolitaireProduct::where('slug', $slug)
+        ->where('status', 1)
+        ->firstOrFail();
+
+    $selectedMetal = $request->query('metal');
+
+    $galleryImages = collect($product->gallery_images ?? []);
+    $metalImages = collect($product->metal_images ?? []);
+
+    $detailImages = collect();
+
+    if ($selectedMetal) {
+        $selectedMetalGroup = $metalImages->firstWhere('metal_code', $selectedMetal);
+
+        if (!empty($selectedMetalGroup['images'])) {
+            foreach ($selectedMetalGroup['images'] as $image) {
+                $detailImages->push($image);
+            }
+        }
+    }
+
+    if ($detailImages->isEmpty()) {
+        foreach ($metalImages as $group) {
+            foreach (($group['images'] ?? []) as $image) {
+                $detailImages->push($image);
+            }
+        }
+    }
+
+    foreach ($galleryImages as $image) {
+        $detailImages->push($image);
+    }
+
+    // Dynamic products for this section
+    $relatedProducts = SolitaireProduct::where('status', 1)
+        ->latest()
+        ->take(6)
+        ->get();
+
+    return view('public.solitaire_product_details', compact(
+        'product',
+        'detailImages',
+        'relatedProducts'
+    ));
+}
+
  public function solitaire_new()
 {
     return view('public.solitaire');

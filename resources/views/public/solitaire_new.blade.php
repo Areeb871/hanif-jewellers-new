@@ -338,99 +338,192 @@
     </div>
 
 </div>
-
-
-    @php
-        $products = [
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-            ['img' => 'ring.png', 'label' => 'Lab Created'],
-        ];
-    @endphp
-
 <!-- PRODUCT GRID -->
 <section class="hj-product-grid">
 
     @foreach($products as $product)
-        <article class="hj-product-card">
+
+        @php
+            $metals = collect($product->metals ?? []);
+            $carats = collect($product->diamond_carats ?? []);
+            $variants = collect($product->variants ?? []);
+            $metalImages = collect($product->metal_images ?? []);
+            $galleryImages = collect($product->gallery_images ?? []);
+
+            $defaultVariant = $variants->firstWhere('is_default', true) ?? $variants->first();
+
+            $defaultMetalCode = $product->default_metal_code 
+                ?? ($defaultVariant['metal_code'] ?? ($metals->first()['code'] ?? ''));
+
+            $defaultCarat = $product->default_diamond_carat 
+                ?? ($defaultVariant['diamond_carat'] ?? ($carats->first()['value'] ?? ''));
+
+            $defaultMetal = $metals->firstWhere('code', $defaultMetalCode);
+
+            $defaultMetalImageGroup = $metalImages->firstWhere('metal_code', $defaultMetalCode);
+
+            $mainImage = data_get($defaultMetalImageGroup, 'images.0.image_path')
+                ?? data_get($galleryImages, '0.image_path')
+                ?? null;
+
+            $metalDesignClasses = [
+                0 => '',
+                1 => 'rose',
+                2 => 'silver',
+                3 => 'rose',
+                4 => 'silver',
+            ];
+
+            $cardData = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'currency' => $product->currency ?? 'AED',
+                'metals' => $metals->values(),
+                'carats' => $carats->values(),
+                'variants' => $variants->values(),
+                'metal_images' => $metalImages->values(),
+                'gallery_images' => $galleryImages->values(),
+                'default_metal_code' => $defaultMetalCode,
+                'default_carat' => $defaultCarat,
+                'fallback_image' => asset('assets/f_assets/image/solitaire/ring10.jpeg'),
+            ];
+
+            $price = $defaultVariant['price'] ?? null;
+            $oldPrice = $defaultVariant['old_price'] ?? null;
+            $discount = $defaultVariant['discount_percent'] ?? null;
+        @endphp
+
+<article 
+    class="hj-product-card" 
+    data-product-card
+    data-product-url="{{ route('solitaire.details', $product->slug) }}"
+>
+            <script type="application/json" class="hj-product-json">
+                @json($cardData)
+            </script>
 
             <div class="hj-product-image-box">
                 <span class="hj-product-badge">
-                    {{ $product['label'] ?? 'Lab Created' }}
+                    {{ $product->tag_label ?? 'Lab Created' }}
                 </span>
 
                 <img 
-                    src="{{ asset('assets/f_assets/image/solitaire/' . $product['img']) }}" 
-                    alt="{{ $product['title'] ?? 'Emerald Solitaire Ring' }}"
+                    class="hj-product-main-img"
+                    src="{{ $mainImage ? asset($mainImage) : asset('assets/f_assets/image/solitaire/ring10.jpeg') }}" 
+                    alt="{{ $product->name }}"
                 >
             </div>
 
             <div class="hj-product-info">
                 <h3>
-                    {{ $product['title'] ?? 'Emerald Solitaire Ring' }}
+                    {{ $product->name }}
                 </h3>
 
-                <p>
-                    {{ $product['desc'] ?? '3.8 Total Carat · Radiant · Solitaire · 14K White Gold' }}
+                <p class="hj-product-desc">
+                    {{ $defaultCarat }} Total Carat · Radiant · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
                 </p>
 
                 <div class="hj-metal-options">
-                    <span class="hj-metal active">14K</span>
-                    <span class="hj-metal rose">14K</span>
-                    <span class="hj-metal silver">18K</span>
-                    <span class="hj-metal rose">18K</span>
-                    <span class="hj-metal platinum">PT</span>
+                    @foreach($metals as $index => $metal)
+                        <span 
+                            class="hj-metal {{ $defaultMetalCode == ($metal['code'] ?? '') ? 'active' : '' }} {{ $metalDesignClasses[$index] ?? '' }}"
+                            data-metal-code="{{ $metal['code'] ?? '' }}"
+                        >
+                            {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
+                        </span>
+                    @endforeach
                 </div>
 
                 <div class="hj-size-options">
-                    <button type="button">1.0</button>
-                    <button type="button">1.8</button>
-                    <button type="button">2.7</button>
-                    <button type="button" class="active">3.8</button>
-                    <button type="button">5.3</button>
-                    <button type="button">7.25</button>
+                    @foreach($carats as $carat)
+                        @php
+                            $caratValue = $carat['value'] ?? '';
+                            $activeCarat = number_format((float)$caratValue, 2, '.', '') 
+                                == number_format((float)$defaultCarat, 2, '.', '');
+                        @endphp
+
+                        <button 
+                            type="button"
+                            class="{{ $activeCarat ? 'active' : '' }}"
+                            data-carat-value="{{ $caratValue }}"
+                        >
+                            {{ $carat['label'] ?? $caratValue }}
+                        </button>
+                    @endforeach
                 </div>
 
                 <div class="hj-price-row">
-                    <del>{{ $product['old_price'] ?? '$2,540' }}</del>
-                    <strong>{{ $product['price'] ?? '$1,530' }}</strong>
-                    <span>{{ $product['discount'] ?? '40% off' }}</span>
+                    <del class="hj-old-price">
+                        {{ $oldPrice ? ($product->currency ?? 'AED') . ' ' . number_format($oldPrice) : '' }}
+                    </del>
+
+                    <strong class="hj-new-price">
+                        {{ $price ? ($product->currency ?? 'AED') . ' ' . number_format($price) : 'Unavailable' }}
+                    </strong>
+
+                    <span class="hj-discount-text">
+                        {{ $discount ? $discount . '% off' : '' }}
+                    </span>
                 </div>
             </div>
 
         </article>
+
     @endforeach
 
 </section>
 
- <!-- PAGINATION -->
-<section class="hj-pagination">
+<!-- PAGINATION -->
+@if ($products->hasPages())
+    @php
+        $paginatedProducts = $products->appends(request()->query());
+    @endphp
 
-    <a href="#" class="hj-page-arrow" aria-label="Previous page">
-        <svg viewBox="0 0 24 24" class="hj-arrow-icon">
-            <path d="M15 18L9 12L15 6"></path>
-        </svg>
-    </a>
+    <section class="hj-pagination">
 
-    <a href="#" class="hj-page-number active">1</a>
-    <a href="#" class="hj-page-number">2</a>
-    <a href="#" class="hj-page-number">3</a>
-    <a href="#" class="hj-page-number">4</a>
+        {{-- Previous Button --}}
+        @if ($products->onFirstPage())
+            <span class="hj-page-arrow disabled" aria-label="Previous page">
+                <svg viewBox="0 0 24 24" class="hj-arrow-icon">
+                    <path d="M15 18L9 12L15 6"></path>
+                </svg>
+            </span>
+        @else
+            <a href="{{ $paginatedProducts->previousPageUrl() }}" class="hj-page-arrow" aria-label="Previous page">
+                <svg viewBox="0 0 24 24" class="hj-arrow-icon">
+                    <path d="M15 18L9 12L15 6"></path>
+                </svg>
+            </a>
+        @endif
 
-    <a href="#" class="hj-page-arrow" aria-label="Next page">
-        <svg viewBox="0 0 24 24" class="hj-arrow-icon">
-            <path d="M9 6L15 12L9 18"></path>
-        </svg>
-    </a>
 
-</section>
+        {{-- Page Numbers --}}
+        @foreach ($paginatedProducts->getUrlRange(1, $products->lastPage()) as $page => $url)
+            @if ($page == $products->currentPage())
+                <span class="hj-page-number active">{{ $page }}</span>
+            @else
+                <a href="{{ $url }}" class="hj-page-number">{{ $page }}</a>
+            @endif
+        @endforeach
+
+
+        {{-- Next Button --}}
+        @if ($products->hasMorePages())
+            <a href="{{ $paginatedProducts->nextPageUrl() }}" class="hj-page-arrow" aria-label="Next page">
+                <svg viewBox="0 0 24 24" class="hj-arrow-icon">
+                    <path d="M9 6L15 12L9 18"></path>
+                </svg>
+            </a>
+        @else
+            <span class="hj-page-arrow disabled" aria-label="Next page">
+                <svg viewBox="0 0 24 24" class="hj-arrow-icon">
+                    <path d="M9 6L15 12L9 18"></path>
+                </svg>
+            </span>
+        @endif
+
+    </section>
+@endif
 
     <!-- CONTENT BOX -->
 <section class="hj-info-section">
@@ -458,4 +551,194 @@
 </section>
 
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    function normalizeCarat(value) {
+        let number = Number(value);
+
+        if (isNaN(number)) {
+            return String(value);
+        }
+
+        return number.toFixed(2);
+    }
+
+    function makeAssetUrl(path, fallback) {
+        if (!path) {
+            return fallback;
+        }
+
+        if (path.startsWith('http') || path.startsWith('/')) {
+            return path;
+        }
+
+        return window.location.origin + '/' + path;
+    }
+
+    function formatMoney(value, currency) {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+
+        let number = Number(value);
+
+        if (isNaN(number)) {
+            return currency + ' ' + value;
+        }
+
+        return currency + ' ' + number.toLocaleString();
+    }
+
+    function findMetal(data, metalCode) {
+        return (data.metals || []).find(function (metal) {
+            return String(metal.code) === String(metalCode);
+        });
+    }
+
+    function findCarat(data, caratValue) {
+        return (data.carats || []).find(function (carat) {
+            return normalizeCarat(carat.value) === normalizeCarat(caratValue);
+        });
+    }
+
+    function findVariant(data, metalCode, caratValue) {
+        return (data.variants || []).find(function (variant) {
+            let status = variant.status === undefined 
+                || variant.status === true 
+                || variant.status === 1 
+                || variant.status === '1';
+
+            return status &&
+                String(variant.metal_code) === String(metalCode) &&
+                normalizeCarat(variant.diamond_carat) === normalizeCarat(caratValue);
+        });
+    }
+
+    function findMetalImage(data, metalCode) {
+        let group = (data.metal_images || []).find(function (item) {
+            return String(item.metal_code) === String(metalCode);
+        });
+
+        if (group && group.images && group.images.length > 0) {
+            return group.images[0].image_path;
+        }
+
+        if (data.gallery_images && data.gallery_images.length > 0) {
+            return data.gallery_images[0].image_path;
+        }
+
+        return null;
+    }
+
+    document.querySelectorAll('[data-product-card]').forEach(function (card) {
+        let jsonScript = card.querySelector('.hj-product-json');
+
+        if (!jsonScript) return;
+
+        let data = JSON.parse(jsonScript.textContent);
+
+        let selectedMetalCode = data.default_metal_code;
+        let selectedCarat = data.default_carat;
+
+        let imageEl = card.querySelector('.hj-product-main-img');
+        let descEl = card.querySelector('.hj-product-desc');
+        let oldPriceEl = card.querySelector('.hj-old-price');
+        let newPriceEl = card.querySelector('.hj-new-price');
+        let discountEl = card.querySelector('.hj-discount-text');
+
+        function updateCard() {
+            let variant = findVariant(data, selectedMetalCode, selectedCarat);
+
+            let metal = findMetal(data, selectedMetalCode);
+            let carat = findCarat(data, selectedCarat);
+
+            let imagePath = findMetalImage(data, selectedMetalCode);
+
+            card.dataset.selectedMetal = selectedMetalCode;
+
+            if (imageEl) {
+                imageEl.src = makeAssetUrl(imagePath, data.fallback_image);
+            }
+
+            if (descEl) {
+                descEl.textContent =
+                    (carat ? carat.label : selectedCarat) +
+                    ' Total Carat · Radiant · Solitaire · ' +
+                    (metal ? metal.name : selectedMetalCode);
+            }
+
+            if (variant) {
+                oldPriceEl.textContent = variant.old_price
+                    ? formatMoney(variant.old_price, data.currency)
+                    : '';
+
+                newPriceEl.textContent = variant.price
+                    ? formatMoney(variant.price, data.currency)
+                    : 'Unavailable';
+
+                discountEl.textContent = variant.discount_percent
+                    ? variant.discount_percent + '% off'
+                    : '';
+            } else {
+                oldPriceEl.textContent = '';
+                newPriceEl.textContent = 'Unavailable';
+                discountEl.textContent = '';
+            }
+
+            card.querySelectorAll('.hj-metal').forEach(function (btn) {
+                btn.classList.toggle('active', btn.dataset.metalCode === selectedMetalCode);
+            });
+
+            card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
+                btn.classList.toggle(
+                    'active',
+                    normalizeCarat(btn.dataset.caratValue) === normalizeCarat(selectedCarat)
+                );
+            });
+        }
+
+        card.querySelectorAll('.hj-metal').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                selectedMetalCode = this.dataset.metalCode;
+                updateCard();
+            });
+        });
+
+        card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                selectedCarat = this.dataset.caratValue;
+                updateCard();
+            });
+        });
+    });
+
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-product-card]').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+
+            if (
+                e.target.closest('.hj-metal') ||
+                e.target.closest('.hj-size-options') ||
+                e.target.closest('button') ||
+                e.target.closest('a')
+            ) {
+                return;
+            }
+
+            let url = card.dataset.productUrl;
+            let metal = card.dataset.selectedMetal;
+
+            if (metal) {
+                url = url + '?metal=' + encodeURIComponent(metal);
+            }
+
+            window.location.href = url;
+        });
+    });
+});
+</script>
 @endsection

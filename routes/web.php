@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DiamondRateController;
 use App\Http\Controllers\CheckoutLeadController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\SolitaireProductAdminController;
 
 
 
@@ -78,7 +79,7 @@ Route::get('/collections/gulposh', [HomeController::class, 'gulposh'])->name('gu
 // Temporary direct route for Pure Lock page view
 Route::get('/collections/pure-lock', [HomeController::class, 'pureLock'])->name('pure-lock');
 Route::get('watches', [HomeController::class, 'watches']);
-Route::get('solitaire/details', [HomeController::class, 'solitaire_details'])->name('solitaire.details');
+Route::get('solitaire/details/{slug}', [HomeController::class, 'solitaire_details'])->name('solitaire.details');
 Route::get('solitaire', [HomeController::class, 'solitaire'])->name('solitaire');
 Route::get('products/{slug}', [HomeController::class, 'product_details'])->name('product.details');
 Route::get('/collections/farah-khan', [HomeController::class, 'farahKhan'])->name('farah-khan');
@@ -154,6 +155,10 @@ Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show')
 // });
 
 Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
+
+
+    Route::resource('solitaire-products', SolitaireProductAdminController::class);
+
      Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/blogs', [BlogController::class, 'adminIndex'])->name('admin.blogs.index');

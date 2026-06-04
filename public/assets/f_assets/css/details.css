@@ -200,67 +200,127 @@ body{
 /* METAL */
 
 .hj-metal-options {
-    height: 68px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    justify-self: center;
-    gap: 12px;
-    flex-wrap: nowrap;
+    gap: 18px;
 }
 
+/* BASE CHIP */
 .metal-chip {
     width: 31px;
     height: 31px;
     min-width: 31px;
     min-height: 31px;
-    max-width: 31px;
-    max-height: 31px;
     border-radius: 50%;
-    border:none;
-    background: #fff;
-    font-size: 10px;
-    font-weight: 600;
+    border: none !important;
+    outline: none !important;
+    background: #fff !important;
     color: #333;
+    font-size: 11px;
+    font-weight: 600;
     padding: 0;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
+    box-sizing: border-box;
+    transition: none !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* outer ring colors */
-.metal-silver {
+/* DEFAULT GREY */
+.metal-chip {
     box-shadow: 0 0 0 5px #c7c7c7;
 }
 
-.metal-rose {
-    box-shadow: 0 0 0 5px #F0C3AD;
+/* ROSE */
+.metal-chip.rose {
+    box-shadow: 0 0 0 5px #efb69d;
 }
 
-.metal-yellow {
-    box-shadow: 0 0 0 5px #f1da8f;
+/* SILVER */
+.metal-chip.silver {
+    box-shadow: 0 0 0 5px #e8e8e8;
 }
 
-.metal-light {
-    box-shadow: 0 0 0 5px #e9e9e9;
-}
-
-.metal-pink {
-    box-shadow: 0 0 0 5px #f0C3AD;
-}
-
-.metal-gold {
-    box-shadow: 0 0 0 5px #f1da8f;
-}
-
-
-/* active outer border */
+/* ACTIVE DEFAULT - BLACK OUTER + GREY INNER */
 .metal-chip.active {
     box-shadow:
-        0 0 0 4px #ead37a,
-        0 0 0 6px #111;
+        0 0 0 5px #c7c7c7,
+        0 0 0 7px #111 !important;
+}
+
+/* ACTIVE ROSE - BLACK OUTER + ROSE INNER */
+.metal-chip.rose.active {
+    box-shadow:
+        0 0 0 5px #efb69d,
+        0 0 0 7px #111 !important;
+}
+
+/* ACTIVE SILVER - BLACK OUTER + SILVER INNER */
+.metal-chip.silver.active {
+    box-shadow:
+        0 0 0 5px #e8e8e8,
+        0 0 0 7px #111 !important;
+}
+
+/* REMOVE OLD YELLOW STATE */
+.metal-chip.metal-yellow,
+.metal-chip.metal-yellow.active {
+    background: #fff !important;
+    box-shadow:
+        0 0 0 5px #e8e8e8,
+        0 0 0 7px #111 !important;
+}
+
+/* FOCUS REMOVE */
+.metal-chip:focus,
+.metal-chip:active {
+    outline: none !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 767px) {
+    .hj-metal-options {
+        gap: 14px;
+    }
+
+    .metal-chip {
+        width: 27px;
+        height: 27px;
+        min-width: 27px;
+        min-height: 27px;
+        font-size: 9px;
+    }
+
+    .metal-chip,
+    .metal-chip.silver {
+        box-shadow: 0 0 0 4px #e8e8e8;
+    }
+
+    .metal-chip.rose {
+        box-shadow: 0 0 0 4px #efb69d;
+    }
+
+    .metal-chip.active {
+        box-shadow:
+            0 0 0 4px #c7c7c7,
+            0 0 0 6.5px #111 !important;
+    }
+
+    .metal-chip.rose.active {
+        box-shadow:
+            0 0 0 4px #efb69d,
+            0 0 0 6.5px #111 !important;
+    }
+
+    .metal-chip.silver.active {
+        box-shadow:
+            0 0 0 4px #e8e8e8,
+            0 0 0 6.5px #111 !important;
+    }
 }
 
 /* RIGHT BUTTONS */
