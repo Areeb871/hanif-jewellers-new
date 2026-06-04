@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('carts')) {
+        if (Schema::hasTable('ehed_promotional_images')) {
             return;
         }
 
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('ehed_promotional_images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->string('session_id', 40)->nullable()->index();
-            $table->unsignedBigInteger('product_id');
-            $table->integer('quantity')->default(1);
+            $table->string('image');
+            $table->integer('display_order')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('ehed_promotional_images');
     }
-}; 
+};

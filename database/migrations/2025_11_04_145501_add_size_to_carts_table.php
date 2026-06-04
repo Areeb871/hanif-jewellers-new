@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! Schema::hasTable('carts') || Schema::hasColumn('carts', 'size')) {
+            return;
+        }
+
         Schema::table('carts', function (Blueprint $table) {
             $table->string('size', 10)->nullable()->after('quantity');
         });

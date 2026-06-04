@@ -25,8 +25,13 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('products') || ! Schema::hasColumn('products', 'subcategory_id')) {
+            return;
+        }
+
         Schema::table('products', function (Blueprint $table) {
-            //
+            $table->dropForeign(['subcategory_id']);
+            $table->dropColumn('subcategory_id');
         });
     }
 };
