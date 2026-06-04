@@ -1087,7 +1087,7 @@ font-family: "Barlow", sans-serif;
 
 /* ACTIVE METAL - BLACK OUTER BORDER */
 .hj-metal.active {
-    box-shadow: 0 0 0 3px #111111;
+    box-shadow: 0 0 0 2px #111111;
     border-color: #d8d8d8;
 }
 
@@ -1212,7 +1212,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-metal.active {
-        box-shadow: 0 0 0 3px #111111;
+        box-shadow: 0 0 0 2px #111111;
     }
 
     .hj-size-options button {
@@ -1337,7 +1337,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-metal.active {
-        box-shadow: 0 0 0 2.5px #111111;
+        box-shadow: 0 0 0 2px #111111;
     }
 
     .hj-size-options {

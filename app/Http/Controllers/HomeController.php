@@ -2587,7 +2587,17 @@ public function solitaire_details($slug, Request $request)
         $detailImages->push($image);
     }
 
-    return view('public.solitaire_product_details', compact('product', 'detailImages'));
+    // Dynamic products for this section
+    $relatedProducts = SolitaireProduct::where('status', 1)
+        ->latest()
+        ->take(6)
+        ->get();
+
+    return view('public.solitaire_product_details', compact(
+        'product',
+        'detailImages',
+        'relatedProducts'
+    ));
 }
 
  public function solitaire_new()

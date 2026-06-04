@@ -82,29 +82,6 @@
         Not:
         hjMetalClass($metal)
     */
-    $hjMetalClass = function ($metal) {
-        $purity = strtolower($metal['purity'] ?? $metal['short_label'] ?? '');
-        $tone = strtolower($metal['tone'] ?? $metal['name'] ?? '');
-
-        if (str_contains($tone, 'rose') || str_contains($tone, 'pink')) {
-            return str_contains($purity, '18') ? 'metal-pink' : 'metal-rose';
-        }
-
-        if (str_contains($tone, 'yellow') || str_contains($tone, 'gold')) {
-            return str_contains($purity, '18') ? 'metal-gold' : 'metal-yellow';
-        }
-
-        if (str_contains($tone, 'white') || str_contains($tone, 'silver')) {
-            return str_contains($purity, '18') ? 'metal-light' : 'metal-silver';
-        }
-
-        if (str_contains($tone, 'platinum') || str_contains($purity, 'pt')) {
-            return 'metal-light';
-        }
-
-        return 'metal-silver';
-    };
-
     $detailData = [
         'name' => $product->name,
         'currency' => $currency,
@@ -194,15 +171,26 @@
  {{-- OPTION CARD --}}
 <div class="hj-option-card">
 
-    {{-- METAL --}}
-    <div class="hj-row hj-metal-row">
+  @php
+    $metalDesignClasses = [
+        0 => '',
+        1 => 'rose',
+        2 => 'silver',
+        3 => 'rose',
+        4 => 'silver',
+        5 => 'silver',
+    ];
+@endphp
+
+{{-- METAL --}}
+<div class="hj-row hj-metal-row">
     <span class="hj-label">METAL</span>
 
     <div class="hj-middle hj-metal-options">
-        @foreach($metals as $metal)
+        @foreach($metals as $index => $metal)
             <button 
                 type="button"
-                class="metal-chip {{ $hjMetalClass($metal) }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
+                class="metal-chip {{ $metalDesignClasses[$index] ?? 'silver' }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
                 data-metal-code="{{ $metal['code'] ?? '' }}"
             >
                 {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
@@ -300,7 +288,10 @@
                     <button class="hj-help-btn" type="button">?</button>
                     <div class="hj-help-dropdown">Carat refers to the weight of the diamond.</div>
                 </div>
-                <strong>1 CARAT</strong>
+   <strong id="selectedCaratSpec">
+        {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
+    </strong>
+
                 <span>Standard measure</span>
             </div>
 
@@ -348,9 +339,9 @@
                 <div class="hj-spec-head">
                     <small>Stone Origin</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Lab created stones are made in controlled conditions.</div>
+                    <div class="hj-help-dropdown">{{ $product->tag_label }} stones are made in controlled conditions.</div>
                 </div>
-                <strong>LAB CREATED</strong>
+                <strong>{{ $product->tag_label}}</strong>
                 <span>Gemstone perfection</span>
             </div>
 
@@ -526,59 +517,113 @@
 
     <div class="hj-lab-products-grid">
 
-        <div class="hj-lab-product-card">
-            <div class="hj-lab-img-box">
-                <span class="hj-lab-tag">Lab Created</span>
-                <img src="{{ asset('assets/f_assets/image/solitaire/ring10.jpeg') }}" alt="Emerald Solitaire Ring">
-            </div>
+        @forelse($relatedProducts as $relatedProduct)
 
-            <div class="hj-lab-product-info">
-                <h3>Emerald Solitaire Ring</h3>
-                <p>3.8 Total Carat · Radiant · Solitaire · 14K White Gold</p>
+            @php
+                $relatedMetals = collect($relatedProduct->metals ?? []);
+                $relatedCarats = collect($relatedProduct->diamond_carats ?? []);
+                $relatedVariants = collect($relatedProduct->variants ?? []);
+                $relatedMetalImages = collect($relatedProduct->metal_images ?? []);
+                $relatedGalleryImages = collect($relatedProduct->gallery_images ?? []);
 
-                <div class="hj-lab-price-row">
-                    <span class="hj-old-price">£2,540</span>
-                    <span class="hj-new-price">$1,530</span>
-                    <span class="hj-discount">40% off</span>
+                $defaultVariant = $relatedVariants->firstWhere('is_default', true) 
+                    ?? $relatedVariants->first();
+
+                $defaultMetalCode = $relatedProduct->default_metal_code
+                    ?: ($defaultVariant['metal_code'] ?? ($relatedMetals->first()['code'] ?? ''));
+
+                $defaultCarat = $relatedProduct->default_diamond_carat
+                    ?: ($defaultVariant['diamond_carat'] ?? ($relatedCarats->first()['value'] ?? ''));
+
+                $defaultMetal = $relatedMetals->firstWhere('code', $defaultMetalCode);
+
+                $defaultMetalImageGroup = $relatedMetalImages->firstWhere('metal_code', $defaultMetalCode);
+
+                // Only first image from metal_images
+                $mainImage = data_get($defaultMetalImageGroup, 'images.0.image_path')
+                    ?: data_get($relatedGalleryImages->toArray(), '0.image_path')
+                    ?: null;
+
+                $currency = $relatedProduct->currency ?? 'PKR';
+
+                $oldPrice = $defaultVariant['old_price'] ?? null;
+                $price = $defaultVariant['price'] ?? null;
+                $discount = $defaultVariant['discount_percent'] ?? null;
+
+                $formatMoney = function ($value) use ($currency) {
+                    if ($value === null || $value === '') {
+                        return '';
+                    }
+
+                    return $currency . ' ' . number_format((float) $value, 0);
+                };
+
+                $detailUrl = route('solitaire.details', $relatedProduct->slug);
+
+                if ($defaultMetalCode) {
+                    $detailUrl .= '?metal=' . urlencode($defaultMetalCode);
+
+                    if ($defaultCarat) {
+                        $detailUrl .= '&carat=' . urlencode($defaultCarat);
+                    }
+                }
+            @endphp
+
+            <div class="hj-lab-product-card">
+                <div class="hj-lab-img-box">
+                    <span class="hj-lab-tag">
+                        {{ $relatedProduct->tag_label ?? 'Lab Created' }}
+                    </span>
+
+                    @if($mainImage)
+                        <img 
+                            src="{{ asset($mainImage) }}" 
+                            alt="{{ $relatedProduct->name }}"
+                        >
+                    @else
+                        <div class="hj-no-image">
+                            No Image Available
+                        </div>
+                    @endif
+                </div>
+
+                <div class="hj-lab-product-info">
+                    <h3>
+                        {{ $relatedProduct->name }}
+                    </h3>
+
+                    <p>
+                        {{ $defaultCarat ?: '0.25' }} Total Carat · Radiant · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
+                    </p>
+
+                    <div class="hj-lab-price-row">
+                        @if($oldPrice)
+                            <span class="hj-old-price">
+                                {{ $formatMoney($oldPrice) }}
+                            </span>
+                        @endif
+
+                        <span class="hj-new-price">
+                            {{ $price ? $formatMoney($price) : 'Unavailable' }}
+                        </span>
+
+                        @if($discount)
+                            <span class="hj-discount">
+                                {{ $discount }}% off
+                            </span>
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
 
-          <div class="hj-lab-product-card">
-            <div class="hj-lab-img-box">
-                <span class="hj-lab-tag">Lab Created</span>
-                <img src="{{ asset('assets/f_assets/image/solitaire/ring10.jpeg') }}" alt="Emerald Solitaire Ring">
+        @empty
+
+            <div class="alert alert-warning">
+                No solitaire products found.
             </div>
 
-            <div class="hj-lab-product-info">
-                <h3>Emerald Solitaire Ring</h3>
-                <p>3.8 Total Carat · Radiant · Solitaire · 14K White Gold</p>
+        @endforelse
 
-                <div class="hj-lab-price-row">
-                    <span class="hj-old-price">£2,540</span>
-                    <span class="hj-new-price">$1,530</span>
-                    <span class="hj-discount">40% off</span>
-                </div>
-            </div>
-        </div>
-
-          <div class="hj-lab-product-card">
-            <div class="hj-lab-img-box">
-                <span class="hj-lab-tag">Lab Created</span>
-                <img src="{{ asset('assets/f_assets/image/solitaire/ring10.jpeg') }}" alt="Emerald Solitaire Ring">
-            </div>
-
-            <div class="hj-lab-product-info">
-                <h3>Emerald Solitaire Ring</h3>
-                <p>3.8 Total Carat · Radiant · Solitaire · 14K White Gold</p>
-
-                <div class="hj-lab-price-row">
-                    <span class="hj-old-price">£2,540</span>
-                    <span class="hj-new-price">$1,530</span>
-                    <span class="hj-discount">40% off</span>
-                </div>
-            </div>
-        </div>
     </div>
 
 </section>
@@ -763,6 +808,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const newPriceEl = document.getElementById('detailNewPrice');
     const savingTextEl = document.getElementById('detailSavingText');
     const caratPriceDiffEl = document.getElementById('caratPriceDiff');
+    const selectedCaratSpec = document.getElementById('selectedCaratSpec');
 
     function normalizeCarat(value) {
         const number = Number(value);
@@ -931,6 +977,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (caratBtn) {
             caratBtn.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
         }
+if (selectedCaratSpec) {
+    selectedCaratSpec.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
+}
 
         if (variant) {
             if (oldPriceEl) {
