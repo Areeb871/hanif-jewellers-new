@@ -501,7 +501,10 @@
 
     </div>
 
-    <div class="card-body text-center {{ empty($product->price) || $product->price <= 0 || empty($product->show_price) ? 'no-price' : '' }}"
+    @php
+        $displayPrice = !empty($product->show_price) ? round($product->final_price ?? 0, -3) : 0;
+    @endphp
+    <div class="card-body text-center {{ $displayPrice <= 0 ? 'no-price' : '' }}"
          style="background-color: #F6F4F2;">
 
 <h5 class="card-title product-name-fixed pb-5 pb-md-0">
@@ -512,8 +515,8 @@
     {{ trim($nameParts[0]) }}
 </h5>
 
-        @if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
-            <p class="card-text">PKR {{ number_format($product->price, 0, '.', ',') }}</p>
+        @if($displayPrice > 0)
+            <p class="card-text">PKR {{ number_format($displayPrice, 0, '.', ',') }}</p>
         @endif
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
