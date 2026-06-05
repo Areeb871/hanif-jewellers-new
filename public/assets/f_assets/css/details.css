@@ -824,6 +824,34 @@ body{
     justify-content: space-between;
     cursor: pointer;
 }
+/* ACCORDION CONTENT ONLY */
+.hj-acc-content {
+    display: none;
+    padding: 0 18px 18px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.hj-acc-content p {
+    margin: 0;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1.6;
+    color: #333;
+}
+
+.hj-acc-item.active .hj-acc-content {
+    display: block;
+}
+
+.hj-acc-item button span {
+    transition: transform 0.25s ease;
+}
+
+.hj-acc-item.active button span {
+    transform: rotate(180deg);
+}
 /* =========================================
    DESKTOP GALLERY WRAPPER
 ========================================= */

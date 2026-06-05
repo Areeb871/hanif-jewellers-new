@@ -16,7 +16,7 @@ use App\Http\Controllers\CheckoutLeadController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SolitaireProductAdminController;
-
+use App\Http\Controllers\ReviewController;
 
 
 use App\Models\Tags;
@@ -158,6 +158,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
 
 
     Route::resource('solitaire-products', SolitaireProductAdminController::class);
+    Route::resource('reviews', ReviewController::class);
 
      Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');

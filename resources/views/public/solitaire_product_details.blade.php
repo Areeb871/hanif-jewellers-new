@@ -363,25 +363,55 @@
 
         <div class="hj-spec-grid">
 
-            <div class="hj-spec-item">
-                <div class="hj-spec-head">
-                    <small>Metal</small>
-                    <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Metal defines the ring material.</div>
-                </div>
-                <strong>18K GOLD</strong>
-                <span>Premium finish</span>
-            </div>
+         @php
+    $initialMetalName = data_get($selectedMetal, 'name', '18K GOLD');
 
-            <div class="hj-spec-item">
-                <div class="hj-spec-head">
-                    <small>Metal Color</small>
-                    <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">The visible color tone of the ring.</div>
-                </div>
-                <strong>WHITE GOLD</strong>
-                <span>Elegant appearance</span>
-            </div>
+    $initialMetalColor = data_get($selectedMetal, 'tone');
+
+    if (!$initialMetalColor) {
+        $metalNameForColor = strtolower($initialMetalName);
+
+        if (str_contains($metalNameForColor, 'rose') || str_contains($metalNameForColor, 'pink')) {
+            $initialMetalColor = 'Rose';
+        } elseif (str_contains($metalNameForColor, 'yellow') || str_contains($metalNameForColor, 'gold')) {
+            $initialMetalColor = 'Yellow';
+        } elseif (str_contains($metalNameForColor, 'white') || str_contains($metalNameForColor, 'silver')) {
+            $initialMetalColor = 'White';
+        } elseif (str_contains($metalNameForColor, 'platinum')) {
+            $initialMetalColor = 'Platinum';
+        } else {
+            $initialMetalColor = 'White';
+        }
+    }
+@endphp
+
+<div class="hj-spec-item">
+    <div class="hj-spec-head">
+        <small>Metal</small>
+        <button class="hj-help-btn" type="button">?</button>
+        <div class="hj-help-dropdown">Metal defines the ring material.</div>
+    </div>
+
+    <strong id="selectedMetalSpec">
+        {{ strtoupper($initialMetalName) }}
+    </strong>
+
+    <span>Premium finish</span>
+</div>
+
+<div class="hj-spec-item">
+    <div class="hj-spec-head">
+        <small>Metal Color</small>
+        <button class="hj-help-btn" type="button">?</button>
+        <div class="hj-help-dropdown">The visible color tone of the ring.</div>
+    </div>
+
+    <strong id="selectedMetalColorSpec">
+        {{ strtoupper($initialMetalColor) }}
+    </strong>
+
+    <span>Elegant appearance</span>
+</div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
@@ -470,23 +500,59 @@
 </div>
     
 <div class="hj-accordion">
-                <div class="hj-acc-item">
-                    <button>Why Choose Our Lab Created Engagement Rings? <span>⌄</span></button>
-                </div>
 
-                <div class="hj-acc-item">
-                    <button>Free Shipping & Returns <span>⌄</span></button>
-                </div>
-                 <div class="hj-acc-item">
-                    <button>Why Choose Our Lab Created Engagement Rings? <span>⌄</span></button>
-                </div>
+    <div class="hj-acc-item">
+        <button type="button" class="hj-acc-btn">
+            Why Choose Our Lab Created Engagement Rings?
+            <span>⌄</span>
+        </button>
 
-                <div class="hj-acc-item">
-                    <button>Free Shipping & Returns <span>⌄</span></button>
-                </div>
-            </div>
+        <div class="hj-acc-content">
+            <p>
+                Our lab created engagement rings offer exceptional brilliance, elegant craftsmanship, and excellent value while keeping the same luxury appearance.
+            </p>
+        </div>
+    </div>
 
-  
+    <div class="hj-acc-item">
+        <button type="button" class="hj-acc-btn">
+            Free Shipping & Returns
+            <span>⌄</span>
+        </button>
+
+        <div class="hj-acc-content">
+            <p>
+                We offer secure delivery and easy return support to make your shopping experience smooth and reliable.
+            </p>
+        </div>
+    </div>
+
+    <div class="hj-acc-item">
+        <button type="button" class="hj-acc-btn">
+            Why Choose Our Lab Created Engagement Rings?
+            <span>⌄</span>
+        </button>
+
+        <div class="hj-acc-content">
+            <p>
+                Each ring is designed with attention to detail, premium finishing, and carefully selected stones for a refined appearance.
+            </p>
+        </div>
+    </div>
+
+    <div class="hj-acc-item">
+        <button type="button" class="hj-acc-btn">
+            Free Shipping & Returns
+            <span>⌄</span>
+        </button>
+
+        <div class="hj-acc-content">
+            <p>
+                Our team will guide you with delivery, return, and after-sales support for a premium customer experience.
+            </p>
+        </div>
+    </div>
+
 </div>
 
             
@@ -627,53 +693,99 @@
     </div>
 
 </section>
+@php
+    $reviewCount = isset($reviews) ? $reviews->count() : 0;
+
+    $reviewGalleryImages = collect();
+
+    if(isset($reviews)) {
+        foreach ($reviews as $review) {
+            if (!empty($review->images)) {
+                foreach ($review->images as $image) {
+                    if (!empty($image['image_path'])) {
+                        $reviewGalleryImages->push([
+                            'image_path' => $image['image_path'],
+                            'alt_text' => $image['alt_text'] ?? $review->title ?? 'Review Image',
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+@endphp
+
+@php
+    $reviewCount = isset($reviews) ? $reviews->count() : 0;
+
+    $reviewGalleryImages = collect();
+
+    if (isset($reviews)) {
+        foreach ($reviews as $review) {
+            if (!empty($review->images)) {
+                foreach ($review->images as $image) {
+                    if (!empty($image['image_path'])) {
+                        $reviewGalleryImages->push([
+                            'image_path' => $image['image_path'],
+                            'alt_text' => $image['alt_text'] ?? $review->title ?? 'Review Image',
+                        ]);
+                    }
+                }
+            }
+        }
+    }
+@endphp
+
 <section class="hj-review-section">
 
     <div class="hj-review-container">
 
-        <!-- TOP AREA -->
+        {{-- TOP AREA --}}
         <div class="hj-review-top">
 
+            {{-- SUMMARY --}}
             <div class="hj-review-summary">
                 <h2>Reviews</h2>
 
                 <div class="hj-rating-number">5.0</div>
                 <div class="hj-rating-stars">★★★★★</div>
-                <div class="hj-rating-count">8 Reviews</div>
-                <a href="#" class="hj-leave-review">Leave a Review</a>
+
+                <div class="hj-rating-count">
+                    {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}
+                </div>
             </div>
 
+            {{-- GALLERY AREA --}}
             <div class="hj-review-gallery-area">
 
                 <div class="hj-review-arrows">
-                   <button type="button" class="hj-gallery-prev" aria-label="Previous image">
-    <img src="{{ asset('assets/f_assets/image/reviews/Icon.svg') }}" alt="Previous" class="hj-gallery-arrow-img hj-arrow-left">
-</button>
+                    <button type="button" class="hj-gallery-prev" aria-label="Previous image">
+                        <img 
+                            src="{{ asset('assets/f_assets/image/reviews/Icon.svg') }}" 
+                            alt="Previous" 
+                            class="hj-gallery-arrow-img hj-arrow-left"
+                        >
+                    </button>
 
-<button type="button" class="hj-gallery-next" aria-label="Next image">
-    <img src="{{ asset('assets/f_assets/image/reviews/Vector.svg') }}" alt="Next" class="hj-gallery-arrow-img hj-arrow-right">
-</button>
+                    <button type="button" class="hj-gallery-next" aria-label="Next image">
+                        <img 
+                            src="{{ asset('assets/f_assets/image/reviews/Vector.svg') }}" 
+                            alt="Next" 
+                            class="hj-gallery-arrow-img hj-arrow-right"
+                        >
+                    </button>
                 </div>
 
                 <div class="hj-review-gallery-viewport">
                     <div class="hj-review-gallery-track">
 
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image"> 
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                         <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
+                        @forelse($reviewGalleryImages as $image)
+                            <img 
+                                src="{{ asset($image['image_path']) }}" 
+                                alt="{{ $image['alt_text'] }}"
+                            >
+                        @empty
+                            <p class="text-muted">No review images found.</p>
+                        @endforelse
 
                     </div>
                 </div>
@@ -682,88 +794,82 @@
 
         </div>
 
-        <!-- SORT -->
+
+        {{-- SORT --}}
         <div class="hj-review-sort">
-            <button type="button">Sort: Highest Rating <span>⌄</span></button>
+            <button type="button">
+                Sort: Highest Rating <span>⌄</span>
+            </button>
         </div>
 
-        <!-- REVIEW 1 -->
-        <div class="hj-review-item">
 
-            <div class="hj-review-text">
-                <h4>Nikol</h4>
-                <div class="hj-review-stars-small">★★★★★</div>
-                <h5>Love love love it!</h5>
-                <p>
-                    I love the fact I was able to customize this ring. I love the simplicity but elegance to it.
-                    The shine is incredible.
-                </p>
-            </div>
+        {{-- REVIEW ITEMS --}}
+        <div class="hj-review-list" id="hjReviewList">
 
-            <div class="hj-review-media">
-                <span>September 28, 2023</span>
+            @forelse($reviews as $index => $review)
 
-                <div class="hj-single-review-img">
-                    <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
+                <div 
+                    class="hj-review-item hj-review-load-item"
+                    style="{{ $index >= 10 ? 'display:none;' : '' }}"
+                >
+
+                    <div class="hj-review-text">
+                        <h4>{{ $review->main_title ?? 'Customer' }}</h4>
+
+                        <div class="hj-review-stars-small">★★★★★</div>
+
+                        <h5>{{ $review->title ?? 'Review Title' }}</h5>
+
+                        <p>
+                            {{ $review->description ?? '' }}
+                        </p>
+                    </div>
+
+                    <div class="hj-review-media">
+                        <span>
+                            {{ $review->created_at ? $review->created_at->format('F d, Y') : '' }}
+                        </span>
+
+                        <div class="hj-single-review-img">
+                            @if(!empty($review->image))
+                                <img 
+                                    src="{{ asset($review->image) }}" 
+                                    alt="{{ $review->title ?? 'Review Image' }}"
+                                >
+                            @elseif(!empty($review->images[0]['image_path']))
+                                <img 
+                                    src="{{ asset($review->images[0]['image_path']) }}" 
+                                    alt="{{ $review->title ?? 'Review Image' }}"
+                                >
+                            @else
+                                <div class="hj-no-image">
+                                    No Image
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
-            </div>
 
-        </div>
+            @empty
 
-        <!-- REVIEW 2 -->
-        <div class="hj-review-item">
-
-            <div class="hj-review-text">
-                <h4>Frank’s Fiancé</h4>
-                <div class="hj-review-stars-small">★★★★★</div>
-                <h5>The Sparkle ✨</h5>
-                <p>
-                    This marquise Nadia gold ring is the ring of my dreams. I am so happy with it.
-                    It never stops sparkling and I am constantly getting compliments.
-                    My fiancé did a wonderful job picking out the setting.
-                </p>
-            </div>
-
-            <div class="hj-review-media">
-                <span>July 3, 2023</span>
-
-                <div class="hj-single-review-img hj-more-images">
-                    <img src="{{ asset('assets/f_assets/image/solitaire/review.png') }}" alt="Review Image">
-                    <small>+1</small>
+                <div class="alert alert-warning">
+                    No reviews found.
                 </div>
-            </div>
+
+            @endforelse
 
         </div>
 
-        <!-- REVIEW 3 -->
-        <div class="hj-review-item">
 
-            <div class="hj-review-text">
-                <h4>Sparkly Fiancée</h4>
-                <div class="hj-review-stars-small">★★★★★</div>
-                <h5>Stunning. Simply stunning.</h5>
-                <p>
-                    Constantly getting compliments on the ring. Perfect size and shape.
-                    Beautifully crafted. Sparkles every day. Super ideal cut.
-                    Setting is low-high, which I like as my job is very hands-on.
-                </p>
+        {{-- LOAD MORE --}}
+        @if($reviews->count() > 3)
+            <div class="hj-load-more" id="hjLoadMoreWrap">
+                <button type="button" id="hjLoadMoreReviews">
+                    Load More
+                </button>
             </div>
-
-            <div class="hj-review-media">
-                <span>April 14, 2023</span>
-
-                <div class="hj-single-review-img hj-more-images">
-                    <img src="{{ asset('assets/f_assets/image/solitare/review.png') }}" alt="Review Image">
-                    <small>+1</small>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- LOAD MORE -->
-        <div class="hj-load-more">
-            <button type="button">Load More</button>
-        </div>
+        @endif
 
     </div>
 
@@ -776,13 +882,13 @@
         <p>We are here 24/7 to answer question you may have.</p>
 
         <div class="hj-question-actions">
-            <a href="#" class="hj-question-btn">FAQ'S</a>
-
-            <a href="tel:+18669784466" class="hj-question-btn hj-call-btn">
-                CALL +1(866) 978-4466
-            </a>
-
-            <a href="#" class="hj-question-btn">LIVE CHAT</a>
+ <a 
+    href="https://wa.me/923236314044" 
+    class="hj-question-btn" 
+    target="_blank"
+>
+    LIVE CHAT
+</a>
         </div>
 
     </div>
@@ -796,7 +902,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const data = JSON.parse(dataScript.textContent);
 
-    let selectedMetalCode = data.selected_metal_code;
+    let selectedMetalCode = data.selected_metal_code || '';
     let selectedCaratIndex = Number(data.selected_carat_index || 0);
 
     const caratRange = document.getElementById('caratRange');
@@ -804,26 +910,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedMetalBtn = document.getElementById('selectedMetalBtn');
     const selectedMetalTitle = document.getElementById('selectedMetalTitle');
 
+    const selectedMetalSpec = document.getElementById('selectedMetalSpec');
+    const selectedMetalColorSpec = document.getElementById('selectedMetalColorSpec');
+    const selectedCaratSpec = document.getElementById('selectedCaratSpec');
+
     const oldPriceEl = document.getElementById('detailOldPrice');
     const newPriceEl = document.getElementById('detailNewPrice');
     const savingTextEl = document.getElementById('detailSavingText');
     const caratPriceDiffEl = document.getElementById('caratPriceDiff');
-    const selectedCaratSpec = document.getElementById('selectedCaratSpec');
 
     function normalizeCarat(value) {
         const number = Number(value);
-
-        if (isNaN(number)) {
-            return String(value);
-        }
-
-        return number.toFixed(2);
+        return isNaN(number) ? String(value) : number.toFixed(2);
     }
 
     function makeAssetUrl(path) {
-        if (!path) {
-            return '';
-        }
+        if (!path) return '';
 
         if (path.startsWith('http') || path.startsWith('/')) {
             return path;
@@ -877,6 +979,40 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!firstCarat) return null;
 
         return findVariant(metalCode, firstCarat.value);
+    }
+
+    function getMetalColor(metal) {
+        if (!metal) {
+            return 'WHITE';
+        }
+
+        if (metal.tone) {
+            return String(metal.tone).toUpperCase();
+        }
+
+        const metalText = String(metal.name || '').toLowerCase();
+
+        if (metalText.includes('rose') || metalText.includes('pink')) {
+            return 'ROSE';
+        }
+
+        if (metalText.includes('yellow')) {
+            return 'YELLOW';
+        }
+
+        if (metalText.includes('white') || metalText.includes('silver')) {
+            return 'WHITE';
+        }
+
+        if (metalText.includes('platinum')) {
+            return 'PLATINUM';
+        }
+
+        if (metalText.includes('gold')) {
+            return 'GOLD';
+        }
+
+        return 'WHITE';
     }
 
     function getMetalImages(metalCode) {
@@ -962,12 +1098,22 @@ document.addEventListener('DOMContentLoaded', function () {
             ? metal.name
             : selectedMetalCode;
 
+        const metalColor = getMetalColor(metal);
+
         if (selectedMetalBtn) {
             selectedMetalBtn.textContent = metalName.toUpperCase();
         }
 
         if (selectedMetalTitle) {
             selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
+        }
+
+        if (selectedMetalSpec) {
+            selectedMetalSpec.textContent = metalName.toUpperCase();
+        }
+
+        if (selectedMetalColorSpec) {
+            selectedMetalColorSpec.textContent = metalColor;
         }
 
         if (caratRange) {
@@ -977,9 +1123,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (caratBtn) {
             caratBtn.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
         }
-if (selectedCaratSpec) {
-    selectedCaratSpec.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
-}
+
+        if (selectedCaratSpec) {
+            selectedCaratSpec.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
+        }
 
         if (variant) {
             if (oldPriceEl) {
@@ -1018,7 +1165,9 @@ if (selectedCaratSpec) {
     }
 
     document.querySelectorAll('.metal-chip').forEach(function (btn) {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+
             selectedMetalCode = this.dataset.metalCode;
             updateDetail();
         });
@@ -1032,6 +1181,49 @@ if (selectedCaratSpec) {
     }
 
     updateDetail();
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const reviewItems = document.querySelectorAll('.hj-review-load-item');
+    const loadMoreBtn = document.getElementById('hjLoadMoreReviews');
+    const loadMoreWrap = document.getElementById('hjLoadMoreWrap');
+
+    let visibleCount = 10;
+    const loadStep = 10;
+
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', function () {
+        visibleCount += loadStep;
+
+        reviewItems.forEach(function (item, index) {
+            if (index < visibleCount) {
+                item.style.display = '';
+            }
+        });
+
+        if (visibleCount >= reviewItems.length) {
+            loadMoreWrap.style.display = 'none';
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.hj-acc-item button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const currentItem = this.closest('.hj-acc-item');
+
+            document.querySelectorAll('.hj-acc-item').forEach(function (item) {
+                if (item !== currentItem) {
+                    item.classList.remove('active');
+                }
+            });
+
+            currentItem.classList.toggle('active');
+        });
+    });
 });
 </script>
 @endsection

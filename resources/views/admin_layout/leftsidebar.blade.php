@@ -296,6 +296,20 @@ data-kt-menu-trigger="click"
                                     </div>
                                 </div>
                             </div>
+                             <div class="menu-item">
+        <a 
+            class="menu-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}" 
+            href="{{ route('reviews.index') }}"
+        >
+            <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Manage Reviews</span>
+        </a>
+    </div>
+
+
+           
 
                             <!-- <div data-kt-menu-trigger="click" class="menu-item {{ request()->is('settings/*') ? 'here show' : '' }} menu-accordion">
                                 <span class="menu-link">

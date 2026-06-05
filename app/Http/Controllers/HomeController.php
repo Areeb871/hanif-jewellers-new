@@ -26,6 +26,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use App\Models\SolitaireProduct;
+use App\Models\Review;
 class HomeController extends Controller
 {
     /**
@@ -2599,10 +2600,14 @@ public function solitaire_details($slug, Request $request)
         ->take(6)
         ->get();
 
+     $reviews = Review::where('status', 1)
+        ->latest()
+        ->get();
     return view('public.solitaire_product_details', compact(
         'product',
         'detailImages',
-        'relatedProducts'
+        'relatedProducts',
+        'reviews'
     ));
 }
 
