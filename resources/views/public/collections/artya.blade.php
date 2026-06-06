@@ -29,57 +29,59 @@
 
 </style>
 
-@if(isset($artyaSubcategory) && $artyaSubcategory)
+@php
+    $desktopBanner = isset($artyaSubcategory) && $artyaSubcategory
+        ? ($artyaSubcategory->banner_url ?? null)
+        : null;
+    $mobileBanner = 'assets/f_assets/image/Artya/Artya-mob-banner.png';
 
-    @php
-        $desktopBanner = $artyaSubcategory->banner_url ?? null;
+    $desktopIsVideo = $desktopBanner && \Illuminate\Support\Str::endsWith(
+        strtolower($desktopBanner),
+        ['.mp4', '.webm', '.ogg']
+    );
 
-        /* same desktop banner for mobile */
-        $mobileBanner = $desktopBanner;
+    $mobileIsVideo = $mobileBanner && \Illuminate\Support\Str::endsWith(
+        strtolower($mobileBanner),
+        ['.mp4', '.webm', '.ogg']
+    );
+@endphp
 
-        $desktopIsVideo = $desktopBanner && \Illuminate\Support\Str::endsWith(
-            strtolower($desktopBanner),
-            ['.mp4', '.webm', '.ogg']
-        );
+@if($desktopBanner || $mobileBanner)
+    <section class="custom-category-banner">
 
-        $mobileIsVideo = $desktopIsVideo;
-    @endphp
+        {{-- DESKTOP --}}
+        @if($desktopBanner)
+        <div class="banner-desktop d-none d-md-block">
+            @if($desktopIsVideo)
+                <video autoplay muted loop playsinline class="custom-banner-media">
+                    <source src="{{ asset($desktopBanner) }}"
+                            type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
+                </video>
+            @else
+                <img src="{{ asset($desktopBanner) }}"
+                     alt="{{ optional($artyaSubcategory)->name ?? 'Artya Banner' }}"
+                     class="custom-banner-media">
+            @endif
+        </div>
+        @endif
 
-    @if($desktopBanner)
-        <section class="custom-category-banner">
+        {{-- MOBILE --}}
+        <div class="banner-mobile d-block d-md-none">
+            @if($mobileIsVideo)
+                <video autoplay muted loop playsinline class="custom-banner-media">
+                    <source src="{{ asset($mobileBanner) }}"
+                            type="video/{{ strtolower(pathinfo($mobileBanner, PATHINFO_EXTENSION)) }}">
+                </video>
+            @else
+                <img src="{{ asset($mobileBanner) }}"
+                     alt="{{ optional($artyaSubcategory)->name ?? 'Artya Banner' }}"
+                     class="custom-banner-media">
+            @endif
+        </div>
 
-            {{-- DESKTOP --}}
-            <div class="banner-desktop d-none d-md-block">
-                @if($desktopIsVideo)
-                    <video autoplay muted loop playsinline class="custom-banner-media">
-                        <source src="{{ asset($desktopBanner) }}"
-                                type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
-                    </video>
-                @else
-                    <img src="{{ asset($desktopBanner) }}"
-                         alt="{{ $artyaSubcategory->name ?? 'Banner' }}"
-                         class="custom-banner-media">
-                @endif
-            </div>
-
-            {{-- MOBILE (same as desktop) --}}
-            <div class="banner-mobile d-block d-md-none">
-                @if($mobileIsVideo)
-                    <video autoplay muted loop playsinline class="custom-banner-media">
-                        <source src="{{ asset($mobileBanner) }}"
-                                type="video/{{ strtolower(pathinfo($mobileBanner, PATHINFO_EXTENSION)) }}">
-                    </video>
-                @else
-                    <img src="{{ asset($mobileBanner) }}"
-                         alt="{{ $artyaSubcategory->name ?? 'Banner' }}"
-                         class="custom-banner-media">
-                @endif
-            </div>
-
-        </section>
-    @endif
-
+    </section>
 @endif
+
     <section class="py-4">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
