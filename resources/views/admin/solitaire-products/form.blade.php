@@ -92,7 +92,7 @@
                 type="text" 
                 name="currency" 
                 class="form-control" 
-                value="{{ old('currency', $product->currency ?? 'AED') }}"
+                value="{{ old('currency', $product->currency ?? 'PKR') }}"
             >
         </div>
 

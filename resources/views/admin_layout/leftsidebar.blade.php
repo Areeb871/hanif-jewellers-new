@@ -307,7 +307,17 @@ data-kt-menu-trigger="click"
             <span class="menu-title">Manage Reviews</span>
         </a>
     </div>
-
+  <div class="menu-item">
+        <a 
+            class="menu-link {{ request()->routeIs('admin.solitaire-products.*') ? 'active' : '' }}" 
+            href="{{ route('solitaire-products.index') }}"
+        >
+            <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Manage Solitaire Products</span>
+        </a>
+    </div>
 
            
 
