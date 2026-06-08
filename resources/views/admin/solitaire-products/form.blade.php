@@ -105,6 +105,26 @@
             >{{ old('short_description', $product->short_description) }}</textarea>
         </div>
 
+        <div class="mb-3">
+    <label>Shape</label>
+
+    <select name="shape" class="form-control">
+        <option value="">Select Shape</option>
+
+        <option value="oval" {{ old('shape', $product->shape ?? '') == 'oval' ? 'selected' : '' }}>
+            Oval
+        </option>
+
+        <option value="princess" {{ old('shape', $product->shape ?? '') == 'princess' ? 'selected' : '' }}>
+            Princess
+        </option>
+
+        <option value="round" {{ old('shape', $product->shape ?? '') == 'round' ? 'selected' : '' }}>
+            Round
+        </option>
+    </select>
+</div>
+
         <label>
             <input 
                 type="checkbox" 
@@ -414,6 +434,76 @@
 </div>
 
 
+@php
+    /*
+        Complete Variant Matrix:
+        Metals × Diamond Carats
+
+        Existing saved variants keep their prices.
+        Missing combinations show empty fields.
+    */
+
+    $formMetals = old('metals', $product->metals ?? []);
+    $formCarats = old('diamond_carats', $product->diamond_carats ?? [
+        ['label' => '0.25', 'value' => '0.25'],
+        ['label' => '0.30', 'value' => '0.30'],
+        ['label' => '0.40', 'value' => '0.40'],
+        ['label' => '0.60', 'value' => '0.60'],
+        ['label' => '0.70', 'value' => '0.70'],
+        ['label' => '0.75', 'value' => '0.75'],
+        ['label' => '0.90', 'value' => '0.90'],
+        ['label' => '1', 'value' => '1.00'],
+    ]);
+
+    $savedVariants = old('variants', $product->variants ?? []);
+
+    $variantMap = [];
+
+    foreach ($savedVariants as $variant) {
+        $metalCode = $variant['metal_code'] ?? '';
+        $caratValue = $variant['diamond_carat'] ?? '';
+
+        if ($metalCode && $caratValue) {
+            $key = $metalCode . '|' . number_format((float) $caratValue, 2, '.', '');
+            $variantMap[$key] = $variant;
+        }
+    }
+
+    $matrixVariants = [];
+
+    foreach ($formMetals as $metal) {
+        $metalCode = $metal['code'] ?? '';
+
+        if (!$metalCode) {
+            continue;
+        }
+
+        foreach ($formCarats as $carat) {
+            $caratValue = $carat['value'] ?? '';
+
+            if (!$caratValue) {
+                continue;
+            }
+
+            $formattedCarat = number_format((float) $caratValue, 2, '.', '');
+            $key = $metalCode . '|' . $formattedCarat;
+
+            $matrixVariants[] = $variantMap[$key] ?? [
+                'metal_code' => $metalCode,
+                'diamond_carat' => $formattedCarat,
+                'variant_sku' => '',
+                'old_price' => '',
+                'price' => '',
+                'discount_percent' => '',
+                'stock' => 0,
+                'is_default' => false,
+                'status' => true,
+            ];
+        }
+    }
+@endphp
+
+
 {{-- VARIANTS PRICES --}}
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -425,17 +515,26 @@
     </div>
 
     <div class="card-body">
+
+        <div class="alert alert-info">
+            Existing variant prices will remain. Missing metal + carat combinations will show as empty fields.
+        </div>
+
         <div id="variantRows">
-            @foreach($variants as $index => $variant)
+
+            @foreach($matrixVariants as $index => $variant)
+
                 <div class="variant-row border p-3 mb-3">
                     <div class="row align-items-end">
+
                         <div class="col-md-2">
                             <label>Metal Code</label>
                             <input 
                                 type="text" 
                                 name="variants[{{ $index }}][metal_code]" 
-                                class="form-control" 
+                                class="form-control variant-metal-code" 
                                 value="{{ $variant['metal_code'] ?? '' }}"
+                                readonly
                             >
                         </div>
 
@@ -444,8 +543,9 @@
                             <input 
                                 type="text" 
                                 name="variants[{{ $index }}][diamond_carat]" 
-                                class="form-control" 
+                                class="form-control variant-carat" 
                                 value="{{ $variant['diamond_carat'] ?? '' }}"
+                                readonly
                             >
                         </div>
 
@@ -517,7 +617,7 @@
                                 type="checkbox" 
                                 name="variants[{{ $index }}][status]" 
                                 value="1" 
-                                {{ !empty($variant['status']) ? 'checked' : '' }}
+                                {{ !isset($variant['status']) || !empty($variant['status']) ? 'checked' : '' }}
                             >
                         </div>
 
@@ -530,9 +630,12 @@
                                 X
                             </button>
                         </div>
+
                     </div>
                 </div>
+
             @endforeach
+
         </div>
     </div>
 </div>
@@ -585,6 +688,15 @@ function cleanMetalCode(code) {
         .replace(/\s+/g, '_')
         .replace(/[^a-z0-9_]/g, '');
 }
+function normalizeCarat(value) {
+    var number = Number(value);
+
+    if (isNaN(number)) {
+        return String(value || '').trim();
+    }
+
+    return number.toFixed(2);
+}
 
 function escapeHtml(value) {
     return String(value || '')
@@ -606,11 +718,168 @@ function imageUrl(path) {
 }
 
 function removeRow(button, selector) {
-    let row = button.closest(selector);
+    var row = button.closest(selector);
 
     if (row) {
         row.remove();
+
+        if (selector === '.variant-row') {
+            refreshVariantIndexes();
+        }
     }
+}
+function refreshVariantIndexes() {
+    document.querySelectorAll('.variant-row').forEach(function (row, index) {
+        row.querySelectorAll('input').forEach(function (input) {
+            input.name = input.name.replace(/variants\[\d+\]/, 'variants[' + index + ']');
+        });
+    });
+
+    variantIndex = document.querySelectorAll('.variant-row').length;
+}
+
+function getCurrentVariantValues() {
+    var values = {};
+
+    document.querySelectorAll('.variant-row').forEach(function (row) {
+        var metalCode = row.querySelector('[name*="[metal_code]"]')?.value || '';
+        var carat = row.querySelector('[name*="[diamond_carat]"]')?.value || '';
+
+        metalCode = cleanMetalCode(metalCode);
+        carat = normalizeCarat(carat);
+
+        if (!metalCode || !carat) return;
+
+        var key = metalCode + '|' + carat;
+
+        values[key] = {
+            metal_code: metalCode,
+            diamond_carat: carat,
+            variant_sku: row.querySelector('[name*="[variant_sku]"]')?.value || '',
+            old_price: row.querySelector('[name*="[old_price]"]')?.value || '',
+            price: row.querySelector('[name*="[price]"]')?.value || '',
+            discount_percent: row.querySelector('[name*="[discount_percent]"]')?.value || '',
+            stock: row.querySelector('[name*="[stock]"]')?.value || 0,
+            is_default: row.querySelector('[name*="[is_default]"]')?.checked || false,
+            status: row.querySelector('[name*="[status]"]')?.checked || false
+        };
+    });
+
+    return values;
+}
+
+function buildVariantRow(index, variant) {
+    return `
+        <div class="variant-row border p-3 mb-3">
+            <div class="row align-items-end">
+
+                <div class="col-md-2">
+                    <label>Metal Code</label>
+                    <input 
+                        type="text" 
+                        name="variants[${index}][metal_code]" 
+                        class="form-control variant-metal-code" 
+                        value="${escapeAttr(variant.metal_code)}"
+                        readonly
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Carat</label>
+                    <input 
+                        type="text" 
+                        name="variants[${index}][diamond_carat]" 
+                        class="form-control variant-carat" 
+                        value="${escapeAttr(variant.diamond_carat)}"
+                        readonly
+                    >
+                </div>
+
+                <div class="col-md-2">
+                    <label>SKU</label>
+                    <input 
+                        type="text" 
+                        name="variants[${index}][variant_sku]" 
+                        class="form-control" 
+                        value="${escapeAttr(variant.variant_sku)}"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Old Price</label>
+                    <input 
+                        type="number" 
+                        step="0.01" 
+                        name="variants[${index}][old_price]" 
+                        class="form-control" 
+                        value="${escapeAttr(variant.old_price)}"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Price</label>
+                    <input 
+                        type="number" 
+                        step="0.01" 
+                        name="variants[${index}][price]" 
+                        class="form-control" 
+                        value="${escapeAttr(variant.price)}"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Discount</label>
+                    <input 
+                        type="number" 
+                        name="variants[${index}][discount_percent]" 
+                        class="form-control" 
+                        value="${escapeAttr(variant.discount_percent)}"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Stock</label>
+                    <input 
+                        type="number" 
+                        name="variants[${index}][stock]" 
+                        class="form-control" 
+                        value="${escapeAttr(variant.stock || 0)}"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Default</label><br>
+                    <input 
+                        type="checkbox" 
+                        name="variants[${index}][is_default]" 
+                        value="1" 
+                        ${variant.is_default ? 'checked' : ''}
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label>Status</label><br>
+                    <input 
+                        type="checkbox" 
+                        name="variants[${index}][status]" 
+                        value="1" 
+                        ${variant.status ? 'checked' : ''}
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <button 
+                        type="button" 
+                        class="btn btn-danger w-100" 
+                        onclick="removeRow(this, '.variant-row')"
+                    >
+                        X
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    `;
 }
 
 function syncExistingGalleryImages() {
@@ -859,12 +1128,16 @@ function addMetalImageRow() {
     metalImageIndex++;
 }
 
+
+
 function buildVariants() {
-    let metalsArray = [];
-    let caratsArray = [];
+    var existingValues = getCurrentVariantValues();
+
+    var metalsArray = [];
+    var caratsArray = [];
 
     document.querySelectorAll('.metal-code').forEach(function (input) {
-        let code = cleanMetalCode(input.value);
+        var code = cleanMetalCode(input.value);
 
         if (code && !metalsArray.includes(code)) {
             metalsArray.push(code);
@@ -872,7 +1145,7 @@ function buildVariants() {
     });
 
     document.querySelectorAll('.carat-value').forEach(function (input) {
-        let value = input.value.trim();
+        var value = normalizeCarat(input.value);
 
         if (value && !caratsArray.includes(value)) {
             caratsArray.push(value);
@@ -889,73 +1162,33 @@ function buildVariants() {
         return;
     }
 
-    let container = document.getElementById('variantRows');
-    container.innerHTML = '';
-    variantIndex = 0;
+    var container = document.getElementById('variantRows');
+    var html = '';
+    var index = 0;
 
     metalsArray.forEach(function (metalCode) {
         caratsArray.forEach(function (carat) {
-            let html = `
-                <div class="variant-row border p-3 mb-3">
-                    <div class="row align-items-end">
-                        <div class="col-md-2">
-                            <label>Metal Code</label>
-                            <input type="text" name="variants[${variantIndex}][metal_code]" class="form-control" value="${metalCode}">
-                        </div>
+            var key = metalCode + '|' + carat;
 
-                        <div class="col-md-1">
-                            <label>Carat</label>
-                            <input type="text" name="variants[${variantIndex}][diamond_carat]" class="form-control" value="${carat}">
-                        </div>
+            var variant = existingValues[key] || {
+                metal_code: metalCode,
+                diamond_carat: carat,
+                variant_sku: '',
+                old_price: '',
+                price: '',
+                discount_percent: '',
+                stock: 0,
+                is_default: false,
+                status: true
+            };
 
-                        <div class="col-md-2">
-                            <label>SKU</label>
-                            <input type="text" name="variants[${variantIndex}][variant_sku]" class="form-control">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Old Price</label>
-                            <input type="number" step="0.01" name="variants[${variantIndex}][old_price]" class="form-control">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Price</label>
-                            <input type="number" step="0.01" name="variants[${variantIndex}][price]" class="form-control">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Discount</label>
-                            <input type="number" name="variants[${variantIndex}][discount_percent]" class="form-control">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Stock</label>
-                            <input type="number" name="variants[${variantIndex}][stock]" class="form-control" value="0">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Default</label><br>
-                            <input type="checkbox" name="variants[${variantIndex}][is_default]" value="1">
-                        </div>
-
-                        <div class="col-md-1">
-                            <label>Status</label><br>
-                            <input type="checkbox" name="variants[${variantIndex}][status]" value="1" checked>
-                        </div>
-
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-danger w-100" onclick="removeRow(this, '.variant-row')">
-                                X
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            container.insertAdjacentHTML('beforeend', html);
-            variantIndex++;
+            html += buildVariantRow(index, variant);
+            index++;
         });
     });
+
+    container.innerHTML = html;
+    variantIndex = index;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

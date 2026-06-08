@@ -26,6 +26,7 @@ class SolitaireProduct extends Model
         'default_metal_code',
         'default_diamond_carat',
         'status',
+        'shape',
     ];
 
     protected $casts = [

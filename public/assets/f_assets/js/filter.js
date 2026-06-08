@@ -1,512 +1,518 @@
 document.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
-    function $(selector, parent = document) {
-        return parent.querySelector(selector);
-    }
-
-    function $all(selector, parent = document) {
-        return Array.from(parent.querySelectorAll(selector));
-    }
+    const $ = (selector, parent = document) => parent.querySelector(selector);
+    const $all = (selector, parent = document) => Array.from(parent.querySelectorAll(selector));
 
     function formatPKR(value) {
-        return "PKR " + Number(value).toLocaleString();
+        value = Number(value || 0);
+
+        return "PKR " + value.toLocaleString(undefined, {
+            maximumFractionDigits: 0
+        });
+    }
+
+    function reloadWithParams(params) {
+        params.delete("page");
+
+        const query = params.toString();
+        window.location.href = window.location.pathname + (query ? "?" + query : "");
+    }
+
+    function setQueryParam(key, value) {
+        const params = new URLSearchParams(window.location.search);
+
+        if (value !== null && value !== undefined && value !== "") {
+            params.set(key, value);
+        } else {
+            params.delete(key);
+        }
+
+        reloadWithParams(params);
     }
 
     /* ===============================
        DESKTOP FILTER PANELS
     =============================== */
 
-    const desktopButtons = [
-        { btn: $("#shapeFilterBtn"), panel: $("#shapesPanel") },
-        { btn: $("#materialFilterBtn"), panel: $("#materialPanel") },
-        { btn: $("#priceFilterBtn"), panel: $("#pricePanel") }
-    ];
-
     function closeDesktopPanels() {
-        desktopButtons.forEach(function (item) {
-            if (item.btn) item.btn.classList.remove("active");
-            if (item.panel) item.panel.classList.remove("show");
+        [
+            ["#shapeFilterBtn", "#shapesPanel"],
+            ["#materialFilterBtn", "#materialPanel"],
+            ["#priceFilterBtn", "#pricePanel"]
+        ].forEach(function (item) {
+            const btn = $(item[0]);
+            const panel = $(item[1]);
+
+            if (btn) btn.classList.remove("active");
+            if (panel) panel.classList.remove("show");
         });
     }
 
-    desktopButtons.forEach(function (item) {
-        if (!item.btn || !item.panel) return;
+    [
+        ["#shapeFilterBtn", "#shapesPanel"],
+        ["#materialFilterBtn", "#materialPanel"],
+        ["#priceFilterBtn", "#pricePanel"]
+    ].forEach(function (item) {
+        const btn = $(item[0]);
+        const panel = $(item[1]);
 
-        item.btn.addEventListener("click", function () {
-            const isOpen = item.panel.classList.contains("show");
+        if (!btn || !panel) return;
+
+        btn.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            const isOpen = panel.classList.contains("show");
 
             closeDesktopPanels();
 
             if (!isOpen) {
-                item.btn.classList.add("active");
-                item.panel.classList.add("show");
-
-                if (item.btn.id === "priceFilterBtn") {
-                    updateDesktopPriceRange();
-                }
+                btn.classList.add("active");
+                panel.classList.add("show");
             }
         });
     });
 
-    const shapeItems = $all(".hj-shape-item");
+    document.addEventListener("click", function (event) {
+        const filterSection = $(".hj-filter-section");
 
-    shapeItems.forEach(function (item) {
-        item.addEventListener("click", function () {
-            shapeItems.forEach(function (shape) {
-                shape.classList.remove("active");
-            });
-            item.classList.add("active");
-        });
+        if (filterSection && !filterSection.contains(event.target)) {
+            closeDesktopPanels();
+        }
     });
-
-    const materialItems = $all(".hj-material-item");
-
-    materialItems.forEach(function (item) {
-        item.addEventListener("click", function () {
-            materialItems.forEach(function (material) {
-                material.classList.remove("active");
-            });
-            item.classList.add("active");
-        });
-    });
-
-    const clearShapeBtn = $(".hj-clear-btn");
-    const clearMaterialBtn = $(".hj-clear-material-btn");
-    const clearPriceBtn = $(".hj-clear-price-btn");
-
-    if (clearShapeBtn) {
-        clearShapeBtn.addEventListener("click", function () {
-            shapeItems.forEach(function (shape) {
-                shape.classList.remove("active");
-            });
-
-            const shapeBtn = $("#shapeFilterBtn");
-            const shapesPanel = $("#shapesPanel");
-
-            if (shapeBtn) shapeBtn.classList.remove("active");
-            if (shapesPanel) shapesPanel.classList.remove("show");
-        });
-    }
-
-    if (clearMaterialBtn) {
-        clearMaterialBtn.addEventListener("click", function () {
-            materialItems.forEach(function (material) {
-                material.classList.remove("active");
-            });
-
-            const materialBtn = $("#materialFilterBtn");
-            const materialPanel = $("#materialPanel");
-
-            if (materialBtn) materialBtn.classList.remove("active");
-            if (materialPanel) materialPanel.classList.remove("show");
-        });
-    }
 
     /* ===============================
-       UNIFIED SORT (Desktop + Mobile)
+       DESKTOP SHAPE FILTER
     =============================== */
 
-    const sortState = {
-        desktopSort: document.getElementById("hjDesktopSort"),
-        desktopSortToggle: document.getElementById("hjDesktopSortToggle"),
-        desktopSortText: document.getElementById("hjDesktopSortText"),
-        modalSortWrap: document.getElementById("hjModalSortWrap"),
-        modalSortToggle: document.getElementById("hjModalSortToggle"),
-        modalSortText: document.getElementById("hjModalSortText"),
-        sortValueInput: document.getElementById("hjSortValue")
-    };
+    $all("[data-filter-shape]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            setQueryParam("shape", this.dataset.filterShape);
+        });
+    });
 
-    function getSortOptions() {
-        return document.querySelectorAll("[data-sort-value]");
+    /* ===============================
+       DESKTOP METAL FILTER
+    =============================== */
+
+    $all("[data-filter-metal]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            setQueryParam("metal", this.dataset.filterMetal);
+        });
+    });
+
+    /* ===============================
+       CLEAR FILTERS
+    =============================== */
+
+    $all("[data-clear-filter]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const params = new URLSearchParams(window.location.search);
+            const type = this.dataset.clearFilter;
+
+            if (type === "shape") {
+                params.delete("shape");
+            }
+
+            if (type === "metal") {
+                params.delete("metal");
+            }
+
+            if (type === "price") {
+                params.delete("min_price");
+                params.delete("max_price");
+            }
+
+            if (type === "all") {
+                params.delete("shape");
+                params.delete("metal");
+                params.delete("min_price");
+                params.delete("max_price");
+                params.delete("sort");
+            }
+
+            reloadWithParams(params);
+        });
+    });
+
+    /* ===============================
+       DESKTOP + MOBILE DUAL PRICE RANGE
+    =============================== */
+
+    function setupDualPriceRange(config) {
+        const minRange = $(config.minRange);
+        const maxRange = $(config.maxRange);
+        const fill = $(config.fill);
+
+        const minTop = $(config.minTop);
+        const maxTop = $(config.maxTop);
+
+        const minText = $(config.minText);
+        const maxText = $(config.maxText);
+
+        const minInput = $(config.minInput);
+        const maxInput = $(config.maxInput);
+
+        if (!minRange || !maxRange || !fill) return;
+
+        function updateUI(changedInput = null) {
+            let minVal = Number(minRange.value || 0);
+            let maxVal = Number(maxRange.value || 0);
+
+            if (minVal > maxVal) {
+                if (changedInput === "min") {
+                    maxVal = minVal;
+                    maxRange.value = maxVal;
+                } else {
+                    minVal = maxVal;
+                    minRange.value = minVal;
+                }
+            }
+
+            const minLimit = Number(minRange.min || 0);
+            const maxLimit = Number(minRange.max || 1);
+
+            const left = ((minVal - minLimit) / (maxLimit - minLimit)) * 100;
+            const right = ((maxVal - minLimit) / (maxLimit - minLimit)) * 100;
+
+            fill.style.left = left + "%";
+            fill.style.width = (right - left) + "%";
+
+            if (minTop) minTop.textContent = formatPKR(minVal);
+            if (maxTop) maxTop.textContent = formatPKR(maxVal);
+
+            if (minText) minText.value = formatPKR(minVal);
+            if (maxText) maxText.value = formatPKR(maxVal);
+
+            if (minInput) minInput.value = minVal;
+            if (maxInput) maxInput.value = maxVal;
+        }
+
+        function applyPriceFilter() {
+            if (!config.applyOnChange) return;
+
+            const params = new URLSearchParams(window.location.search);
+
+            const minVal = minInput ? minInput.value : minRange.value;
+            const maxVal = maxInput ? maxInput.value : maxRange.value;
+            const maxLimit = Number(maxRange.max || 0);
+
+            if (Number(minVal) <= 0 && Number(maxVal) >= maxLimit) {
+                params.delete("min_price");
+                params.delete("max_price");
+            } else {
+                params.set("min_price", minVal);
+                params.set("max_price", maxVal);
+            }
+
+            reloadWithParams(params);
+        }
+
+        minRange.addEventListener("input", function () {
+            updateUI("min");
+        });
+
+        maxRange.addEventListener("input", function () {
+            updateUI("max");
+        });
+
+        minRange.addEventListener("change", applyPriceFilter);
+        maxRange.addEventListener("change", applyPriceFilter);
+
+        updateUI();
     }
+
+    setupDualPriceRange({
+        minRange: "#desktopPriceMinRange",
+        maxRange: "#desktopPriceMaxRange",
+        fill: "#desktopPriceFill",
+        minTop: "#desktopPriceMinTop",
+        maxTop: "#desktopPriceMaxTop",
+        minText: "#desktopPriceMinText",
+        maxText: "#desktopPriceMaxText",
+        minInput: "#desktopMinPriceInput",
+        maxInput: "#desktopMaxPriceInput",
+        applyOnChange: true
+    });
+
+    setupDualPriceRange({
+        minRange: "#mobilePriceMinRange",
+        maxRange: "#mobilePriceMaxRange",
+        fill: "#mobilePriceFill",
+        minTop: "#mobilePriceMinTop",
+        maxTop: "#mobilePriceMaxTop",
+        minText: "#mobilePriceMinText",
+        maxText: "#mobilePriceMaxText",
+        minInput: "#mobileMinPriceInput",
+        maxInput: "#mobileMaxPriceInput",
+        applyOnChange: false
+    });
+
+    /* ===============================
+       SORT DESKTOP + MOBILE
+    =============================== */
+
+    const sortValueInput = $("#hjSortValue");
+
+    const desktopSort = $("#hjDesktopSort");
+    const desktopSortToggle = $("#hjDesktopSortToggle");
+    const desktopSortText = $("#hjDesktopSortText");
+
+    const modalSortWrap = $("#hjModalSortWrap");
+    const modalSortToggle = $("#hjModalSortToggle");
+    const modalSortText = $("#hjModalSortText");
 
     function closeSortDropdowns() {
-        if (sortState.desktopSort) {
-            sortState.desktopSort.classList.remove("show");
-        }
-        if (sortState.modalSortWrap) {
-            sortState.modalSortWrap.classList.remove("show");
-        }
+        if (desktopSort) desktopSort.classList.remove("show");
+        if (modalSortWrap) modalSortWrap.classList.remove("show");
     }
 
-    function setSort(value) {
-        const sortValue = value || "featured";
-        let toggleLabel = "Sort: Featured";
+    function setSortText(value) {
+        let label = "Sort: Featured";
+        const finalValue = value || "featured";
 
-        getSortOptions().forEach(function (option) {
-            const optionValue = option.dataset.sortValue;
-            const isSelected = optionValue === sortValue;
+        $all("[data-sort-value]").forEach(function (option) {
+            const isSelected = option.dataset.sortValue === finalValue;
 
             option.classList.toggle("is-selected", isSelected);
 
             if (isSelected) {
-                toggleLabel = option.dataset.sortLabel || option.textContent.trim();
+                label = option.dataset.sortLabel || option.textContent.trim();
             }
         });
 
-        if (sortState.sortValueInput) {
-            sortState.sortValueInput.value = sortValue;
+        if (sortValueInput) {
+            sortValueInput.value = finalValue;
         }
 
-        if (sortState.desktopSortText) {
-            sortState.desktopSortText.textContent = toggleLabel;
+        if (desktopSortText) {
+            desktopSortText.textContent = label;
         }
 
-        if (sortState.modalSortText) {
-            sortState.modalSortText.textContent = toggleLabel;
+        if (modalSortText) {
+            modalSortText.textContent = label;
         }
+    }
+
+    if (desktopSortToggle && desktopSort) {
+        desktopSortToggle.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            const isOpen = desktopSort.classList.contains("show");
+
+            closeSortDropdowns();
+
+            if (!isOpen) {
+                desktopSort.classList.add("show");
+            }
+        });
+    }
+
+    if (modalSortToggle && modalSortWrap) {
+        modalSortToggle.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            const isOpen = modalSortWrap.classList.contains("show");
+
+            closeSortDropdowns();
+
+            if (!isOpen) {
+                modalSortWrap.classList.add("show");
+            }
+        });
+    }
+
+    $all("[data-sort-value]").forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            const sortValue = this.dataset.sortValue || "featured";
+            const isMobileSort = this.closest("#hjModalSortDropdown");
+
+            setSortText(sortValue);
+            closeSortDropdowns();
+
+            if (!isMobileSort) {
+                if (sortValue === "featured") {
+                    setQueryParam("sort", "");
+                } else {
+                    setQueryParam("sort", sortValue);
+                }
+            }
+        });
+    });
+
+    document.addEventListener("click", function (event) {
+        const inDesktopSort = desktopSort && desktopSort.contains(event.target);
+        const inMobileSort = modalSortWrap && modalSortWrap.contains(event.target);
+
+        if (!inDesktopSort && !inMobileSort) {
+            closeSortDropdowns();
+        }
+    });
+
+    setSortText(sortValueInput ? sortValueInput.value : "featured");
+
+    /* ===============================
+       MOBILE FILTER DRAWER
+    =============================== */
+
+    const openMobileFilters = $("#hjOpenMobileFilters");
+    const closeMobileFilters = $("#hjCloseMobileFilters");
+    const mobileDrawer = $("#hjMobileFilterDrawer");
+    const mobileOverlay = $("#hjMobileFilterOverlay");
+
+    function openMobileDrawer() {
+        if (!mobileDrawer || !mobileOverlay) return;
+
+        mobileDrawer.classList.add("show");
+        mobileOverlay.classList.add("show");
+        document.body.classList.add("hj-mobile-filter-opened");
+    }
+
+    function closeMobileDrawer() {
+        if (!mobileDrawer || !mobileOverlay) return;
+
+        mobileDrawer.classList.remove("show");
+        mobileOverlay.classList.remove("show");
+        document.body.classList.remove("hj-mobile-filter-opened");
 
         closeSortDropdowns();
     }
 
-    function initSort() {
-        const initialValue =
-            (sortState.sortValueInput && sortState.sortValueInput.value) || "featured";
-
-        if (sortState.desktopSortToggle && sortState.desktopSort) {
-            sortState.desktopSortToggle.addEventListener("click", function (event) {
-                event.stopPropagation();
-                const isOpen = sortState.desktopSort.classList.contains("show");
-
-                closeSortDropdowns();
-
-                if (!isOpen) {
-                    sortState.desktopSort.classList.add("show");
-                }
-            });
-        }
-
-        if (sortState.modalSortToggle && sortState.modalSortWrap) {
-            sortState.modalSortToggle.addEventListener("click", function (event) {
-                event.stopPropagation();
-                const isOpen = sortState.modalSortWrap.classList.contains("show");
-
-                closeSortDropdowns();
-
-                if (!isOpen) {
-                    sortState.modalSortWrap.classList.add("show");
-                }
-            });
-        }
-
-        getSortOptions().forEach(function (option) {
-            option.addEventListener("click", function (event) {
-                event.stopPropagation();
-
-                const value = option.dataset.sortValue;
-
-                if (value) {
-                    setSort(value);
-                }
-            });
+    if (openMobileFilters) {
+        openMobileFilters.addEventListener("click", function (event) {
+            event.preventDefault();
+            openMobileDrawer();
         });
-
-        document.addEventListener("click", function (event) {
-            const inDesktop =
-                sortState.desktopSort && sortState.desktopSort.contains(event.target);
-            const inMobile =
-                sortState.modalSortWrap && sortState.modalSortWrap.contains(event.target);
-
-            if (!inDesktop && !inMobile) {
-                closeSortDropdowns();
-            }
-        });
-
-        setSort(initialValue);
     }
 
-    initSort();
+    if (closeMobileFilters) {
+        closeMobileFilters.addEventListener("click", function (event) {
+            event.preventDefault();
+            closeMobileDrawer();
+        });
+    }
+
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener("click", closeMobileDrawer);
+    }
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeMobileDrawer();
+        }
+    });
 
     /* ===============================
-       UNIFIED PRICE RANGE (Desktop & Mobile)
+       MOBILE ACCORDION
     =============================== */
 
-    function setupPriceRange(rangeId, tooltipId, minId, maxId, clearBtnId) {
-        const priceRange = $(rangeId);
-        const priceTooltip = $(tooltipId);
-        const priceMin = $(minId);
-        const priceMax = $(maxId);
-        const clearBtn = clearBtnId ? $(clearBtnId) : null;
+    $all(".hj-mobile-filter-title").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const block = this.closest(".hj-mobile-filter-block");
 
-        if (!priceRange) return;
-
-        function updatePriceRange() {
-            const min = Number(priceRange.min || 0);
-            const max = Number(priceRange.max || 0);
-            const value = Number(priceRange.value || 0);
-            const percent = max > min ? ((value - min) / (max - min)) * 100 : 0;
-
-            priceRange.style.background =
-                "linear-gradient(to right, #777 " + percent + "%, #e4e4e4 " + percent + "%)";
-
-            if (priceTooltip) {
-                priceTooltip.style.left = percent + "%";
-                priceTooltip.innerText = formatPKR(value);
+            if (block) {
+                block.classList.toggle("active");
             }
-
-            if (priceMin && !priceMin.value) {
-                priceMin.value = formatPKR(min);
-            }
-
-            if (priceMax) {
-                priceMax.value = formatPKR(value);
-                if (value > 0) {
-                    priceMax.classList.add("is-active");
-                } else {
-                    priceMax.classList.remove("is-active");
-                }
-            }
-        }
-
-        priceRange.addEventListener("input", updatePriceRange);
-        updatePriceRange();
-
-        if (clearBtn) {
-            clearBtn.addEventListener("click", function () {
-                priceRange.value = priceRange.min || 0;
-                updatePriceRange();
-            });
-        }
-    }
-
-    setupPriceRange("#priceRange", "#priceTooltip", "#priceMin", "#priceMax", ".hj-clear-price-btn");
-    
-    const priceBtn = $("#priceFilterBtn");
-    const pricePanel = $("#pricePanel");
-    if (clearPriceBtn && priceBtn && pricePanel) {
-        clearPriceBtn.addEventListener("click", function () {
-            priceBtn.classList.remove("active");
-            pricePanel.classList.remove("show");
         });
-    }
+    });
 
     /* ===============================
-       MOBILE DUAL PRICE RANGE SLIDER
+       MOBILE METAL SINGLE SELECT
     =============================== */
 
-    function setupMobilePriceRangeSlider() {
-        const minRange = $("#mobilePriceMinRange");
-        const maxRange = $("#mobilePriceMaxRange");
-        const fill = $("#mobilePriceFill");
-        const minLabel = $("#mobilePriceMinTop");
-        const maxLabel = $("#mobilePriceMaxTop");
-        const minInput = $("#mobilePriceMinText");
-        const maxInput = $("#mobilePriceMaxText");
-        const minHidden = $("#mobileMinPriceInput");
-        const maxHidden = $("#mobileMaxPriceInput");
+    const mobileMetalInput = $("#mobileMetalInput");
 
-        if (!minRange || !maxRange || !fill) return;
+    $all(".hj-mobile-metal-list button").forEach(function (button) {
+        button.addEventListener("click", function () {
+            $all(".hj-mobile-metal-list button").forEach(function (item) {
+                item.classList.remove("active");
+            });
 
-        function updateSliderFill() {
-            const minVal = Number(minRange.value);
-            const maxVal = Number(maxRange.value);
-            const minMax = Number(minRange.max);
-            const minMin = Number(minRange.min);
+            this.classList.add("active");
 
-            // Calculate percentages
-            const minPercent = ((minVal - minMin) / (minMax - minMin)) * 100;
-            const maxPercent = ((maxVal - minMin) / (minMax - minMin)) * 100;
-
-            // Update fill bar position and width
-            fill.style.left = minPercent + "%";
-            fill.style.width = maxPercent - minPercent + "%";
-
-            // Update labels
-            if (minLabel) minLabel.textContent = "$" + minVal.toLocaleString();
-            if (maxLabel) maxLabel.textContent = "$" + maxVal.toLocaleString();
-
-            // Update input fields
-            if (minInput) minInput.value = "$" + minVal.toLocaleString();
-            if (maxInput) maxInput.value = "$" + maxVal.toLocaleString();
-
-            // Update hidden inputs
-            if (minHidden) minHidden.value = minVal;
-            if (maxHidden) maxHidden.value = maxVal;
-
-            // Prevent max range from going below min range
-            if (maxVal < minVal) {
-                maxRange.value = minVal;
+            if (mobileMetalInput) {
+                mobileMetalInput.value = this.dataset.value || "";
             }
-        }
-
-        minRange.addEventListener("input", updateSliderFill);
-        maxRange.addEventListener("input", updateSliderFill);
-
-        // Initial update
-        updateSliderFill();
-    }
-
-    setupMobilePriceRangeSlider();
-
- /* ===============================
-   MOBILE FILTER MODAL OPEN / CLOSE
-=============================== */
-
-const openMobileFilters = $("#hjOpenMobileFilters");
-const mobileDrawer = $("#hjMobileFilterDrawer");
-const mobileOverlay = $("#hjMobileFilterOverlay");
-const closeMobileFilters = $("#hjCloseMobileFilters");
-const mobileCloseHeader = $(".hj-mobile-filter-head");
-const viewProductsBtn = $(".hj-mobile-view-products");
-const modalSortWrap = document.getElementById("hjModalSortWrap");
-
-function openMobileDrawer() {
-    if (!mobileDrawer || !mobileOverlay) return;
-
-    mobileDrawer.classList.add("show");
-    mobileOverlay.classList.add("show");
-    document.body.classList.add("hj-mobile-filter-opened");
-}
-
-function closeMobileDrawer() {
-    if (!mobileDrawer || !mobileOverlay) return;
-
-    mobileDrawer.classList.remove("show");
-    mobileOverlay.classList.remove("show");
-    document.body.classList.remove("hj-mobile-filter-opened");
-
-    if (modalSortWrap) {
-        modalSortWrap.classList.remove("show");
-    }
-}
-
-if (openMobileFilters) {
-    openMobileFilters.addEventListener("click", function (event) {
-        event.preventDefault();
-        openMobileDrawer();
-    });
-}
-
-if (closeMobileFilters) {
-    closeMobileFilters.addEventListener("click", closeMobileDrawer);
-}
-
-if (mobileCloseHeader) {
-    mobileCloseHeader.addEventListener("click", closeMobileDrawer);
-}
-
-document.body.addEventListener("click", function (event) {
-    if (event.target.closest("#hjCloseMobileFilters")) {
-        closeMobileDrawer();
-    }
-});
-
-if (mobileOverlay) {
-    mobileOverlay.addEventListener("click", closeMobileDrawer);
-}
-
-if (viewProductsBtn) {
-    viewProductsBtn.addEventListener("click", closeMobileDrawer);
-}
-
-const mobileFilterTitles = $all(".hj-mobile-filter-title");
-
-mobileFilterTitles.forEach(function (title) {
-    title.addEventListener("click", function () {
-        const block = title.closest(".hj-mobile-filter-block");
-        if (!block) return;
-        block.classList.toggle("active");
-    });
-});
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        closeMobileDrawer();
-    }
-});
-/* ===============================
-   MOBILE MULTI SELECT FILTER ITEMS
-=============================== */
-
-const mobileMetalItems = $all(".hj-mobile-metal-list button");
-const mobileShapeItems = $all(".hj-mobile-shapes-grid button");
-
-const selectedFiltersWrap = $("#hjMobileSelectedFiltersWrap");
-const selectedFiltersBox = $("#hjMobileSelectedFilters");
-const resetFiltersBtn = $("#hjMobileResetFilters");
-
-function getFilterLabel(item) {
-    const small = item.querySelector("small");
-    const span = item.querySelector("span");
-
-    if (small) return small.textContent.trim();
-    if (span) return span.textContent.trim();
-
-    return item.textContent.trim();
-}
-
-function updateSelectedFilterChips() {
-    if (!selectedFiltersBox || !selectedFiltersWrap) return;
-
-    selectedFiltersBox.innerHTML = "";
-
-    const selectedItems = [
-        ...mobileMetalItems.filter(item => item.classList.contains("active")),
-        ...mobileShapeItems.filter(item => item.classList.contains("active"))
-    ];
-
-    if (selectedItems.length === 0) {
-        selectedFiltersWrap.classList.remove("show");
-        return;
-    }
-
-    selectedFiltersWrap.classList.add("show");
-
-    selectedItems.forEach(function (item) {
-        const label = getFilterLabel(item);
-
-        const chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "hj-mobile-selected-chip";
-        chip.innerHTML = `${label} <span>×</span>`;
-
-        chip.addEventListener("click", function () {
-            item.classList.remove("active");
-            updateSelectedFilterChips();
         });
-
-        selectedFiltersBox.appendChild(chip);
     });
-}
-
-/* MULTI SELECT METAL */
-mobileMetalItems.forEach(function (item) {
-    item.addEventListener("click", function () {
-        item.classList.toggle("active");
-        updateSelectedFilterChips();
-    });
-});
-
-/* MULTI SELECT SHAPES */
-mobileShapeItems.forEach(function (item) {
-    item.addEventListener("click", function () {
-        item.classList.toggle("active");
-        updateSelectedFilterChips();
-    });
-});
-
-/* RESET ALL FILTERS */
-if (resetFiltersBtn) {
-    resetFiltersBtn.addEventListener("click", function () {
-        mobileMetalItems.forEach(function (item) {
-            item.classList.remove("active");
-        });
-
-        mobileShapeItems.forEach(function (item) {
-            item.classList.remove("active");
-        });
-
-        updateSelectedFilterChips();
-    });
-}
-
-updateSelectedFilterChips();
-   
-    setupPriceRange("#mobilePriceRange", "#mobilePriceTooltip", "#mobilePriceMin", "#mobilePriceMax", ".hj-clear-mobile-price-btn");
 
     /* ===============================
-       MOBILE GALLERY SLIDER
+       MOBILE SHAPE SINGLE SELECT
+    =============================== */
+
+    const mobileShapesInput = $("#mobileShapesInput");
+
+    $all(".hj-mobile-shapes-grid button").forEach(function (button) {
+        button.addEventListener("click", function () {
+            $all(".hj-mobile-shapes-grid button").forEach(function (item) {
+                item.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            if (mobileShapesInput) {
+                mobileShapesInput.value = this.dataset.value || "";
+            }
+        });
+    });
+
+    /* ===============================
+       MOBILE VIEW PRODUCTS APPLY
+    =============================== */
+
+    const viewProductsBtn = $("#hjMobileViewProducts");
+
+    if (viewProductsBtn) {
+        viewProductsBtn.addEventListener("click", function () {
+            const params = new URLSearchParams(window.location.search);
+
+            const selectedMetal = mobileMetalInput ? mobileMetalInput.value : "";
+            const selectedShape = mobileShapesInput ? mobileShapesInput.value : "";
+            const minPriceInput = $("#mobileMinPriceInput");
+            const maxPriceInput = $("#mobileMaxPriceInput");
+
+            const minPrice = minPriceInput ? minPriceInput.value : "";
+            const maxPrice = maxPriceInput ? maxPriceInput.value : "";
+            const selectedSort = sortValueInput ? sortValueInput.value : "featured";
+
+            if (selectedMetal) {
+                params.set("metal", selectedMetal);
+            } else {
+                params.delete("metal");
+            }
+
+            if (selectedShape) {
+                params.set("shape", selectedShape);
+            } else {
+                params.delete("shape");
+            }
+
+            if (minPrice !== "") {
+                params.set("min_price", minPrice);
+            } else {
+                params.delete("min_price");
+            }
+
+            if (maxPrice !== "") {
+                params.set("max_price", maxPrice);
+            } else {
+                params.delete("max_price");
+            }
+
+            if (selectedSort && selectedSort !== "featured") {
+                params.set("sort", selectedSort);
+            } else {
+                params.delete("sort");
+            }
+
+            reloadWithParams(params);
+        });
+    }
+
+    /* ===============================
+       PRODUCT DETAIL MOBILE GALLERY
     =============================== */
 
     const gallery = $("#hjProductGallery");
@@ -578,97 +584,128 @@ updateSelectedFilterChips();
     const reviewNextBtn = $(".hj-review-arrows .hj-gallery-next");
 
     if (reviewGalleryViewport && reviewGalleryTrack && reviewPrevBtn && reviewNextBtn) {
-        const reviewImages = $all("img", reviewGalleryTrack);
-        const imageWidth = 150; // Default width from CSS
-        const imageGap = 6; // Gap from CSS
+        function getReviewScrollAmount() {
+            const firstImg = $("img", reviewGalleryTrack);
+            const gap = 6;
 
-        function getReviewImageDimensions() {
-            const firstImg = reviewImages[0];
-            if (firstImg) {
-                return {
-                    width: firstImg.offsetWidth,
-                    gap: imageGap
-                };
+            if (!firstImg) {
+                return 156;
             }
-            return { width: imageWidth, gap: imageGap };
-        }
 
-        function scrollReviewGallery(direction) {
-            const dims = getReviewImageDimensions();
-            const scrollAmount = dims.width + dims.gap;
-            
-            reviewGalleryTrack.scrollBy({
-                left: direction === "next" ? scrollAmount : -scrollAmount,
-                behavior: "smooth"
-            });
+            return firstImg.offsetWidth + gap;
         }
 
         reviewNextBtn.addEventListener("click", function () {
-            scrollReviewGallery("next");
+            reviewGalleryTrack.scrollBy({
+                left: getReviewScrollAmount(),
+                behavior: "smooth"
+            });
         });
 
         reviewPrevBtn.addEventListener("click", function () {
-            scrollReviewGallery("prev");
+            reviewGalleryTrack.scrollBy({
+                left: -getReviewScrollAmount(),
+                behavior: "smooth"
+            });
         });
     }
 
-         const caratValues = [
-        "0.25 CARAT",
-        "0.30 CARAT",
-        "0.40 CARAT",
-        "0.50 CARAT",
-        "0.60 CARAT",
-        "0.70 CARAT",
-        "0.75 CARAT",
-        "0.90 CARAT",
-        "1.00 CARAT"
-    ];
+    /* ===============================
+       FALLBACK CARAT BUTTON UPDATE
+    =============================== */
 
-    const caratRange = document.getElementById("caratRange");
-    const caratBtn = document.getElementById("caratBtn");
+    const detailDataScript = $("#hjDetailProductData");
+    const caratRange = $("#caratRange");
+    const caratBtn = $("#caratBtn");
 
-    if (caratRange && caratBtn) {
+    if (!detailDataScript && caratRange && caratBtn) {
+        const caratValues = [
+            "0.25 CARAT",
+            "0.30 CARAT",
+            "0.40 CARAT",
+            "0.60 CARAT",
+            "0.70 CARAT",
+            "0.75 CARAT",
+            "0.90 CARAT",
+            "1.00 CARAT"
+        ];
+
         caratRange.addEventListener("input", function () {
-            caratBtn.textContent = caratValues[this.value];
+            caratBtn.textContent = caratValues[this.value] || caratValues[0];
         });
     }
-document.querySelectorAll('.hj-tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        const tabId = this.getAttribute('data-tab');
 
-        document.querySelectorAll('.hj-tab-btn').forEach(function(tab) {
-            tab.classList.remove('active');
-        });
+    /* ===============================
+       SPEC TABS
+    =============================== */
 
-        document.querySelectorAll('.hj-tab-panel').forEach(function(panel) {
-            panel.classList.remove('active');
-        });
+    $all(".hj-tab-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const tabId = this.getAttribute("data-tab");
 
-        this.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-    });
-});
+            $all(".hj-tab-btn").forEach(function (tab) {
+                tab.classList.remove("active");
+            });
 
-document.querySelectorAll('.hj-help-btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-        e.stopPropagation();
+            $all(".hj-tab-panel").forEach(function (panel) {
+                panel.classList.remove("active");
+            });
 
-        const currentItem = this.closest('.hj-spec-item');
+            this.classList.add("active");
 
-        document.querySelectorAll('.hj-spec-item').forEach(function(item) {
-            if (item !== currentItem) {
-                item.classList.remove('active-help');
+            const panel = document.getElementById(tabId);
+
+            if (panel) {
+                panel.classList.add("active");
             }
         });
-
-        currentItem.classList.toggle('active-help');
     });
-});
 
-document.addEventListener('click', function() {
-    document.querySelectorAll('.hj-spec-item').forEach(function(item) {
-        item.classList.remove('active-help');
+    /* ===============================
+       SPEC HELP DROPDOWN
+    =============================== */
+
+    $all(".hj-help-btn").forEach(function (btn) {
+        btn.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            const currentItem = this.closest(".hj-spec-item");
+
+            $all(".hj-spec-item").forEach(function (item) {
+                if (item !== currentItem) {
+                    item.classList.remove("active-help");
+                }
+            });
+
+            if (currentItem) {
+                currentItem.classList.toggle("active-help");
+            }
+        });
     });
-});
-    
+
+    document.addEventListener("click", function () {
+        $all(".hj-spec-item").forEach(function (item) {
+            item.classList.remove("active-help");
+        });
+    });
+
+    /* ===============================
+       SIMPLE ACCORDION
+    =============================== */
+
+    $all(".hj-acc-item button").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const currentItem = this.closest(".hj-acc-item");
+
+            $all(".hj-acc-item").forEach(function (item) {
+                if (item !== currentItem) {
+                    item.classList.remove("active");
+                }
+            });
+
+            if (currentItem) {
+                currentItem.classList.toggle("active");
+            }
+        });
+    });
 });

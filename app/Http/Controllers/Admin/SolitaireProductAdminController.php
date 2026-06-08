@@ -33,6 +33,7 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'shape' => 'nullable|in:oval,princess,round',
         ]);
 
         $product = SolitaireProduct::create([
@@ -41,7 +42,8 @@ class SolitaireProductAdminController extends Controller
             'sku' => $request->sku,
             'tag_label' => $request->tag_label,
             'short_description' => $request->short_description,
-            'currency' => $request->currency ?? 'AED',
+            'currency' => $request->currency ?? 'PKR',
+            'shape' => $request->shape,
 
             'gallery_images' => $this->storeGalleryImages($request),
             'metals' => $this->cleanMetals($request->metals ?? []),
@@ -79,6 +81,7 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+                'shape' => 'nullable|in:oval,princess,round',
         ]);
 
         $oldGalleryImages = $product->gallery_images ?? [];
@@ -123,8 +126,8 @@ class SolitaireProductAdminController extends Controller
             'sku' => $request->sku,
             'tag_label' => $request->tag_label,
             'short_description' => $request->short_description,
-            'currency' => $request->currency ?? 'AED',
-
+            'currency' => $request->currency ?? 'PKR',
+            'shape' => $request->shape,
             'gallery_images' => $finalGalleryImages,
             'metals' => $this->cleanMetals($request->metals ?? []),
             'diamond_carats' => $this->cleanDiamondCarats($request->diamond_carats ?? []),

@@ -659,7 +659,7 @@
                     </h3>
 
                     <p>
-                        {{ $defaultCarat ?: '0.25' }} Total Carat · Radiant · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
+                        {{ $defaultCarat ?: '0.25' }} Total Carat · {{ $relatedProduct->shape ?? 'N/A' }} · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
                     </p>
 
                     <div class="hj-lab-price-row">

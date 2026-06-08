@@ -31,9 +31,26 @@
         <a href="#">Solitaire Engagement Rings</a>
     </section>
 
+@php
+    $sortLabels = [
+        'featured' => 'Sort: Featured',
+        'newest' => 'Sort: Newest first',
+        'price_low_high' => 'Sort: Price: low to high',
+        'price_high_low' => 'Sort: Price: high to low',
+    ];
+
+    $activeSortLabel = $sortLabels[$selectedSort ?? 'featured'] ?? 'Sort: Featured';
+
+    $desktopMinPrice = $selectedMinPrice !== null && $selectedMinPrice !== '' ? $selectedMinPrice : 0;
+    $desktopMaxPrice = $selectedMaxPrice !== null && $selectedMaxPrice !== '' ? $selectedMaxPrice : $maxFilterPrice;
+
+    $mobileMinPrice = $selectedMinPrice !== null && $selectedMinPrice !== '' ? $selectedMinPrice : 0;
+    $mobileMaxPrice = $selectedMaxPrice !== null && $selectedMaxPrice !== '' ? $selectedMaxPrice : $maxFilterPrice;
+@endphp
+
 <!-- FILTER SECTION -->
 <div class="hj-filter-section">
-    <input type="hidden" id="hjSortValue" value="featured">
+    <input type="hidden" id="hjSortValue" value="{{ $selectedSort ?? 'featured' }}">
 
     <!-- DESKTOP FILTER BAR -->
     <div class="hj-filter-top hj-desktop-filter-top">
@@ -61,146 +78,201 @@
 
         </div>
 
-       <div class="hj-sort-box hj-custom-sort" id="hjDesktopSort">
-
-    <button type="button" class="hj-sort-toggle" id="hjDesktopSortToggle">
-        <span id="hjDesktopSortText">Sort: Featured</span>
+        <div class="hj-sort-box hj-custom-sort" id="hjDesktopSort">
+            <button type="button" class="hj-sort-toggle" id="hjDesktopSortToggle">
+                <span id="hjDesktopSortText">{{ $activeSortLabel }}</span>
                 <i class="hj-chevron"></i>
-
-    </button>
-
-    <div class="hj-sort-dropdown" id="hjDesktopSortDropdown">
-        <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
-        <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
-        <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
-        <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
-    </div>
-
-</div>
-
-    </div>
-<!-- MOBILE FILTER BUTTON -->
-<div class="hj-mobile-filter-top">
-    <button type="button" class="hj-mobile-filter-open" id="hjOpenMobileFilters">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M4 7H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M17 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M15 5V9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M4 17H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M13 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M11 15V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span>Filters</span>
-    </button>
-</div>
-    <!-- DESKTOP SHAPES PANEL -->
-    <div class="hj-shapes-panel" id="shapesPanel">
-           <div class="hj-shapes-list">
-
-            <button class="hj-shape-item active" type="button">
-                <img src="{{ asset('assets/f_assets/image/solitaire/round.png') }}" alt="Round">
-                <span>Round</span>
             </button>
 
-            <button class="hj-shape-item" type="button">
-                <img src="{{ asset('assets/f_assets/image/solitaire/princess.png') }}" alt="Princess">
-                <span>Princess</span>
-            </button>
-
-            <button class="hj-shape-item" type="button">
-                <img src="{{ asset('assets/f_assets/image/solitaire/oval.png') }}" alt="Oval">
-                <span>Oval</span>
-            </button>
-
+            <div class="hj-sort-dropdown" id="hjDesktopSortDropdown">
+                <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
+                <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
+                <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
+                <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
+            </div>
         </div>
 
-         <button class="hj-clear-btn" type="button">
-    <span class="hj-clear-x">×</span>
-    <span>CLEAR ALL</span>
-</button>
-</div>
+    </div>
+
+    <!-- MOBILE FILTER BUTTON -->
+    <div class="hj-mobile-filter-top">
+        <button type="button" class="hj-mobile-filter-open" id="hjOpenMobileFilters">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M4 7H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M17 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M15 5V9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 17H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M13 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M11 15V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Filters</span>
+        </button>
+    </div>
+
+    <!-- DESKTOP SHAPES PANEL -->
+    <div class="hj-shapes-panel" id="shapesPanel">
+        <div class="hj-shapes-list">
+            @foreach($availableShapes as $shapeValue => $shapeLabel)
+                <button 
+                    class="hj-shape-item {{ request('shape') === $shapeValue ? 'active' : '' }}" 
+                    type="button"
+                    data-filter-shape="{{ $shapeValue }}"
+                >
+                    <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $shapeLabel }}">
+                    <span>{{ $shapeLabel }}</span>
+                </button>
+            @endforeach
+        </div>
+
+        <button class="hj-clear-btn" type="button" data-clear-filter="shape">
+            <span class="hj-clear-x">×</span>
+            <span>CLEAR ALL</span>
+        </button>
+    </div>
 
     <!-- DESKTOP MATERIAL PANEL -->
-    <div class="hj-material-panel" id="materialPanel">
-         <div class="hj-material-list">
+   <div class="hj-material-panel" id="materialPanel">
+    <div class="hj-material-list">
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '14k_white' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="14k_white"
+        >
             <span class="hj-material-circle silver">14K</span>
-            <span>14K Silver</span>
+            <span>14K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '14k_rose' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="14k_rose"
+        >
             <span class="hj-material-circle rose">14K</span>
-            <span>14K Rose</span>
+            <span>14K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '14k_yellow' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="14k_yellow"
+        >
             <span class="hj-material-circle gold">14K</span>
             <span>14K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '18k_white' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="18k_white"
+        >
             <span class="hj-material-circle silver">18K</span>
-            <span>18K Silver</span>
+            <span>18K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '18k_rose' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="18k_rose"
+        >
             <span class="hj-material-circle rose">18K</span>
-            <span>18K Rose</span>
+            <span>18K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === '18k_yellow' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="18k_yellow"
+        >
             <span class="hj-material-circle gold">18K</span>
             <span>18K Gold</span>
         </button>
 
-        <button class="hj-material-item" type="button">
+        <button 
+            class="hj-material-item {{ request('metal') === 'platinum' ? 'active' : '' }}" 
+            type="button"
+            data-filter-metal="platinum"
+        >
             <span class="hj-material-circle platinum">PT</span>
             <span>Platinum</span>
         </button>
 
     </div>
 
-    <button class="hj-clear-material-btn" type="button">
+    <button class="hj-clear-material-btn" type="button" data-clear-filter="metal">
         <span class="hj-clear-x">×</span>
         <span>CLEAR ALL</span>
     </button>
-
 </div>
 
     <!-- DESKTOP PRICE PANEL -->
-    <div class="hj-price-panel" id="pricePanel">
- <div class="hj-price-range-box">
+    <!-- DESKTOP PRICE PANEL -->
+<div class="hj-price-panel" id="pricePanel">
+    <div class="hj-price-range-box hj-desktop-price-range-box">
 
-        <div class="hj-range-wrap">
-            <div class="hj-price-tooltip" id="priceTooltip">PKR 50,000</div>
+        <div class="hj-price-label-row">
+            <span id="desktopPriceMinTop">
+                PKR {{ number_format((float) $desktopMinPrice, 0) }}
+            </span>
 
-            <input
-                type="range"
-                id="priceRange"
-                min="0"
-                max="200000"
-                step="1000"
-                value="0"
+            <span id="desktopPriceMaxTop">
+                PKR {{ number_format((float) $desktopMaxPrice, 0) }}
+            </span>
+        </div>
+
+        <div class="hj-price-slider-wrap">
+            <div class="hj-price-slider-track"></div>
+            <div class="hj-price-slider-fill" id="desktopPriceFill"></div>
+
+            <input 
+                type="range" 
+                id="desktopPriceMinRange" 
+                min="0" 
+                max="{{ (int) $maxFilterPrice }}" 
+                step="1000" 
+                value="{{ (int) $desktopMinPrice }}"
+            >
+
+            <input 
+                type="range" 
+                id="desktopPriceMaxRange" 
+                min="0" 
+                max="{{ (int) $maxFilterPrice }}" 
+                step="1000" 
+                value="{{ (int) $desktopMaxPrice }}"
             >
         </div>
 
         <div class="hj-price-inputs">
-            <input type="text" id="priceMin" value="PKR 0" readonly class="hj-price-min">
+            <input 
+                type="text" 
+                id="desktopPriceMinText" 
+                value="PKR {{ number_format((float) $desktopMinPrice, 0) }}" 
+                readonly 
+                class="hj-price-min"
+            >
+
             <span>-</span>
-            <input type="text" id="priceMax" value="PKR 200,000" readonly class="hj-price-max">
+
+            <input 
+                type="text" 
+                id="desktopPriceMaxText" 
+                value="PKR {{ number_format((float) $desktopMaxPrice, 0) }}" 
+                readonly 
+                class="hj-price-max"
+            >
         </div>
+
+        <input type="hidden" id="desktopMinPriceInput" value="{{ $desktopMinPrice }}">
+        <input type="hidden" id="desktopMaxPriceInput" value="{{ $desktopMaxPrice }}">
 
     </div>
 
-    <button class="hj-clear-price-btn" type="button">
+    <button class="hj-clear-price-btn" type="button" data-clear-filter="price">
         <span class="hj-clear-x">×</span>
         <span>CLEAR ALL</span>
     </button>
-
 </div>
-</div>
-
 </div>
 
 
@@ -219,7 +291,7 @@
         <!-- SORT DROPDOWN -->
         <div class="hj-modal-sort-wrap" id="hjModalSortWrap">
             <button class="hj-modal-sort-toggle" type="button" id="hjModalSortToggle">
-                <span id="hjModalSortText">Sort: Featured</span>
+                <span id="hjModalSortText">{{ $activeSortLabel }}</span>
                 <i class="hj-chevron"></i>
             </button>
 
@@ -231,72 +303,145 @@
             </div>
         </div>
 
-
         <!-- METAL -->
-        <div class="hj-mobile-filter-block active">
-            <button type="button" class="hj-mobile-filter-title">
-                <span>Metal</span>
-                <i></i>
-            </button>
-
-            <div class="hj-mobile-filter-content">
-                <div class="hj-mobile-metal-list">
-
-                    <button type="button" class="active" data-value="14k-white">
-                        <span class="hj-mobile-metal-circle silver">14K</span>
-                        <small>14k White</small>
-                    </button>
-
-                    <button type="button" data-value="14k-gold">
-                        <span class="hj-mobile-metal-circle gold">14K</span>
-                        <small>14k Gold</small>
-                    </button>
-
-                    <button type="button" data-value="14k-rose">
-                        <span class="hj-mobile-metal-circle rose">14K</span>
-                        <small>14k Rose</small>
-                    </button>
-
-                </div>
-
-                <input type="hidden" name="metal" id="mobileMetalInput" value="14k-white">
-            </div>
-        </div>
-
-
-     <!-- PRICE -->
-<div class="hj-mobile-filter-block active">
+      <div class="hj-mobile-filter-block active">
     <button type="button" class="hj-mobile-filter-title">
-        <span>Price</span>
+        <span>Metal</span>
         <i></i>
     </button>
 
     <div class="hj-mobile-filter-content">
+        <div class="hj-mobile-metal-list">
 
-        <div class="hj-price-label-row">
-            <span id="mobilePriceMinTop">500$</span>
-            <span id="mobilePriceMaxTop">20,000$</span>
+            <button 
+                type="button" 
+                class="{{ request('metal') === '14k_white' ? 'active' : '' }}"
+                data-value="14k_white"
+            >
+                <span class="hj-mobile-metal-circle silver">14K</span>
+                <small>14K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === '14k_rose' ? 'active' : '' }}"
+                data-value="14k_rose"
+            >
+                <span class="hj-mobile-metal-circle rose">14K</span>
+                <small>14K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === '14k_yellow' ? 'active' : '' }}"
+                data-value="14k_yellow"
+            >
+                <span class="hj-mobile-metal-circle gold">14K</span>
+                <small>14K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === '18k_white' ? 'active' : '' }}"
+                data-value="18k_white"
+            >
+                <span class="hj-mobile-metal-circle silver">18K</span>
+                <small>18K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === '18k_rose' ? 'active' : '' }}"
+                data-value="18k_rose"
+            >
+                <span class="hj-mobile-metal-circle rose">18K</span>
+                <small>18K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === '18k_yellow' ? 'active' : '' }}"
+                data-value="18k_yellow"
+            >
+                <span class="hj-mobile-metal-circle gold">18K</span>
+                <small>18K Gold</small>
+            </button>
+
+            <button 
+                type="button" 
+                class="{{ request('metal') === 'platinum' ? 'active' : '' }}"
+                data-value="platinum"
+            >
+                <span class="hj-mobile-metal-circle platinum">PT</span>
+                <small>Platinum</small>
+            </button>
+
         </div>
 
-        <div class="hj-price-slider-wrap">
-    <div class="hj-price-slider-track"></div>
-    <div class="hj-price-slider-fill" id="mobilePriceFill"></div>
-
-    <input type="range" id="mobilePriceMinRange" min="500" max="20000" step="100" value="2500">
-    <input type="range" id="mobilePriceMaxRange" min="500" max="20000" step="100" value="12000">
-</div>
-
-        <div class="hj-price-inputs">
-            <input type="text" id="mobilePriceMinText" placeholder="min" value="">
-            <input type="text" id="mobilePriceMaxText" value="$20,000">
-        </div>
-
-        <input type="hidden" name="min_price" id="mobileMinPriceInput" value="500">
-        <input type="hidden" name="max_price" id="mobileMaxPriceInput" value="20000">
-
+        <input 
+            type="hidden" 
+            name="metal" 
+            id="mobileMetalInput" 
+            value="{{ request('metal') }}"
+        >
     </div>
 </div>
+        <!-- PRICE -->
+        <div class="hj-mobile-filter-block active">
+            <button type="button" class="hj-mobile-filter-title">
+                <span>Price</span>
+                <i></i>
+            </button>
 
+            <div class="hj-mobile-filter-content">
+
+                <div class="hj-price-label-row">
+                    <span id="mobilePriceMinTop">PKR {{ number_format((float) $mobileMinPrice, 0) }}</span>
+                    <span id="mobilePriceMaxTop">PKR {{ number_format((float) $mobileMaxPrice, 0) }}</span>
+                </div>
+
+                <div class="hj-price-slider-wrap">
+                    <div class="hj-price-slider-track"></div>
+                    <div class="hj-price-slider-fill" id="mobilePriceFill"></div>
+
+                    <input 
+                        type="range" 
+                        id="mobilePriceMinRange" 
+                        min="0" 
+                        max="{{ (int) $maxFilterPrice }}" 
+                        step="1000" 
+                        value="{{ (int) $mobileMinPrice }}"
+                    >
+
+                    <input 
+                        type="range" 
+                        id="mobilePriceMaxRange" 
+                        min="0" 
+                        max="{{ (int) $maxFilterPrice }}" 
+                        step="1000" 
+                        value="{{ (int) $mobileMaxPrice }}"
+                    >
+                </div>
+
+                <div class="hj-price-inputs">
+                    <input 
+                        type="text" 
+                        id="mobilePriceMinText" 
+                        value="PKR {{ number_format((float) $mobileMinPrice, 0) }}"
+                    >
+
+                    <input 
+                        type="text" 
+                        id="mobilePriceMaxText" 
+                        value="PKR {{ number_format((float) $mobileMaxPrice, 0) }}"
+                    >
+                </div>
+
+                <input type="hidden" name="min_price" id="mobileMinPriceInput" value="{{ $mobileMinPrice }}">
+                <input type="hidden" name="max_price" id="mobileMaxPriceInput" value="{{ $mobileMaxPrice }}">
+
+            </div>
+        </div>
 
         <!-- SHAPES -->
         <div class="hj-mobile-filter-block active">
@@ -307,25 +452,19 @@
 
             <div class="hj-mobile-filter-content">
                 <div class="hj-mobile-shapes-grid">
-
-                    <button type="button" class="active" data-value="round">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/round.png') }}" alt="Round">
-                        <span>Round</span>
-                    </button>
-
-                    <button type="button" data-value="oval">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/oval.png') }}" alt="Oval">
-                        <span>Oval</span>
-                    </button>
-
-                    <button type="button" data-value="princess">
-                        <img src="{{ asset('assets/f_assets/image/solitaire/princess.png') }}" alt="Princess">
-                        <span>Princess</span>
-                    </button>
-
+                    @foreach($availableShapes as $shapeValue => $shapeLabel)
+                        <button 
+                            type="button" 
+                            class="{{ request('shape') === $shapeValue ? 'active' : '' }}"
+                            data-value="{{ $shapeValue }}"
+                        >
+                            <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $shapeLabel }}">
+                            <span>{{ $shapeLabel }}</span>
+                        </button>
+                    @endforeach
                 </div>
 
-                <input type="hidden" name="shapes" id="mobileShapesInput" value="round">
+                <input type="hidden" name="shapes" id="mobileShapesInput" value="{{ request('shape') }}">
             </div>
         </div>
 
@@ -333,7 +472,7 @@
 
     <div class="hj-mobile-filter-bottom">
         <button type="button" class="hj-mobile-view-products" id="hjMobileViewProducts">
-            View Products (258)
+            View Products ({{ $products->total() }})
         </button>
     </div>
 
@@ -341,30 +480,77 @@
 <!-- PRODUCT GRID -->
 <section class="hj-product-grid">
 
-    @foreach($products as $product)
+    @forelse($products as $product)
 
         @php
-            $metals = collect($product->metals ?? []);
-            $carats = collect($product->diamond_carats ?? []);
-            $variants = collect($product->variants ?? []);
-            $metalImages = collect($product->metal_images ?? []);
-            $galleryImages = collect($product->gallery_images ?? []);
+            $metals = collect($product->metals ?? [])->values();
+            $carats = collect($product->diamond_carats ?? [])->values();
+            $variants = collect($product->variants ?? [])->values();
+            $metalImages = collect($product->metal_images ?? [])->values();
+            $galleryImages = collect($product->gallery_images ?? [])->values();
 
-            $defaultVariant = $variants->firstWhere('is_default', true) ?? $variants->first();
+            $activeVariants = $variants->filter(function ($variant) {
+                return !isset($variant['status'])
+                    || $variant['status'] === true
+                    || $variant['status'] === 1
+                    || $variant['status'] === '1';
+            })->values();
 
-            $defaultMetalCode = $product->default_metal_code 
-                ?? ($defaultVariant['metal_code'] ?? ($metals->first()['code'] ?? ''));
+            /*
+                Metal comes from filter.
+                If no filter, use product default metal.
+            */
+            $selectedMetalCode = request('metal')
+                ?: ($product->default_metal_code ?: data_get($metals->first(), 'code'));
 
-            $defaultCarat = $product->default_diamond_carat 
-                ?? ($defaultVariant['diamond_carat'] ?? ($carats->first()['value'] ?? ''));
+            /*
+                Carat stays product default.
+                It will NOT auto jump from 0.25 to 0.30.
+            */
+            $selectedCaratValue = $product->default_diamond_carat
+                ?: data_get($carats->first(), 'value');
 
-            $defaultMetal = $metals->firstWhere('code', $defaultMetalCode);
+            /*
+                Price comes from selected metal + default carat.
+            */
+            $selectedVariant = $activeVariants->first(function ($variant) use ($selectedMetalCode, $selectedCaratValue) {
+                return ($variant['metal_code'] ?? '') === $selectedMetalCode
+                    && number_format((float) ($variant['diamond_carat'] ?? 0), 2, '.', '')
+                    === number_format((float) $selectedCaratValue, 2, '.', '');
+            });
 
-            $defaultMetalImageGroup = $metalImages->firstWhere('metal_code', $defaultMetalCode);
+            /*
+                Fallback only if no metal filter selected.
+            */
+            if (!$selectedVariant && !request('metal')) {
+                $selectedVariant = $activeVariants->firstWhere('is_default', true) ?? $activeVariants->first();
 
-            $mainImage = data_get($defaultMetalImageGroup, 'images.0.image_path')
-                ?? data_get($galleryImages, '0.image_path')
-                ?? null;
+                if ($selectedVariant) {
+                    $selectedMetalCode = $selectedVariant['metal_code'] ?? $selectedMetalCode;
+                    $selectedCaratValue = $product->default_diamond_carat ?: ($selectedVariant['diamond_carat'] ?? $selectedCaratValue);
+                }
+            }
+
+            $selectedMetal = $metals->firstWhere('code', $selectedMetalCode);
+
+            $selectedMetalImageGroup = $metalImages->firstWhere('metal_code', $selectedMetalCode);
+
+            $mainImage = data_get($selectedMetalImageGroup, 'images.0.image_path')
+                ?: data_get($galleryImages->first(), 'image_path');
+
+            $currency = $product->currency ?? 'PKR';
+
+            $price = $selectedVariant['price'] ?? null;
+            $oldPrice = $selectedVariant['old_price'] ?? null;
+            $discount = $selectedVariant['discount_percent'] ?? null;
+
+            $formatMoney = function ($value) use ($currency) {
+                if ($value === null || $value === '') {
+                    return '';
+                }
+
+                return $currency . ' ' . number_format((float) $value, 0);
+            };
 
             $metalDesignClasses = [
                 0 => '',
@@ -372,32 +558,36 @@
                 2 => 'silver',
                 3 => 'rose',
                 4 => 'silver',
+                5 => 'silver',
             ];
+
+            $detailUrl = route('solitaire.details', $product->slug)
+                . '?metal=' . urlencode($selectedMetalCode)
+                . '&carat=' . urlencode($selectedCaratValue);
 
             $cardData = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'currency' => $product->currency ?? 'AED',
-                'metals' => $metals->values(),
-                'carats' => $carats->values(),
-                'variants' => $variants->values(),
-                'metal_images' => $metalImages->values(),
-                'gallery_images' => $galleryImages->values(),
-                'default_metal_code' => $defaultMetalCode,
-                'default_carat' => $defaultCarat,
-                'fallback_image' => asset('assets/f_assets/image/solitaire/ring10.jpeg'),
-            ];
-
-            $price = $defaultVariant['price'] ?? null;
-            $oldPrice = $defaultVariant['old_price'] ?? null;
-            $discount = $defaultVariant['discount_percent'] ?? null;
+    'id' => $product->id,
+    'name' => $product->name,
+    'slug' => $product->slug,
+    'base_detail_url' => route('solitaire.details', $product->slug),
+    'shape' => $product->shape ?? 'Oval',
+    'currency' => $currency,
+    'metals' => $metals->toArray(),
+    'carats' => $carats->toArray(),
+    'variants' => $activeVariants->toArray(),
+    'metal_images' => $metalImages->toArray(),
+    'gallery_images' => $galleryImages->toArray(),
+    'default_metal_code' => $selectedMetalCode,
+    'default_carat' => $selectedCaratValue,
+    'fallback_image' => asset('assets/f_assets/image/solitaire/ring10.jpeg'),
+];
         @endphp
 
-<article 
-    class="hj-product-card" 
-    data-product-card
-    data-product-url="{{ route('solitaire.details', $product->slug) }}"
->
+        <article 
+            class="hj-product-card" 
+            data-product-card
+            data-product-url="{{ $detailUrl }}"
+        >
             <script type="application/json" class="hj-product-json">
                 @json($cardData)
             </script>
@@ -415,18 +605,16 @@
             </div>
 
             <div class="hj-product-info">
-                <h3>
-                    {{ $product->name }}
-                </h3>
+                <h3>{{ $product->name }}</h3>
 
                 <p class="hj-product-desc">
-                    {{ $defaultCarat }} Total Carat · Radiant · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
+                    {{ $selectedCaratValue }} Total Carat · {{ ucfirst($product->shape ?? 'Oval') }} · Solitaire · {{ data_get($selectedMetal, 'name', $selectedMetalCode) }}
                 </p>
 
                 <div class="hj-metal-options">
                     @foreach($metals as $index => $metal)
                         <span 
-                            class="hj-metal {{ $defaultMetalCode == ($metal['code'] ?? '') ? 'active' : '' }} {{ $metalDesignClasses[$index] ?? '' }}"
+                            class="hj-metal {{ $selectedMetalCode == ($metal['code'] ?? '') ? 'active' : '' }} {{ $metalDesignClasses[$index] ?? '' }}"
                             data-metal-code="{{ $metal['code'] ?? '' }}"
                         >
                             {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
@@ -438,8 +626,9 @@
                     @foreach($carats as $carat)
                         @php
                             $caratValue = $carat['value'] ?? '';
-                            $activeCarat = number_format((float)$caratValue, 2, '.', '') 
-                                == number_format((float)$defaultCarat, 2, '.', '');
+
+                            $activeCarat = number_format((float) $caratValue, 2, '.', '') 
+                                == number_format((float) $selectedCaratValue, 2, '.', '');
                         @endphp
 
                         <button 
@@ -454,11 +643,11 @@
 
                 <div class="hj-price-row">
                     <del class="hj-old-price">
-                        {{ $oldPrice ? ($product->currency ?? 'AED') . ' ' . number_format($oldPrice) : '' }}
+                        {{ $oldPrice ? $formatMoney($oldPrice) : '' }}
                     </del>
 
                     <strong class="hj-new-price">
-                        {{ $price ? ($product->currency ?? 'AED') . ' ' . number_format($price) : 'Unavailable' }}
+                        {{ $price ? $formatMoney($price) : 'Unavailable' }}
                     </strong>
 
                     <span class="hj-discount-text">
@@ -469,7 +658,11 @@
 
         </article>
 
-    @endforeach
+    @empty
+        <!-- <div class="alert alert-warning w-100">
+            No solitaire products found.
+        </div> -->
+    @endforelse
 
 </section>
 
@@ -553,12 +746,13 @@
 </main>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    'use strict';
 
     function normalizeCarat(value) {
-        let number = Number(value);
+        const number = Number(value);
 
-        if (isNaN(number)) {
-            return String(value);
+        if (Number.isNaN(number)) {
+            return String(value || '').trim();
         }
 
         return number.toFixed(2);
@@ -566,10 +760,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function makeAssetUrl(path, fallback) {
         if (!path) {
-            return fallback;
+            return fallback || '';
         }
 
-        if (path.startsWith('http') || path.startsWith('/')) {
+        if (String(path).startsWith('http') || String(path).startsWith('/')) {
             return path;
         }
 
@@ -581,13 +775,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return '';
         }
 
-        let number = Number(value);
+        const number = Number(value);
 
-        if (isNaN(number)) {
+        if (Number.isNaN(number)) {
             return currency + ' ' + value;
         }
 
-        return currency + ' ' + number.toLocaleString();
+        return currency + ' ' + number.toLocaleString(undefined, {
+            maximumFractionDigits: 0
+        });
     }
 
     function findMetal(data, metalCode) {
@@ -604,115 +800,180 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function findVariant(data, metalCode, caratValue) {
         return (data.variants || []).find(function (variant) {
-            let status = variant.status === undefined 
-                || variant.status === true 
-                || variant.status === 1 
+            const status = variant.status === undefined
+                || variant.status === true
+                || variant.status === 1
                 || variant.status === '1';
 
-            return status &&
-                String(variant.metal_code) === String(metalCode) &&
-                normalizeCarat(variant.diamond_carat) === normalizeCarat(caratValue);
+            return status
+                && String(variant.metal_code) === String(metalCode)
+                && normalizeCarat(variant.diamond_carat) === normalizeCarat(caratValue);
         });
     }
 
     function findMetalImage(data, metalCode) {
-        let group = (data.metal_images || []).find(function (item) {
+        const group = (data.metal_images || []).find(function (item) {
             return String(item.metal_code) === String(metalCode);
         });
 
-        if (group && group.images && group.images.length > 0) {
+        if (group && Array.isArray(group.images) && group.images.length > 0) {
             return group.images[0].image_path;
         }
 
-        if (data.gallery_images && data.gallery_images.length > 0) {
+        if (Array.isArray(data.gallery_images) && data.gallery_images.length > 0) {
             return data.gallery_images[0].image_path;
         }
 
-        return null;
+        return '';
+    }
+
+    function buildDetailUrl(baseUrl, metalCode, caratValue) {
+        const url = new URL(baseUrl, window.location.origin);
+
+        if (metalCode) {
+            url.searchParams.set('metal', metalCode);
+        }
+
+        if (caratValue) {
+            url.searchParams.set('carat', caratValue);
+        }
+
+        return url.toString();
     }
 
     document.querySelectorAll('[data-product-card]').forEach(function (card) {
-        let jsonScript = card.querySelector('.hj-product-json');
+        const jsonScript = card.querySelector('.hj-product-json');
 
-        if (!jsonScript) return;
+        if (!jsonScript) {
+            return;
+        }
 
-        let data = JSON.parse(jsonScript.textContent);
+        let data = {};
 
-        let selectedMetalCode = data.default_metal_code;
-        let selectedCarat = data.default_carat;
+        try {
+            data = JSON.parse(jsonScript.textContent);
+        } catch (error) {
+            console.error('Invalid product JSON', error);
+            return;
+        }
 
-        let imageEl = card.querySelector('.hj-product-main-img');
-        let descEl = card.querySelector('.hj-product-desc');
-        let oldPriceEl = card.querySelector('.hj-old-price');
-        let newPriceEl = card.querySelector('.hj-new-price');
-        let discountEl = card.querySelector('.hj-discount-text');
+        let selectedMetalCode = data.default_metal_code || '';
+        let selectedCarat = data.default_carat || '';
+
+        const baseDetailUrl = data.base_detail_url
+            || (card.dataset.productUrl ? card.dataset.productUrl.split('?')[0] : '');
+
+        const imageEl = card.querySelector('.hj-product-main-img');
+        const descEl = card.querySelector('.hj-product-desc');
+        const oldPriceEl = card.querySelector('.hj-old-price');
+        const newPriceEl = card.querySelector('.hj-new-price');
+        const discountEl = card.querySelector('.hj-discount-text');
 
         function updateCard() {
-            let variant = findVariant(data, selectedMetalCode, selectedCarat);
-
-            let metal = findMetal(data, selectedMetalCode);
-            let carat = findCarat(data, selectedCarat);
-
-            let imagePath = findMetalImage(data, selectedMetalCode);
+            const metal = findMetal(data, selectedMetalCode);
+            const carat = findCarat(data, selectedCarat);
+            const variant = findVariant(data, selectedMetalCode, selectedCarat);
+            const imagePath = findMetalImage(data, selectedMetalCode);
 
             card.dataset.selectedMetal = selectedMetalCode;
+            card.dataset.selectedCarat = selectedCarat;
+
+            if (baseDetailUrl) {
+                card.dataset.productUrl = buildDetailUrl(
+                    baseDetailUrl,
+                    selectedMetalCode,
+                    selectedCarat
+                );
+            }
+
+            card.querySelectorAll('.hj-metal').forEach(function (chip) {
+                chip.classList.toggle(
+                    'active',
+                    String(chip.dataset.metalCode) === String(selectedMetalCode)
+                );
+            });
+
+            card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
+                const buttonCarat = btn.dataset.caratValue || '';
+
+                btn.classList.toggle(
+                    'active',
+                    normalizeCarat(buttonCarat) === normalizeCarat(selectedCarat)
+                );
+            });
 
             if (imageEl) {
                 imageEl.src = makeAssetUrl(imagePath, data.fallback_image);
             }
 
             if (descEl) {
+                const shapeName = String(data.shape || 'Oval');
+                const shapeText = shapeName.charAt(0).toUpperCase() + shapeName.slice(1);
+                const metalName = metal && metal.name ? metal.name : selectedMetalCode;
+                const caratLabel = carat && carat.label ? carat.label : selectedCarat;
+
                 descEl.textContent =
-                    (carat ? carat.label : selectedCarat) +
-                    ' Total Carat · Radiant · Solitaire · ' +
-                    (metal ? metal.name : selectedMetalCode);
+                    caratLabel + ' Total Carat · ' +
+                    shapeText + ' · Solitaire · ' +
+                    metalName;
             }
 
-            if (variant) {
-                oldPriceEl.textContent = variant.old_price
-                    ? formatMoney(variant.old_price, data.currency)
+            if (oldPriceEl) {
+                oldPriceEl.textContent = variant && variant.old_price
+                    ? formatMoney(variant.old_price, data.currency || 'PKR')
                     : '';
+            }
 
-                newPriceEl.textContent = variant.price
-                    ? formatMoney(variant.price, data.currency)
+            if (newPriceEl) {
+                newPriceEl.textContent = variant && variant.price
+                    ? formatMoney(variant.price, data.currency || 'PKR')
                     : 'Unavailable';
+            }
 
-                discountEl.textContent = variant.discount_percent
+            if (discountEl) {
+                discountEl.textContent = variant && variant.discount_percent
                     ? variant.discount_percent + '% off'
                     : '';
-            } else {
-                oldPriceEl.textContent = '';
-                newPriceEl.textContent = 'Unavailable';
-                discountEl.textContent = '';
             }
-
-            card.querySelectorAll('.hj-metal').forEach(function (btn) {
-                btn.classList.toggle('active', btn.dataset.metalCode === selectedMetalCode);
-            });
-
-            card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
-                btn.classList.toggle(
-                    'active',
-                    normalizeCarat(btn.dataset.caratValue) === normalizeCarat(selectedCarat)
-                );
-            });
         }
 
-        card.querySelectorAll('.hj-metal').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                selectedMetalCode = this.dataset.metalCode;
+        card.querySelectorAll('.hj-metal').forEach(function (chip) {
+            chip.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                selectedMetalCode = this.dataset.metalCode || selectedMetalCode;
+
                 updateCard();
             });
         });
 
         card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                selectedCarat = this.dataset.caratValue;
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                selectedCarat = this.dataset.caratValue || selectedCarat;
+
                 updateCard();
             });
         });
-    });
 
+        card.addEventListener('click', function (event) {
+            if (
+                event.target.closest('.hj-metal') ||
+                event.target.closest('.hj-size-options button')
+            ) {
+                return;
+            }
+
+            if (card.dataset.productUrl) {
+                window.location.href = card.dataset.productUrl;
+            }
+        });
+
+        updateCard();
+    });
 });
 </script>
 <script>

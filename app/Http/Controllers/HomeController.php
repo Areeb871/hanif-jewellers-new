@@ -2551,13 +2551,172 @@ public function Online_Shopping_Store(Request $request)
     }
 
 
-public function solitaire()
-{
-   $products = SolitaireProduct::where('status', 1)
-        ->latest()
-        ->paginate(4);
 
-    return view('public.solitaire_new', compact('products'));
+public function solitaire(Request $request)
+{
+    $allProducts = SolitaireProduct::where('status', 1)
+        ->latest()
+        ->get();
+
+    $availableShapes = [
+        'round' => 'Round',
+        'oval' => 'Oval',
+        'princess' => 'Princess',
+    ];
+
+    $availableMetals = $allProducts
+        ->flatMap(function ($product) {
+            return collect($product->metals ?? []);
+        })
+        ->filter(function ($metal) {
+            return !empty($metal['code']);
+        })
+        ->unique('code')
+        ->values();
+
+    $allPrices = $allProducts
+        ->flatMap(function ($product) {
+            return collect($product->variants ?? [])
+                ->filter(function ($variant) {
+                    return !isset($variant['status'])
+                        || $variant['status'] === true
+                        || $variant['status'] === 1
+                        || $variant['status'] === '1';
+                })
+                ->pluck('price');
+        })
+        ->filter(function ($price) {
+            return $price !== null && $price !== '';
+        })
+        ->map(function ($price) {
+            return (float) $price;
+        });
+
+    $maxFilterPrice = $allPrices->max() ?: 200000;
+
+    $selectedShape = $request->query('shape');
+    $selectedMetal = $request->query('metal');
+    $selectedMinPrice = $request->query('min_price');
+    $selectedMaxPrice = $request->query('max_price');
+    $selectedSort = $request->query('sort', 'featured');
+
+    $productsCollection = $allProducts->filter(function ($product) use (
+        $selectedShape,
+        $selectedMetal,
+        $selectedMinPrice,
+        $selectedMaxPrice
+    ) {
+        if ($selectedShape && strtolower($product->shape ?? '') !== strtolower($selectedShape)) {
+            return false;
+        }
+
+        $variants = collect($product->variants ?? [])->filter(function ($variant) {
+            return !isset($variant['status'])
+                || $variant['status'] === true
+                || $variant['status'] === 1
+                || $variant['status'] === '1';
+        });
+
+        $hasVariantFilter = false;
+
+        if ($selectedMetal) {
+            $hasVariantFilter = true;
+
+            $variants = $variants->filter(function ($variant) use ($selectedMetal) {
+                return ($variant['metal_code'] ?? '') === $selectedMetal;
+            });
+        }
+
+        if (
+            ($selectedMinPrice !== null && $selectedMinPrice !== '') ||
+            ($selectedMaxPrice !== null && $selectedMaxPrice !== '')
+        ) {
+            $hasVariantFilter = true;
+
+            $minPrice = $selectedMinPrice !== null && $selectedMinPrice !== ''
+                ? (float) $selectedMinPrice
+                : 0;
+
+            $maxPrice = $selectedMaxPrice !== null && $selectedMaxPrice !== ''
+                ? (float) $selectedMaxPrice
+                : PHP_INT_MAX;
+
+            $variants = $variants->filter(function ($variant) use ($minPrice, $maxPrice) {
+                $price = isset($variant['price']) && $variant['price'] !== ''
+                    ? (float) $variant['price']
+                    : null;
+
+                return $price !== null
+                    && $price >= $minPrice
+                    && $price <= $maxPrice;
+            });
+        }
+
+        if ($hasVariantFilter) {
+            return $variants->isNotEmpty();
+        }
+
+        return true;
+    })->values();
+
+    $getProductPrice = function ($product) use ($selectedMetal) {
+        $variants = collect($product->variants ?? [])->filter(function ($variant) {
+            return !isset($variant['status'])
+                || $variant['status'] === true
+                || $variant['status'] === 1
+                || $variant['status'] === '1';
+        });
+
+        if ($selectedMetal) {
+            $variants = $variants->filter(function ($variant) use ($selectedMetal) {
+                return ($variant['metal_code'] ?? '') === $selectedMetal;
+            });
+        }
+
+        return $variants
+            ->pluck('price')
+            ->filter(function ($price) {
+                return $price !== null && $price !== '';
+            })
+            ->map(function ($price) {
+                return (float) $price;
+            })
+            ->min() ?? 999999999;
+    };
+
+    if ($selectedSort === 'price_low_high') {
+        $productsCollection = $productsCollection->sortBy($getProductPrice)->values();
+    } elseif ($selectedSort === 'price_high_low') {
+        $productsCollection = $productsCollection->sortByDesc($getProductPrice)->values();
+    } elseif ($selectedSort === 'newest') {
+        $productsCollection = $productsCollection->sortByDesc('created_at')->values();
+    }
+
+    $perPage = 4;
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+    $products = new LengthAwarePaginator(
+        $productsCollection->slice(($currentPage - 1) * $perPage, $perPage)->values(),
+        $productsCollection->count(),
+        $perPage,
+        $currentPage,
+        [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]
+    );
+
+    return view('public.solitaire_new', compact(
+        'products',
+        'availableShapes',
+        'availableMetals',
+        'maxFilterPrice',
+        'selectedShape',
+        'selectedMetal',
+        'selectedMinPrice',
+        'selectedMaxPrice',
+        'selectedSort'
+    ));
 }
 public function solitaire_details($slug, Request $request)
 {
@@ -2565,47 +2724,138 @@ public function solitaire_details($slug, Request $request)
         ->where('status', 1)
         ->firstOrFail();
 
-    $selectedMetal = $request->query('metal');
+    /*
+    |--------------------------------------------------------------------------
+    | Collections
+    |--------------------------------------------------------------------------
+    */
+    $metals = collect($product->metals ?? [])->values();
+    $carats = collect($product->diamond_carats ?? [])->values();
+    $variants = collect($product->variants ?? [])->values();
+    $metalImages = collect($product->metal_images ?? [])->values();
+    $galleryImages = collect($product->gallery_images ?? [])->values();
 
-    $galleryImages = collect($product->gallery_images ?? []);
-    $metalImages = collect($product->metal_images ?? []);
+    /*
+    |--------------------------------------------------------------------------
+    | Active Variants Only
+    |--------------------------------------------------------------------------
+    */
+    $activeVariants = $variants->filter(function ($variant) {
+        return !isset($variant['status'])
+            || $variant['status'] === true
+            || $variant['status'] === 1
+            || $variant['status'] === '1';
+    })->values();
 
-    $detailImages = collect();
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Metal From Previous Page URL
+    |--------------------------------------------------------------------------
+    */
+    $selectedMetalCode = $request->query('metal')
+        ?: ($product->default_metal_code ?: data_get($metals->first(), 'code'));
 
-    if ($selectedMetal) {
-        $selectedMetalGroup = $metalImages->firstWhere('metal_code', $selectedMetal);
+    $selectedMetal = $metals->firstWhere('code', $selectedMetalCode);
 
-        if (!empty($selectedMetalGroup['images'])) {
-            foreach ($selectedMetalGroup['images'] as $image) {
-                $detailImages->push($image);
-            }
+    if (!$selectedMetal) {
+        $selectedMetal = $metals->first();
+        $selectedMetalCode = data_get($selectedMetal, 'code');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Carat From Previous Page URL
+    |--------------------------------------------------------------------------
+    */
+    $selectedCarat = $request->query('carat')
+        ?: ($product->default_diamond_carat ?: data_get($carats->first(), 'value'));
+
+    $selectedCaratIndex = $carats->search(function ($carat) use ($selectedCarat) {
+        return number_format((float) data_get($carat, 'value', 0), 2, '.', '')
+            === number_format((float) $selectedCarat, 2, '.', '');
+    });
+
+    if ($selectedCaratIndex === false) {
+        $selectedCaratIndex = 0;
+        $selectedCarat = data_get($carats->first(), 'value');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Variant Price
+    | Exact: selected metal + selected carat
+    |--------------------------------------------------------------------------
+    */
+    $selectedVariant = $activeVariants->first(function ($variant) use ($selectedMetalCode, $selectedCarat) {
+        return ($variant['metal_code'] ?? '') === $selectedMetalCode
+            && number_format((float) ($variant['diamond_carat'] ?? 0), 2, '.', '')
+            === number_format((float) $selectedCarat, 2, '.', '');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Selected Metal Images Only
+    |--------------------------------------------------------------------------
+    */
+    $selectedMetalImageGroup = $metalImages->firstWhere('metal_code', $selectedMetalCode);
+
+    $detailImages = collect(data_get($selectedMetalImageGroup, 'images', []));
+
+    if ($detailImages->isEmpty() && $galleryImages->isNotEmpty()) {
+        $detailImages = $galleryImages;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Money Format
+    |--------------------------------------------------------------------------
+    */
+    $currency = $product->currency ?? 'PKR';
+
+    $formatMoney = function ($value) use ($currency) {
+        if ($value === null || $value === '') {
+            return '';
         }
-    }
 
-    if ($detailImages->isEmpty()) {
-        foreach ($metalImages as $group) {
-            foreach (($group['images'] ?? []) as $image) {
-                $detailImages->push($image);
-            }
-        }
-    }
+        return $currency . ' ' . number_format((float) $value, 0);
+    };
 
-    foreach ($galleryImages as $image) {
-        $detailImages->push($image);
-    }
-
-    // Dynamic products for this section
+    /*
+    |--------------------------------------------------------------------------
+    | Related Products
+    |--------------------------------------------------------------------------
+    */
     $relatedProducts = SolitaireProduct::where('status', 1)
+        ->where('id', '!=', $product->id)
         ->latest()
         ->take(6)
         ->get();
 
-     $reviews = Review::where('status', 1)
+    /*
+    |--------------------------------------------------------------------------
+    | Reviews
+    |--------------------------------------------------------------------------
+    */
+    $reviews = Review::where('status', 1)
         ->latest()
         ->get();
+
     return view('public.solitaire_product_details', compact(
         'product',
+        'metals',
+        'carats',
+        'variants',
+        'activeVariants',
+        'metalImages',
+        'galleryImages',
         'detailImages',
+        'selectedMetalCode',
+        'selectedMetal',
+        'selectedCarat',
+        'selectedCaratIndex',
+        'selectedVariant',
+        'currency',
+        'formatMoney',
         'relatedProducts',
         'reviews'
     ));
