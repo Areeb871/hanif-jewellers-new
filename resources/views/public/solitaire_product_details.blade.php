@@ -133,16 +133,7 @@
             <button type="button" class="active">Gallery</button>
         </div>
 
-        <div class="hj-gallery-dots" id="hjGalleryDots">
-            <button class="active"></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-        </div>
+        <div class="hj-gallery-dots" id="hjGalleryDots"></div>
     </div>
 
 </div>
@@ -186,16 +177,18 @@
 <div class="hj-row hj-metal-row">
     <span class="hj-label">METAL</span>
 
-    <div class="hj-middle hj-metal-options">
-        @foreach($metals as $index => $metal)
-            <button 
-                type="button"
-                class="metal-chip {{ $metalDesignClasses[$index] ?? 'silver' }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
-                data-metal-code="{{ $metal['code'] ?? '' }}"
-            >
-                {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
-            </button>
-        @endforeach
+    <div class="hj-metal-track-wrap">
+        <div class="hj-metal-options" id="metalOptionsTrack">
+            @foreach($metals as $index => $metal)
+                <button 
+                    type="button"
+                    class="metal-chip {{ $metalDesignClasses[$index] ?? 'silver' }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
+                    data-metal-code="{{ $metal['code'] ?? '' }}"
+                >
+                    {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
+                </button>
+            @endforeach
+        </div>
     </div>
 
     <button type="button" class="hj-side-btn" id="selectedMetalBtn">
@@ -635,7 +628,7 @@
                 }
             @endphp
 
-            <div class="hj-lab-product-card">
+            <a href="{{ $detailUrl }}" class="hj-lab-product-card">
                 <div class="hj-lab-img-box">
                     <span class="hj-lab-tag">
                         {{ $relatedProduct->tag_label ?? 'Lab Created' }}
@@ -680,7 +673,7 @@
                         @endif
                     </div>
                 </div>
-            </div>
+            </a>
 
         @empty
 
@@ -1059,6 +1052,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         gallery.innerHTML = html;
+
+        if (typeof window.hjInitGallerySlider === 'function') {
+            window.hjInitGallerySlider();
+        }
     }
 
     function updateUrl() {

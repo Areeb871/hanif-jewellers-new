@@ -515,19 +515,49 @@ document.addEventListener("DOMContentLoaded", function () {
        PRODUCT DETAIL MOBILE GALLERY
     =============================== */
 
-    const gallery = $("#hjProductGallery");
-    const nextBtn = $("#hjGalleryNext");
-    const dotsWrap = $("#hjGalleryDots");
+    function initGallerySlider() {
+        const gallery = $("#hjProductGallery");
+        const nextBtn = $("#hjGalleryNext");
+        const dotsWrap = $("#hjGalleryDots");
 
-    if (gallery && nextBtn && dotsWrap) {
+        if (!gallery || !nextBtn || !dotsWrap) {
+            return;
+        }
+
         const slides = $all(".hj-gallery-item", gallery);
+
+        dotsWrap.innerHTML = "";
+
+        slides.forEach(function (_, i) {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.setAttribute("aria-label", "Go to image " + (i + 1));
+
+            if (i === 0) {
+                dot.classList.add("active");
+            }
+
+            dotsWrap.appendChild(dot);
+        });
+
         const dots = $all("button", dotsWrap);
 
         function getCurrentGalleryIndex() {
-            return Math.round(gallery.scrollLeft / gallery.clientWidth);
+            if (!gallery.clientWidth || !slides.length) {
+                return 0;
+            }
+
+            return Math.min(
+                Math.round(gallery.scrollLeft / gallery.clientWidth),
+                slides.length - 1
+            );
         }
 
         function goToGallerySlide(index) {
+            if (!slides.length) {
+                return;
+            }
+
             gallery.scrollTo({
                 left: gallery.clientWidth * index,
                 behavior: "smooth"
@@ -542,36 +572,72 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        nextBtn.addEventListener("click", function () {
+        nextBtn.onclick = function () {
+            const currentSlides = $all(".hj-gallery-item", gallery);
+
+            if (!currentSlides.length) {
+                return;
+            }
+
             let index = getCurrentGalleryIndex() + 1;
 
-            if (index >= slides.length) {
+            if (index >= currentSlides.length) {
                 index = 0;
             }
 
             goToGallerySlide(index);
-        });
+        };
 
         dots.forEach(function (dot, index) {
-            dot.addEventListener("click", function () {
+            dot.onclick = function () {
                 goToGallerySlide(index);
-            });
+            };
         });
+
+        gallery.scrollLeft = 0;
+        updateGalleryDots();
+    }
+
+    window.hjInitGallerySlider = initGallerySlider;
+
+    const galleryEl = $("#hjProductGallery");
+
+    if (galleryEl && !galleryEl.dataset.sliderBound) {
+        galleryEl.dataset.sliderBound = "1";
 
         let ticking = false;
 
-        gallery.addEventListener("scroll", function () {
+        galleryEl.addEventListener("scroll", function () {
             if (!ticking) {
                 window.requestAnimationFrame(function () {
-                    updateGalleryDots();
+                    const dotsWrap = $("#hjGalleryDots");
+                    const gallery = $("#hjProductGallery");
+
+                    if (dotsWrap && gallery && gallery.clientWidth) {
+                        const dots = $all("button", dotsWrap);
+                        const slides = $all(".hj-gallery-item", gallery);
+                        const index = slides.length
+                            ? Math.min(
+                                Math.round(gallery.scrollLeft / gallery.clientWidth),
+                                slides.length - 1
+                            )
+                            : 0;
+
+                        dots.forEach(function (dot, i) {
+                            dot.classList.toggle("active", i === index);
+                        });
+                    }
+
                     ticking = false;
                 });
 
                 ticking = true;
             }
         });
+    }
 
-        updateGalleryDots();
+    if ($("#hjProductGallery") && $("#hjGalleryNext") && $("#hjGalleryDots")) {
+        initGallerySlider();
     }
 
     /* ===============================
