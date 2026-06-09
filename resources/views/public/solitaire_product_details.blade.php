@@ -228,40 +228,135 @@
 
 
     {{-- RING SIZE --}}
-    <div class="hj-row hj-size-row">
-        <span class="hj-label">RING SIZE</span>
+  {{-- RING SIZE --}}
+<div class="hj-ring-size-box" id="hjRingSizeBox">
 
-        <p class="hj-middle hj-select-text">Please select</p>
+    <div class="hj-ring-size-head">
+        <button type="button" class="hj-ring-size-toggle" id="hjRingSizeToggle">
+            <span id="hjRingSizeSelected">Ring size</span>
+<span class="hj-ring-size-arrow">
+    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+        <path 
+            fill-rule="evenodd" 
+            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" 
+            clip-rule="evenodd">
+        </path>
+    </svg>
+</span>
+        </button>
 
-        <button type="button" class="hj-side-btn">SELECT</button>
+        <button type="button" class="hj-ring-size-help">
+            Need help?
+        </button>
     </div>
+
+    <div class="hj-ring-size-dropdown" id="hjRingSizeDropdown">
+        @for($size = 3; $size <= 12.75; $size += 0.25)
+            @php
+                $sizeValue = number_format($size, 2);
+            @endphp
+
+            <button 
+                type="button" 
+                class="hj-ring-size-option"
+                data-size="{{ $sizeValue }}"
+            >
+                {{ $sizeValue }}
+            </button>
+        @endfor
+    </div>
+
+    <input type="hidden" name="ring_size" id="hjRingSizeInput" value="">
+
+</div>
 
 </div>
 
 
-{{-- PRICE ROW --}}
-<div class="hj-price-row">
-    <div class="hj-price-left">
-        <del id="detailOldPrice">
-            {{ $selectedVariant && !empty($selectedVariant['old_price']) ? $formatMoney($selectedVariant['old_price']) : '' }}
-        </del>
+{{-- ADD TO CART / PRICE ROW --}}
+<form id="hjAddToCartForm">
+    @csrf
 
-        <strong id="detailNewPrice">
-            {{ $selectedVariant && !empty($selectedVariant['price']) ? $formatMoney($selectedVariant['price']) : 'Unavailable' }}
-        </strong>
+    <input type="hidden" name="cart_type" value="solitaire">
+    <input type="hidden" name="product_id" value="{{ $product->id }}">
+    <input type="hidden" name="quantity" value="1">
 
-        <span id="detailSavingText">
-            {{ $selectedVariant && !empty($selectedVariant['discount_percent']) ? 'You save ' . $selectedVariant['discount_percent'] . ' %' : '' }}
-        </span>
+    <input type="hidden" name="metal_code" id="cartMetalInput" value="{{ $selectedMetalCode ?? '' }}">
+    <input type="hidden" name="diamond_carat" id="cartCaratInput" value="{{ $selectedCarat ?? '' }}">
+    <input type="hidden" name="solitaire_ring_size" id="cartRingSizeInput" value="">
+    <input type="hidden" name="inscription_text" id="cartInscriptionInput" value="">
+    <input type="hidden" name="selected_image" id="cartSelectedImageInput" value="">
+
+
+    <div class="hj-price-row">
+        <div class="hj-price-left">
+            <del id="detailOldPrice">
+                {{ $selectedVariant && !empty($selectedVariant['old_price']) ? $formatMoney($selectedVariant['old_price']) : '' }}
+            </del>
+
+            <strong id="detailNewPrice">
+                {{ $selectedVariant && !empty($selectedVariant['price']) ? $formatMoney($selectedVariant['price']) : 'Unavailable' }}
+            </strong>
+
+            <span id="detailSavingText">
+                {{ $selectedVariant && !empty($selectedVariant['discount_percent']) ? 'You save ' . $selectedVariant['discount_percent'] . ' %' : '' }}
+            </span>
+        </div>
+
+        <button type="submit" class="hj-cart-btn">
+            ADD TO CART
+        </button>
     </div>
+</form>
 
-    <button type="button" class="hj-cart-btn">ADD TO CART</button>
-</div>
-
-<button class="hj-engraving">
+<button type="button" class="hj-engraving" id="hjOpenInscription">
     <b>+</b>
-    <span>Add Free Inscription</span>
+    <span id="hjInscriptionBtnText">Add Free Inscription</span>
 </button>
+
+<input type="hidden" name="inscription_text" id="hjInscriptionHidden" value="">
+
+<div class="hj-inscription-overlay" id="hjInscriptionOverlay"></div>
+
+<div class="hj-inscription-modal" id="hjInscriptionModal">
+    <div class="hj-inscription-box">
+
+        <button type="button" class="hj-inscription-close" id="hjCloseInscription">
+            ×
+        </button>
+
+        <h3>Add Free Inscription</h3>
+
+        <p>Add a short personal message inside your ring.</p>
+
+        <div class="hj-inscription-input-wrap">
+            <input 
+                type="text" 
+                id="hjInscriptionInput" 
+                maxlength="15" 
+                placeholder="Enter text"
+                autocomplete="off"
+            >
+
+            <span id="hjInscriptionCount">0/15</span>
+        </div>
+
+        <small class="hj-inscription-note">
+            Maximum 15 characters allowed.
+        </small>
+
+        <div class="hj-inscription-actions">
+            <button type="button" class="hj-inscription-cancel" id="hjCancelInscription">
+                Cancel
+            </button>
+
+            <button type="button" class="hj-inscription-save" id="hjSaveInscription">
+                Save
+            </button>
+        </div>
+
+    </div>
+</div>
 
 <div class="hj-spec-card">
 
@@ -495,10 +590,19 @@
 <div class="hj-accordion">
 
     <div class="hj-acc-item">
-        <button type="button" class="hj-acc-btn">
-            Why Choose Our Lab Created Engagement Rings?
-            <span>⌄</span>
-        </button>
+    <button type="button" class="hj-acc-btn">
+    Why Choose Our Lab Created Engagement Rings?
+
+    <span class="hj-acc-arrow">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path 
+                fill-rule="evenodd" 
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" 
+                clip-rule="evenodd">
+            </path>
+        </svg>
+    </span>
+</button>
 
         <div class="hj-acc-content">
             <p>
@@ -509,9 +613,18 @@
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-            Free Shipping & Returns
-            <span>⌄</span>
-        </button>
+    Why Choose Our Lab Created Engagement Rings?
+
+    <span class="hj-acc-arrow">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path 
+                fill-rule="evenodd" 
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" 
+                clip-rule="evenodd">
+            </path>
+        </svg>
+    </span>
+</button>
 
         <div class="hj-acc-content">
             <p>
@@ -522,9 +635,18 @@
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-            Why Choose Our Lab Created Engagement Rings?
-            <span>⌄</span>
-        </button>
+    Why Choose Our Lab Created Engagement Rings?
+
+    <span class="hj-acc-arrow">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path 
+                fill-rule="evenodd" 
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" 
+                clip-rule="evenodd">
+            </path>
+        </svg>
+    </span>
+</button>
 
         <div class="hj-acc-content">
             <p>
@@ -534,10 +656,19 @@
     </div>
 
     <div class="hj-acc-item">
-        <button type="button" class="hj-acc-btn">
-            Free Shipping & Returns
-            <span>⌄</span>
-        </button>
+       <button type="button" class="hj-acc-btn">
+    Why Choose Our Lab Created Engagement Rings?
+
+    <span class="hj-acc-arrow">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path 
+                fill-rule="evenodd" 
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" 
+                clip-rule="evenodd">
+            </path>
+        </svg>
+    </span>
+</button>
 
         <div class="hj-acc-content">
             <p>
@@ -887,6 +1018,111 @@
     </div>
 </section>
 <script>
+    /** Inscription Modal Script */
+document.addEventListener('DOMContentLoaded', function () {
+    const openBtn = document.getElementById('hjOpenInscription');
+    const closeBtn = document.getElementById('hjCloseInscription');
+    const cancelBtn = document.getElementById('hjCancelInscription');
+    const saveBtn = document.getElementById('hjSaveInscription');
+
+    const overlay = document.getElementById('hjInscriptionOverlay');
+    const modal = document.getElementById('hjInscriptionModal');
+
+    const input = document.getElementById('hjInscriptionInput');
+    const count = document.getElementById('hjInscriptionCount');
+    const hiddenInput = document.getElementById('hjInscriptionHidden');
+    const btnText = document.getElementById('hjInscriptionBtnText');
+
+    const maxLength = 15;
+
+    if (!openBtn || !overlay || !modal || !input || !count || !hiddenInput || !btnText) {
+        return;
+    }
+
+    function openModal() {
+        input.value = hiddenInput.value || '';
+        updateCount();
+
+        overlay.classList.add('active');
+        modal.classList.add('active');
+
+        setTimeout(function () {
+            input.focus();
+        }, 100);
+    }
+
+    function closeModal() {
+        overlay.classList.remove('active');
+        modal.classList.remove('active');
+    }
+
+    function updateCount() {
+        let value = input.value || '';
+
+        if (value.length > maxLength) {
+            value = value.substring(0, maxLength);
+            input.value = value;
+        }
+
+        count.textContent = value.length + '/' + maxLength;
+    }
+
+    openBtn.addEventListener('click', openModal);
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+
+    overlay.addEventListener('click', closeModal);
+    input.addEventListener('input', updateCount);
+
+    saveBtn.addEventListener('click', function () {
+        const value = input.value.trim();
+
+        hiddenInput.value = value;
+
+        if (value) {
+            btnText.textContent = 'Inscription: ' + value;
+        } else {
+            btnText.textContent = 'Add Free Inscription';
+        }
+
+        closeModal();
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const accordionButtons = document.querySelectorAll('.hj-acc-btn');
+
+    accordionButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const currentItem = this.closest('.hj-acc-item');
+
+            if (!currentItem) return;
+
+            document.querySelectorAll('.hj-acc-item').forEach(function (item) {
+                if (item !== currentItem) {
+                    item.classList.remove('active');
+                }
+            });
+
+            currentItem.classList.toggle('active');
+        });
+    });
+});
+</script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
     const dataScript = document.getElementById('hjDetailProductData');
     const gallery = document.getElementById('hjProductGallery');
@@ -1158,6 +1394,18 @@ document.addEventListener('DOMContentLoaded', function () {
             if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
         }
 
+        // PASTE INSIDE YOUR EXISTING updateDetail() FUNCTION BEFORE updateUrl();
+
+const cartMetalInput = document.getElementById('cartMetalInput');
+const cartCaratInput = document.getElementById('cartCaratInput');
+
+if (cartMetalInput) {
+    cartMetalInput.value = selectedMetalCode;
+}
+
+if (cartCaratInput && carat && carat.value) {
+    cartCaratInput.value = carat.value;
+}
         updateUrl();
     }
 
@@ -1182,32 +1430,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const reviewItems = document.querySelectorAll('.hj-review-load-item');
-    const loadMoreBtn = document.getElementById('hjLoadMoreReviews');
-    const loadMoreWrap = document.getElementById('hjLoadMoreWrap');
-
-    let visibleCount = 10;
-    const loadStep = 10;
-
-    if (!loadMoreBtn) return;
-
-    loadMoreBtn.addEventListener('click', function () {
-        visibleCount += loadStep;
-
-        reviewItems.forEach(function (item, index) {
-            if (index < visibleCount) {
-                item.style.display = '';
-            }
-        });
-
-        if (visibleCount >= reviewItems.length) {
-            loadMoreWrap.style.display = 'none';
-        }
-    });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.hj-acc-item button').forEach(function (button) {
         button.addEventListener('click', function () {
             const currentItem = this.closest('.hj-acc-item');
@@ -1221,6 +1443,262 @@ document.addEventListener('DOMContentLoaded', function () {
             currentItem.classList.toggle('active');
         });
     });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | RING SIZE SELECTION
+    |--------------------------------------------------------------------------
+    */
+
+    const sizeBox = document.getElementById('hjRingSizeBox');
+    const sizeToggle = document.getElementById('hjRingSizeToggle');
+    const sizeSelected = document.getElementById('hjRingSizeSelected');
+
+    const mainRingSizeInput = document.getElementById('hjRingSizeInput');
+    const cartRingSizeInput = document.getElementById('cartRingSizeInput');
+
+    const sizeOptions = document.querySelectorAll('.hj-ring-size-option');
+
+    if (sizeToggle && sizeBox) {
+        sizeToggle.addEventListener('click', function (event) {
+            event.stopPropagation();
+            sizeBox.classList.toggle('active');
+        });
+    }
+
+    sizeOptions.forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const selectedSize = this.getAttribute('data-size');
+
+            if (!selectedSize) return;
+
+            if (sizeSelected) {
+                sizeSelected.textContent = selectedSize;
+            }
+
+            if (mainRingSizeInput) {
+                mainRingSizeInput.value = selectedSize;
+            }
+
+            if (cartRingSizeInput) {
+                cartRingSizeInput.value = selectedSize;
+            }
+
+            sizeOptions.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+
+            this.classList.add('active');
+
+            if (sizeBox) {
+                sizeBox.classList.remove('active');
+            }
+        });
+    });
+
+    document.addEventListener('click', function (event) {
+        if (sizeBox && !sizeBox.contains(event.target)) {
+            sizeBox.classList.remove('active');
+        }
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELECTED IMAGE HANDLING
+    |--------------------------------------------------------------------------
+    */
+
+    function cleanImagePath(value) {
+        if (!value) return '';
+
+        value = value.replace(window.location.origin + '/', '');
+        value = value.replace(/^\/+/, '');
+
+        return value;
+    }
+
+    function setSelectedCartImage(imagePath) {
+        const cartSelectedImageInput = document.getElementById('cartSelectedImageInput');
+
+        if (!cartSelectedImageInput || !imagePath) return;
+
+        cartSelectedImageInput.value = cleanImagePath(imagePath);
+
+        console.log('Cart selected image:', cartSelectedImageInput.value);
+    }
+
+    function syncCurrentMainImage() {
+        const mainImage =
+            document.getElementById('mainSolitaireImage') ||
+            document.getElementById('mainProductImage') ||
+            document.getElementById('hjMainSolitaireImage') ||
+            document.querySelector('.hj-main-image img') ||
+            document.querySelector('.product-main-image img');
+
+        if (mainImage && mainImage.getAttribute('src')) {
+            setSelectedCartImage(mainImage.getAttribute('src'));
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GALLERY IMAGE CLICK
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener('click', function (event) {
+        const imageElement = event.target.closest('[data-image], [data-image-path]');
+
+        if (!imageElement) return;
+
+        const selectedImage =
+            imageElement.getAttribute('data-image') ||
+            imageElement.getAttribute('data-image-path') ||
+            imageElement.getAttribute('src') ||
+            '';
+
+        if (selectedImage) {
+            setSelectedCartImage(selectedImage);
+        }
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | METAL SELECTION
+    |--------------------------------------------------------------------------
+    */
+
+    document.addEventListener('click', function (event) {
+        const metalElement = event.target.closest('[data-metal-code], .metal-chip');
+
+        if (!metalElement) return;
+
+        const cartMetalInput = document.getElementById('cartMetalInput');
+
+        const metalCode =
+            metalElement.getAttribute('data-metal-code') ||
+            metalElement.getAttribute('data-metal') ||
+            metalElement.value ||
+            '';
+
+        if (cartMetalInput && metalCode) {
+            cartMetalInput.value = metalCode;
+        }
+
+        const metalImage =
+            metalElement.getAttribute('data-first-image') ||
+            metalElement.getAttribute('data-image') ||
+            metalElement.getAttribute('data-image-path') ||
+            '';
+
+        if (metalImage) {
+            setSelectedCartImage(metalImage);
+        } else {
+            setTimeout(syncCurrentMainImage, 200);
+        }
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADD TO CART FORM
+    |--------------------------------------------------------------------------
+    */
+
+    const form = document.getElementById('hjAddToCartForm');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const ringSizeMain = document.getElementById('hjRingSizeInput');
+        const inscriptionMain = document.getElementById('hjInscriptionHidden');
+
+        const cartMetal = document.getElementById('cartMetalInput');
+        const cartCarat = document.getElementById('cartCaratInput');
+        const cartRingSize = document.getElementById('cartRingSizeInput');
+        const cartInscription = document.getElementById('cartInscriptionInput');
+        const cartSelectedImage = document.getElementById('cartSelectedImageInput');
+
+        if (cartRingSize && ringSizeMain) {
+            cartRingSize.value = ringSizeMain.value || '';
+        }
+
+        if (cartInscription && inscriptionMain) {
+            cartInscription.value = inscriptionMain.value || '';
+        }
+
+        if (cartSelectedImage && !cartSelectedImage.value) {
+            syncCurrentMainImage();
+        }
+
+        if (!cartMetal || !cartMetal.value) {
+            alert('Please select metal.');
+            return;
+        }
+
+        if (!cartCarat || !cartCarat.value) {
+            alert('Please select carat.');
+            return;
+        }
+
+        if (!cartRingSize || !cartRingSize.value) {
+            alert('Please select ring size.');
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        fetch("{{ route('cart.add') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(async response => {
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw data;
+            }
+
+            return data;
+        })
+        .then(data => {
+            alert(data.message || 'Added to cart successfully.');
+
+            if (data.success) {
+                window.location.href = "{{ url('/cart') }}";
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            alert(error.message || 'Something went wrong. Please try again.');
+        });
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DEFAULT IMAGE ON PAGE LOAD
+    |--------------------------------------------------------------------------
+    */
+
+    setTimeout(syncCurrentMainImage, 500);
+
 });
 </script>
 @endsection

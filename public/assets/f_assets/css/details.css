@@ -549,6 +549,134 @@ body{
 .hj-engraving span {
     text-decoration: underline;
 }
+
+.hj-inscription-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s ease;
+}
+
+.hj-inscription-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s ease;
+}
+
+.hj-inscription-overlay.active,
+.hj-inscription-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hj-inscription-box {
+    width: 100%;
+    max-width: 430px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 26px 24px 22px;
+    position: relative;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+.hj-inscription-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: none;
+    background: transparent;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: #222;
+}
+
+.hj-inscription-box h3 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    font-weight: 500;
+    color: #111;
+}
+
+.hj-inscription-box p {
+    margin: 0 0 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.hj-inscription-input-wrap {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #d8d8d8;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #fff;
+}
+
+.hj-inscription-input-wrap input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 14px;
+    font-size: 15px;
+    color: #111;
+}
+
+.hj-inscription-input-wrap span {
+    width: 56px;
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+}
+
+.hj-inscription-note {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #777;
+}
+
+.hj-inscription-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.hj-inscription-cancel,
+.hj-inscription-save {
+    height: 42px;
+    border-radius: 24px;
+    padding: 0 22px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.hj-inscription-cancel {
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #111;
+}
+
+.hj-inscription-save {
+    border: none;
+    background: #111;
+    color: #fff;
+}
 .hj-spec-card {
     padding: 24px;
     margin-bottom: 18px;
@@ -866,7 +994,7 @@ body{
     justify-content: space-between;
     cursor: pointer;
 }
-/* ACCORDION CONTENT ONLY */
+/* Accordion dropdown only */
 .hj-acc-content {
     display: none;
     padding: 0 18px 18px;
@@ -876,23 +1004,21 @@ body{
 
 .hj-acc-content p {
     margin: 0;
-    font-size: 13px;
-    font-family: inherit;
-    font-weight: inherit;
-    line-height: 1.6;
-    color: #333;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
 }
 
 .hj-acc-item.active .hj-acc-content {
     display: block;
 }
 
-.hj-acc-item button span {
-    transition: transform 0.25s ease;
+.hj-acc-item.active .hj-acc-btn span {
+    transform: rotate(180deg);
 }
 
-.hj-acc-item.active button span {
-    transform: rotate(180deg);
+.hj-acc-btn span {
+    transition: transform 0.25s ease;
 }
 /* =========================================
    DESKTOP GALLERY WRAPPER
@@ -1009,7 +1135,7 @@ body{
         background: transparent;
     }
 
-    .hj-gallery-arrow {
+    /* .hj-gallery-arrow {
         display: flex;
         position: absolute;
         right: 18px;
@@ -1028,7 +1154,7 @@ body{
         cursor: pointer;
         z-index: 20;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-    }
+    } */
 
     .hj-mobile-gallery-bottom {
         display: flex;
@@ -2052,5 +2178,158 @@ a.hj-lab-product-card {
     .hj-call-btn {
         width: 220px;
         min-width: 220px;
+    }
+}
+
+/* ================================
+   CUSTOM JS FOR ring size selection 
+================================ */
+/* RING SIZE CUSTOM DROPDOWN */
+
+.hj-ring-size-box {
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 10px;
+    position: relative;
+    font-family: inherit;
+}
+
+.hj-ring-size-head {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    overflow: hidden;
+}
+
+.hj-ring-size-toggle {
+    flex: 1;
+    height: 100%;
+    border: none;
+    background: #fff;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    color: #111;
+    text-align: left;
+}
+
+.hj-ring-size-help {
+    height: 42px;
+    margin-right: 4px;
+    padding: 0 14px;
+    border: 1px solid #d5d5d5;
+    background: #f9f9f9;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 400;
+    color: #111;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.hj-ring-size-arrow {
+    width: 18px;
+    height: 18px;
+    color: #777;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.hj-ring-size-arrow svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+.hj-ring-size-box.active .hj-ring-size-arrow {
+    transform: rotate(180deg);
+}
+
+.hj-ring-size-dropdown {
+    display: none;
+    width: 100%;
+    max-height: 230px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    position: absolute;
+    left: 0;
+    top: 48px;
+    z-index: 99;
+}
+
+.hj-ring-size-box.active .hj-ring-size-dropdown {
+    display: block;
+}
+
+.hj-ring-size-option {
+    width: 100%;
+    height: 41px;
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+    background: #fff;
+    padding: 0 13px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 400;
+    color: #111;
+    cursor: pointer;
+}
+
+.hj-ring-size-option:hover,
+.hj-ring-size-option.active {
+    background: #f7f7f7;
+}
+
+.hj-ring-size-option:last-child {
+    border-bottom: none;
+}
+
+/* scrollbar same as screenshot */
+.hj-ring-size-dropdown::-webkit-scrollbar {
+    width: 10px;
+}
+
+.hj-ring-size-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 20px;
+}
+
+.hj-ring-size-dropdown::-webkit-scrollbar-thumb {
+    background: #8d8d8d;
+    border-radius: 20px;
+    border: 2px solid #f1f1f1;
+}
+
+@media (max-width: 575px) {
+    .hj-ring-size-head {
+        height: 46px;
+    }
+
+    .hj-ring-size-toggle {
+        font-size: 13px;
+    }
+
+    .hj-ring-size-help {
+        font-size: 12px;
+        padding: 0 10px;
+    }
+
+    .hj-ring-size-dropdown {
+        top: 46px;
+        max-height: 225px;
     }
 }

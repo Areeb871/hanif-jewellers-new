@@ -387,12 +387,16 @@
 </style>
 @php
     $cartCount = 0;
+
     if (Auth::check()) {
         $cartCount = \App\Models\Cart::where('user_id', Auth::id())->sum('quantity');
     } else {
         $cartCount = \App\Models\Cart::where('session_id', session()->getId())->sum('quantity');
     }
+
+    $total = 0;
 @endphp
+
 <div class="cart-header">
     <div class="container" style="border-top: solid 1px #cdcdcd; border-bottom: solid 1px #cdcdcd; padding-top: 3rem; padding-bottom: 3rem;">
         <p class="cart-title">Shopping Cart <span class="item-count">({{ $cartCount }})</span></p>
@@ -402,294 +406,373 @@
 <div class="cart-container">
     <div class="">
         @if($cartItems->count() > 0)
+
             <div class="cart-content">
+
                 <!-- Cart Items Section -->
                 <div class="cart-items-section">
-                @php 
-                $total = 0; 
-                @endphp
+
                     @foreach($cartItems as $item)
-                   @php
-    $product = $item->product;
 
-    // Base price (prefer final_price if available)
-    $price = $product->final_price ?? $product->price ?? 0;
-    $hasDiscount = false;
-    $discountText = '';
-    // Percentage discount
-    if ($product->discount_type == 2 && $product->discount_percentage > 0) {
-      $price = $product->price - ($product->price * $product->discount_percentage / 100);
-        $hasDiscount = true;
-        $discountText = $product->discount_percentage . '% OFF';
+                        @php
+                            $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire') || !empty($item->solitaire_product_id);
 
-    // Fixed price discount
-    } elseif ($product->discount_type == 3 && $product->discounted_price > 0) {
-        $price = $product->discounted_price;
-        $hasDiscount = true;
+                            $cartProduct = $isSolitaire
+                                ? $item->solitaireProduct
+                                : $item->product;
+                        @endphp
 
-        if ($product->price > $product->discounted_price) {
-            $discountText = 'PKR ' . number_format($product->price - $product->discounted_price) . ' OFF';
-        }
-    }
-    // Safety
-    $price = max(0, round($price));
+                        @continue(!$cartProduct)
 
-    // Totals
-    $subtotal = $price * $item->quantity;
-    $total += $subtotal;
-@endphp
+                        @php
+                            $productName = $cartProduct->name ?? $cartProduct->title ?? 'Product';
 
-                    <div class="cart-item" data-id="{{ $item->id }}">
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="item-image">
-                        
-                        <div class="item-details">
-                            <div>
-                                <div class="item-brand">Hanif</div>
-                                <div class="item-name">{{ $product->name }}</div>
-                                <div class="item-price">PKR {{ number_format(round($price,-3)) }}</div>
-                                @if($item->size)
-                                <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.5rem; margin-bottom: 0.5rem;">
-                                    Size: {{ $item->size }}
-                                </div>
-                                @endif
-                                
-                                <div class="quantity-section">
-                                    <span class="quantity-label">Qty</span>
-                                    <div class="quantity-display" onclick="toggleQuantityDropdown(this)">
-                                        <span class="quantity-value">{{ $item->quantity }}</span>
-                                        <span class="quantity-arrow"></span>
+                            /*
+                            |--------------------------------------------------------------------------
+                            | Image
+                            |--------------------------------------------------------------------------
+                            */
+                            if ($isSolitaire) {
+                                $productImage = $cartProduct->image ?? 'assets/f_assets/image/no-image.png';
+                            } else {
+                                $productImage = $cartProduct->image ?? 'assets/f_assets/image/no-image.png';
+                            }
+
+                            /*
+                            |--------------------------------------------------------------------------
+                            | Price
+                            |--------------------------------------------------------------------------
+                            */
+                            if ($isSolitaire) {
+                                $price = (float) ($item->variant_price ?? $cartProduct->price ?? 0);
+                                $oldPrice = $item->old_price ?? null;
+                                $discountText = $item->discount_percent ? $item->discount_percent . '% OFF' : '';
+                                $hasDiscount = !empty($discountText);
+                            } else {
+                                $price = (float) ($cartProduct->final_price ?? $cartProduct->price ?? 0);
+                                $hasDiscount = false;
+                                $discountText = '';
+
+                                if (($cartProduct->discount_type ?? null) == 2 && ($cartProduct->discount_percentage ?? 0) > 0) {
+                                    $price = $cartProduct->price - ($cartProduct->price * $cartProduct->discount_percentage / 100);
+                                    $hasDiscount = true;
+                                    $discountText = $cartProduct->discount_percentage . '% OFF';
+                                } elseif (($cartProduct->discount_type ?? null) == 3 && ($cartProduct->discounted_price ?? 0) > 0) {
+                                    $price = $cartProduct->discounted_price;
+                                    $hasDiscount = true;
+
+                                    if ($cartProduct->price > $cartProduct->discounted_price) {
+                                        $discountText = 'PKR ' . number_format($cartProduct->price - $cartProduct->discounted_price) . ' OFF';
+                                    }
+                                }
+                            }
+
+                            $price = max(0, round($price));
+                            $subtotal = $price * $item->quantity;
+                            $total += $subtotal;
+                        @endphp
+
+                        <div class="cart-item" data-id="{{ $item->id }}">
+                            <img src="{{ asset($productImage) }}" alt="{{ $productName }}" class="item-image">
+
+                            <div class="item-details">
+                                <div>
+                                    <div class="item-brand">Hanif</div>
+
+                                    <div class="item-name">{{ $productName }}</div>
+
+                                    <div class="item-price">
+                                        PKR {{ number_format(round($price, -3)) }}
                                     </div>
-                                    <div class="quantity-dropdown" id="quantity-dropdown-{{ $item->id }}">
-                                        @for($i = 1; $i <= 10; $i++)
-                                            <div class="quantity-option" data-value="{{ $i }}" onclick="updateQuantityDirect({{ $item->id }}, {{ $i }})">
-                                                {{ $i }}
+
+                                    @if($isSolitaire)
+                                        @if(!empty($item->metal_name))
+                                            <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.5rem;">
+                                                Metal: {{ $item->metal_name }}
                                             </div>
-                                        @endfor
+                                        @endif
+
+                                        @if(!empty($item->diamond_carat))
+                                            <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.3rem;">
+                                                Diamond Carat: {{ $item->diamond_carat }}
+                                            </div>
+                                        @endif
+
+                                        @if(!empty($item->solitaire_ring_size))
+                                            <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.3rem; margin-bottom: 0.5rem;">
+                                                Ring Size: {{ $item->solitaire_ring_size }}
+                                            </div>
+                                        @endif
+
+                                        @if(!empty($item->inscription_text))
+                                            <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.3rem; margin-bottom: 0.5rem;">
+                                                Inscription: {{ $item->inscription_text }}
+                                            </div>
+                                        @endif
+                                    @else
+                                        @if(!empty($item->size))
+                                            <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                                                Size: {{ $item->size }}
+                                            </div>
+                                        @endif
+                                    @endif
+
+                                    <div class="quantity-section">
+                                        <span class="quantity-label">Qty</span>
+
+                                        <div class="quantity-display" onclick="toggleQuantityDropdown(this)">
+                                            <span class="quantity-value">{{ $item->quantity }}</span>
+                                            <span class="quantity-arrow"></span>
+                                        </div>
+
+                                        <div class="quantity-dropdown" id="quantity-dropdown-{{ $item->id }}">
+                                            @for($i = 1; $i <= 10; $i++)
+                                                <div class="quantity-option" data-value="{{ $i }}" onclick="updateQuantityDirect({{ $item->id }}, {{ $i }})">
+                                                    {{ $i }}
+                                                </div>
+                                            @endfor
+                                        </div>
                                     </div>
+
+                                    <div class="shipping-info">Complimentary Standard 7-10 Business Days</div>
                                 </div>
-                                
-                                <div class="shipping-info">Complimentary Standard 7-10 Business Days</div>
-                            </div>
-                            
-                            <div class="item-actions">
-                                <!-- <span class="action-link" onclick="editItem({{ $item->id }})">Edit</span>
-                                <span class="action-link" onclick="saveForLater({{ $item->id }})">Save for Later</span> -->
-                                <span class="action-link" onclick="removeItem({{ $item->id }})">Delete</span>
+
+                                <div class="item-actions">
+                                    <span class="action-link" onclick="removeItem({{ $item->id }})">Delete</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
                     @endforeach
+
                 </div>
-                
+
                 <!-- Order Summary Section -->
                 <div class="order-summary-section">
                     <div class="order-summary-box">
+
                         <div class="summary-row">
                             <span>Subtotal</span>
-                            <span>PKR {{ number_format(round($total,-3)) }}</span>
+                            <span>PKR {{ number_format(round($total, -3)) }}</span>
                         </div>
+
                         <div class="summary-row shipping">
                             <span>7-10 Business Days</span>
                             <span></span>
                         </div>
+
                         <div class="summary-row">
                             <span>Estimated Tax</span>
                             <span>-</span>
                         </div>
+
                         <div class="summary-row">
                             <span class="action-link">Taxes and other shipping methods</span>
                             <span></span>
                         </div>
+
                         <div class="summary-row total">
                             <span>Estimated Total</span>
-                            <span>PKR {{ number_format(round($total,-3)) }}</span>
+                            <span>PKR {{ number_format(round($total, -3)) }}</span>
                         </div>
-                        
+
                         <div class="delivery-info">Complimentary Delivery & Returns</div>
-                        
+
                         <button class="checkout-button" onclick="window.location.href='{{ route('checkout') }}'">
                             Checkout
                         </button>
+
                     </div>
                 </div>
+
             </div>
+
         @else
+
             <!-- Empty Cart State -->
             <div class="empty-cart">
                 <h2>Your cart is empty</h2>
                 <p>Looks like you haven't added any items to your cart yet.</p>
                 <a href="{{ route('index') }}" class="start-shopping-btn">Start Shopping</a>
             </div>
+
         @endif
-        
+
         <!-- Recommended for You Section -->
         @if($cartItems->count() > 0)
+
             <div class="recommended-section">
                 <div class="recommended-header">
                     <h2>Recommended for You</h2>
                 </div>
-                
-                {{-- Carousel Container --}}
+
                 <div class="position-relative">
-                    {{-- Navigation Arrows --}}
-                    <button class="btn btn-link position-absolute top-50 start-0 translate-middle-y text-dark p-0" 
-                            onclick="scrollRecommended('left')" 
+
+                    <button class="btn btn-link position-absolute top-50 start-0 translate-middle-y text-dark p-0"
+                            onclick="scrollRecommended('left')"
                             style="z-index: 10; left: -20px;">
                         <i class="fas fa-chevron-left" style="font-size: 24px;"></i>
                     </button>
-                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-dark p-0" 
-                            onclick="scrollRecommended('right')" 
+
+                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-dark p-0"
+                            onclick="scrollRecommended('right')"
                             style="z-index: 10; right: -20px;">
                         <i class="fas fa-chevron-right" style="font-size: 24px;"></i>
                     </button>
-                    
-                    {{-- Products Carousel --}}
-                    <div class="products-carousel" id="recommendedProducts" 
+
+                    <div class="products-carousel" id="recommendedProducts"
                          style="overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+
                         <div class="d-flex gap-3" style="min-width: max-content;">
+
                             @php
-                            $recommendedProducts = \App\Models\Products::where('status', 'published')
-    ->where('show_price', 1)
-    ->whereHas('tags', function($q) {
-        $q->where('name', 'Gold Ring');
-    })
-    ->with('category', 'subcategory', 'images', 'tags')
-    ->inRandomOrder()
-    ->take(12)
-    ->get();
+                                $recommendedProducts = \App\Models\Products::where('status', 'published')
+                                    ->where('show_price', 1)
+                                    ->whereHas('tags', function($q) {
+                                        $q->where('name', 'Gold Ring');
+                                    })
+                                    ->with('category', 'subcategory', 'images', 'tags')
+                                    ->inRandomOrder()
+                                    ->take(12)
+                                    ->get();
                             @endphp
-                            
-                            {{-- Product Cards --}}
+
                             @foreach($recommendedProducts as $index => $product)
+
                                 @php
-                                    $price = $product->price;
-                                    if ($product->discount_type == 2 && $product->discount_percentage > 0) {
-                                        $price = $product->price - ($product->price * $product->discount_percentage / 100);
-                                    } elseif ($product->discount_type == 3 && $product->discounted_price > 0) {
-                                        $price = $product->discounted_price;
+                                    $recommendedPrice = $product->price ?? 0;
+
+                                    if (($product->discount_type ?? null) == 2 && ($product->discount_percentage ?? 0) > 0) {
+                                        $recommendedPrice = $product->price - ($product->price * $product->discount_percentage / 100);
+                                    } elseif (($product->discount_type ?? null) == 3 && ($product->discounted_price ?? 0) > 0) {
+                                        $recommendedPrice = $product->discounted_price;
                                     }
-                                    $price = max(0, $price);
+
+                                    $recommendedPrice = max(0, $recommendedPrice);
                                 @endphp
+
                                 <div class="product-card-item" style="min-width: 280px; max-width: 280px; flex: 0 0 280px;">
                                     <div class="card addToCartProductDetailsTop">
-                                        {{-- Product Image Carousel --}}
+
                                         <div class="card-img">
                                             <div id="carouselRecommended{{ $product->slug }}" class="carousel slide">
+
                                                 @if($product->images && $product->images->count() > 0)
-                                                    {{-- Carousel Indicators --}}
+
                                                     <div class="carousel-indicators">
                                                         @foreach ($product->images as $imgIndex => $img)
                                                             <button type="button"
-                                                                data-bs-target="#carouselRecommended{{ $product->slug }}"
-                                                                data-bs-slide-to="{{ $imgIndex }}"
-                                                                class="{{ $imgIndex === 0 ? 'active bg-dark' : 'bg-dark' }}"
-                                                                @if($imgIndex === 0) aria-current="true" @endif
-                                                                aria-label="Slide {{ $imgIndex + 1 }}">
+                                                                    data-bs-target="#carouselRecommended{{ $product->slug }}"
+                                                                    data-bs-slide-to="{{ $imgIndex }}"
+                                                                    class="{{ $imgIndex === 0 ? 'active bg-dark' : 'bg-dark' }}"
+                                                                    @if($imgIndex === 0) aria-current="true" @endif
+                                                                    aria-label="Slide {{ $imgIndex + 1 }}">
                                                             </button>
                                                         @endforeach
                                                     </div>
-                                                    
+
                                                     <div class="carousel-inner">
                                                         @foreach ($product->images as $imgIndex => $img)
                                                             <div class="carousel-item{{ $imgIndex === 0 ? ' active' : '' }}">
-                                                                <img src="{{ asset($img->image) }}" 
-                                                                     class="img-fluid d-block" 
-                                                                     loading="lazy" 
-                                                                     alt="{{ $product->name }} image" 
-                                                                     width="400" height="400">
+                                                                <img src="{{ asset($img->image) }}"
+                                                                     class="img-fluid d-block"
+                                                                     loading="lazy"
+                                                                     alt="{{ $product->name }} image"
+                                                                     width="400"
+                                                                     height="400">
                                                             </div>
                                                         @endforeach
                                                     </div>
-                                                    <button class="carousel-control-prev" type="button"
-                                                        data-bs-target="#carouselRecommended{{ $product->slug }}" 
-                                                        data-bs-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Previous</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button"
-                                                        data-bs-target="#carouselRecommended{{ $product->slug }}" 
-                                                        data-bs-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Next</span>
-                                                    </button>
+
                                                 @else
-                                                    {{-- Use main feature image when no gallery images --}}
+
                                                     <div class="carousel-indicators">
                                                         <button type="button"
-                                                            data-bs-target="#carouselRecommended{{ $product->slug }}"
-                                                            data-bs-slide-to="0"
-                                                            class="active bg-dark"
-                                                            aria-label="Slide 1">
+                                                                data-bs-target="#carouselRecommended{{ $product->slug }}"
+                                                                data-bs-slide-to="0"
+                                                                class="active bg-dark"
+                                                                aria-label="Slide 1">
                                                         </button>
                                                     </div>
+
                                                     <div class="carousel-inner">
                                                         <div class="carousel-item active">
-                                                            <img src="{{ asset($product->image) }}" 
-                                                                 class="img-fluid d-block" 
-                                                                 loading="lazy" 
-                                                                 alt="{{ $product->name }} image" 
-                                                                 width="400" height="400">
+                                                            <img src="{{ asset($product->image) }}"
+                                                                 class="img-fluid d-block"
+                                                                 loading="lazy"
+                                                                 alt="{{ $product->name }} image"
+                                                                 width="400"
+                                                                 height="400">
                                                         </div>
                                                     </div>
-                                                    <button class="carousel-control-prev" type="button"
-                                                        data-bs-target="#carouselRecommended{{ $product->slug }}" 
-                                                        data-bs-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Previous</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button"
-                                                        data-bs-target="#carouselRecommended{{ $product->slug }}" 
-                                                        data-bs-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Next</span>
-                                                    </button>
+
                                                 @endif
+
+                                                <button class="carousel-control-prev" type="button"
+                                                        data-bs-target="#carouselRecommended{{ $product->slug }}"
+                                                        data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+
+                                                <button class="carousel-control-next" type="button"
+                                                        data-bs-target="#carouselRecommended{{ $product->slug }}"
+                                                        data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+
                                             </div>
                                         </div>
+
                                         <div class="card-img-overlay">New</div>
+
                                         <div class="card-body text-center" style="background-color: #F6F4F2;">
                                             <h5 class="card-title">{{ $product->name }}</h5>
-                                            <p class="card-text">
-                                            @if( $product->show_price )
-<p class="card-text">
-@php
-    $livePrice = $product->final_price ?? 0;
-    $roundedPrice = round($livePrice, -3);
-@endphp
 
-@if($roundedPrice > 0)
-    PKR {{ number_format($roundedPrice, 0, '.', ',') }}
-@endif
+                                            @if($product->show_price)
+                                                @php
+                                                    $livePrice = $product->final_price ?? $recommendedPrice ?? 0;
+                                                    $roundedPrice = round($livePrice, -3);
+                                                @endphp
 
-        </p> 
-   
+                                                @if($roundedPrice > 0)
+                                                    <p class="card-text">
+                                                        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+                                                    </p>
+                                                @endif
                                             @endif
-                                            
-                                            </p>
-                                            <button class="btn text-white bg-black addToCartProductDetails" onclick="addToCartFromRecommendation({{ $product->id }})">
+
+                                            <button class="btn text-white bg-black addToCartProductDetails"
+                                                    onclick="addToCartFromRecommendation({{ $product->id }})">
                                                 Add to Cart
                                             </button>
                                         </div>
+
                                     </div>
                                 </div>
+
                             @endforeach
+
                         </div>
                     </div>
 
-                    {{-- Carousel Dots --}}
                     <div class="text-center mt-4">
                         <div class="d-flex justify-content-center gap-2">
                             @for($i = 0; $i < ceil($recommendedProducts->count() / 4); $i++)
-                                <div class="carousel-dot" 
-                                     onclick="goToRecommendedSlide({{ $i }})" 
+                                <div class="carousel-dot"
+                                     onclick="goToRecommendedSlide({{ $i }})"
                                      style="width: 8px; height: 8px; border-radius: 50%; background: {{ $i === 0 ? '#000' : '#ccc' }}; cursor: pointer; transition: background 0.3s ease;">
-                            </div>
+                                </div>
                             @endfor
                         </div>
                     </div>
+
                 </div>
             </div>
+
         @endif
+
     </div>
 </div>
 

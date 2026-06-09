@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\CheckoutLead;
+use App\Models\SolitaireProduct;
 
 
 class CartController extends Controller
@@ -22,7 +23,7 @@ class CartController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
 
-        $cartItems = Cart::with('product')
+        $cartItems = Cart::with('product','solitaireProduct')
             ->when($userId, function($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -507,18 +508,206 @@ class CartController extends Controller
     //     }
     // }
 
-     public function add(Request $request)
-    {
-        Log::info('Add to cart started', $request->all());
+public function add(Request $request)
+{
+    Log::info('Add to cart started', $request->all());
 
-        $productId = $request->input('product_id');
-        $quantity  = (int) $request->input('quantity', 1);
-        $size      = $request->input('size');
+    $cartType = $request->input('cart_type', 'normal');
+    $quantity = (int) $request->input('quantity', 1);
 
-        $product = Products::find($productId);
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+
+    $userId = Auth::check() ? Auth::id() : null;
+    $sessionId = !$userId ? session()->getId() : null;
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPER: Extract first image path from any image array/string format
+    |--------------------------------------------------------------------------
+    */
+    $extractImagePath = function ($value) use (&$extractImagePath) {
+        if (empty($value)) {
+            return null;
+        }
+
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_object($value)) {
+            $value = (array) $value;
+        }
+
+        if (!is_array($value)) {
+            return null;
+        }
+
+        foreach (['image', 'image_path', 'path', 'url', 'src', 'file'] as $key) {
+            if (!empty($value[$key])) {
+                if (is_string($value[$key])) {
+                    return $value[$key];
+                }
+
+                if (is_array($value[$key])) {
+                    $path = $extractImagePath($value[$key]);
+
+                    if ($path) {
+                        return $path;
+                    }
+                }
+            }
+        }
+
+        foreach (['images', 'gallery', 'metal_images', 'metals_images'] as $key) {
+            if (!empty($value[$key])) {
+                $path = $extractImagePath($value[$key]);
+
+                if ($path) {
+                    return $path;
+                }
+            }
+        }
+
+        foreach ($value as $item) {
+            $path = $extractImagePath($item);
+
+            if ($path) {
+                return $path;
+            }
+        }
+
+        return null;
+    };
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPER: Fetch solitaire image from metals_images by metal_code
+    |--------------------------------------------------------------------------
+    */
+    $getSolitaireMetalImage = function ($product, $metalCode, $selectedMetal, $requestSelectedImage = null) use ($extractImagePath) {
+        // If frontend already sends selected image, save that image directly
+        if (!empty($requestSelectedImage)) {
+            return $requestSelectedImage;
+        }
+
+        $metalsImages = $product->metals_images ?? [];
+
+        if (is_string($metalsImages)) {
+            $decoded = json_decode($metalsImages, true);
+            $metalsImages = is_array($decoded) ? $decoded : [];
+        }
+
+        if (is_object($metalsImages)) {
+            $metalsImages = (array) $metalsImages;
+        }
+
+        if (is_array($metalsImages) && count($metalsImages) > 0) {
+
+            // Format example:
+            // metals_images = {
+            //   "white_gold": ["image1.jpg", "image2.jpg"],
+            //   "yellow_gold": ["image3.jpg"]
+            // }
+            if (isset($metalsImages[$metalCode])) {
+                $path = $extractImagePath($metalsImages[$metalCode]);
+
+                if ($path) {
+                    return $path;
+                }
+            }
+
+            // Case-insensitive key matching
+            foreach ($metalsImages as $key => $value) {
+                if (is_string($key) && strtolower(trim($key)) === strtolower(trim($metalCode))) {
+                    $path = $extractImagePath($value);
+
+                    if ($path) {
+                        return $path;
+                    }
+                }
+            }
+
+            // Format example:
+            // metals_images = [
+            //   {"metal_code": "white_gold", "images": ["image1.jpg"]},
+            //   {"metal_code": "yellow_gold", "images": ["image2.jpg"]}
+            // ]
+            foreach ($metalsImages as $row) {
+                if (is_object($row)) {
+                    $row = (array) $row;
+                }
+
+                if (!is_array($row)) {
+                    continue;
+                }
+
+                $rowMetalCode = $row['metal_code']
+                    ?? $row['code']
+                    ?? $row['metal']
+                    ?? $row['metalCode']
+                    ?? null;
+
+                if ($rowMetalCode && strtolower(trim((string) $rowMetalCode)) === strtolower(trim((string) $metalCode))) {
+                    $path = $extractImagePath($row);
+
+                    if ($path) {
+                        return $path;
+                    }
+                }
+            }
+        }
+
+        // Fallback if image exists inside selected metal array
+        $metalImages = data_get($selectedMetal, 'images');
+        $path = $extractImagePath($metalImages);
+
+        if ($path) {
+            return $path;
+        }
+
+        // Final fallback
+        return $product->image ?? 'assets/f_assets/image/no-image.png';
+    };
+
+    /*
+    |--------------------------------------------------------------------------
+    | SOLITAIRE PRODUCT ADD TO CART
+    |--------------------------------------------------------------------------
+    */
+    if ($cartType === 'solitaire') {
+
+        $productId = $request->input('solitaire_product_id') ?? $request->input('product_id');
+        $metalCode = $request->input('metal_code');
+        $diamondCarat = $request->input('diamond_carat');
+        $ringSize = $request->input('solitaire_ring_size');
+        $requestSelectedImage = $request->input('selected_image');
+
+        $inscriptionText = trim((string) $request->input('inscription_text', ''));
+
+        if ($inscriptionText === '') {
+            $inscriptionText = null;
+        }
+
+        if (!$productId || !$metalCode || !$diamondCarat || !$ringSize) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select metal, carat, and ring size.'
+            ], 422);
+        }
+
+        if ($inscriptionText && strlen($inscriptionText) > 15) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Inscription must be maximum 15 characters.'
+            ], 422);
+        }
+
+        $product = SolitaireProduct::where('status', 1)->find($productId);
 
         if (!$product) {
-            Log::warning('Add to cart failed: Product not found', [
+            Log::warning('Solitaire add to cart failed: Product not found', [
                 'product_id' => $productId
             ]);
 
@@ -528,41 +717,197 @@ class CartController extends Controller
             ], 404);
         }
 
-        $userId = Auth::check() ? Auth::id() : null;
-        $sessionId = !$userId ? session()->getId() : null;
+        $metals = collect($product->metals ?? []);
+        $variants = collect($product->variants ?? []);
 
-        $cartItem = Cart::where('product_id', $productId)
-            ->where('size', $size)
-            ->when($userId, fn($q) => $q->where('user_id', $userId))
-            ->when(!$userId, fn($q) => $q->where('session_id', $sessionId))
+        $selectedMetal = $metals->first(function ($metal) use ($metalCode) {
+            return (data_get($metal, 'code') === $metalCode)
+                || (data_get($metal, 'metal_code') === $metalCode);
+        });
+
+        if (!$selectedMetal) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected metal is not available.'
+            ], 422);
+        }
+
+        $diamondCaratFormatted = number_format((float) $diamondCarat, 2, '.', '');
+
+        $selectedVariant = $variants->first(function ($variant) use ($metalCode, $diamondCaratFormatted) {
+            $status = data_get($variant, 'status');
+
+            $isActive = !isset($status)
+                || $status === true
+                || $status === 1
+                || $status === '1';
+
+            return $isActive
+                && (data_get($variant, 'metal_code') === $metalCode)
+                && number_format((float) data_get($variant, 'diamond_carat', 0), 2, '.', '') === $diamondCaratFormatted;
+        });
+
+        if (!$selectedVariant || empty(data_get($selectedVariant, 'price'))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected metal and carat price is unavailable.'
+            ], 422);
+        }
+
+        $price = (float) data_get($selectedVariant, 'price');
+        $oldPrice = !empty(data_get($selectedVariant, 'old_price')) ? (float) data_get($selectedVariant, 'old_price') : null;
+        $discount = !empty(data_get($selectedVariant, 'discount_percent')) ? (float) data_get($selectedVariant, 'discount_percent') : null;
+
+        $selectedImage = $getSolitaireMetalImage(
+            $product,
+            $metalCode,
+            $selectedMetal,
+            $requestSelectedImage
+        );
+
+        $cartItem = Cart::where('cart_type', 'solitaire')
+            ->whereNull('product_id')
+            ->where('solitaire_product_id', $product->id)
+            ->where('metal_code', $metalCode)
+            ->where('diamond_carat', $diamondCaratFormatted)
+            ->where('solitaire_ring_size', $ringSize)
+            ->where('inscription_text', $inscriptionText)
+            ->when($userId, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
+            ->when(!$userId, function ($query) use ($sessionId) {
+                return $query->where('session_id', $sessionId);
+            })
             ->first();
 
         if ($cartItem) {
             $cartItem->quantity += $quantity;
+            $cartItem->variant_price = $price;
+            $cartItem->old_price = $oldPrice;
+            $cartItem->discount_percent = $discount;
+            $cartItem->selected_image = $selectedImage;
             $cartItem->save();
 
-            Log::info('Cart updated', [
+            Log::info('Solitaire cart updated', [
                 'cart_id' => $cartItem->id,
-                'quantity' => $cartItem->quantity
+                'quantity' => $cartItem->quantity,
+                'selected_image' => $selectedImage
             ]);
         } else {
             Cart::create([
                 'user_id' => $userId,
                 'session_id' => $sessionId,
-                'product_id' => $productId,
+
+                'product_id' => null,
+                'solitaire_product_id' => $product->id,
+
                 'quantity' => $quantity,
-                'size' => $size,
+                'size' => null,
+                'solitaire_ring_size' => $ringSize,
+
+                'metal_code' => $metalCode,
+                'metal_name' => data_get($selectedMetal, 'name') ?? data_get($selectedMetal, 'metal_name') ?? $metalCode,
+                'diamond_carat' => $diamondCaratFormatted,
+                'inscription_text' => $inscriptionText,
+
+                'selected_image' => $selectedImage,
+
+                'variant_price' => $price,
+                'old_price' => $oldPrice,
+                'discount_percent' => $discount,
+
+                'cart_type' => 'solitaire',
             ]);
 
-            Log::info('New cart item created', [
-                'product_id' => $productId,
-                'quantity' => $quantity
+            Log::info('New solitaire cart item created', [
+                'solitaire_product_id' => $product->id,
+                'metal_code' => $metalCode,
+                'diamond_carat' => $diamondCaratFormatted,
+                'solitaire_ring_size' => $ringSize,
+                'quantity' => $quantity,
+                'selected_image' => $selectedImage
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Product added to cart!'
+            'message' => 'Solitaire product added to cart!'
         ]);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | NORMAL PRODUCT ADD TO CART
+    |--------------------------------------------------------------------------
+    */
+    $productId = $request->input('product_id');
+    $size = $request->input('size');
+
+    $product = Products::find($productId);
+
+    if (!$product) {
+        Log::warning('Add to cart failed: Product not found', [
+            'product_id' => $productId
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Product not found.'
+        ], 404);
+    }
+
+    $cartItem = Cart::where('cart_type', 'normal')
+        ->where('product_id', $productId)
+        ->where('size', $size)
+        ->when($userId, function ($query) use ($userId) {
+            return $query->where('user_id', $userId);
+        })
+        ->when(!$userId, function ($query) use ($sessionId) {
+            return $query->where('session_id', $sessionId);
+        })
+        ->first();
+
+    if ($cartItem) {
+        $cartItem->quantity += $quantity;
+        $cartItem->save();
+
+        Log::info('Normal cart updated', [
+            'cart_id' => $cartItem->id,
+            'quantity' => $cartItem->quantity
+        ]);
+    } else {
+        Cart::create([
+            'user_id' => $userId,
+            'session_id' => $sessionId,
+
+            'product_id' => $productId,
+            'solitaire_product_id' => null,
+
+            'quantity' => $quantity,
+            'size' => $size,
+            'solitaire_ring_size' => null,
+
+            'metal_code' => null,
+            'metal_name' => null,
+            'diamond_carat' => null,
+            'inscription_text' => null,
+            'selected_image' => null,
+            'variant_price' => null,
+            'old_price' => null,
+            'discount_percent' => null,
+
+            'cart_type' => 'normal',
+        ]);
+
+        Log::info('New normal cart item created', [
+            'product_id' => $productId,
+            'quantity' => $quantity
+        ]);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Product added to cart!'
+    ]);
+}
 }

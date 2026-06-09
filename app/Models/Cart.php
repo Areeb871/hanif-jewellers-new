@@ -13,6 +13,17 @@ class Cart extends Model
         'product_id',
         'quantity',
         'size',
+        'solitaire_product_id',
+        'metal_code',
+        'metal_name',
+        'diamond_carat',
+        'inscription_text',
+        'variant_price',
+        'old_price',
+        'discount_percent',
+        'cart_type',
+        'solitaire_ring_size',
+        'selected_image',
     ];
 
     public function product() {
@@ -21,4 +32,8 @@ class Cart extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function solitaireProduct()
+{
+    return $this->belongsTo(SolitaireProduct::class, 'solitaire_product_id');
+}
 }

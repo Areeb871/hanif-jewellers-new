@@ -37,4 +37,5 @@ class SolitaireProduct extends Model
         'variants' => 'array',
         'status' => 'boolean',
     ];
+   
 }
