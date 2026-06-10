@@ -227,7 +227,6 @@
     </div>
 
 
-    {{-- RING SIZE --}}
   {{-- RING SIZE --}}
 <div class="hj-ring-size-box" id="hjRingSizeBox">
 

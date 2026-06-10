@@ -19,7 +19,8 @@ class OrderItem extends Model
         'discount_percentage',
         'quantity',
         'total_price',
-    ];
+        'item_options'
+        ];
 
     protected $casts = [
         'unit_price' => 'decimal:2',
@@ -27,6 +28,7 @@ class OrderItem extends Model
         'discount_amount' => 'decimal:2',
         'discount_percentage' => 'decimal:2',
         'total_price' => 'decimal:2',
+        'item_options' => 'array',
     ];
 
     /**
@@ -44,4 +46,5 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Products::class, 'product_id');
     }
+    
 }

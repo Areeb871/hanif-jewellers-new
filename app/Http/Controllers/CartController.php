@@ -114,7 +114,7 @@ class CartController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
         
-        $cartItems = Cart::with('product')
+        $cartItems = Cart::with('product','solitaireProduct')
             ->when($userId, function($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -129,20 +129,21 @@ class CartController extends Controller
         
         return view('public.checkout');
     }
-    public function processCheckout(Request $request)
+public function processCheckout(Request $request)
 {
     Log::info('Checkout process started');
 
     try {
-        /* ---------- 1. VALIDATION ---------- */
-        $request->validate([
+        /*
+        |--------------------------------------------------------------------------
+        | 1. Manual Validation
+        |--------------------------------------------------------------------------
+        */
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName'  => 'required|string|max:255',
             'email'     => 'required|email|max:255',
-'phone' => [
-    'required',
-    'regex:/^(?:\+92|0)(?:3\d{9}|(?:2[1]|4[2]|5[1])\d{7,8})$/'
-],
+            'phone'     => 'required|string|max:20|regex:/^[0-9+\-\s()]+$/',
             'address1'  => 'required|string|max:500',
             'address2'  => 'nullable|string|max:500',
             'city'      => 'required|string|max:255',
@@ -150,77 +151,139 @@ class CartController extends Controller
             'zipCode'   => 'required|string|max:20',
             'deliveryOption' => 'nullable|string',
             'orderNotes' => 'nullable|string|max:1000',
+            'paymentMethod' => 'nullable|string|max:100',
         ]);
 
-        /* ---------- 2. USER / SESSION ---------- */
+        if ($validator->fails()) {
+            Log::warning('Checkout validation failed', $validator->errors()->toArray());
+
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2. User / Session
+        |--------------------------------------------------------------------------
+        */
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
 
         Log::info('Checkout user/session resolved', [
             'user_id' => $userId,
-            'session_id' => $sessionId
+            'session_id' => $sessionId,
         ]);
 
-        /* ---------- 3. FETCH CART ---------- */
-        $cartItems = Cart::with('product')
-            ->when($userId, fn($q) => $q->where('user_id', $userId))
-            ->when(!$userId, fn($q) => $q->where('session_id', $sessionId))
+        /*
+        |--------------------------------------------------------------------------
+        | 3. Fetch Cart
+        |--------------------------------------------------------------------------
+        */
+        $cartItems = Cart::with(['product', 'solitaireProduct'])
+            ->when($userId, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
+            ->when(!$userId, function ($query) use ($sessionId) {
+                return $query->where('session_id', $sessionId);
+            })
             ->get()
-            ->filter(fn($item) => $item->product !== null);
+            ->filter(function ($item) {
+                $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire')
+                    || !empty($item->solitaire_product_id);
 
-        Log::info('Cart fetched', ['items_count' => $cartItems->count()]);
+                if ($isSolitaire) {
+                    return $item->solitaireProduct !== null;
+                }
+
+                return $item->product !== null;
+            })
+            ->values();
+
+        Log::info('Cart fetched', [
+            'items_count' => $cartItems->count(),
+        ]);
 
         if ($cartItems->isEmpty()) {
-            Log::warning('Checkout stopped: Cart empty');
             return response()->json([
                 'success' => false,
-                'message' => 'Your cart is empty.'
-            ], 400);
+                'message' => 'Your cart is empty.',
+            ], 422);
         }
 
         DB::beginTransaction();
 
-        /* ---------- PRICE CALCULATOR (same as checkout blade) ---------- */
-        $calcPrice = function ($product): int {
-            $basePrice = (float)($product->final_price ?? $product->price ?? 0);
-            $price = $basePrice;
-
-            if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
-                $price = $basePrice - ($basePrice * (float)$product->discount_percentage / 100);
-            } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
-                $price = (float)$product->discounted_price;
+        /*
+        |--------------------------------------------------------------------------
+        | 4. Normal Product Price Calculator
+        |--------------------------------------------------------------------------
+        */
+        $calcNormalProductPrice = function ($product): array {
+            if (!$product) {
+                return [
+                    'unit_price' => 0,
+                    'original_price' => 0,
+                    'discount_amount' => 0,
+                    'discount_type' => null,
+                    'discount_percentage' => 0,
+                ];
             }
 
-            return (int) max(0, round($price));
+            $originalPrice = (float) ($product->final_price ?? $product->price ?? 0);
+            $unitPrice = $originalPrice;
+
+            $discountType = $product->discount_type ?? null;
+            $discountPercentage = (float) ($product->discount_percentage ?? 0);
+            $discountAmount = 0;
+
+            if ((int)($discountType ?? 0) === 2 && $discountPercentage > 0) {
+                $discountAmount = $originalPrice * $discountPercentage / 100;
+                $unitPrice = $originalPrice - $discountAmount;
+            } elseif ((int)($discountType ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+                $unitPrice = (float) $product->discounted_price;
+                $discountAmount = max(0, $originalPrice - $unitPrice);
+            }
+
+            return [
+                'unit_price' => (int) max(0, round($unitPrice)),
+                'original_price' => (int) max(0, round($originalPrice)),
+                'discount_amount' => (int) max(0, round($discountAmount)),
+                'discount_type' => $discountType,
+                'discount_percentage' => $discountPercentage,
+            ];
         };
 
-        /* ---------- 4. CALCULATE TOTALS ---------- */
+        /*
+        |--------------------------------------------------------------------------
+        | 5. Calculate Totals
+        |--------------------------------------------------------------------------
+        */
         $subtotal = 0;
 
         foreach ($cartItems as $item) {
-            $product = $item->product;
-            $unit = $calcPrice($product);
+            $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire')
+                || !empty($item->solitaire_product_id);
 
-            $subtotal += $unit * (int)$item->quantity;
+            if ($isSolitaire) {
+                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0)));
+            } else {
+                $priceData = $calcNormalProductPrice($item->product);
+                $unitPrice = $priceData['unit_price'];
+            }
 
-            Log::debug('Price calculated (live)', [
-                'product_id' => $product->id,
-                'base_price' => (float)($product->final_price ?? $product->price ?? 0),
-                'unit_price' => $unit,
-                'quantity' => (int)$item->quantity
-            ]);
+            $subtotal += $unitPrice * (int) $item->quantity;
         }
 
         $shipping = 0;
         $total = $subtotal + $shipping;
 
-        Log::info('Totals calculated', [
-            'subtotal' => $subtotal,
-            'shipping' => $shipping,
-            'total' => $total
-        ]);
-
-        /* ---------- 5. CREATE ORDER ---------- */
+        /*
+        |--------------------------------------------------------------------------
+        | 6. Create Order
+        |--------------------------------------------------------------------------
+        */
         $order = Order::create([
             'order_number' => 'ORD-' . strtoupper(uniqid()),
             'status' => 'pending',
@@ -235,93 +298,141 @@ class CartController extends Controller
             'city' => $request->city,
             'state' => $request->state,
             'zip_code' => $request->zipCode,
-            'delivery_option' => $request->deliveryOption,
+            'delivery_option' => $request->deliveryOption ?? 'shipping',
             'order_notes' => $request->orderNotes,
             'subtotal' => $subtotal,
             'shipping_cost' => $shipping,
             'total_amount' => $total,
+            'payment_method' => $request->paymentMethod ?? 'bank_transfer',
         ]);
 
-        Log::info('Order created', [
-            'order_id' => $order->id,
-            'order_number' => $order->order_number
-        ]);
-        CheckoutLead::where('session_id', session()->getId())
-    ->update([
-        'is_converted' => true,
-        'order_id' => $order->id,
-        'last_activity_at' => now(),
-        'last_reason' => 'converted_to_order',
-    ]);
-     Log::info('Checkout lead', [
-            'order_id' => $order->id,
-        ]);
-
-        /* ---------- 6. CREATE ORDER ITEMS ---------- */
+        /*
+        |--------------------------------------------------------------------------
+        | 7. Create Order Items
+        |--------------------------------------------------------------------------
+        */
         foreach ($cartItems as $item) {
-            $product = $item->product;
+            $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire')
+                || !empty($item->solitaire_product_id);
 
-            $unitPrice = $calcPrice($product);
-            $qty = (int)$item->quantity;
+            if ($isSolitaire) {
+                $product = $item->solitaireProduct;
 
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'product_name' => $product->name ?? 'Product',
-                'product_image' => $product->image ?? null,
-                'unit_price' => $unitPrice,
-                'quantity' => $qty,
-                'total_price' => $unitPrice * $qty,
-            ]);
+                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0)));
+                $originalPrice = (int) max(0, round((float) ($item->old_price ?? $unitPrice)));
+                $discountAmount = max(0, $originalPrice - $unitPrice);
+                $qty = (int) $item->quantity;
 
-            Log::info('Order item created (live)', [
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'unit_price' => $unitPrice,
-                'quantity' => $qty
-            ]);
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => null,
+
+                    'product_name' => $product->name ?? $product->title ?? 'Solitaire Ring',
+                    'product_image' => $item->selected_image ?? $product->image ?? null,
+
+                    'item_options' => [
+                        'cart_type' => 'solitaire',
+                        'solitaire_product_id' => $item->solitaire_product_id,
+                        'metal_code' => $item->metal_code,
+                        'metal_name' => $item->metal_name,
+                        'diamond_carat' => $item->diamond_carat,
+                        'solitaire_ring_size' => $item->solitaire_ring_size,
+                        'inscription_text' => $item->inscription_text,
+                        'selected_image' => $item->selected_image,
+                        'variant_price' => $item->variant_price,
+                        'old_price' => $item->old_price,
+                        'discount_percent' => $item->discount_percent,
+                    ],
+
+                    'unit_price' => $unitPrice,
+                    'original_price' => $originalPrice,
+                    'discount_amount' => $discountAmount,
+                    'discount_type' => $item->discount_percent ? 'percentage' : null,
+                    'discount_percentage' => $item->discount_percent ?? 0,
+                    'quantity' => $qty,
+                    'total_price' => $unitPrice * $qty,
+                ]);
+            } else {
+                $product = $item->product;
+                $priceData = $calcNormalProductPrice($product);
+
+                $unitPrice = $priceData['unit_price'];
+                $originalPrice = $priceData['original_price'];
+                $discountAmount = $priceData['discount_amount'];
+                $qty = (int) $item->quantity;
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+
+                    'product_name' => $product->name ?? 'Product',
+                    'product_image' => $product->image ?? null,
+
+                    'item_options' => [
+                        'cart_type' => 'normal',
+                        'size' => $item->size ?? null,
+                    ],
+
+                    'unit_price' => $unitPrice,
+                    'original_price' => $originalPrice,
+                    'discount_amount' => $discountAmount,
+                    'discount_type' => $priceData['discount_type'],
+                    'discount_percentage' => $priceData['discount_percentage'],
+                    'quantity' => $qty,
+                    'total_price' => $unitPrice * $qty,
+                ]);
+            }
         }
 
-        /* ---------- 7. CLEAR CART ---------- */
-        Cart::when($userId, fn($q) => $q->where('user_id', $userId))
-            ->when(!$userId, fn($q) => $q->where('session_id', $sessionId))
+        /*
+        |--------------------------------------------------------------------------
+        | 8. Update Lead
+        |--------------------------------------------------------------------------
+        */
+        CheckoutLead::where('session_id', session()->getId())
+            ->update([
+                'is_converted' => true,
+                'order_id' => $order->id,
+                'last_activity_at' => now(),
+                'last_reason' => 'converted_to_order',
+            ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | 9. Clear Cart
+        |--------------------------------------------------------------------------
+        */
+        Cart::when($userId, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
+            ->when(!$userId, function ($query) use ($sessionId) {
+                return $query->where('session_id', $sessionId);
+            })
             ->delete();
 
-        Log::info('Cart cleared');
-
         DB::commit();
-
-        Log::info('Checkout completed successfully');
 
         return response()->json([
             'success' => true,
             'message' => 'Order placed successfully!',
             'redirect' => route('index'),
             'order_number' => $order->order_number,
-            'order_total' => $order->total_amount
+            'order_total' => $order->total_amount,
         ]);
 
-    } catch (ValidationException $e) {
-        if (DB::transactionLevel() > 0) DB::rollBack();
-
-        Log::warning('Checkout validation failed', $e->errors());
-
-        return response()->json([
-            'success' => false,
-            'errors' => $e->errors()
-        ], 422);
-
     } catch (\Exception $e) {
-        if (DB::transactionLevel() > 0) DB::rollBack();
+        if (DB::transactionLevel() > 0) {
+            DB::rollBack();
+        }
 
         Log::error('Checkout error', [
             'message' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
+            'trace' => $e->getTraceAsString(),
         ]);
 
         return response()->json([
             'success' => false,
-            'message' => 'Something went wrong. Please try again.'
+            'message' => $e->getMessage(),
         ], 500);
     }
 }

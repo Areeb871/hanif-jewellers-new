@@ -40,7 +40,7 @@
                         <div class="delivery-options mb-4">
                             <h5 class="mb-3 fw-bold">Delivery Options</h5>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="deliveryOption" id="shipItems" checked>
+                                <input class="form-check-input" type="radio" name="deliveryOption" id="shipItems" value="ship" checked>
                                 <label class="form-check-label fw-semibold" for="shipItems">
                                     Ship My Items
                                 </label>
@@ -225,103 +225,215 @@
                     </div>
                 </div>
             </div>
+        <!-- Right Column - Order Summary -->
+<div class="col-lg-4">
 
-            <!-- Right Column - Order Summary -->
-            <div class="col-lg-4">
-    <div class="order-summary">
-        <h5 class="mb-4 fw-bold">Order Summary</h5>
+    @php
+        $userId = Auth::check() ? Auth::id() : null;
+        $sessionId = !$userId ? session()->getId() : null;
 
-        @php
-            $userId = Auth::check() ? Auth::id() : null;
-            $sessionId = !$userId ? session()->getId() : null;
+        $cartItems = \App\Models\Cart::with(['product', 'solitaireProduct'])
+            ->when($userId, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
+            ->when($sessionId, function ($query) use ($sessionId) {
+                return $query->where('session_id', $sessionId);
+            })
+            ->get();
 
-            $cartItems = \App\Models\Cart::with('product')
-                ->when($userId, function($query) use ($userId) {
-                    return $query->where('user_id', $userId);
-                })
-                ->when($sessionId, function($query) use ($sessionId) {
-                    return $query->where('session_id', $sessionId);
-                })
-                ->get();
-
-            // ✅ One function for price calculation
-            $calcPrice = function($product) {
-                $price = $product->final_price ?? $product->price ?? 0;
-
-                if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
-                    $price = $price - ($price * $product->discount_percentage / 100);
-                } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
-                    $price = (float)$product->discounted_price;
-                }
-
-                return max(0, round($price));
-            };
-
-            $subtotal = 0;
-            foreach($cartItems as $item) {
-                $p = $item->product;
-                $price = $p ? $calcPrice($p) : 0;
-                $subtotal += $price * (int)$item->quantity;
+        $calcNormalProductPrice = function ($product) {
+            if (!$product) {
+                return 0;
             }
 
-            $shipping = 0; // Free shipping
-            $total = $subtotal + $shipping;
-        @endphp
+            $price = $product->final_price ?? $product->price ?? 0;
 
+            if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
+                $price = $price - ($price * $product->discount_percentage / 100);
+            } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+                $price = (float) $product->discounted_price;
+            }
+
+            return max(0, round($price));
+        };
+
+        $makeImageUrl = function ($imagePath) {
+            if (!$imagePath) {
+                return asset('assets/f_assets/image/no-image.png');
+            }
+
+            $imagePath = trim($imagePath);
+            $imagePath = ltrim($imagePath, '/');
+
+            if (str_starts_with($imagePath, 'http://') || str_starts_with($imagePath, 'https://')) {
+                return $imagePath;
+            }
+
+            if (
+                str_starts_with($imagePath, 'storage/') ||
+                str_starts_with($imagePath, 'assets/') ||
+                str_starts_with($imagePath, 'uploads/')
+            ) {
+                return asset($imagePath);
+            }
+
+            return asset('storage/' . $imagePath);
+        };
+
+        $subtotal = 0;
+
+        foreach ($cartItems as $cartItem) {
+            $isSolitaire = ($cartItem->cart_type ?? 'normal') === 'solitaire';
+
+            if ($isSolitaire) {
+                $price = (float) ($cartItem->variant_price ?? 0);
+            } else {
+                $price = (float) $calcNormalProductPrice($cartItem->product);
+            }
+
+            $subtotal += $price * (int) $cartItem->quantity;
+        }
+
+        $shipping = 0;
+        $total = $subtotal + $shipping;
+    @endphp
+
+    <div class="order-summary" id="checkoutOrderSummary" data-cart-count="{{ $cartItems->count() }}">
+        <h5 class="mb-4 fw-bold">Order Summary</h5>
         @if($cartItems->count() > 0)
+
             @foreach($cartItems as $item)
                 @php
-                    $product = $item->product;
+                    $isSolitaire = ($item->cart_type ?? 'normal') === 'solitaire';
 
-                    $basePrice = $product->final_price ?? $product->price ?? 0;
-                    $price = $product ? $calcPrice($product) : 0;
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Product Relation
+                    |--------------------------------------------------------------------------
+                    */
+                    $product = $isSolitaire
+                        ? $item->solitaireProduct
+                        : $item->product;
 
-                    $hasDiscount = false;
-                    $discountText = '';
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Name
+                    |--------------------------------------------------------------------------
+                    */
+                    $productName = $product->name
+                        ?? $product->title
+                        ?? 'Product';
 
-                    if ($product) {
-                        if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
-                            $hasDiscount = true;
-                            $discountText = $product->discount_percentage . '% OFF';
-                        } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
-                            $hasDiscount = true;
-                            $diff = max(0, ($basePrice - $product->discounted_price));
-                            $discountText = $diff > 0 ? 'PKR ' . number_format($diff, 0, '.', ',') . ' OFF' : '';
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Image
+                    |--------------------------------------------------------------------------
+                    | Solitaire = selected metal image saved in cart
+                    | Normal = product image
+                    |--------------------------------------------------------------------------
+                    */
+                    if ($isSolitaire) {
+                        $imagePath = $item->selected_image
+                            ?? $product->image
+                            ?? null;
+                    } else {
+                        $imagePath = $product->image
+                            ?? null;
+                    }
+
+                    $imageUrl = $makeImageUrl($imagePath);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Price
+                    |--------------------------------------------------------------------------
+                    */
+                    if ($isSolitaire) {
+                        $price = (float) ($item->variant_price ?? 0);
+                        $basePrice = (float) ($item->old_price ?? $price);
+                        $discountPercent = $item->discount_percent ?? null;
+
+                        $hasDiscount = $basePrice > $price;
+                        $discountText = $discountPercent
+                            ? $discountPercent . '% OFF'
+                            : ($hasDiscount ? 'PKR ' . number_format(($basePrice - $price), 0, '.', ',') . ' OFF' : '');
+
+                    } else {
+                        $basePrice = (float) ($product->final_price ?? $product->price ?? 0);
+                        $price = (float) $calcNormalProductPrice($product);
+
+                        $hasDiscount = false;
+                        $discountText = '';
+
+                        if ($product) {
+                            if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
+                                $hasDiscount = true;
+                                $discountText = $product->discount_percentage . '% OFF';
+                            } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+                                $hasDiscount = true;
+                                $diff = max(0, ($basePrice - $product->discounted_price));
+                                $discountText = $diff > 0 ? 'PKR ' . number_format($diff, 0, '.', ',') . ' OFF' : '';
+                            }
                         }
                     }
 
                     $showStrike = $hasDiscount && $basePrice > $price;
-
-                    $itemSubtotal = $price * (int)$item->quantity;
+                    $itemSubtotal = $price * (int) $item->quantity;
                 @endphp
 
                 <div class="order-item mb-4">
                     <div class="row align-items-center">
                         <div class="col-3">
-                            <img src="{{ asset($product->image) }}"
-                                 alt="{{ $product->name }}"
+                            <img src="{{ $imageUrl }}"
+                                 alt="{{ $productName }}"
                                  class="img-fluid rounded product-image">
                         </div>
 
                         <div class="col-8">
-                            <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
+                            <h6 class="mb-1 fw-semibold">{{ $productName }}</h6>
 
-                            @if($item->size)
-                                <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
-                                    Size: {{ $item->size }}
-                                </div>
+                            @if($isSolitaire)
+                                @if($item->metal_name || $item->metal_code)
+                                    <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
+                                        Metal: {{ $item->metal_name ?? $item->metal_code }}
+                                    </div>
+                                @endif
+
+                                @if($item->diamond_carat)
+                                    <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
+                                        Carat: {{ $item->diamond_carat }}
+                                    </div>
+                                @endif
+
+                                @if($item->solitaire_ring_size)
+                                    <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
+                                        Ring Size: {{ $item->solitaire_ring_size }}
+                                    </div>
+                                @endif
+
+                                @if($item->inscription_text)
+                                    <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
+                                        Inscription: {{ $item->inscription_text }}
+                                    </div>
+                                @endif
+                            @else
+                                @if($item->size)
+                                    <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
+                                        Size: {{ $item->size ?? 'N/A' }}
+                                    </div>
+                                @endif
                             @endif
 
                             <div class="item-pricing mb-2">
                                 @if($showStrike)
                                     <span class="original-price"
                                           style="text-decoration: line-through; color: #6c757d; font-size: 0.9rem; margin-right: 0.5rem;">
-PKR {{ number_format(round($basePrice, -3), 0, '.', ',') }}
+                                        PKR {{ number_format(round($basePrice, -3), 0, '.', ',') }}
                                     </span>
                                 @endif
 
                                 <span class="current-price fw-bold">
-                                    PKR {{ number_format(round($price,-3), 0, '.', ',') }}
+                                    PKR {{ number_format(round($price, -3), 0, '.', ',') }}
                                 </span>
 
                                 @if($hasDiscount && $discountText)
@@ -333,12 +445,15 @@ PKR {{ number_format(round($basePrice, -3), 0, '.', ',') }}
 
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="text-muted">Qty: {{ $item->quantity }}</span>
-                                <span class="fw-bold">PKR {{ number_format(round($itemSubtotal,-3), 0, '.', ',') }}</span>
+                                <span class="fw-bold">
+                                    PKR {{ number_format(round($itemSubtotal, -3), 0, '.', ',') }}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             @endforeach
+
         @else
             <div class="text-center py-4">
                 <p class="text-muted">Your cart is empty</p>
@@ -352,29 +467,32 @@ PKR {{ number_format(round($basePrice, -3), 0, '.', ',') }}
             <div class="order-totals">
                 <div class="d-flex justify-content-between mb-2">
                     <span>Subtotal:</span>
-                    <span class="fw-bold">PKR {{ number_format(round($subtotal,-3), 0, '.', ',') }}</span>
+                    <span class="fw-bold">
+                        PKR {{ number_format(round($subtotal, -3), 0, '.', ',') }}
+                    </span>
                 </div>
 
                 <div class="d-flex justify-content-between mb-2">
                     <span>Express Delivery with Signature:</span>
-                    <span class="fw-bold">PKR {{ number_format($shipping, 0, '.', ',') }}</span>
+                    <span class="fw-bold">
+                        PKR {{ number_format($shipping, 0, '.', ',') }}
+                    </span>
                 </div>
 
                 <hr class="my-3">
 
                 <div class="d-flex justify-content-between">
                     <span class="fw-bold">Total Amount:</span>
-                    <span class="fw-bold fs-5">PKR {{ number_format(round($total,-3), 0, '.', ',') }}</span>
+                    <span class="fw-bold fs-5">
+                        PKR {{ number_format(round($total, -3), 0, '.', ',') }}
+                    </span>
                 </div>
             </div>
         @endif
     </div>
 </div>
 
-        </div>
-    </div>
-</div>
-
+       
 <style>
 /* Checkout Progress Indicator */
 .checkout-progress {
@@ -1304,12 +1422,24 @@ function validateShippingForm() {
 
 function processCheckout() {
     const form = document.getElementById('shippingForm');
-    if (!form) return console.error('Form not found');
 
-    // Save lead snapshot when user clicks complete order
-    saveLead('clicked_complete_order');
+    if (!form) {
+        alert('Shipping form not found.');
+        return;
+    }
 
     const formData = new FormData(form);
+
+    const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked');
+    if (deliveryOption) {
+        formData.set('deliveryOption', deliveryOption.value || deliveryOption.id);
+    }
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+if (paymentMethod) {
+    formData.set('paymentMethod', paymentMethod.value);
+} else {
+    formData.set('paymentMethod', 'bank_transfer');
+}
 
     fetch("{{ route('checkout.process') }}", {
         method: "POST",
@@ -1319,25 +1449,30 @@ function processCheckout() {
         },
         body: formData
     })
-    .then(async res => {
-        const text = await res.text();
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            console.error('Server returned non-JSON:', text);
-            throw new Error('Invalid JSON response');
+    .then(async response => {
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw data;
         }
+
+        return data;
     })
     .then(data => {
         if (data.success) {
             window.location.href = data.redirect;
         } else {
-            alert(data.message || 'Checkout failed');
+            alert(data.message || 'Checkout failed.');
         }
     })
-    .catch(err => {
-        console.error(err);
-        alert('Server error occurred');
+    .catch(error => {
+        console.log('Checkout error:', error);
+
+        if (error.errors) {
+            alert(Object.values(error.errors).flat().join("\n"));
+        } else {
+            alert(error.message || 'Checkout failed.');
+        }
     });
 }
 

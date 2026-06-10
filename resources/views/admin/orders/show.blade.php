@@ -63,46 +63,191 @@
                                                 <tr>
                                                     <th>Product</th>
                                                     <th>Image</th>
+                                                    <th>Details</th>
                                                     <th>Price</th>
                                                     <th>Quantity</th>
                                                     <th>Total</th>
+
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                @foreach($order->items as $item)
-                                                <tr>
-                                                    <td>
-                                                        <strong>{{ $item->product_name }}</strong>
-                                                        @if($item->discount_amount > 0)
-                                                            <br><small class="text-success">
-                                                                @if($item->discount_type === 'percentage')
-                                                                    {{ $item->discount_percentage }}% OFF
-                                                                @else
-                                                                    ${{ number_format($item->discount_amount, 2) }} OFF
-                                                                @endif
-                                                            </small>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($item->product_image)
-                                                            <img src="{{ asset($item->product_image) }}" 
-                                                                 alt="{{ $item->product_name }}" 
-                                                                 style="width: 50px; height: 50px; object-fit: cover;">
-                                                        @else
-                                                            <span class="text-muted">No image</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($item->original_price > $item->unit_price)
-                                                            <span class="text-muted text-decoration-line-through">PKR{{ number_format(round($item->original_price,-3), 2) }}</span><br>
-                                                        @endif
-                                                        <strong>PKR{{ number_format(round($item->unit_price,-3), 2) }}</strong>
-                                                    </td>
-                                                    <td>{{ $item->quantity }}</td>
-                                                    <td><strong>PKR{{ number_format(round($item->total_price,-3), 2) }}</strong></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
+                                         @php
+    $makeImageUrl = function ($imagePath) {
+        if (!$imagePath) {
+            return asset('assets/f_assets/image/no-image.png');
+        }
+
+        $imagePath = trim($imagePath);
+        $imagePath = ltrim($imagePath, '/');
+
+        if (str_starts_with($imagePath, 'http://') || str_starts_with($imagePath, 'https://')) {
+            return $imagePath;
+        }
+
+        if (
+            str_starts_with($imagePath, 'storage/') ||
+            str_starts_with($imagePath, 'assets/') ||
+            str_starts_with($imagePath, 'uploads/')
+        ) {
+            return asset($imagePath);
+        }
+
+        return asset('storage/' . $imagePath);
+    };
+@endphp
+
+<tbody>
+    @foreach($order->items as $item)
+        @php
+            $options = $item->item_options ?? [];
+
+            if (is_string($options)) {
+                $decodedOptions = json_decode($options, true);
+                $options = is_array($decodedOptions) ? $decodedOptions : [];
+            }
+
+            if (is_object($options)) {
+                $options = (array) $options;
+            }
+
+            $cartType = $options['cart_type'] ?? 'normal';
+
+            $displayImage = $options['selected_image']
+                ?? $item->product_image
+                ?? null;
+
+            $imageUrl = $makeImageUrl($displayImage);
+        @endphp
+
+        <tr>
+            {{-- Product Name --}}
+            <td>
+                <strong>{{ $item->product_name }}</strong>
+
+                <br>
+
+                @if($cartType === 'solitaire')
+                    <span class="badge bg-dark mt-1">Solitaire</span>
+                @else
+                    <span class="badge bg-secondary mt-1">Normal Product</span>
+                @endif
+
+                @if((float)($item->discount_amount ?? 0) > 0)
+                    <br>
+                    <small class="text-success">
+                        @if($item->discount_type === 'percentage')
+                            {{ $item->discount_percentage }}% OFF
+                        @else
+                            PKR {{ number_format((float)$item->discount_amount, 0, '.', ',') }} OFF
+                        @endif
+                    </small>
+                @endif
+            </td>
+
+            {{-- Product Image --}}
+            <td>
+                <img
+                    src="{{ $imageUrl }}"
+                    alt="{{ $item->product_name }}"
+                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;"
+                >
+            </td>
+
+            {{-- Product Details --}}
+            <td>
+                @if($cartType === 'solitaire')
+                    <div class="mb-1">
+                        <strong>Metal:</strong>
+                        {{ $options['metal_name'] ?? $options['metal_code'] ?? 'N/A' }}
+                    </div>
+
+                    <div class="mb-1">
+                        <strong>Metal Code:</strong>
+                        {{ $options['metal_code'] ?? 'N/A' }}
+                    </div>
+
+                    <div class="mb-1">
+                        <strong>Diamond Carat:</strong>
+                        {{ $options['diamond_carat'] ?? 'N/A' }}
+                    </div>
+
+                    <div class="mb-1">
+                        <strong>Ring Size:</strong>
+                        {{ $options['solitaire_ring_size'] ?? 'N/A' }}
+                    </div>
+
+                    <div class="mb-1">
+                        <strong>Inscription:</strong>
+                        {{ !empty($options['inscription_text']) ? $options['inscription_text'] : 'N/A' }}
+                    </div>
+
+                    <!-- <div class="mb-1">
+                        <strong>Variant Price:</strong>
+                        PKR {{ number_format((float)($options['variant_price'] ?? $item->unit_price), 0, '.', ',') }}
+                    </div> -->
+
+                    <!-- @if(!empty($options['old_price']))
+                        <div class="mb-1">
+                            <strong>Old Price:</strong>
+                            PKR {{ number_format((float)$options['old_price'], 0, '.', ',') }}
+                        </div>
+                    @endif -->
+
+                    <!-- @if(!empty($options['discount_percent']))
+                        <div class="mb-1">
+                            <strong>Discount:</strong>
+                            {{ $options['discount_percent'] }}%
+                        </div>
+                    @endif -->
+
+                    @if(!empty($options['selected_image']))
+                        <div class="mb-1">
+                            <strong>Selected Image:</strong>
+                            <small style="word-break: break-all;">
+                                {{ $options['selected_image'] }}
+                            </small>
+                        </div>
+                    @endif
+                @else
+                    @if(!empty($options['size']))
+                        <div class="mb-1">
+                            <strong>Size:</strong>
+                            {{ $options['size'] }}
+                        </div>
+                    @else
+                        <span class="text-muted">No extra details</span>
+                    @endif
+                @endif
+            </td>
+
+            {{-- Unit Price --}}
+            <td>
+                @if((float)($item->original_price ?? 0) > (float)($item->unit_price ?? 0))
+                    <span class="text-muted text-decoration-line-through">
+                        PKR {{ number_format(round((float)$item->original_price, -3), 0, '.', ',') }}
+                    </span>
+                    <br>
+                @endif
+
+                <strong>
+                    PKR {{ number_format(round((float)$item->unit_price, -3), 0, '.', ',') }}
+                </strong>
+            </td>
+
+            {{-- Quantity --}}
+            <td>
+                {{ $item->quantity }}
+            </td>
+
+            {{-- Total --}}
+            <td>
+                <strong>
+                    PKR {{ number_format(round((float)$item->total_price, -3), 0, '.', ',') }}
+                </strong>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                                         </table>
                                     </div>
                                 </div>
@@ -273,6 +418,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 function updateOrderStatus() {
