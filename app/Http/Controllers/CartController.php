@@ -16,6 +16,23 @@ use App\Models\CheckoutLead;
 
 class CartController extends Controller
 {
+    private function cartContextKey(int $productId, ?string $size): string
+    {
+        return $productId . '_' . ($size ?: 'default');
+    }
+
+    private function cartUsesStorefront(int $productId, ?string $size): bool
+    {
+        return (bool) data_get(session('cart_store_context', []), $this->cartContextKey($productId, $size), false);
+    }
+
+    private function setCartStorefront(int $productId, ?string $size, bool $forStore): void
+    {
+        $contexts = session('cart_store_context', []);
+        $contexts[$this->cartContextKey($productId, $size)] = $forStore;
+        session(['cart_store_context' => $contexts]);
+    }
+
     // Show cart page
     public function index()
     {
@@ -180,8 +197,8 @@ class CartController extends Controller
         DB::beginTransaction();
 
         /* ---------- PRICE CALCULATOR (same as checkout blade) ---------- */
-        $calcPrice = function ($product): int {
-            $basePrice = (float)($product->final_price ?? $product->price ?? 0);
+        $calcPrice = function ($product, bool $forStore = false): int {
+            $basePrice = (float) $product->displayPrice($forStore);
             $price = $basePrice;
 
             if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
@@ -198,13 +215,14 @@ class CartController extends Controller
 
         foreach ($cartItems as $item) {
             $product = $item->product;
-            $unit = $calcPrice($product);
+            $forStore = $this->cartUsesStorefront((int) $product->id, $item->size);
+            $unit = $calcPrice($product, $forStore);
 
             $subtotal += $unit * (int)$item->quantity;
 
             Log::debug('Price calculated (live)', [
                 'product_id' => $product->id,
-                'base_price' => (float)($product->final_price ?? $product->price ?? 0),
+                'base_price' => (float) $product->displayPrice($forStore),
                 'unit_price' => $unit,
                 'quantity' => (int)$item->quantity
             ]);
@@ -259,14 +277,15 @@ class CartController extends Controller
         /* ---------- 6. CREATE ORDER ITEMS ---------- */
         foreach ($cartItems as $item) {
             $product = $item->product;
+            $forStore = $this->cartUsesStorefront((int) $product->id, $item->size);
 
-            $unitPrice = $calcPrice($product);
+            $unitPrice = $calcPrice($product, $forStore);
             $qty = (int)$item->quantity;
 
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->id,
-                'product_name' => $product->name ?? 'Product',
+                'product_name' => $product->displayName($forStore),
                 'product_image' => $product->image ?? null,
                 'unit_price' => $unitPrice,
                 'quantity' => $qty,
@@ -536,6 +555,8 @@ class CartController extends Controller
             ->when($userId, fn($q) => $q->where('user_id', $userId))
             ->when(!$userId, fn($q) => $q->where('session_id', $sessionId))
             ->first();
+
+        $this->setCartStorefront((int) $productId, $size, $request->boolean('store'));
 
         if ($cartItem) {
             $cartItem->quantity += $quantity;

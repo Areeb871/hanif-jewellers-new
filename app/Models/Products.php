@@ -9,7 +9,7 @@ use App\Services\DiamondPriceCalculator;
 class Products extends Model
 {
     protected $table = 'products';
-    protected $fillable = ['category_id', 'sub_category_id', 'name', 'slug', 'sku', 'barcode', 'description', 'image', 'hover_image', 'price', 'diamond_price', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_latest', 'show_price'];
+    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_latest', 'show_price'];
     protected $hidden = ['created_at', 'updated_at'];
     // public function getPriceAttribute($value)
     // {
@@ -53,12 +53,15 @@ class Products extends Model
     }
 
     /**
-     * Live-calculated price: diamond (tagged) or gold from description, else stored price.
+     * Live-calculated price from any description text (same gold/diamond logic).
      */
-    public function getFinalPriceAttribute(): float
+    public function finalPriceForDescription(?string $description): float
     {
         if ($this->shouldUseDiamondPricing()) {
-            $diamond = DiamondPriceCalculator::calculateForProduct($this);
+            $diamond = DiamondPriceCalculator::calculateFromDescription(
+                $description ?? '',
+                (float) ($this->diamond_price ?? 0)
+            );
             if ($diamond !== null) {
                 return $diamond;
             }
@@ -66,13 +69,56 @@ class Products extends Model
             return (float) ($this->attributes['price'] ?? 0);
         }
 
-        $calculated = GoldPriceCalculator::calculateFromDescription($this->description ?? '');
+        $calculated = GoldPriceCalculator::calculateFromDescription($description ?? '');
 
         if ($calculated !== null) {
             return $calculated;
         }
 
         return (float) ($this->attributes['price'] ?? 0);
+    }
+
+    /**
+     * Live-calculated price: diamond (tagged) or gold from description, else stored price.
+     */
+    public function getFinalPriceAttribute(): float
+    {
+        return $this->finalPriceForDescription($this->description ?? '');
+    }
+
+    /** Online store name when set, otherwise default product name. */
+    public function storefrontName(): string
+    {
+        return filled($this->online_store_name) ? $this->online_store_name : ($this->name ?? '');
+    }
+
+    /** Online store description when set, otherwise default description. */
+    public function storefrontDescription(): string
+    {
+        return filled($this->online_store_description)
+            ? $this->online_store_description
+            : ($this->description ?? '');
+    }
+
+    /** Live price from storefront description (matches online store card). */
+    public function getStorefrontPriceAttribute(): float
+    {
+        return $this->finalPriceForDescription($this->storefrontDescription());
+    }
+
+    public function displayName(bool $forStore = false): string
+    {
+        return $forStore ? $this->storefrontName() : ($this->name ?? '');
+    }
+
+    public function displayDescription(bool $forStore = false): string
+    {
+        return $forStore ? $this->storefrontDescription() : ($this->description ?? '');
+    }
+
+    public function displayPrice(bool $forStore = false): float
+    {
+        return $forStore ? $this->storefront_price : $this->final_price;
     }
 
     public function isWatchProduct(): bool

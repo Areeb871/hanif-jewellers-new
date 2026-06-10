@@ -33,7 +33,7 @@
                         <div class="card-title">
                             <div class="d-flex align-items-center position-relative my-1">
                                 <i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
-                                <input type="text" id="search_product" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-300px ps-12" placeholder="Search Product By Name" />
+                                <input type="text" id="search_product" data-kt-ecommerce-product-filter="search" class="form-control form-control-solid w-300px ps-12" placeholder="Search by name or online store name" />
                             </div>
                         </div>
                         <div class="card-toolbar flex-row-fluid justify-content-end gap-5">

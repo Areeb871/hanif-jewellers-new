@@ -411,9 +411,10 @@
                     @foreach($cartItems as $item)
                    @php
     $product = $item->product;
+    $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
+    $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
 
-    // Base price (prefer final_price if available)
-    $price = $product->final_price ?? $product->price ?? 0;
+    $price = $product->displayPrice($forStore);
     $hasDiscount = false;
     $discountText = '';
     // Percentage discount
@@ -440,12 +441,12 @@
 @endphp
 
                     <div class="cart-item" data-id="{{ $item->id }}">
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="item-image">
+                        <img src="{{ asset($product->image) }}" alt="{{ $product->displayName($forStore) }}" class="item-image">
                         
                         <div class="item-details">
                             <div>
                                 <div class="item-brand">Hanif</div>
-                                <div class="item-name">{{ $product->name }}</div>
+                                <div class="item-name">{{ $product->displayName($forStore) }}</div>
                                 <div class="item-price">PKR {{ number_format(round($price,-3)) }}</div>
                                 @if($item->size)
                                 <div class="item-size" style="font-size: 0.9rem; color: #666666; margin-top: 0.5rem; margin-bottom: 0.5rem;">

@@ -245,8 +245,8 @@
                 ->get();
 
             // ✅ One function for price calculation
-            $calcPrice = function($product) {
-                $price = $product->final_price ?? $product->price ?? 0;
+            $calcPrice = function($product, bool $forStore = false) {
+                $price = $product->displayPrice($forStore);
 
                 if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
                     $price = $price - ($price * $product->discount_percentage / 100);
@@ -260,7 +260,9 @@
             $subtotal = 0;
             foreach($cartItems as $item) {
                 $p = $item->product;
-                $price = $p ? $calcPrice($p) : 0;
+                $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
+                $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
+                $price = $p ? $calcPrice($p, $forStore) : 0;
                 $subtotal += $price * (int)$item->quantity;
             }
 
@@ -272,9 +274,11 @@
             @foreach($cartItems as $item)
                 @php
                     $product = $item->product;
+                    $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
+                    $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
 
-                    $basePrice = $product->final_price ?? $product->price ?? 0;
-                    $price = $product ? $calcPrice($product) : 0;
+                    $basePrice = $product->displayPrice($forStore);
+                    $price = $product ? $calcPrice($product, $forStore) : 0;
 
                     $hasDiscount = false;
                     $discountText = '';
@@ -299,12 +303,12 @@
                     <div class="row align-items-center">
                         <div class="col-3">
                             <img src="{{ asset($product->image) }}"
-                                 alt="{{ $product->name }}"
+                                 alt="{{ $product->displayName($forStore) }}"
                                  class="img-fluid rounded product-image">
                         </div>
 
                         <div class="col-8">
-                            <h6 class="mb-1 fw-semibold">{{ $product->name }}</h6>
+                            <h6 class="mb-1 fw-semibold">{{ $product->displayName($forStore) }}</h6>
 
                             @if($item->size)
                                 <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
