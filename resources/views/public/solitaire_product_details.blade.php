@@ -1,7 +1,7 @@
 @extends('public.layouts.header_latest')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}?v={{ filemtime(public_path('assets/f_assets/css/details.css')) }}">
 <script src="{{ asset('assets/f_assets/js/filter.js') }}" defer></script>
 <section class="hj-product-detail-page">
 
@@ -191,9 +191,13 @@
         </div>
     </div>
 
-    <button type="button" class="hj-side-btn" id="selectedMetalBtn">
-        {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
-    </button>
+    <div class="hj-metal-btn-wrap">
+        <button type="button" class="hj-side-btn" id="selectedMetalBtn">
+            {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
+        </button>
+    </div>
+
+
 </div>
 
 
@@ -221,9 +225,11 @@
             >
         </div>
 
-        <button type="button" class="hj-side-btn" id="caratBtn">
-            {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
-        </button>
+        <div class="hj-carat-btn-wrap">
+            <button type="button" class="hj-side-btn" id="caratBtn">
+                {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
+            </button>
+        </div>
     </div>
 
 
@@ -1135,6 +1141,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const caratRange = document.getElementById('caratRange');
     const caratBtn = document.getElementById('caratBtn');
+
+    function applyCaratRangeBackground(rangeEl, caratCount) {
+        if (!rangeEl) {
+            return;
+        }
+
+        const baseBar = 'linear-gradient(to right, #303030 0%, #303030 100%)';
+
+        if (!caratCount || caratCount <= 1) {
+            rangeEl.style.background = baseBar;
+            return;
+        }
+
+        const tickHalf = 0.35;
+        const layers = [];
+
+        for (let i = 1; i < caratCount; i++) {
+            const pos = (i / (caratCount - 1)) * 100;
+            const start = Math.max(0, pos - tickHalf);
+            const end = Math.min(100, pos + tickHalf);
+
+            layers.push(
+                'linear-gradient(to right, transparent ' + start + '%, #ffffff ' + start + '%, #ffffff ' + end + '%, transparent ' + end + '%)'
+            );
+        }
+
+        layers.push(baseBar);
+        rangeEl.style.background = layers.join(', ');
+    }
+
+    applyCaratRangeBackground(caratRange, (data.carats || []).length);
     const selectedMetalBtn = document.getElementById('selectedMetalBtn');
     const selectedMetalTitle = document.getElementById('selectedMetalTitle');
 
@@ -1291,6 +1328,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (typeof window.hjInitGallerySlider === 'function') {
             window.hjInitGallerySlider();
         }
+
+        const cartSelectedImageInput = document.getElementById('cartSelectedImageInput');
+
+        if (cartSelectedImageInput && images && images.length > 0 && images[0].image_path) {
+            cartSelectedImageInput.value = String(images[0].image_path).replace(/^\/+/, '');
+        }
     }
 
     function updateUrl() {
@@ -1308,7 +1351,13 @@ document.addEventListener('DOMContentLoaded', function () {
         window.history.replaceState({}, '', url.toString());
     }
 
-    function updateDetail() {
+    function updateDetail(options) {
+        const settings = Object.assign({
+            refreshGallery: true,
+            updateUrl: true,
+            syncCaratRange: true,
+        }, options || {});
+
         const metal = findMetal(selectedMetalCode);
         const carat = getSelectedCarat();
 
@@ -1317,39 +1366,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const variant = findVariant(selectedMetalCode, carat.value);
         const baseVariant = findBaseVariant(selectedMetalCode);
 
-        renderGallery(selectedMetalCode);
+        if (settings.refreshGallery) {
+            renderGallery(selectedMetalCode);
 
-        document.querySelectorAll('.metal-chip').forEach(function (btn) {
-            btn.classList.toggle(
-                'active',
-                String(btn.dataset.metalCode) === String(selectedMetalCode)
-            );
-        });
+            document.querySelectorAll('.metal-chip').forEach(function (btn) {
+                btn.classList.toggle(
+                    'active',
+                    String(btn.dataset.metalCode) === String(selectedMetalCode)
+                );
+            });
 
-        const metalName = metal && metal.name
-            ? metal.name
-            : selectedMetalCode;
+            const metalName = metal && metal.name
+                ? metal.name
+                : selectedMetalCode;
 
-        const metalColor = getMetalColor(metal);
+            const metalColor = getMetalColor(metal);
 
-        if (selectedMetalBtn) {
-            selectedMetalBtn.textContent = metalName.toUpperCase();
+            if (selectedMetalBtn) {
+                selectedMetalBtn.textContent = metalName.toUpperCase();
+            }
+
+            if (selectedMetalTitle) {
+                selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
+            }
+
+            if (selectedMetalSpec) {
+                selectedMetalSpec.textContent = metalName.toUpperCase();
+            }
+
+            if (selectedMetalColorSpec) {
+                selectedMetalColorSpec.textContent = metalColor;
+            }
         }
 
-        if (selectedMetalTitle) {
-            selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
-        }
-
-        if (selectedMetalSpec) {
-            selectedMetalSpec.textContent = metalName.toUpperCase();
-        }
-
-        if (selectedMetalColorSpec) {
-            selectedMetalColorSpec.textContent = metalColor;
-        }
-
-        if (caratRange) {
-            caratRange.value = selectedCaratIndex;
+        if (settings.syncCaratRange && caratRange) {
+            caratRange.value = String(selectedCaratIndex);
         }
 
         if (caratBtn) {
@@ -1393,19 +1444,42 @@ document.addEventListener('DOMContentLoaded', function () {
             if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
         }
 
-        // PASTE INSIDE YOUR EXISTING updateDetail() FUNCTION BEFORE updateUrl();
+        const cartMetalInput = document.getElementById('cartMetalInput');
+        const cartCaratInput = document.getElementById('cartCaratInput');
 
-const cartMetalInput = document.getElementById('cartMetalInput');
-const cartCaratInput = document.getElementById('cartCaratInput');
+        if (cartMetalInput) {
+            cartMetalInput.value = selectedMetalCode;
+        }
 
-if (cartMetalInput) {
-    cartMetalInput.value = selectedMetalCode;
-}
+        if (cartCaratInput && carat.value) {
+            cartCaratInput.value = carat.value;
+        }
 
-if (cartCaratInput && carat && carat.value) {
-    cartCaratInput.value = carat.value;
-}
-        updateUrl();
+        if (settings.updateUrl) {
+            updateUrl();
+        }
+    }
+
+    function snapCaratRangeToPointer(rangeEl, clientX) {
+        const max = Number(rangeEl.max) || 0;
+
+        if (max <= 0) {
+            return;
+        }
+
+        const rect = rangeEl.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        const index = Math.round(ratio * max);
+
+        if (Number(rangeEl.value) !== index) {
+            rangeEl.value = String(index);
+            selectedCaratIndex = index;
+            updateDetail({
+                refreshGallery: false,
+                updateUrl: false,
+                syncCaratRange: false,
+            });
+        }
     }
 
     document.querySelectorAll('.metal-chip').forEach(function (btn) {
@@ -1420,7 +1494,28 @@ if (cartCaratInput && carat && carat.value) {
     if (caratRange) {
         caratRange.addEventListener('input', function () {
             selectedCaratIndex = Number(this.value);
-            updateDetail();
+            updateDetail({
+                refreshGallery: false,
+                updateUrl: false,
+                syncCaratRange: false,
+            });
+        });
+
+        caratRange.addEventListener('change', function () {
+            selectedCaratIndex = Number(this.value);
+            updateDetail({
+                refreshGallery: false,
+                updateUrl: true,
+                syncCaratRange: false,
+            });
+        });
+
+        caratRange.addEventListener('pointerdown', function (event) {
+            if (event.button !== 0) {
+                return;
+            }
+
+            snapCaratRangeToPointer(this, event.clientX);
         });
     }
 
@@ -1536,6 +1631,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function syncCurrentMainImage() {
         const mainImage =
+            document.querySelector('#hjProductGallery .hj-gallery-item img') ||
             document.getElementById('mainSolitaireImage') ||
             document.getElementById('mainProductImage') ||
             document.getElementById('hjMainSolitaireImage') ||

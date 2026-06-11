@@ -395,6 +395,29 @@
     }
 
     $total = 0;
+
+    $makeImageUrl = function ($imagePath) {
+        if (!$imagePath) {
+            return asset('assets/f_assets/image/no-image.png');
+        }
+
+        $imagePath = trim($imagePath);
+        $imagePath = ltrim($imagePath, '/');
+
+        if (str_starts_with($imagePath, 'http://') || str_starts_with($imagePath, 'https://')) {
+            return $imagePath;
+        }
+
+        if (
+            str_starts_with($imagePath, 'storage/') ||
+            str_starts_with($imagePath, 'assets/') ||
+            str_starts_with($imagePath, 'uploads/')
+        ) {
+            return asset($imagePath);
+        }
+
+        return asset('storage/' . $imagePath);
+    };
 @endphp
 
 <div class="cart-header">
@@ -431,12 +454,37 @@
                             |--------------------------------------------------------------------------
                             | Image
                             |--------------------------------------------------------------------------
+                            | Solitaire = selected metal image saved in cart
+                            | Normal = product image
+                            |--------------------------------------------------------------------------
                             */
                             if ($isSolitaire) {
-                                $productImage = $cartProduct->image ?? 'assets/f_assets/image/no-image.png';
+                                $imagePath = $item->selected_image ?? null;
+
+                                if (
+                                    !$imagePath
+                                    || str_contains((string) $imagePath, 'no-image')
+                                ) {
+                                    $metalImageGroup = collect($cartProduct->metal_images ?? [])
+                                        ->first(function ($group) use ($item) {
+                                            $groupCode = is_array($group)
+                                                ? ($group['metal_code'] ?? $group['code'] ?? null)
+                                                : null;
+
+                                            return $groupCode
+                                                && strtolower(trim((string) $groupCode)) === strtolower(trim((string) $item->metal_code));
+                                        });
+
+                                    $imagePath = data_get($metalImageGroup, 'images.0.image_path')
+                                        ?? data_get($metalImageGroup, 'images.0.image')
+                                        ?? data_get($cartProduct->gallery_images, '0.image_path')
+                                        ?? null;
+                                }
                             } else {
-                                $productImage = $cartProduct->image ?? 'assets/f_assets/image/no-image.png';
+                                $imagePath = $cartProduct->image ?? null;
                             }
+
+                            $imageUrl = $makeImageUrl($imagePath);
 
                             /*
                             |--------------------------------------------------------------------------
@@ -473,7 +521,7 @@
                         @endphp
 
                         <div class="cart-item" data-id="{{ $item->id }}">
-                            <img src="{{ asset($productImage) }}" alt="{{ $productName }}" class="item-image">
+                            <img src="{{ $imageUrl }}" alt="{{ $productName }}" class="item-image">
 
                             <div class="item-details">
                                 <div>

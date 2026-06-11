@@ -333,12 +333,29 @@
                     |--------------------------------------------------------------------------
                     */
                     if ($isSolitaire) {
-                        $imagePath = $item->selected_image
-                            ?? $product->image
-                            ?? null;
+                        $imagePath = $item->selected_image ?? null;
+
+                        if (
+                            !$imagePath
+                            || str_contains((string) $imagePath, 'no-image')
+                        ) {
+                            $metalImageGroup = collect($product->metal_images ?? [])
+                                ->first(function ($group) use ($item) {
+                                    $groupCode = is_array($group)
+                                        ? ($group['metal_code'] ?? $group['code'] ?? null)
+                                        : null;
+
+                                    return $groupCode
+                                        && strtolower(trim((string) $groupCode)) === strtolower(trim((string) $item->metal_code));
+                                });
+
+                            $imagePath = data_get($metalImageGroup, 'images.0.image_path')
+                                ?? data_get($metalImageGroup, 'images.0.image')
+                                ?? data_get($product->gallery_images, '0.image_path')
+                                ?? null;
+                        }
                     } else {
-                        $imagePath = $product->image
-                            ?? null;
+                        $imagePath = $product->image ?? null;
                     }
 
                     $imageUrl = $makeImageUrl($imagePath);

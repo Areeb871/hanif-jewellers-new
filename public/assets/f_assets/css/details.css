@@ -198,7 +198,7 @@ body{
 .hj-metal-row {
     grid-template-columns: auto minmax(0, 1fr) 92px;
     column-gap: 0;
-    align-items: start;
+    align-items: center;
     min-height: 68px;
     overflow: visible;
 }
@@ -214,9 +214,11 @@ body{
     padding-right: 0;
 }
 
-.hj-metal-row .hj-side-btn {
+.hj-metal-row .hj-metal-btn-wrap {
     grid-column: 3;
     grid-row: 1;
+    display: flex;
+    align-items: center;
 }
 
 .hj-metal-track-wrap {
@@ -225,24 +227,58 @@ body{
     max-width: 100%;
     width: auto;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     overflow: visible;
     box-sizing: border-box;
     padding-left: clamp(0px, 1.2vw, 12px);
     padding-right: 8px;
-    padding-top: 10px;
-    padding-bottom: 4px;
 }
 
 @media (min-width: 992px) {
-    .hj-metal-options {
-        justify-content: center;
-        align-content: flex-start;
-        padding: 9px 8px 9px 4px;
+    .hj-row.hj-metal-row,
+    .hj-row.hj-carat-row {
+        grid-template-columns: auto minmax(0, 1fr) 92px;
+        grid-template-rows: auto;
+        column-gap: 0;
+        align-items: center;
+        min-height: 68px;
     }
 
-    .hj-metal-row .hj-side-btn {
-        margin-top: 8px;
+    .hj-metal-row .hj-label,
+    .hj-carat-row .hj-label {
+        grid-column: 1;
+        grid-row: 1;
+        height: auto;
+        justify-self: start;
+        align-self: center;
+    }
+
+    .hj-metal-row .hj-metal-track-wrap,
+    .hj-carat-row .hj-middle {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .hj-carat-row .hj-middle {
+        padding-left: clamp(0px, 1.2vw, 12px);
+        padding-right: 8px;
+    }
+
+    .hj-metal-row .hj-metal-btn-wrap,
+    .hj-carat-row .hj-carat-btn-wrap {
+        grid-column: 3;
+        grid-row: 1;
+        align-self: center;
+    }
+
+    .hj-metal-options {
+        justify-content: center;
+        align-content: center;
+        padding: 0 8px 0 4px;
+    }
+
+    .hj-slider-box {
+        padding-top: 0;
     }
 }
 
@@ -253,12 +289,12 @@ body{
     width: 100%;
     display: flex;
     align-items: center;
-    align-content: flex-start;
+    align-content: center;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
     overflow: visible;
-    padding: 9px 8px 9px 4px;
+    padding: 0 8px 0 4px;
     box-sizing: border-box;
     /* border: 1px solid #ededed; */
     /* border-radius: 8px; */
@@ -268,15 +304,18 @@ body{
     display: none !important;
 }
 
-.hj-metal-row .hj-side-btn {
+.hj-metal-row .hj-metal-btn-wrap .hj-side-btn {
     flex-shrink: 0;
-    align-self: start;
-    justify-self: start;
     margin-left: 0;
     position: relative;
     z-index: 5;
     background: #fff;
     isolation: isolate;
+}
+
+.hj-carat-row .hj-carat-btn-wrap {
+    display: flex;
+    align-items: center;
 }
 
 /* BASE CHIP */
@@ -360,8 +399,11 @@ body{
 @media (max-width: 767px) {
     .hj-metal-options {
         gap: 13px 10px;
-        padding: 6px;
+        padding: 6px 0;
         justify-content: center;
+        width: auto;
+        max-width: 100%;
+        margin: 0 auto;
     }
 }
 
@@ -411,17 +453,7 @@ body{
     cursor: pointer;
     display: block;
     border-radius: 20px;
-
-    /* dark bar + white vertical cuts */
-    background:
-        linear-gradient(to right, transparent 0%, transparent 11.7%, #ffffff 11.7%, #ffffff 12.4%, transparent 12.4%),
-        linear-gradient(to right, transparent 0%, transparent 24.2%, #ffffff 24.2%, #ffffff 24.9%, transparent 24.9%),
-        linear-gradient(to right, transparent 0%, transparent 36.7%, #ffffff 36.7%, #ffffff 37.4%, transparent 37.4%),
-        linear-gradient(to right, transparent 0%, transparent 49.2%, #ffffff 49.2%, #ffffff 49.9%, transparent 49.9%),
-        linear-gradient(to right, transparent 0%, transparent 61.7%, #ffffff 61.7%, #ffffff 62.4%, transparent 62.4%),
-        linear-gradient(to right, transparent 0%, transparent 74.2%, #ffffff 74.2%, #ffffff 74.9%, transparent 74.9%),
-        linear-gradient(to right, transparent 0%, transparent 86.7%, #ffffff 86.7%, #ffffff 87.4%, transparent 87.4%),
-        linear-gradient(to right, #303030 0%, #303030 100%);
+    background: linear-gradient(to right, #303030 0%, #303030 100%);
 }
 
 .hj-carat-range::-webkit-slider-thumb {
@@ -1222,7 +1254,8 @@ body{
         padding: 18px 10px 16px;
     }
 
-    .hj-row {
+    .hj-row:not(.hj-metal-row) {
+        /* border:2px solid black; */
         grid-template-columns: 1fr;
         row-gap: 16px;
         min-height: auto;
@@ -1240,40 +1273,93 @@ body{
         white-space: normal;
     }
 
-    .hj-metal-row {
+    .hj-row.hj-metal-row,
+    .hj-carat-row {
         grid-template-columns: 1fr;
-        row-gap: 0;
+        justify-items: stretch;
+        row-gap: 8px;
         overflow: visible;
     }
 
     .hj-metal-row .hj-label {
+        grid-column: 1;
+        grid-row: 1;
         margin-bottom: 0;
+        justify-self: start;
+        align-self: center;
+        height: auto;
     }
 
-    .hj-metal-track-wrap {
-        width: auto;
+    .hj-carat-row .hj-label {
+        grid-column: 1;
+        grid-row: 1;
+        margin-bottom: 0;
+        justify-self: start;
+    }
+
+    .hj-metal-row .hj-metal-track-wrap {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
         max-width: 100%;
-        margin-left: 0;
-        padding-left: 0;
-        padding-right: 0;
-        padding-top: 0;
-        padding-bottom: 4px;
+        margin: 0;
+        padding: 0;
         overflow: visible;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .hj-metal-options {
+        flex: 0 1 auto;
         flex-wrap: wrap;
         overflow: visible;
         gap: 13px 10px;
-        padding: 9px 8px 9px 4px;
+        padding: 9px 0;
         justify-content: center;
+        width: auto;
+        max-width: 100%;
+        margin: 0 auto;
     }
 
-    .hj-metal-row .hj-side-btn {
+    .hj-carat-row .hj-middle {
+        grid-column: 1;
+        grid-row: 2;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .hj-row.hj-metal-row .hj-metal-btn-wrap {
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn {
         width: 98px;
         height: 38px;
-        justify-self: start;
-        margin-top: 6px;
+        flex-shrink: 0;
+    }
+
+    .hj-carat-row .hj-carat-btn-wrap {
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn {
+        width: 98px;
+        height: 38px;
+        flex-shrink: 0;
     }
 
     .metal-chip {
@@ -1286,12 +1372,6 @@ body{
         font-size: 10px;
     }
 
-    .hj-row:not(.hj-metal-row) .hj-side-btn {
-        width: 98px;
-        height: 38px;
-        justify-self: end;
-    }
-
     .hj-cart-btn {
         width: 200px;
     }
@@ -1302,10 +1382,6 @@ body{
 
     .hj-select-text {
         margin: 0 0 12px;
-    }
-
-    .hj-row.hj-carat-row .hj-side-btn {
-        margin-top: 0;
     }
 }
 
@@ -1952,7 +2028,7 @@ a.hj-lab-product-card {
         padding: 18px 10px 14px;
     }
 
-    .hj-row {
+    .hj-row:not(.hj-metal-row) {
         grid-template-columns: 1fr;
         row-gap: 16px;
         min-height: auto;
@@ -1987,18 +2063,23 @@ a.hj-lab-product-card {
         justify-items: center;
     }
 
-    .hj-metal-row {
+    .hj-metal-row,
+    .hj-carat-row {
         justify-items: stretch;
     }
 
-    .hj-metal-track-wrap,
-    .hj-metal-options {
+    .hj-metal-track-wrap {
         width: 100%;
-        /* margin: 10px; */
     }
 
-    .hj-side-btn,
-    .hj-cart-btn {
+    .hj-metal-options {
+        width: auto;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .hj-price-row .hj-side-btn,
+    .hj-price-row .hj-cart-btn {
         width: 78%;
         max-width: 280px;
         height: 48px;

@@ -694,16 +694,26 @@ public function add(Request $request)
 
     /*
     |--------------------------------------------------------------------------
-    | HELPER: Fetch solitaire image from metals_images by metal_code
+    | HELPER: Fetch solitaire image from metal_images by metal_code
     |--------------------------------------------------------------------------
     */
     $getSolitaireMetalImage = function ($product, $metalCode, $selectedMetal, $requestSelectedImage = null) use ($extractImagePath) {
-        // If frontend already sends selected image, save that image directly
         if (!empty($requestSelectedImage)) {
-            return $requestSelectedImage;
+            $requestSelectedImage = trim((string) $requestSelectedImage);
+
+            if (str_starts_with($requestSelectedImage, 'http://') || str_starts_with($requestSelectedImage, 'https://')) {
+                $parsedPath = parse_url($requestSelectedImage, PHP_URL_PATH);
+                $requestSelectedImage = $parsedPath ? ltrim($parsedPath, '/') : $requestSelectedImage;
+            }
+
+            $requestSelectedImage = ltrim($requestSelectedImage, '/');
+
+            if ($requestSelectedImage !== '' && !str_contains($requestSelectedImage, 'no-image')) {
+                return $requestSelectedImage;
+            }
         }
 
-        $metalsImages = $product->metals_images ?? [];
+        $metalsImages = $product->metal_images ?? [];
 
         if (is_string($metalsImages)) {
             $decoded = json_decode($metalsImages, true);
