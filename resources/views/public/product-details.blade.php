@@ -158,6 +158,11 @@
                 <div class="col-lg-4 mt-0 mt-lg-5" style="padding-right: 50px; margin: unset;">
                     <div class="product-info sticky-sidebar">
 
+@php
+    $storeContext = request()->boolean('store');
+    $displayName = $product->displayName($storeContext);
+    $displayDescription = $product->displayDescription($storeContext);
+@endphp
 
 @if(
     optional($product->subcategory)->slug === 'favre-leuba' ||
@@ -168,15 +173,15 @@
         <h5 class="card-title product-name-fixed pb-5 pb-md-0"style="margin-bottom: 18px;margin-top:33px;">
             @if(true)
                 @php
-                    $nameParts = explode('-', $product->name, 2);
+                    $nameParts = explode('-', $displayName, 2);
                 @endphp
                 @if(count($nameParts) > 1)
                     {{ strtoupper($nameParts[0]) }}<br><div class="text-muted" style="font-size:0.8rem;">{{ strtoupper($nameParts[1]) }}</div>
                 @else
-                    {{ strtoupper($product->name) }}
+                    {{ strtoupper($displayName) }}
                 @endif
             @else
-                {{strtoupper( $product->name) }}
+                {{strtoupper($displayName) }}
             @endif
         </h5>
 
@@ -184,7 +189,7 @@
 
     <div class="mb-4">
         <h1 class="h2 mb-0" style="font-family: sans-serif; font-size: 1.4rem !important;">
-            {{ $product->name }}
+            {{ $displayName }}
         </h1>
     </div>
 
@@ -245,13 +250,13 @@
 </style>
 @endif
 
-@if($product->description)
+@if(filled($displayDescription))
 <div class="mb-4">
     <h3 class="fw-bold" style="text-decoration: underline; font-size:15px;margin-bottom: 4px;">
         Main Features:
     </h3>
     <div class="product-description" style="line-height: 1.5; font-size: 14px; margin: 1; padding: 0;color:#666">
-        {!! $product->description !!}
+        {!! $displayDescription !!}
     </div>
 </div>
 @endif
@@ -266,11 +271,14 @@
                         </div> -->
 <div class="my-5">
     @php
-        $livePrice    = $product->final_price ?? 0;
+        $livePrice    = $product->displayPrice($storeContext);
         $roundedPrice = round($livePrice, -3);
+        $canShowPrice = $storeContext
+            ? ($roundedPrice > 0)
+            : (!empty($product->show_price) && $roundedPrice > 0);
     @endphp
 
-    @if($product->show_price && $roundedPrice > 0)
+    @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
         </div>
@@ -378,7 +386,7 @@
 
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
-                            @if($product->show_price && $product->price > 0)
+                            @if($canShowPrice)
                                 {{-- First Row - Add to Cart and Buy Now --}}
                                 <div class="row g-2 mb-3">
                                     <div class="col-6">
@@ -1260,6 +1268,9 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             formData.append('quantity', quantity);
             formData.append('size', selectedSize);
             formData.append('_token', '{{ csrf_token() }}');
+            @if($storeContext)
+            formData.append('store', '1');
+            @endif
 
             fetch("{{ route('cart.add') }}", {
                 method: "POST",
@@ -1300,6 +1311,9 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             formData.append('quantity', quantity);
             formData.append('size', selectedSize);
             formData.append('_token', '{{ csrf_token() }}');
+            @if($storeContext)
+            formData.append('store', '1');
+            @endif
 
             fetch("{{ route('cart.add') }}", {
                 method: "POST",

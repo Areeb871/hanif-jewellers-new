@@ -448,16 +448,16 @@
                         @continue(!$cartProduct)
 
                         @php
-                            $productName = $cartProduct->name ?? $cartProduct->title ?? 'Product';
+                            $forStore = false;
+                            if (!$isSolitaire && $item->product_id) {
+                                $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
+                                $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
+                            }
 
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Image
-                            |--------------------------------------------------------------------------
-                            | Solitaire = selected metal image saved in cart
-                            | Normal = product image
-                            |--------------------------------------------------------------------------
-                            */
+                            $productName = $isSolitaire
+                                ? ($cartProduct->name ?? $cartProduct->title ?? 'Product')
+                                : $cartProduct->displayName($forStore);
+
                             if ($isSolitaire) {
                                 $imagePath = $item->selected_image ?? null;
 
@@ -486,31 +486,27 @@
 
                             $imageUrl = $makeImageUrl($imagePath);
 
-                            /*
-                            |--------------------------------------------------------------------------
-                            | Price
-                            |--------------------------------------------------------------------------
-                            */
                             if ($isSolitaire) {
                                 $price = (float) ($item->variant_price ?? $cartProduct->price ?? 0);
                                 $oldPrice = $item->old_price ?? null;
                                 $discountText = $item->discount_percent ? $item->discount_percent . '% OFF' : '';
                                 $hasDiscount = !empty($discountText);
                             } else {
-                                $price = (float) ($cartProduct->final_price ?? $cartProduct->price ?? 0);
+                                $basePrice = (float) $cartProduct->displayPrice($forStore);
+                                $price = $basePrice;
                                 $hasDiscount = false;
                                 $discountText = '';
 
                                 if (($cartProduct->discount_type ?? null) == 2 && ($cartProduct->discount_percentage ?? 0) > 0) {
-                                    $price = $cartProduct->price - ($cartProduct->price * $cartProduct->discount_percentage / 100);
+                                    $price = $basePrice - ($basePrice * $cartProduct->discount_percentage / 100);
                                     $hasDiscount = true;
                                     $discountText = $cartProduct->discount_percentage . '% OFF';
                                 } elseif (($cartProduct->discount_type ?? null) == 3 && ($cartProduct->discounted_price ?? 0) > 0) {
                                     $price = $cartProduct->discounted_price;
                                     $hasDiscount = true;
 
-                                    if ($cartProduct->price > $cartProduct->discounted_price) {
-                                        $discountText = 'PKR ' . number_format($cartProduct->price - $cartProduct->discounted_price) . ' OFF';
+                                    if ($basePrice > $cartProduct->discounted_price) {
+                                        $discountText = 'PKR ' . number_format($basePrice - $cartProduct->discounted_price) . ' OFF';
                                     }
                                 }
                             }

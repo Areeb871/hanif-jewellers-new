@@ -2,6 +2,12 @@
     $carouselId = 'carouselOnline' . ($product->slug ?? 'item') . '_' . uniqid();
     $hasImages = isset($product->images) && count($product->images) > 0;
     $displayImage = $hasImages ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg'));
+    $storeContext = $storeContext ?? false;
+    $cardName = $storeContext ? $product->storefrontName() : $product->name;
+    $livePrice = $storeContext ? $product->storefront_price : ($product->final_price ?? 0);
+    $detailUrl = $storeContext
+        ? route('product.details', $product->slug) . '?store=1'
+        : route('product.details', $product->slug);
 @endphp
  <style>
     /*desktop 2000px*/
@@ -302,8 +308,8 @@
                 <div class="carousel-inner">
                     @foreach ($product->images as $imgIndex => $img)
                         <div class="carousel-item{{ $imgIndex === 0 ? ' active' : '' }}">
-                            <a href="{{ route('product.details', $product->slug) }}" class="position-relative d-block" style="z-index:2;">
-                                <img src="{{ asset($img->image) }}" class="img-fluid d-block" loading="lazy" alt="{{ $product->name }} image" width="400" height="400" style="pointer-events:auto;">
+                            <a href="{{ $detailUrl }}" class="position-relative d-block" style="z-index:2;">
+                                <img src="{{ asset($img->image) }}" class="img-fluid d-block" loading="lazy" alt="{{ $cardName }} image" width="400" height="400" style="pointer-events:auto;">
                             </a>
                         </div>
                     @endforeach
@@ -332,12 +338,12 @@
             </div>
         @else
             <div class="position-relative d-block">
-      <a href="{{ route('product.details', $product->slug) }}" class="product-image-link">
+      <a href="{{ $detailUrl }}" class="product-image-link">
     <img
         src="{{ $hasImages ? asset($product->images->first()->image) : $displayImage }}"
         class="product-image"
         loading="lazy"
-        alt="{{ $product->name }} image">
+        alt="{{ $cardName }} image">
 </a>
     </div>
 
@@ -346,8 +352,8 @@
     <!-- <div class="card-img-overlay pe-none">New</div> -->
     <div class="card-body text-center" style="background-color: #F6F4F2;">
         <h5 class="card-title product-name-fixed">
-    @php 
-        $nameParts = explode('-', $product->name); 
+    @php
+        $nameParts = explode('-', $cardName);
     @endphp
 
     {{ trim($nameParts[0]) }}
@@ -360,7 +366,6 @@
         @endif -->
  <p class="card-text">
 @php
-    $livePrice = $product->final_price ?? 0;
     $roundedPrice = round($livePrice, -3);
 @endphp
 
@@ -372,7 +377,7 @@
    
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
-            <a href="{{ route('product.details', $product->slug) }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">Discover More</a>
+            <a href="{{ $detailUrl }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">Discover More</a>
         @endif
     </div>
 </div>

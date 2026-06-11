@@ -1063,12 +1063,6 @@
                             if (pairsInput) pairsInput.value = '';
                             let tagValues = [];
                             tagCheckboxes.forEach(cb => { if (cb.checked) tagValues.push(cb.value); });
-                            if (tagValues.some(t => isDiamondTag(t))) {
-                                tagValues = tagValues.filter(t => !isGoldTag(t));
-                            }
-                            if (tagValues.some(t => isGoldTag(t))) {
-                                tagValues = tagValues.filter(t => !isDiamondTag(t));
-                            }
                             if (tagsInput) tagsInput.value = tagValues.join(',');
                             // Clear single-select fields
                             const subcatInput = document.getElementById('subcatInput');
@@ -1224,14 +1218,14 @@
                     {{-- Product 1 --}}
                     <div class="col-6 col-xl-3 os-promo-col">
                         @if(($cursor) < $products->count())
-                            @include('public.partials.product-card-new', ['product' => $products[$cursor]])
+                            @include('public.partials.product-card-new', ['product' => $products[$cursor], 'storeContext' => true])
                         @endif
                     </div>
 
                     {{-- Product 2 --}}
                     <div class="col-6 col-xl-3 os-promo-col">
                         @if(($cursor + 1) < $products->count())
-                            @include('public.partials.product-card-new', ['product' => $products[$cursor + 1]])
+                            @include('public.partials.product-card-new', ['product' => $products[$cursor + 1], 'storeContext' => true])
                         @endif
                     </div>
 
@@ -1255,14 +1249,14 @@
                     {{-- Product 1 --}}
                     <div class="col-6 col-xl-3 os-promo-col">
                         @if(($cursor) < $products->count())
-                            @include('public.partials.product-card-new', ['product' => $products[$cursor]])
+                            @include('public.partials.product-card-new', ['product' => $products[$cursor], 'storeContext' => true])
                         @endif
                     </div>
 
                     {{-- Product 2 --}}
                     <div class="col-6 col-xl-3 os-promo-col">
                         @if(($cursor + 1) < $products->count())
-                            @include('public.partials.product-card-new', ['product' => $products[$cursor + 1]])
+                            @include('public.partials.product-card-new', ['product' => $products[$cursor + 1], 'storeContext' => true])
                         @endif
                     </div>
 
@@ -1294,7 +1288,7 @@
             @php $prod = $products[$cursor]; @endphp
 
             <div class="col-6 col-xl-3">
-                @include('public.partials.product-card-new', ['product' => $prod])
+                @include('public.partials.product-card-new', ['product' => $prod, 'storeContext' => true])
             </div>
 
             @php $cursor++; @endphp

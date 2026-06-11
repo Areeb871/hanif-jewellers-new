@@ -176,30 +176,43 @@
                             <div class="tab-pane fade show active" id="kt_ecommerce_add_product_general" role="tab-panel">
                                 <div class="d-flex flex-column gap-7 gap-lg-10">
                                     <div class="card card-flush py-4">
-                                        <div class="card-header">
+                                        <div class="card-header flex-wrap gap-3">
                                             <div class="card-title">
-                                                <h2>General</h2>
+                                                <h2>Product Details</h2>
                                             </div>
-                                        </div>
-                                        <div class="" style="padding: 0px 75px 60px 0px;margin: -50px;">
-                                            <div class="form-check form-switch form-check-custom form-check-solid" style="float: right;">
-                                                <input class="form-check-input" type="checkbox" name="is_featured" id="show_pricing" value="1" />
-                                                <label class="form-check-label" for="show_pricing">
-                                                    Featured Product
-                                                </label>
+                                            <div class="card-toolbar d-flex flex-wrap align-items-center gap-5 ms-auto">
+                                                <div class="form-check form-switch form-check-custom form-check-solid mb-0">
+                                                    <input class="form-check-input" type="checkbox" id="onlineStoreFieldsToggle">
+                                                    <label class="form-check-label" for="onlineStoreFieldsToggle">Online Shopping Store</label>
+                                                </div>
+                                                <div class="form-check form-switch form-check-custom form-check-solid mb-0">
+                                                    <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured_toggle" value="1" />
+                                                    <label class="form-check-label" for="is_featured_toggle">Featured Product</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-body pt-0">
-                                            <div class="mb-10 fv-row">
-                                                <label class="required form-label">Product Name</label>
-                                                <input type="text" name="name" class="form-control mb-2" placeholder="Product name" value="" required/>
-                                                <div class="text-muted fs-7">A product name is required.</div>
+                                            <div id="collectionsProductFields">
+                                                <div class="mb-10 fv-row">
+                                                    <label class="required form-label">Product Name</label>
+                                                    <input type="text" name="name" id="product_name" class="form-control mb-2" placeholder="Product name" value="" required/>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">Description</label>
+                                                    <div id="kt_ecommerce_add_product_description" name="description" class="min-h-200px mb-2"></div>
+                                                    <input type="hidden" name="description" id="description">
+                                                </div>
                                             </div>
-                                            <div>
-                                                <label class="form-label">Description</label>
-                                                <div id="kt_ecommerce_add_product_description" name="description" class="min-h-200px mb-2"></div>
-                                                <input type="hidden" name="description" id="description">
-                                                <div class="text-muted fs-7">Set a description to the product for better visibility.</div>
+                                            <div id="onlineStoreProductFields" class="d-none">
+                                                <div class="mb-10 fv-row">
+                                                    <label class="form-label">Product Name</label>
+                                                    <input type="text" name="online_store_name" id="online_store_name" class="form-control mb-2" placeholder="Product name for Online Shopping Store" value="{{ old('online_store_name') }}">
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">Description</label>
+                                                    <div id="kt_ecommerce_online_store_description" class="min-h-200px mb-2">{!! old('online_store_description') !!}</div>
+                                                    <input type="hidden" name="online_store_description" id="online_store_description">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -501,6 +514,29 @@
         var quillEditor = editorContentContainer && editorContentContainer.querySelector('.ql-editor');
         var html = quillEditor ? quillEditor.innerHTML : editorContentContainer.innerHTML;
         document.getElementById('description').value = html;
+
+        var osContainer = document.querySelector('#kt_ecommerce_online_store_description');
+        var osEditor = osContainer && osContainer.querySelector('.ql-editor');
+        document.getElementById('online_store_description').value = osEditor ? osEditor.innerHTML : (osContainer ? osContainer.innerHTML : '');
     });
+
+    (function () {
+        var toggle = document.getElementById('onlineStoreFieldsToggle');
+        var collectionsFields = document.getElementById('collectionsProductFields');
+        var onlineStoreFields = document.getElementById('onlineStoreProductFields');
+        var productName = document.getElementById('product_name');
+
+        function syncProductFieldsView() {
+            var onlineStoreMode = toggle.checked;
+            collectionsFields.classList.toggle('d-none', onlineStoreMode);
+            onlineStoreFields.classList.toggle('d-none', !onlineStoreMode);
+            if (productName) {
+                productName.required = !onlineStoreMode;
+            }
+        }
+
+        toggle.addEventListener('change', syncProductFieldsView);
+        syncProductFieldsView();
+    })();
 </script>
 @endsection

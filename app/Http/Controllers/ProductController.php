@@ -33,7 +33,11 @@ class ProductController extends Controller
         $query = Products::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'LIKE', '%' . $request->search . '%');
+            $term = '%' . $request->search . '%';
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'LIKE', $term)
+                    ->orWhere('online_store_name', 'LIKE', $term);
+            });
         }
         
         if ($request->filled('status') && $request->status !== 'Status') {
@@ -125,10 +129,12 @@ class ProductController extends Controller
             }
 
             $product->name = $request->name;
+            $product->online_store_name = $request->online_store_name;
             $product->slug = $slug;
             $product->sku = $request->sku;
             $product->barcode = $request->barcode;
             $product->description = $request->description;
+            $product->online_store_description = $request->online_store_description;
             $product->price = $request->price;
             // // Try to auto-calculate price from description (weight + karat)
             $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);
@@ -299,9 +305,11 @@ class ProductController extends Controller
 
             // Update product fields
             $product->name = $request->name;
+            $product->online_store_name = $request->online_store_name;
             $product->sku = $request->sku;
             $product->barcode = $request->barcode;
             $product->description = $request->description;
+            $product->online_store_description = $request->online_store_description;
             $product->price = $request->price;
             // Try to auto-calculate price from description (weight + karat)
             $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);

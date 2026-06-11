@@ -17,6 +17,23 @@ use App\Models\SolitaireProduct;
 
 class CartController extends Controller
 {
+    private function cartContextKey(int $productId, ?string $size): string
+    {
+        return $productId . '_' . ($size ?: 'default');
+    }
+
+    private function cartUsesStorefront(int $productId, ?string $size): bool
+    {
+        return (bool) data_get(session('cart_store_context', []), $this->cartContextKey($productId, $size), false);
+    }
+
+    private function setCartStorefront(int $productId, ?string $size, bool $forStore): void
+    {
+        $contexts = session('cart_store_context', []);
+        $contexts[$this->cartContextKey($productId, $size)] = $forStore;
+        session(['cart_store_context' => $contexts]);
+    }
+
     // Show cart page
     public function index()
     {
@@ -217,10 +234,10 @@ public function processCheckout(Request $request)
 
         /*
         |--------------------------------------------------------------------------
-        | 4. Normal Product Price Calculator
+        | 4. Normal Product Price Calculator (store-aware + discount breakdown)
         |--------------------------------------------------------------------------
         */
-        $calcNormalProductPrice = function ($product): array {
+        $calcNormalProductPrice = function ($product, bool $forStore = false): array {
             if (!$product) {
                 return [
                     'unit_price' => 0,
@@ -231,17 +248,17 @@ public function processCheckout(Request $request)
                 ];
             }
 
-            $originalPrice = (float) ($product->final_price ?? $product->price ?? 0);
+            $originalPrice = (float) $product->displayPrice($forStore);
             $unitPrice = $originalPrice;
 
             $discountType = $product->discount_type ?? null;
             $discountPercentage = (float) ($product->discount_percentage ?? 0);
             $discountAmount = 0;
 
-            if ((int)($discountType ?? 0) === 2 && $discountPercentage > 0) {
+            if ((int) ($discountType ?? 0) === 2 && $discountPercentage > 0) {
                 $discountAmount = $originalPrice * $discountPercentage / 100;
                 $unitPrice = $originalPrice - $discountAmount;
-            } elseif ((int)($discountType ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+            } elseif ((int) ($discountType ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
                 $unitPrice = (float) $product->discounted_price;
                 $discountAmount = max(0, $originalPrice - $unitPrice);
             }
@@ -269,7 +286,8 @@ public function processCheckout(Request $request)
             if ($isSolitaire) {
                 $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0)));
             } else {
-                $priceData = $calcNormalProductPrice($item->product);
+                $forStore = $this->cartUsesStorefront((int) $item->product->id, $item->size);
+                $priceData = $calcNormalProductPrice($item->product, $forStore);
                 $unitPrice = $priceData['unit_price'];
             }
 
@@ -354,7 +372,8 @@ public function processCheckout(Request $request)
                 ]);
             } else {
                 $product = $item->product;
-                $priceData = $calcNormalProductPrice($product);
+                $forStore = $this->cartUsesStorefront((int) $product->id, $item->size);
+                $priceData = $calcNormalProductPrice($product, $forStore);
 
                 $unitPrice = $priceData['unit_price'];
                 $originalPrice = $priceData['original_price'];
@@ -365,12 +384,13 @@ public function processCheckout(Request $request)
                     'order_id' => $order->id,
                     'product_id' => $product->id,
 
-                    'product_name' => $product->name ?? 'Product',
+                    'product_name' => $product->displayName($forStore),
                     'product_image' => $product->image ?? null,
 
                     'item_options' => [
                         'cart_type' => 'normal',
                         'size' => $item->size ?? null,
+                        'for_store' => $forStore,
                     ],
 
                     'unit_price' => $unitPrice,
@@ -987,6 +1007,8 @@ public function add(Request $request)
             return $query->where('session_id', $sessionId);
         })
         ->first();
+
+    $this->setCartStorefront((int) $productId, $size, $request->boolean('store'));
 
     if ($cartItem) {
         $cartItem->quantity += $quantity;

@@ -241,16 +241,16 @@
             })
             ->get();
 
-        $calcNormalProductPrice = function ($product) {
+        $calcNormalProductPrice = function ($product, bool $forStore = false) {
             if (!$product) {
                 return 0;
             }
 
-            $price = $product->final_price ?? $product->price ?? 0;
+            $price = (float) $product->displayPrice($forStore);
 
-            if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
-                $price = $price - ($price * $product->discount_percentage / 100);
-            } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+            if ((int) ($product->discount_type ?? 0) === 2 && (float) ($product->discount_percentage ?? 0) > 0) {
+                $price = $price - ($price * (float) $product->discount_percentage / 100);
+            } elseif ((int) ($product->discount_type ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
                 $price = (float) $product->discounted_price;
             }
 
@@ -283,12 +283,15 @@
         $subtotal = 0;
 
         foreach ($cartItems as $cartItem) {
-            $isSolitaire = ($cartItem->cart_type ?? 'normal') === 'solitaire';
+            $isSolitaire = ($cartItem->cart_type ?? 'normal') === 'solitaire'
+                || !empty($cartItem->solitaire_product_id);
 
             if ($isSolitaire) {
                 $price = (float) ($cartItem->variant_price ?? 0);
             } else {
-                $price = (float) $calcNormalProductPrice($cartItem->product);
+                $cartKey = $cartItem->product_id . '_' . ($cartItem->size ?: 'default');
+                $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
+                $price = (float) $calcNormalProductPrice($cartItem->product, $forStore);
             }
 
             $subtotal += $price * (int) $cartItem->quantity;
@@ -304,7 +307,8 @@
 
             @foreach($cartItems as $item)
                 @php
-                    $isSolitaire = ($item->cart_type ?? 'normal') === 'solitaire';
+                    $isSolitaire = ($item->cart_type ?? 'normal') === 'solitaire'
+                        || !empty($item->solitaire_product_id);
 
                     /*
                     |--------------------------------------------------------------------------
@@ -315,14 +319,20 @@
                         ? $item->solitaireProduct
                         : $item->product;
 
+                    $forStore = false;
+                    if (!$isSolitaire && $item->product_id) {
+                        $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
+                        $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
+                    }
+
                     /*
                     |--------------------------------------------------------------------------
                     | Name
                     |--------------------------------------------------------------------------
                     */
-                    $productName = $product->name
-                        ?? $product->title
-                        ?? 'Product';
+                    $productName = $isSolitaire
+                        ? ($product->name ?? $product->title ?? 'Product')
+                        : ($product ? $product->displayName($forStore) : 'Product');
 
                     /*
                     |--------------------------------------------------------------------------
@@ -376,17 +386,17 @@
                             : ($hasDiscount ? 'PKR ' . number_format(($basePrice - $price), 0, '.', ',') . ' OFF' : '');
 
                     } else {
-                        $basePrice = (float) ($product->final_price ?? $product->price ?? 0);
-                        $price = (float) $calcNormalProductPrice($product);
+                        $basePrice = (float) $product->displayPrice($forStore);
+                        $price = (float) $calcNormalProductPrice($product, $forStore);
 
                         $hasDiscount = false;
                         $discountText = '';
 
                         if ($product) {
-                            if ((int)($product->discount_type ?? 0) === 2 && (float)($product->discount_percentage ?? 0) > 0) {
+                            if ((int) ($product->discount_type ?? 0) === 2 && (float) ($product->discount_percentage ?? 0) > 0) {
                                 $hasDiscount = true;
                                 $discountText = $product->discount_percentage . '% OFF';
-                            } elseif ((int)($product->discount_type ?? 0) === 3 && (float)($product->discounted_price ?? 0) > 0) {
+                            } elseif ((int) ($product->discount_type ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
                                 $hasDiscount = true;
                                 $diff = max(0, ($basePrice - $product->discounted_price));
                                 $discountText = $diff > 0 ? 'PKR ' . number_format($diff, 0, '.', ',') . ' OFF' : '';
