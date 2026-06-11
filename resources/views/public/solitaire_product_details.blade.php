@@ -1739,17 +1739,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!cartMetal || !cartMetal.value) {
-            alert('Please select metal.');
+            showToast('error', 'Please select metal.');
             return;
         }
 
         if (!cartCarat || !cartCarat.value) {
-            alert('Please select carat.');
+            showToast('error', 'Please select carat.');
             return;
         }
 
         if (!cartRingSize || !cartRingSize.value) {
-            alert('Please select ring size.');
+            showToast('error', 'Please select ring size.');
             return;
         }
 
@@ -1773,15 +1773,17 @@ document.addEventListener('DOMContentLoaded', function () {
             return data;
         })
         .then(data => {
-            alert(data.message || 'Added to cart successfully.');
+            showToast('success', data.message || 'Added to cart successfully.');
 
             if (data.success) {
-                window.location.href = "{{ url('/cart') }}";
+                setTimeout(() => {
+                    window.location.href = "{{ url('/cart') }}";
+                }, 800);
             }
         })
         .catch(error => {
             console.log(error);
-            alert(error.message || 'Something went wrong. Please try again.');
+            showToast('error', error.message || 'Something went wrong. Please try again.');
         });
     });
 

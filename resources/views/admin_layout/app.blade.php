@@ -51,6 +51,17 @@
 
 
 		@yield('jsfiles')
+
+		<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			@if (session('success'))
+				toastr.success(@json(session('success')));
+			@endif
+			@if (session('error'))
+				toastr.error(@json(session('error')));
+			@endif
+		});
+		</script>
 		
 	</body>
 </html>

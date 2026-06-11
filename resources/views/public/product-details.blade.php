@@ -2,9 +2,6 @@
 
 @section('content')
     {{-- Success Message Display --}}
-    @if(session('success'))
-        <div class="alert alert-success mt-3">{{ session('success') }}</div>
-    @endif
     
     {{-- Main Product Details Section --}}
     <section class="py-5">
@@ -1254,7 +1251,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             
             // Only validate size for gold bracelets, gold rings, and diamond rings
             if (requiresSizeSelection && !selectedSize) {
-                alert('Please select a size before adding to cart.');
+                showToast('error', 'Please select a size before adding to cart.');
                 return;
             }
             
@@ -1274,22 +1271,15 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             })
             .then(response => response.json())
             .then(data => {
-                const msgDiv = document.getElementById('cartMessage');
-                if(data.success) {
-                    msgDiv.innerHTML = '<div class="alert alert-success">'+data.message+'</div>';
-                    
-                    // Update cart count in header
-                    location.reload(); // Simple refresh for now
-                    
-                    setTimeout(() => {
-                        msgDiv.innerHTML = '';
-                    }, 3000);
-                                    } else {
-                    msgDiv.innerHTML = '<div class="alert alert-danger">'+(data.message || 'Could not add to cart')+'</div>';
+                if (data.success) {
+                    showToast('success', data.message);
+                    location.reload();
+                } else {
+                    showToast('error', data.message || 'Could not add to cart');
                 }
             })
             .catch(() => {
-                document.getElementById('cartMessage').innerHTML = '<div class="alert alert-danger">Error adding to cart.</div>';
+                showToast('error', 'Error adding to cart.');
             });
         }
 
@@ -1301,7 +1291,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             
             // Only validate size for gold bracelets, gold rings, and diamond rings
             if (requiresSizeSelection && !selectedSize) {
-                alert('Please select a size before proceeding to checkout.');
+                showToast('error', 'Please select a size before proceeding to checkout.');
                 return;
             }
             
@@ -1325,12 +1315,11 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     // Redirect to checkout
                     window.location.href = "{{ route('checkout') }}";
                 } else {
-                    const msgDiv = document.getElementById('cartMessage');
-                    msgDiv.innerHTML = '<div class="alert alert-danger">'+(data.message || 'Could not add to cart')+'</div>';
+                    showToast('error', data.message || 'Could not add to cart');
                 }
             })
             .catch(() => {
-                document.getElementById('cartMessage').innerHTML = '<div class="alert alert-danger">Error adding to cart.</div>';
+                showToast('error', 'Error adding to cart.');
             });
         }
 
