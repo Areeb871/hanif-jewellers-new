@@ -86,9 +86,7 @@ Route::get('/collections/farah-khan', [HomeController::class, 'farahKhan'])->nam
 Route::get('/collections/divine-treasures', [HomeController::class, 'divineTreasures'])->name('divine-treasures');
 Route::get('/collections/haphazard', [HomeController::class, 'haphazard_new'])->name('collections.haphazard_new');
 Route::get('/collections/nagar', [HomeController::class, 'nagar'])->name('collections.nagar');
-Route::get('/highend-jewellery', [HomeController::class, 'highend'])->name('collections.highend');
-
-
+Route::get('/solitaire-old', [HomeController::class, 'solitaire_new'])->name('collections.solitaire_new');
 // Route::get('/collection/qaws-al-matar', [HomeController::class, 'qaws_al_matar_collection'])->name('qaws-al-matar-collection-page');
 // Specific collection routes must be defined BEFORE the generic wildcard
 

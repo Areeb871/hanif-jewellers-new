@@ -605,7 +605,7 @@ BRIDALS
                 </li>
 
                 <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/solitaire">SOLITAIRE</a>
+                    <a class="mobile-nav-link" href="/solitaire-old">SOLITAIRE</a>
                 </li>
                 
                 <!-- About Us -->

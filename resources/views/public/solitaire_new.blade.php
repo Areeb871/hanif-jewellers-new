@@ -555,10 +555,10 @@
             $metalDesignClasses = [
                 0 => '',
                 1 => 'rose',
-                2 => 'silver',
-                3 => 'rose',
-                4 => 'silver',
-                5 => 'silver',
+                2 => 'yellow',
+                3 => 'white',
+                4 => 'rose',
+                5 => 'yellow',
             ];
 
             $detailUrl = route('solitaire.details', $product->slug)
