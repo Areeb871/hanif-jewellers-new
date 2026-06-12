@@ -162,15 +162,28 @@
  {{-- OPTION CARD --}}
 <div class="hj-option-card">
 
-  @php
-    $metalDesignClasses = [
-        0 => '',
-        1 => 'rose',
-        2 => 'silver',
-        3 => 'rose',
-        4 => 'silver',
-        5 => 'silver',
-    ];
+@php
+    $getMetalColorClass = function ($metal) {
+        $metalCode = strtolower($metal['code'] ?? '');
+        $metalName = strtolower($metal['name'] ?? '');
+        $metalTone = strtolower($metal['tone'] ?? '');
+
+        $value = $metalCode . ' ' . $metalName . ' ' . $metalTone;
+
+        if (str_contains($value, 'rose')) {
+            return 'rose';
+        }
+
+        if (str_contains($value, 'yellow')) {
+            return 'yellow';
+        }
+
+        if (str_contains($value, 'white')) {
+            return 'white';
+        }
+
+        return 'white';
+    };
 @endphp
 
 {{-- METAL --}}
@@ -179,11 +192,16 @@
 
     <div class="hj-metal-track-wrap">
         <div class="hj-metal-options" id="metalOptionsTrack">
-            @foreach($metals as $index => $metal)
+            @foreach($metals as $metal)
+                @php
+                    $metalCode = $metal['code'] ?? '';
+                    $metalColorClass = $getMetalColorClass($metal);
+                @endphp
+
                 <button 
                     type="button"
-                    class="metal-chip {{ $metalDesignClasses[$index] ?? 'silver' }} {{ ($metal['code'] ?? '') === $selectedMetalCode ? 'active' : '' }}"
-                    data-metal-code="{{ $metal['code'] ?? '' }}"
+                    class="metal-chip {{ $metalColorClass }} {{ $metalCode === $selectedMetalCode ? 'active' : '' }}"
+                    data-metal-code="{{ $metalCode }}"
                 >
                     {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
                 </button>
@@ -196,8 +214,6 @@
             {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
         </button>
     </div>
-
-
 </div>
 
 

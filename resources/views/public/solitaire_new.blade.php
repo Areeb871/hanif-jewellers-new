@@ -552,14 +552,27 @@
                 return $currency . ' ' . number_format((float) $value, 0);
             };
 
-            $metalDesignClasses = [
-                0 => '',
-                1 => 'rose',
-                2 => 'yellow',
-                3 => 'white',
-                4 => 'rose',
-                5 => 'yellow',
-            ];
+           $getMetalColorClass = function ($metal) {
+    $metalCode = strtolower($metal['code'] ?? '');
+    $metalName = strtolower($metal['name'] ?? '');
+    $metalTone = strtolower($metal['tone'] ?? '');
+
+    $checkValue = $metalCode . ' ' . $metalName . ' ' . $metalTone;
+
+    if (str_contains($checkValue, 'rose')) {
+        return 'rose';
+    }
+
+    if (str_contains($checkValue, 'yellow')) {
+        return 'yellow';
+    }
+
+    if (str_contains($checkValue, 'white')) {
+        return 'white';
+    }
+
+    return 'white';
+};
 
             $detailUrl = route('solitaire.details', $product->slug)
                 . '?metal=' . urlencode($selectedMetalCode)
@@ -612,15 +625,20 @@
                 </p>
 
                 <div class="hj-metal-options">
-                    @foreach($metals as $index => $metal)
-                        <span 
-                            class="hj-metal {{ $selectedMetalCode == ($metal['code'] ?? '') ? 'active' : '' }} {{ $metalDesignClasses[$index] ?? '' }}"
-                            data-metal-code="{{ $metal['code'] ?? '' }}"
-                        >
-                            {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
-                        </span>
-                    @endforeach
-                </div>
+    @foreach($metals as $metal)
+        @php
+            $metalCode = $metal['code'] ?? '';
+            $metalColorClass = $getMetalColorClass($metal);
+        @endphp
+
+        <span 
+            class="hj-metal {{ $selectedMetalCode == $metalCode ? 'active' : '' }} {{ $metalColorClass }}"
+            data-metal-code="{{ $metalCode }}"
+        >
+            {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
+        </span>
+    @endforeach
+</div>
 
                 <div class="hj-size-options">
                     @foreach($carats as $carat)

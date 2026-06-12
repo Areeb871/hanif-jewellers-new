@@ -359,6 +359,12 @@ body{
     box-shadow: 0 0 0 5px #e8e8e8;
 }
 
+/* YELLOW */
+.metal-chip.yellow {
+    box-shadow: 0 0 0 5px #F0da8d;
+}
+
+
 /* ACTIVE STATE */
 .metal-chip.active {
     border: none !important;
@@ -378,17 +384,11 @@ body{
     outline: none !important;
 }
 
-.metal-chip.metal-yellow,
-.metal-chip.metal-yellow.active {
+.metal-chip.yellow.active {
     background: #fff !important;
-    box-shadow: 0 0 0 4px #e8e8e8;
+    box-shadow: 0 0 0 4px #F0da8d, 0 0 0 7px #111;
 }
 
-.metal-chip.metal-yellow.active {
-    border: none !important;
-    box-shadow: 0 0 0 4px #e8e8e8, 0 0 0 7px #111;
-    outline: none !important;
-}
 
 .metal-chip:focus:not(.active) {
     outline: none !important;
