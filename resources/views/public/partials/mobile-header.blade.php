@@ -16,8 +16,13 @@
         font-size: 12px;
     }
     
-    .mobile-header-main {
+    header.mobile-header-main {
         padding: 12px 0;
+        background: #fff !important;
+    }
+
+    header.mobile-header-main:hover {
+        background: #fff !important;
     }
     
     .mobile-logo {

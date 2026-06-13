@@ -1217,7 +1217,7 @@ public function Online_Shopping_Store(Request $request)
     $useDefaults = !$hasExplicitFilters;
     // Optional forced default tags on first load (keep empty to preserve current default behavior).
     // Examples: 'ehed' or 'mens_rings' or 'ehed,mens_rings' or 'heritage' etc
-    $forcedDefaultTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht';
+    $forcedDefaultTags = 'monalisa,purelook,jewelphabets,heritage,ehed,selene,hasht';
     $activeTags = trim((string) $request->input('tags', ''));
     if ($activeTags === '' && $useDefaults && $forcedDefaultTags !== '') {
         $activeTags = $forcedDefaultTags;

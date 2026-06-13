@@ -862,6 +862,32 @@ a {
   position: relative;
 }
 
+@media (min-width: 768px) {
+  .gehnawaSection {
+    height: auto;
+    margin-top: 0;
+    z-index: 0;
+    background-size: contain;
+    background-position: center top;
+  }
+
+  .gehnawaSection video,
+  .gehnawaSection img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  .gehnawaSection > div[style*="background-image"] {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+}
+
 /*  gehnawa page end */
 
 /* ehad  page start */
