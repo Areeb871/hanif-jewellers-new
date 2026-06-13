@@ -4,7 +4,231 @@
 <link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}?v={{ filemtime(public_path('assets/f_assets/css/details.css')) }}">
 <script src="{{ asset('assets/f_assets/js/filter.js') }}" defer></script>
 <section class="hj-product-detail-page">
+<div class="hj-360-viewer"
+     data-folder="{{ asset('assets/f_assets/image/solitaire/frames') }}/"
+     data-frame-count="60"
+     data-extension="jpg"
+    data-source-fps="12">
 
+    <img
+        src="{{ asset('assets/f_assets/image/solitaire/frames/frame_001.jpg') }}"
+        alt="360 Product View"
+        class="hj-360-image"
+        draggable="false"
+    >
+
+    <div class="hj-360-hint">Drag left or right to rotate</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const viewers = document.querySelectorAll('.hj-360-viewer');
+
+    viewers.forEach(function (viewer) {
+        const img = viewer.querySelector('.hj-360-image');
+
+        const folder = viewer.dataset.folder;
+        const frameCount = parseInt(viewer.dataset.frameCount, 10);
+        const extension = viewer.dataset.extension || 'jpg';
+
+        /*
+            This must match your extracted video FPS.
+            You extracted frames with fps=12, so keep 12.
+        */
+        const sourceFps = parseFloat(viewer.dataset.sourceFps || 12);
+
+        let currentFrame = 1;
+        let isDragging = false;
+        let isLoaded = false;
+
+        let lastX = 0;
+        let dragAccumulator = 0;
+
+        let autoDirection = 1;
+        let lastAutoTime = performance.now();
+        let rafId = null;
+
+        /*
+            Drag setting:
+            Bigger = slower / smoother drag
+            Smaller = faster drag
+        */
+        const pixelsPerFrame = 22;
+
+        /*
+            Auto smooth timing:
+            Because source video is 12fps,
+            each frame should change after 1000 / 12 ms.
+        */
+        const frameInterval = 1000 / sourceFps;
+
+        function getFramePath(frameNumber) {
+            const padded = String(frameNumber).padStart(3, '0');
+            return `${folder}frame_${padded}.${extension}`;
+        }
+
+        function normalizeFrame(frame) {
+            if (frame > frameCount) return 1;
+            if (frame < 1) return frameCount;
+            return frame;
+        }
+
+        function setFrame(frameNumber) {
+            currentFrame = normalizeFrame(frameNumber);
+            img.src = getFramePath(currentFrame);
+        }
+
+        function nextFrame() {
+            setFrame(currentFrame + 1);
+        }
+
+        function prevFrame() {
+            setFrame(currentFrame - 1);
+        }
+
+        function preloadFrames(callback) {
+            let loaded = 0;
+            let hasError = false;
+
+            for (let i = 1; i <= frameCount; i++) {
+                const preloadImg = new Image();
+
+                preloadImg.onload = function () {
+                    loaded++;
+
+                    if (loaded === frameCount) {
+                        isLoaded = true;
+                        viewer.classList.add('loaded');
+
+                        if (callback) callback();
+                    }
+                };
+
+                preloadImg.onerror = function () {
+                    hasError = true;
+                    console.warn('Missing or broken 360 frame:', preloadImg.src);
+
+                    loaded++;
+
+                    if (loaded === frameCount) {
+                        isLoaded = true;
+                        viewer.classList.add('loaded');
+
+                        if (callback) callback();
+                    }
+                };
+
+                preloadImg.src = getFramePath(i);
+            }
+        }
+
+        function autoLoop(now) {
+            if (!isLoaded) {
+                rafId = requestAnimationFrame(autoLoop);
+                return;
+            }
+
+            if (!isDragging) {
+                const elapsed = now - lastAutoTime;
+
+                if (elapsed >= frameInterval) {
+                    /*
+                        If browser was slow, do not jump many frames.
+                        Move only one frame for luxury smooth feel.
+                    */
+                    if (autoDirection === 1) {
+                        nextFrame();
+                    } else {
+                        prevFrame();
+                    }
+
+                    lastAutoTime = now;
+                }
+            } else {
+                lastAutoTime = now;
+            }
+
+            rafId = requestAnimationFrame(autoLoop);
+        }
+
+        function startAuto() {
+            if (!rafId) {
+                lastAutoTime = performance.now();
+                rafId = requestAnimationFrame(autoLoop);
+            }
+        }
+
+        preloadFrames(function () {
+            setFrame(1);
+            startAuto();
+        });
+
+        viewer.addEventListener('pointerdown', function (e) {
+            isDragging = true;
+            lastX = e.clientX;
+            dragAccumulator = 0;
+
+            viewer.classList.add('dragging');
+
+            if (viewer.setPointerCapture) {
+                viewer.setPointerCapture(e.pointerId);
+            }
+
+            e.preventDefault();
+        });
+
+        viewer.addEventListener('pointermove', function (e) {
+            if (!isDragging || !isLoaded) return;
+
+            const diff = e.clientX - lastX;
+            lastX = e.clientX;
+
+            dragAccumulator += diff;
+
+            while (Math.abs(dragAccumulator) >= pixelsPerFrame) {
+                if (dragAccumulator > 0) {
+                    /*
+                        Drag right
+                    */
+                    prevFrame();
+                    autoDirection = -1;
+                    dragAccumulator -= pixelsPerFrame;
+                } else {
+                    /*
+                        Drag left
+                    */
+                    nextFrame();
+                    autoDirection = 1;
+                    dragAccumulator += pixelsPerFrame;
+                }
+            }
+
+            e.preventDefault();
+        });
+
+        function stopDrag(e) {
+            if (!isDragging) return;
+
+            isDragging = false;
+            dragAccumulator = 0;
+            lastAutoTime = performance.now();
+
+            viewer.classList.remove('dragging');
+
+            if (e && viewer.hasPointerCapture && viewer.hasPointerCapture(e.pointerId)) {
+                viewer.releasePointerCapture(e.pointerId);
+            }
+        }
+
+        viewer.addEventListener('pointerup', stopDrag);
+        viewer.addEventListener('pointercancel', stopDrag);
+        viewer.addEventListener('pointerleave', stopDrag);
+
+        img.addEventListener('dragstart', function (e) {
+            e.preventDefault();
+        });
+    });
+});
+</script>
 <div class="hj-product-container">
 
      {{-- LEFT IMAGE GALLERY --}}
@@ -1038,6 +1262,7 @@
 
     </div>
 </section>
+
 <script>
     /** Inscription Modal Script */
 document.addEventListener('DOMContentLoaded', function () {

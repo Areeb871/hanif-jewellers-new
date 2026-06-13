@@ -2414,3 +2414,39 @@ a.hj-lab-product-card {
         max-height: 225px;
     }
 }
+.hj-360-viewer {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    position: relative;
+    cursor: grab;
+    user-select: none;
+    overflow: hidden;
+    background: #fff;
+    touch-action: none;
+}
+
+.hj-360-viewer.dragging {
+    cursor: grabbing;
+}
+
+.hj-360-image {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    backface-visibility: hidden;
+}
+
+.hj-360-hint {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
