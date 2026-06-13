@@ -359,6 +359,12 @@ body{
     box-shadow: 0 0 0 5px #e8e8e8;
 }
 
+/* YELLOW */
+.metal-chip.yellow {
+    box-shadow: 0 0 0 5px #F0da8d;
+}
+
+
 /* ACTIVE STATE */
 .metal-chip.active {
     border: none !important;
@@ -378,17 +384,11 @@ body{
     outline: none !important;
 }
 
-.metal-chip.metal-yellow,
-.metal-chip.metal-yellow.active {
+.metal-chip.yellow.active {
     background: #fff !important;
-    box-shadow: 0 0 0 4px #e8e8e8;
+    box-shadow: 0 0 0 4px #F0da8d, 0 0 0 7px #111;
 }
 
-.metal-chip.metal-yellow.active {
-    border: none !important;
-    box-shadow: 0 0 0 4px #e8e8e8, 0 0 0 7px #111;
-    outline: none !important;
-}
 
 .metal-chip:focus:not(.active) {
     outline: none !important;
@@ -2515,4 +2515,40 @@ a.hj-lab-product-card {
         top: 46px;
         max-height: 225px;
     }
+}
+.hj-360-viewer {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    position: relative;
+    cursor: grab;
+    user-select: none;
+    overflow: hidden;
+    background: #fff;
+    touch-action: none;
+}
+
+.hj-360-viewer.dragging {
+    cursor: grabbing;
+}
+
+.hj-360-image {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    backface-visibility: hidden;
+}
+
+.hj-360-hint {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
 }

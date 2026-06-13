@@ -2894,7 +2894,12 @@ public function solitaire_details($slug, Request $request)
 
  public function solitaire_new()
 {
-    return view('public.solitaire');
+    $products = Products::with('category', 'subcategory', 'images')->where([
+            ['status', 'published'],
+            ['category_id', 7],
+            ['subcategory_id', 40]
+        ])->get();
+        return view('public.solitaire_new', compact('products'));
 }
 
 

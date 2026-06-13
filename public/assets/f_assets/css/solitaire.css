@@ -1072,19 +1072,17 @@ font-family: "Barlow", sans-serif;
     transition: none;
 }
 
-/* METAL COLORS */
-.hj-metal.rose {
-    border-color: #f5c8ba;
-}
-
-.hj-metal.silver {
+.hj-metal.white {
     border-color: #eeeeee;
 }
 
-.hj-metal.platinum {
-    border-color: #cccccc;
+.hj-metal.rose {
+    border-color: #f5c8ba;;
 }
 
+.hj-metal.yellow {
+    border-color: #F0da8d;
+}
 /* ACTIVE METAL - BLACK OUTER BORDER */
 .hj-metal.active {
     box-shadow: 0 0 0 2px #111111;
@@ -1099,6 +1097,9 @@ font-family: "Barlow", sans-serif;
 /* ACTIVE SILVER - KEEP SILVER INNER BORDER */
 .hj-metal.silver.active {
     border-color: #eeeeee;
+}
+.hj-metal.yellow.active {
+    border-color: #F0da8d;
 }
 
 /* ACTIVE PLATINUM - KEEP PLATINUM INNER BORDER */
