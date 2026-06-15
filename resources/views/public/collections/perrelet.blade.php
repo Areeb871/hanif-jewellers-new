@@ -2,74 +2,32 @@
 @extends('public.layouts.header_latest')
 <style>
 /* =======================
-   DESKTOP HERO BASE
+   DESKTOP HERO
    ======================= */
 .heroBanner{
   position: relative;
   width: 100%;
-  height: 1100px;
-  max-height: 1100px;
   overflow: hidden;
   background: #000;
-  margin-top: -10rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  line-height: 0;
+  margin-top: 0;
 }
 
-/* Video behaves exactly like image banner */
-.heroVideo{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  z-index: 1;
-}
-
-/* Image */
+.heroVideo,
 .heroImg{
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
   display: block;
-  z-index: 1;
+  object-fit: cover;
 }
 
-/* =======================
-   EDGE-TO-EDGE FIX (DESKTOP)
-   ======================= */
-.heroBanner.d-lg-block{
+.heroBanner.d-lg-block,
+.heroBanner.d-md-block{
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
 }
 
-/* =======================
-   RESPONSIVE RATIO (DESKTOP)
-   ======================= */
-
-
-@media (min-width: 992px){
-  .heroBanner{
-    aspect-ratio: 1750 / 992;
-    height: auto;
-    max-height: 1100px;
-  }
-}
-@media (min-width: 768px){
-  .heroBanner{
-    aspect-ratio: 992 / 768;
-    height: auto;
-    max-height: 1100px;
-  }
-}
 /* =======================
    MOBILE STACK
    ======================= */
@@ -82,24 +40,15 @@
   width: 100%;
   overflow: hidden;
   background: #000;
-  height: 70vh;
-  max-height: 520px;
+  line-height: 0;
 }
 
-/* Mobile video fills the wrap */
-.mobileStackVideo{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Mobile image fallback */
+.mobileStackVideo,
 .mobileStackImg{
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+  object-fit: cover;
 }
 </style>
 @section('content')
@@ -141,8 +90,8 @@
                 Your browser does not support the video tag.
             </video>
         </section>
-    @else
-        <section class="heroBanner d-none d-lg-block">
+    @else   
+        <section class="heroBanner d-none d-md-block">
             <img
                 src="{{ asset($subcategory->banner_url) }}"
                 alt="Perrelet Banner"
