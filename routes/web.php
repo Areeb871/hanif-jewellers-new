@@ -50,6 +50,7 @@ Route::redirect('/after-sale-services', '/pages/after-sale-services', 301);
 Route::redirect('/care-instructions', '/pages/care-instructions', 301);
 Route::get('/collections/bovet', [HomeController::class, 'bovet']);
 Route::get('/collections/high-end', [HomeController::class, 'high_end']);
+Route::get('/highend-jewellery', [HomeController::class, 'highend']);
 Route::get('ehed', [HomeController::class, 'ehed'])->name('ehed');
 Route::get('collections/cleopatra', [HomeController::class, 'cleopatra'])->name('cleopatra');
 Route::redirect('cleopatra', '/collections/cleopatra', 301);

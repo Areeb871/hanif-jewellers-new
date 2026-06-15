@@ -283,6 +283,18 @@ body {
                         </div>
                         <h3>NAGAR</h3>
                     </div>
+                    <!-- <div class="polychroma-item">
+                        <div class="image-box">
+                            <img src="{{ asset('assets/f_assets/image/highend/6.png') }}" alt="JOC">
+                        </div>
+                        <h3>JOC</h3>
+                    </div>
+                    <div class="polychroma-item">
+                        <div class="image-box">
+                            <img src="{{ asset('assets/f_assets/image/highend/7.png') }}" alt="Timeless Blue">
+                        </div>
+                        <h3>Timeless Blue</h3>
+                    </div> -->
 
                 </div>
             </div>
