@@ -1228,7 +1228,7 @@ public function Online_Shopping_Store(Request $request)
         ['purelook', 'pure-lock'],
         ['jewelphabets'],
         ['heritage'],
-        ['ehed'],
+        ['ehed', 'love-engagement', 'love engagement'],
         ['selene'],
         ['hasht'],
     ];

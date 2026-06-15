@@ -750,7 +750,7 @@
                         <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
-                        <button type="button" class="filter-tag-btn" data-tags="ehed,mens_rings">Wedding Bands</button>
+                        <button type="button" class="filter-tag-btn" data-tags="mens_rings,ehed">Wedding Bands</button>
 
                         </div>
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
