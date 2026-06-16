@@ -17,7 +17,7 @@
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for desktop --}}
-                <div class="video-fallback-desktop d-none d-md-block" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($armandNicoletSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
+                <!-- <div class="video-fallback-desktop d-none d-md-block" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($armandNicoletSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div> -->
             @else
                 {{-- Static image for desktop --}}
                 <div class="d-none d-md-block" style="width:100%; height:120vh; background-image:url('{{ asset($armandNicoletSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
