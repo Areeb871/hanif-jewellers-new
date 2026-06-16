@@ -2,6 +2,15 @@
 
 @section('content')
 <style>
+/* Override global .gehnawaSection on phones (pulls banner behind header) */
+@media (max-width: 991.98px) {
+    .gehnawaSection {
+        margin-top: 0 !important;
+        z-index: 0 !important;
+        height: auto !important;
+    }
+}
+
 .fl-since-history-wrapper {
     width: 100%;
     padding: 150px 0;
@@ -188,7 +197,7 @@ padding:0px;
         $bannerUrl = null;
 
         // Change this to Favre-Leuba mobile video if you have one
-        $mobileVideoPath = 'assets/f_assets/image/watches mobile view/favre_luba_mobile.mp4';
+        $mobileVideoPath = 'assets/f_assets/image/watches mobile view/favre-leuba-mobile.jpeg';
 
         if (isset($favreSubcategory) && $favreSubcategory && $favreSubcategory->banner_url) {
             $bannerUrl = $favreSubcategory->banner_url;
@@ -241,12 +250,13 @@ padding:0px;
                     type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
         </video>
     @else
-        <div class="d-block d-lg-none"
-             style="width:100%; height:120vh;
-                    background-image:url('{{ asset($mobileVideo) }}');
-                    background-size:cover;
-                    background-position:center;">
-        </div>
+        <img
+            src="{{ asset($mobileVideo) }}"
+            alt="Favre Leuba Mobile Banner"
+            class="d-block d-lg-none w-100"
+            style="height: auto; display: block;"
+            loading="eager"
+        >
     @endif
 
 </section>
