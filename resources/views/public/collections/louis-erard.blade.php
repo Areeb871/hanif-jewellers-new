@@ -385,6 +385,19 @@ img{
     }
 
     @media (max-width: 767px){
+        .sectionMobile{
+            height: clamp(200px, 150vw, 800px);
+            max-height: 800px;
+        }
+
+        .sectionMobile img,
+        .sectionMobile video{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
         .louis-erard-page{
             padding-bottom:20px;
         }
@@ -486,8 +499,8 @@ padding:2px 15px 0;
         /* mobile banner dynamic */
         $mobileBanner = $desktopBanner;
 
-        if ($louisErardSubcategory->slug === 'louis-erard ') {
-            $mobileBanner = 'assets/f_assets/image/watches mobile view/louis_erard_mobile.mp4';
+        if (trim(strtolower($louisErardSubcategory->slug ?? '')) === 'louis-erard') {
+            $mobileBanner = 'assets/f_assets/image/watches mobile view/louis-erard-mobile.jpeg';
         }
 
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);
