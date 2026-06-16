@@ -524,7 +524,13 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const slides = $all(".hj-gallery-item", gallery);
+        const getVisibleSlides = function () {
+            return $all(".hj-gallery-item", gallery).filter(function (slide) {
+                return slide.offsetParent !== null;
+            });
+        };
+
+        const slides = getVisibleSlides();
 
         dotsWrap.innerHTML = "";
 
@@ -573,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         nextBtn.onclick = function () {
-            const currentSlides = $all(".hj-gallery-item", gallery);
+            const currentSlides = getVisibleSlides();
 
             if (!currentSlides.length) {
                 return;
@@ -615,7 +621,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (dotsWrap && gallery && gallery.clientWidth) {
                         const dots = $all("button", dotsWrap);
-                        const slides = $all(".hj-gallery-item", gallery);
+                        const slides = $all(".hj-gallery-item", gallery).filter(function (slide) {
+                            return slide.offsetParent !== null;
+                        });
                         const index = slides.length
                             ? Math.min(
                                 Math.round(gallery.scrollLeft / gallery.clientWidth),

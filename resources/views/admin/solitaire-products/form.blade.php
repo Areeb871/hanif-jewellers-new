@@ -375,10 +375,10 @@
 </div>
 
 
-{{-- METAL IMAGES --}}
+{{-- METAL IMAGES / 360 VIDEOS --}}
 <div class="card mb-4">
     <div class="card-header">
-        Metal Images
+        Metal Images / 360 Videos
     </div>
 
     <div class="card-body">
@@ -392,7 +392,8 @@
         <div id="existingMetalImagesPreview"></div>
 
         <p class="text-muted">
-            Add new metal images using metal code. Example: <strong>14k_white</strong>
+            Add new metal images and one 360 video using metal code. Video is converted to JPG frames automatically with FFmpeg.
+            Example: <strong>14k_white</strong>
         </p>
 
         <div id="metalImageRows">
@@ -406,7 +407,8 @@
                     >
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <label class="small text-muted mb-1">Images</label>
                     <input 
                         type="file" 
                         name="metal_image_files[0][]" 
@@ -416,6 +418,16 @@
                 </div>
 
                 <div class="col-md-3">
+                    <label class="small text-muted mb-1">360 Video</label>
+                    <input 
+                        type="file" 
+                        name="metal_video_files[0]" 
+                        class="form-control"
+                        accept="video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-m4v"
+                    >
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
                     <button 
                         type="button" 
                         class="btn btn-danger" 
@@ -428,7 +440,7 @@
         </div>
 
         <button type="button" class="btn btn-sm btn-primary" onclick="addMetalImageRow()">
-            Add More Metal Image
+            Add More Metal Media
         </button>
     </div>
 </div>
@@ -707,6 +719,10 @@ function escapeHtml(value) {
         .replaceAll("'", '&#039;');
 }
 
+function escapeAttr(value) {
+    return escapeHtml(value);
+}
+
 function imageUrl(path) {
     if (!path) return '';
 
@@ -898,6 +914,13 @@ function syncExistingMetalImages() {
     }
 }
 
+function prepareMetalImageInputs() {
+    syncExistingGalleryImages();
+    syncExistingMetalImages();
+
+    return true;
+}
+
 function renderExistingGalleryImages() {
     let container = document.getElementById('existingGalleryImagesPreview');
 
@@ -971,9 +994,20 @@ function renderExistingMetalImages() {
                 <div class="d-flex flex-wrap gap-2">
         `;
 
-        (group.images || []).forEach(function (image) {
+        group.images = (group.images || []).slice().sort(function (a, b) {
+            return Number(a.sort_order || 0) - Number(b.sort_order || 0);
+        });
+
+        group.images.forEach(function (image, imageIndex) {
             html += `
-                <div class="position-relative" style="width:90px;">
+                <div
+                    class="position-relative border p-1 metal-image-sort-item"
+                    style="width:112px;cursor:grab;"
+                    draggable="true"
+                    data-metal-code="${escapeHtml(group.metal_code)}"
+                    data-image-index="${imageIndex}"
+                    data-image-path="${escapeHtml(image.image_path)}"
+                >
                     <button 
                         type="button" 
                         class="btn btn-sm btn-danger remove-metal-image"
@@ -986,13 +1020,36 @@ function renderExistingMetalImages() {
 
                     <img 
                         src="${imageUrl(escapeHtml(image.image_path))}" 
-                        width="90" 
+                        width="100" 
                         height="90" 
                         style="object-fit:cover;border:1px solid #ddd;"
                     >
+
+                    <small class="d-block text-center text-muted mt-1">
+                        Drag #${imageIndex + 1}
+                    </small>
                 </div>
             `;
         });
+
+        if (group.frames && group.frames.frame_count) {
+            html += `
+                <div class="w-100 mt-3">
+                    <div class="alert alert-info mb-2">
+                        360 frames stored: ${escapeHtml(group.frames.frame_count)} frames
+                    </div>
+
+                    ${group.frames.first_frame ? `
+                        <img 
+                            src="${imageUrl(escapeHtml(group.frames.first_frame))}" 
+                            width="120" 
+                            height="120" 
+                            style="object-fit:cover;border:1px solid #ddd;"
+                        >
+                    ` : ''}
+                </div>
+            `;
+        }
 
         html += `
                 </div>
@@ -1031,7 +1088,7 @@ document.addEventListener('click', function (event) {
                 return group;
             })
             .filter(function (group) {
-                return (group.images || []).length > 0;
+                return (group.images || []).length > 0 || !!group.frames;
             });
 
         renderExistingMetalImages();
@@ -1046,6 +1103,85 @@ document.addEventListener('click', function (event) {
 
         renderExistingMetalImages();
     }
+});
+
+document.addEventListener('dragstart', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (!item) return;
+
+    item.classList.add('opacity-50');
+
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', JSON.stringify({
+        metalCode: item.dataset.metalCode,
+        imageIndex: Number(item.dataset.imageIndex)
+    }));
+});
+
+document.addEventListener('dragend', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (item) {
+        item.classList.remove('opacity-50');
+    }
+});
+
+document.addEventListener('dragover', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (!item) return;
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+});
+
+document.addEventListener('drop', function (event) {
+    let targetItem = event.target.closest('.metal-image-sort-item');
+
+    if (!targetItem) return;
+
+    event.preventDefault();
+
+    let dragData;
+
+    try {
+        dragData = JSON.parse(event.dataTransfer.getData('text/plain') || '{}');
+    } catch (error) {
+        return;
+    }
+
+    let metalCode = dragData.metalCode;
+    let fromIndex = Number(dragData.imageIndex);
+    let toIndex = Number(targetItem.dataset.imageIndex);
+
+    if (!metalCode || targetItem.dataset.metalCode !== metalCode || fromIndex === toIndex) {
+        return;
+    }
+
+    existingMetalImages = existingMetalImages.map(function (group) {
+        if (group.metal_code !== metalCode) {
+            return group;
+        }
+
+        let images = group.images || [];
+        let movedImage = images.splice(fromIndex, 1)[0];
+
+        if (!movedImage) {
+            return group;
+        }
+
+        images.splice(toIndex, 0, movedImage);
+
+        group.images = images.map(function (image, index) {
+            image.sort_order = index + 1;
+            return image;
+        });
+
+        return group;
+    });
+
+    renderExistingMetalImages();
 });
 
 function addMetalRow() {
@@ -1107,7 +1243,8 @@ function addMetalImageRow() {
                 >
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label class="small text-muted mb-1">Images</label>
                 <input 
                     type="file" 
                     name="metal_image_files[${metalImageIndex}][]" 
@@ -1117,6 +1254,16 @@ function addMetalImageRow() {
             </div>
 
             <div class="col-md-3">
+                <label class="small text-muted mb-1">360 Video</label>
+                <input 
+                    type="file" 
+                    name="metal_video_files[${metalImageIndex}]" 
+                    class="form-control"
+                    accept="video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-m4v"
+                >
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
                 <button type="button" class="btn btn-danger" onclick="removeRow(this, '.metal-image-row')">
                     Remove
                 </button>
