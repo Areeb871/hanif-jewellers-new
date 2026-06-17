@@ -375,10 +375,10 @@
 </div>
 
 
-{{-- METAL IMAGES --}}
+{{-- METAL IMAGES / 360 FRAMES --}}
 <div class="card mb-4">
     <div class="card-header">
-        Metal Images
+        Metal Images / 360 Frames
     </div>
 
     <div class="card-body">
@@ -392,12 +392,15 @@
         <div id="existingMetalImagesPreview"></div>
 
         <p class="text-muted">
-            Add new metal images using metal code. Example: <strong>14k_white</strong>
+            Add new metal images and manual 360 frames using metal code. Select the generated frame folder, or select all frame images inside it.
+            Frames are saved in filename order and renamed to frame_001, frame_002, etc.
+            Or upload the frame folder by FTP/cPanel and enter its public folder path plus frame count.
+            Example: <strong>14k_white</strong>
         </p>
 
         <div id="metalImageRows">
             <div class="row mb-3 metal-image-row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <input 
                         type="text" 
                         name="metal_image_codes[0]" 
@@ -406,7 +409,8 @@
                     >
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-3">
+                    <label class="small text-muted mb-1">Images</label>
                     <input 
                         type="file" 
                         name="metal_image_files[0][]" 
@@ -416,6 +420,50 @@
                 </div>
 
                 <div class="col-md-3">
+                    <label class="small text-muted mb-1">Upload 360 Frame Folder</label>
+                    <input 
+                        type="file" 
+                        name="metal_frame_files[0][]" 
+                        class="form-control"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        webkitdirectory
+                        directory
+                    >
+                </div>
+
+                <div class="col-md-2">
+                    <label class="small text-muted mb-1">Manual Frame Folder</label>
+                    <input
+                        type="text"
+                        name="metal_frame_folders[0]"
+                        class="form-control"
+                        placeholder="uploads/solitaire-products/metals/14k_white/frames/set1"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label class="small text-muted mb-1">Count</label>
+                    <input
+                        type="number"
+                        min="1"
+                        name="metal_frame_counts[0]"
+                        class="form-control"
+                        placeholder="36"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label class="small text-muted mb-1">Ext</label>
+                    <select name="metal_frame_extensions[0]" class="form-control">
+                        <option value="jpg">jpg</option>
+                        <option value="jpeg">jpeg</option>
+                        <option value="png">png</option>
+                        <option value="webp">webp</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
                     <button 
                         type="button" 
                         class="btn btn-danger" 
@@ -428,7 +476,7 @@
         </div>
 
         <button type="button" class="btn btn-sm btn-primary" onclick="addMetalImageRow()">
-            Add More Metal Image
+            Add More Metal Media
         </button>
     </div>
 </div>
@@ -707,6 +755,10 @@ function escapeHtml(value) {
         .replaceAll("'", '&#039;');
 }
 
+function escapeAttr(value) {
+    return escapeHtml(value);
+}
+
 function imageUrl(path) {
     if (!path) return '';
 
@@ -898,6 +950,13 @@ function syncExistingMetalImages() {
     }
 }
 
+function prepareMetalImageInputs() {
+    syncExistingGalleryImages();
+    syncExistingMetalImages();
+
+    return true;
+}
+
 function renderExistingGalleryImages() {
     let container = document.getElementById('existingGalleryImagesPreview');
 
@@ -971,9 +1030,20 @@ function renderExistingMetalImages() {
                 <div class="d-flex flex-wrap gap-2">
         `;
 
-        (group.images || []).forEach(function (image) {
+        group.images = (group.images || []).slice().sort(function (a, b) {
+            return Number(a.sort_order || 0) - Number(b.sort_order || 0);
+        });
+
+        group.images.forEach(function (image, imageIndex) {
             html += `
-                <div class="position-relative" style="width:90px;">
+                <div
+                    class="position-relative border p-1 metal-image-sort-item"
+                    style="width:112px;cursor:grab;"
+                    draggable="true"
+                    data-metal-code="${escapeHtml(group.metal_code)}"
+                    data-image-index="${imageIndex}"
+                    data-image-path="${escapeHtml(image.image_path)}"
+                >
                     <button 
                         type="button" 
                         class="btn btn-sm btn-danger remove-metal-image"
@@ -986,13 +1056,44 @@ function renderExistingMetalImages() {
 
                     <img 
                         src="${imageUrl(escapeHtml(image.image_path))}" 
-                        width="90" 
+                        width="100" 
                         height="90" 
                         style="object-fit:cover;border:1px solid #ddd;"
                     >
+
+                    <small class="d-block text-center text-muted mt-1">
+                        Drag #${imageIndex + 1}
+                    </small>
                 </div>
             `;
         });
+
+        if (group.frames && group.frames.frame_count) {
+            html += `
+                <div class="w-100 mt-3">
+                    <div class="alert alert-info mb-2 d-flex justify-content-between align-items-center">
+                        <span>360 frames stored: ${escapeHtml(group.frames.frame_count)} frames</span>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger remove-metal-frames"
+                            data-metal-code="${escapeHtml(group.metal_code)}"
+                        >
+                            Remove Frames
+                        </button>
+                    </div>
+
+                    ${group.frames.first_frame ? `
+                        <img 
+                            src="${imageUrl(escapeHtml(group.frames.first_frame))}" 
+                            width="120" 
+                            height="120" 
+                            style="object-fit:cover;border:1px solid #ddd;"
+                        >
+                    ` : ''}
+                </div>
+            `;
+        }
 
         html += `
                 </div>
@@ -1031,7 +1132,7 @@ document.addEventListener('click', function (event) {
                 return group;
             })
             .filter(function (group) {
-                return (group.images || []).length > 0;
+                return (group.images || []).length > 0 || !!group.frames;
             });
 
         renderExistingMetalImages();
@@ -1046,6 +1147,104 @@ document.addEventListener('click', function (event) {
 
         renderExistingMetalImages();
     }
+
+    if (event.target.classList.contains('remove-metal-frames')) {
+        let metalCode = event.target.dataset.metalCode;
+
+        existingMetalImages = existingMetalImages
+            .map(function (group) {
+                if (group.metal_code === metalCode) {
+                    delete group.frames;
+                    delete group.video;
+                }
+
+                return group;
+            })
+            .filter(function (group) {
+                return (group.images || []).length > 0 || !!group.frames;
+            });
+
+        renderExistingMetalImages();
+    }
+});
+
+document.addEventListener('dragstart', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (!item) return;
+
+    item.classList.add('opacity-50');
+
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', JSON.stringify({
+        metalCode: item.dataset.metalCode,
+        imageIndex: Number(item.dataset.imageIndex)
+    }));
+});
+
+document.addEventListener('dragend', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (item) {
+        item.classList.remove('opacity-50');
+    }
+});
+
+document.addEventListener('dragover', function (event) {
+    let item = event.target.closest('.metal-image-sort-item');
+
+    if (!item) return;
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+});
+
+document.addEventListener('drop', function (event) {
+    let targetItem = event.target.closest('.metal-image-sort-item');
+
+    if (!targetItem) return;
+
+    event.preventDefault();
+
+    let dragData;
+
+    try {
+        dragData = JSON.parse(event.dataTransfer.getData('text/plain') || '{}');
+    } catch (error) {
+        return;
+    }
+
+    let metalCode = dragData.metalCode;
+    let fromIndex = Number(dragData.imageIndex);
+    let toIndex = Number(targetItem.dataset.imageIndex);
+
+    if (!metalCode || targetItem.dataset.metalCode !== metalCode || fromIndex === toIndex) {
+        return;
+    }
+
+    existingMetalImages = existingMetalImages.map(function (group) {
+        if (group.metal_code !== metalCode) {
+            return group;
+        }
+
+        let images = group.images || [];
+        let movedImage = images.splice(fromIndex, 1)[0];
+
+        if (!movedImage) {
+            return group;
+        }
+
+        images.splice(toIndex, 0, movedImage);
+
+        group.images = images.map(function (image, index) {
+            image.sort_order = index + 1;
+            return image;
+        });
+
+        return group;
+    });
+
+    renderExistingMetalImages();
 });
 
 function addMetalRow() {
@@ -1098,7 +1297,7 @@ function addMetalRow() {
 function addMetalImageRow() {
     let html = `
         <div class="row mb-3 metal-image-row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <input 
                     type="text" 
                     name="metal_image_codes[${metalImageIndex}]" 
@@ -1107,7 +1306,8 @@ function addMetalImageRow() {
                 >
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
+                <label class="small text-muted mb-1">Images</label>
                 <input 
                     type="file" 
                     name="metal_image_files[${metalImageIndex}][]" 
@@ -1117,6 +1317,50 @@ function addMetalImageRow() {
             </div>
 
             <div class="col-md-3">
+                <label class="small text-muted mb-1">Upload 360 Frame Folder</label>
+                <input 
+                    type="file" 
+                    name="metal_frame_files[${metalImageIndex}][]" 
+                    class="form-control"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    webkitdirectory
+                    directory
+                >
+            </div>
+
+            <div class="col-md-2">
+                <label class="small text-muted mb-1">Manual Frame Folder</label>
+                <input
+                    type="text"
+                    name="metal_frame_folders[${metalImageIndex}]"
+                    class="form-control"
+                    placeholder="uploads/solitaire-products/metals/14k_white/frames/set1"
+                >
+            </div>
+
+            <div class="col-md-1">
+                <label class="small text-muted mb-1">Count</label>
+                <input
+                    type="number"
+                    min="1"
+                    name="metal_frame_counts[${metalImageIndex}]"
+                    class="form-control"
+                    placeholder="36"
+                >
+            </div>
+
+            <div class="col-md-1">
+                <label class="small text-muted mb-1">Ext</label>
+                <select name="metal_frame_extensions[${metalImageIndex}]" class="form-control">
+                    <option value="jpg">jpg</option>
+                    <option value="jpeg">jpeg</option>
+                    <option value="png">png</option>
+                    <option value="webp">webp</option>
+                </select>
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
                 <button type="button" class="btn btn-danger" onclick="removeRow(this, '.metal-image-row')">
                     Remove
                 </button>
