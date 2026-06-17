@@ -7,7 +7,6 @@ use App\Models\SolitaireProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\Process\Process;
 
 class SolitaireProductAdminController extends Controller
 {
@@ -35,7 +34,10 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'metal_video_files.*' => 'nullable|file|mimes:mp4,mov,avi,webm,m4v|max:512000',
+            'metal_frame_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'metal_frame_folders.*' => 'nullable|string|max:255',
+            'metal_frame_counts.*' => 'nullable|integer|min:1',
+            'metal_frame_extensions.*' => 'nullable|in:jpg,jpeg,png,webp',
             'shape' => 'nullable|in:oval,princess,round',
         ]);
 
@@ -72,6 +74,11 @@ class SolitaireProductAdminController extends Controller
         return view('admin.solitaire-products.edit', compact('product'));
     }
 
+    public function show($id)
+    {
+        return redirect()->route('solitaire-products.edit', $id);
+    }
+
     public function update(Request $request, $id)
     {
         $product = SolitaireProduct::findOrFail($id);
@@ -84,7 +91,10 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'metal_video_files.*' => 'nullable|file|mimes:mp4,mov,avi,webm,m4v|max:512000',
+            'metal_frame_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'metal_frame_folders.*' => 'nullable|string|max:255',
+            'metal_frame_counts.*' => 'nullable|integer|min:1',
+            'metal_frame_extensions.*' => 'nullable|in:jpg,jpeg,png,webp',
             'shape' => 'nullable|in:oval,princess,round',
         ]);
 
@@ -157,7 +167,7 @@ class SolitaireProductAdminController extends Controller
         $product->delete();
 
         return redirect()
-            ->route('admin.solitaire-products.index')
+            ->route('solitaire-products.index')
             ->with('success', 'Solitaire product deleted successfully.');
     }
 
@@ -202,7 +212,10 @@ class SolitaireProductAdminController extends Controller
 
         $metalCodes = $request->input('metal_image_codes', []);
         $metalFiles = $request->file('metal_image_files', []);
-        $metalVideoFiles = $request->file('metal_video_files', []);
+        $metalFrameFiles = $request->file('metal_frame_files', []);
+        $metalFrameFolders = $request->input('metal_frame_folders', []);
+        $metalFrameCounts = $request->input('metal_frame_counts', []);
+        $metalFrameExtensions = $request->input('metal_frame_extensions', []);
 
         foreach ($metalCodes as $index => $metalCode) {
             if (empty($metalCode)) {
@@ -236,21 +249,26 @@ class SolitaireProductAdminController extends Controller
                 ];
             }
 
-            $videoData = null;
+            $frameData = null;
 
-            if (!empty($metalVideoFiles[$index]) && $metalVideoFiles[$index]->isValid()) {
-                $videoData = $this->storeMetalVideoFrames($metalVideoFiles[$index], $cleanMetalCode);
+            if (!empty($metalFrameFolders[$index]) && !empty($metalFrameCounts[$index])) {
+                $frameData = $this->storeManualMetalFramePath(
+                    $metalFrameFolders[$index],
+                    (int) $metalFrameCounts[$index],
+                    $metalFrameExtensions[$index] ?? 'jpg'
+                );
+            } elseif (!empty($metalFrameFiles[$index])) {
+                $frameData = $this->storeManualMetalFrames($metalFrameFiles[$index], $cleanMetalCode);
             }
 
-            if (!empty($images) || !empty($videoData)) {
+            if (!empty($images) || !empty($frameData)) {
                 $group = [
                     'metal_code' => $cleanMetalCode,
                     'images' => $images,
                 ];
 
-                if (!empty($videoData)) {
-                    $group['video'] = $videoData['video'];
-                    $group['frames'] = $videoData['frames'];
+                if (!empty($frameData)) {
+                    $group['frames'] = $frameData;
                 }
 
                 $metalImages[] = $group;
@@ -260,77 +278,99 @@ class SolitaireProductAdminController extends Controller
         return $metalImages;
     }
 
-    private function storeMetalVideoFrames($file, string $cleanMetalCode): array
+    private function storeManualMetalFramePath(string $folder, int $frameCount, string $extension = 'jpg'): array
+    {
+        $folder = trim(str_replace('\\', '/', $folder));
+        $folder = preg_replace('#^https?://[^/]+/#i', '', $folder);
+        $folder = preg_replace('#^public/#', '', ltrim($folder, '/'));
+        $folder = rtrim($folder, '/');
+        $extension = strtolower($extension ?: 'jpg');
+
+        if (!Str::startsWith($folder, 'uploads/solitaire-products/')) {
+            throw ValidationException::withMessages([
+                'metal_frame_folders' => 'Manual 360 frame folder must be inside uploads/solitaire-products/.',
+            ]);
+        }
+
+        if ($frameCount < 1) {
+            throw ValidationException::withMessages([
+                'metal_frame_counts' => 'Manual 360 frame count must be at least 1.',
+            ]);
+        }
+
+        if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            throw ValidationException::withMessages([
+                'metal_frame_extensions' => 'Manual 360 frame extension must be jpg, jpeg, png, or webp.',
+            ]);
+        }
+
+        return [
+            'folder' => $folder,
+            'frame_count' => $frameCount,
+            'extension' => $extension,
+            'source_fps' => 12,
+            'first_frame' => $folder . '/frame_001.' . $extension,
+        ];
+    }
+
+    private function storeManualMetalFrames(array $files, string $cleanMetalCode): array
     {
         $baseFolder = 'uploads/solitaire-products/metals/' . $cleanMetalCode;
-        $videoFolder = $baseFolder . '/videos';
         $framesFolder = $baseFolder . '/frames/' . time() . '_' . uniqid();
-
-        $videoDestinationPath = public_path($videoFolder);
         $framesDestinationPath = public_path($framesFolder);
-
-        if (!is_dir($videoDestinationPath)) {
-            mkdir($videoDestinationPath, 0755, true);
-        }
 
         if (!is_dir($framesDestinationPath)) {
             mkdir($framesDestinationPath, 0755, true);
         }
 
-        $videoFilename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move($videoDestinationPath, $videoFilename);
+        $validFiles = array_values(array_filter($files, function ($file) {
+            return $file && $file->isValid();
+        }));
 
-        $videoPath = $videoFolder . '/' . $videoFilename;
-        $outputPattern = $framesDestinationPath . DIRECTORY_SEPARATOR . 'frame_%03d.jpg';
-        $ffmpegBinary = env('FFMPEG_BINARY', 'ffmpeg');
-
-        $process = new Process([
-            $ffmpegBinary,
-            '-y',
-            '-i',
-            public_path($videoPath),
-            '-vf',
-            'fps=12,scale=900:-1',
-            '-q:v',
-            '2',
-            $outputPattern,
-        ]);
-
-        $process->setTimeout(300);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            $this->deletePublicFile($videoPath);
+        if (empty($validFiles)) {
             $this->deletePublicDirectory($framesFolder);
 
             throw ValidationException::withMessages([
-                'metal_video_files' => 'FFmpeg could not convert the uploaded metal video. Make sure FFmpeg is installed and the video file is valid.',
+                'metal_frame_files' => 'Please upload at least one valid 360 frame image.',
             ]);
         }
 
-        $frameCount = count(glob($framesDestinationPath . DIRECTORY_SEPARATOR . 'frame_*.jpg') ?: []);
+        usort($validFiles, function ($a, $b) {
+            return strnatcasecmp($a->getClientOriginalName(), $b->getClientOriginalName());
+        });
 
-        if ($frameCount === 0) {
-            $this->deletePublicFile($videoPath);
+        $extension = strtolower($validFiles[0]->getClientOriginalExtension() ?: 'jpg');
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+        if (!in_array($extension, $allowedExtensions, true)) {
             $this->deletePublicDirectory($framesFolder);
 
             throw ValidationException::withMessages([
-                'metal_video_files' => 'The uploaded metal video did not produce any frames.',
+                'metal_frame_files' => '360 frame images must be JPG, PNG, or WebP files.',
             ]);
         }
+
+        foreach ($validFiles as $fileIndex => $file) {
+            if (strtolower($file->getClientOriginalExtension()) !== $extension) {
+                $this->deletePublicDirectory($framesFolder);
+
+                throw ValidationException::withMessages([
+                    'metal_frame_files' => 'All 360 frame images for one metal must use the same file extension.',
+                ]);
+            }
+
+            $filename = 'frame_' . str_pad((string) ($fileIndex + 1), 3, '0', STR_PAD_LEFT) . '.' . $extension;
+            $file->move($framesDestinationPath, $filename);
+        }
+
+        $frameCount = count($validFiles);
 
         return [
-            'video' => [
-                'video_path' => $videoPath,
-                'original_name' => $file->getClientOriginalName(),
-            ],
-            'frames' => [
-                'folder' => $framesFolder,
-                'frame_count' => $frameCount,
-                'extension' => 'jpg',
-                'source_fps' => 12,
-                'first_frame' => $framesFolder . '/frame_001.jpg',
-            ],
+            'folder' => $framesFolder,
+            'frame_count' => $frameCount,
+            'extension' => $extension,
+            'source_fps' => 12,
+            'first_frame' => $framesFolder . '/frame_001.' . $extension,
         ];
     }
 
