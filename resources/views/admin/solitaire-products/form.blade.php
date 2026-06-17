@@ -375,10 +375,10 @@
 </div>
 
 
-{{-- METAL IMAGES / 360 VIDEOS --}}
+{{-- METAL IMAGES / 360 FRAMES --}}
 <div class="card mb-4">
     <div class="card-header">
-        Metal Images / 360 Videos
+        Metal Images / 360 Frames
     </div>
 
     <div class="card-body">
@@ -392,13 +392,15 @@
         <div id="existingMetalImagesPreview"></div>
 
         <p class="text-muted">
-            Add new metal images and one 360 video using metal code. Video is converted to JPG frames automatically with FFmpeg.
+            Add new metal images and manual 360 frames using metal code. Select the generated frame folder, or select all frame images inside it.
+            Frames are saved in filename order and renamed to frame_001, frame_002, etc.
+            Or upload the frame folder by FTP/cPanel and enter its public folder path plus frame count.
             Example: <strong>14k_white</strong>
         </p>
 
         <div id="metalImageRows">
             <div class="row mb-3 metal-image-row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <input 
                         type="text" 
                         name="metal_image_codes[0]" 
@@ -407,7 +409,7 @@
                     >
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="small text-muted mb-1">Images</label>
                     <input 
                         type="file" 
@@ -418,16 +420,50 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="small text-muted mb-1">360 Video</label>
+                    <label class="small text-muted mb-1">Upload 360 Frame Folder</label>
                     <input 
                         type="file" 
-                        name="metal_video_files[0]" 
+                        name="metal_frame_files[0][]" 
                         class="form-control"
-                        accept="video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-m4v"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        webkitdirectory
+                        directory
                     >
                 </div>
 
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-md-2">
+                    <label class="small text-muted mb-1">Manual Frame Folder</label>
+                    <input
+                        type="text"
+                        name="metal_frame_folders[0]"
+                        class="form-control"
+                        placeholder="uploads/solitaire-products/metals/14k_white/frames/set1"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label class="small text-muted mb-1">Count</label>
+                    <input
+                        type="number"
+                        min="1"
+                        name="metal_frame_counts[0]"
+                        class="form-control"
+                        placeholder="36"
+                    >
+                </div>
+
+                <div class="col-md-1">
+                    <label class="small text-muted mb-1">Ext</label>
+                    <select name="metal_frame_extensions[0]" class="form-control">
+                        <option value="jpg">jpg</option>
+                        <option value="jpeg">jpeg</option>
+                        <option value="png">png</option>
+                        <option value="webp">webp</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
                     <button 
                         type="button" 
                         class="btn btn-danger" 
@@ -1035,8 +1071,16 @@ function renderExistingMetalImages() {
         if (group.frames && group.frames.frame_count) {
             html += `
                 <div class="w-100 mt-3">
-                    <div class="alert alert-info mb-2">
-                        360 frames stored: ${escapeHtml(group.frames.frame_count)} frames
+                    <div class="alert alert-info mb-2 d-flex justify-content-between align-items-center">
+                        <span>360 frames stored: ${escapeHtml(group.frames.frame_count)} frames</span>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger remove-metal-frames"
+                            data-metal-code="${escapeHtml(group.metal_code)}"
+                        >
+                            Remove Frames
+                        </button>
                     </div>
 
                     ${group.frames.first_frame ? `
@@ -1100,6 +1144,25 @@ document.addEventListener('click', function (event) {
         existingMetalImages = existingMetalImages.filter(function (group) {
             return group.metal_code !== metalCode;
         });
+
+        renderExistingMetalImages();
+    }
+
+    if (event.target.classList.contains('remove-metal-frames')) {
+        let metalCode = event.target.dataset.metalCode;
+
+        existingMetalImages = existingMetalImages
+            .map(function (group) {
+                if (group.metal_code === metalCode) {
+                    delete group.frames;
+                    delete group.video;
+                }
+
+                return group;
+            })
+            .filter(function (group) {
+                return (group.images || []).length > 0 || !!group.frames;
+            });
 
         renderExistingMetalImages();
     }
@@ -1234,7 +1297,7 @@ function addMetalRow() {
 function addMetalImageRow() {
     let html = `
         <div class="row mb-3 metal-image-row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <input 
                     type="text" 
                     name="metal_image_codes[${metalImageIndex}]" 
@@ -1243,7 +1306,7 @@ function addMetalImageRow() {
                 >
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="small text-muted mb-1">Images</label>
                 <input 
                     type="file" 
@@ -1254,16 +1317,50 @@ function addMetalImageRow() {
             </div>
 
             <div class="col-md-3">
-                <label class="small text-muted mb-1">360 Video</label>
+                <label class="small text-muted mb-1">Upload 360 Frame Folder</label>
                 <input 
                     type="file" 
-                    name="metal_video_files[${metalImageIndex}]" 
+                    name="metal_frame_files[${metalImageIndex}][]" 
                     class="form-control"
-                    accept="video/mp4,video/quicktime,video/x-msvideo,video/webm,video/x-m4v"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    webkitdirectory
+                    directory
                 >
             </div>
 
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="col-md-2">
+                <label class="small text-muted mb-1">Manual Frame Folder</label>
+                <input
+                    type="text"
+                    name="metal_frame_folders[${metalImageIndex}]"
+                    class="form-control"
+                    placeholder="uploads/solitaire-products/metals/14k_white/frames/set1"
+                >
+            </div>
+
+            <div class="col-md-1">
+                <label class="small text-muted mb-1">Count</label>
+                <input
+                    type="number"
+                    min="1"
+                    name="metal_frame_counts[${metalImageIndex}]"
+                    class="form-control"
+                    placeholder="36"
+                >
+            </div>
+
+            <div class="col-md-1">
+                <label class="small text-muted mb-1">Ext</label>
+                <select name="metal_frame_extensions[${metalImageIndex}]" class="form-control">
+                    <option value="jpg">jpg</option>
+                    <option value="jpeg">jpeg</option>
+                    <option value="png">png</option>
+                    <option value="webp">webp</option>
+                </select>
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
                 <button type="button" class="btn btn-danger" onclick="removeRow(this, '.metal-image-row')">
                     Remove
                 </button>
