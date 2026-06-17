@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\SolitaireProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\Process\Process;
 
 class SolitaireProductAdminController extends Controller
 {
@@ -33,6 +35,7 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+            'metal_video_files.*' => 'nullable|file|mimes:mp4,mov,avi,webm,m4v|max:512000',
             'shape' => 'nullable|in:oval,princess,round',
         ]);
 
@@ -81,7 +84,8 @@ class SolitaireProductAdminController extends Controller
 
             'metal_image_codes.*' => 'nullable|string|max:100',
             'metal_image_files.*.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-                'shape' => 'nullable|in:oval,princess,round',
+            'metal_video_files.*' => 'nullable|file|mimes:mp4,mov,avi,webm,m4v|max:512000',
+            'shape' => 'nullable|in:oval,princess,round',
         ]);
 
         $oldGalleryImages = $product->gallery_images ?? [];
@@ -109,16 +113,17 @@ class SolitaireProductAdminController extends Controller
             $newGalleryImages
         ));
 
-        $finalMetalImages = $this->mergeMetalImages(
+        $finalMetalImages = $this->normalizeMetalImageOrder($this->mergeMetalImages(
             $keptMetalImages,
             $newMetalImages
-        );
+        ));
 
         /*
             Delete files which were removed from JSON.
         */
         $this->deleteRemovedGalleryFiles($oldGalleryImages, $finalGalleryImages);
         $this->deleteRemovedMetalFiles($oldMetalImages, $finalMetalImages);
+        $this->deleteRemovedMetalFrameFolders($oldMetalImages, $finalMetalImages);
 
         $product->update([
             'name' => $request->name,
@@ -197,13 +202,10 @@ class SolitaireProductAdminController extends Controller
 
         $metalCodes = $request->input('metal_image_codes', []);
         $metalFiles = $request->file('metal_image_files', []);
+        $metalVideoFiles = $request->file('metal_video_files', []);
 
         foreach ($metalCodes as $index => $metalCode) {
             if (empty($metalCode)) {
-                continue;
-            }
-
-            if (empty($metalFiles[$index])) {
                 continue;
             }
 
@@ -211,7 +213,7 @@ class SolitaireProductAdminController extends Controller
 
             $images = [];
 
-            foreach ($metalFiles[$index] as $fileIndex => $file) {
+            foreach (($metalFiles[$index] ?? []) as $fileIndex => $file) {
                 if (!$file || !$file->isValid()) {
                     continue;
                 }
@@ -234,21 +236,111 @@ class SolitaireProductAdminController extends Controller
                 ];
             }
 
-            if (!empty($images)) {
-                $metalImages[] = [
+            $videoData = null;
+
+            if (!empty($metalVideoFiles[$index]) && $metalVideoFiles[$index]->isValid()) {
+                $videoData = $this->storeMetalVideoFrames($metalVideoFiles[$index], $cleanMetalCode);
+            }
+
+            if (!empty($images) || !empty($videoData)) {
+                $group = [
                     'metal_code' => $cleanMetalCode,
                     'images' => $images,
                 ];
+
+                if (!empty($videoData)) {
+                    $group['video'] = $videoData['video'];
+                    $group['frames'] = $videoData['frames'];
+                }
+
+                $metalImages[] = $group;
             }
         }
 
         return $metalImages;
     }
 
+    private function storeMetalVideoFrames($file, string $cleanMetalCode): array
+    {
+        $baseFolder = 'uploads/solitaire-products/metals/' . $cleanMetalCode;
+        $videoFolder = $baseFolder . '/videos';
+        $framesFolder = $baseFolder . '/frames/' . time() . '_' . uniqid();
+
+        $videoDestinationPath = public_path($videoFolder);
+        $framesDestinationPath = public_path($framesFolder);
+
+        if (!is_dir($videoDestinationPath)) {
+            mkdir($videoDestinationPath, 0755, true);
+        }
+
+        if (!is_dir($framesDestinationPath)) {
+            mkdir($framesDestinationPath, 0755, true);
+        }
+
+        $videoFilename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->move($videoDestinationPath, $videoFilename);
+
+        $videoPath = $videoFolder . '/' . $videoFilename;
+        $outputPattern = $framesDestinationPath . DIRECTORY_SEPARATOR . 'frame_%03d.jpg';
+        $ffmpegBinary = env('FFMPEG_BINARY', 'ffmpeg');
+
+        $process = new Process([
+            $ffmpegBinary,
+            '-y',
+            '-i',
+            public_path($videoPath),
+            '-vf',
+            'fps=12,scale=900:-1',
+            '-q:v',
+            '2',
+            $outputPattern,
+        ]);
+
+        $process->setTimeout(300);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            $this->deletePublicFile($videoPath);
+            $this->deletePublicDirectory($framesFolder);
+
+            throw ValidationException::withMessages([
+                'metal_video_files' => 'FFmpeg could not convert the uploaded metal video. Make sure FFmpeg is installed and the video file is valid.',
+            ]);
+        }
+
+        $frameCount = count(glob($framesDestinationPath . DIRECTORY_SEPARATOR . 'frame_*.jpg') ?: []);
+
+        if ($frameCount === 0) {
+            $this->deletePublicFile($videoPath);
+            $this->deletePublicDirectory($framesFolder);
+
+            throw ValidationException::withMessages([
+                'metal_video_files' => 'The uploaded metal video did not produce any frames.',
+            ]);
+        }
+
+        return [
+            'video' => [
+                'video_path' => $videoPath,
+                'original_name' => $file->getClientOriginalName(),
+            ],
+            'frames' => [
+                'folder' => $framesFolder,
+                'frame_count' => $frameCount,
+                'extension' => 'jpg',
+                'source_fps' => 12,
+                'first_frame' => $framesFolder . '/frame_001.jpg',
+            ],
+        ];
+    }
+
     private function mergeMetalImages(array $existing, array $new): array
     {
         foreach ($new as $newGroup) {
-            if (empty($newGroup['metal_code']) || empty($newGroup['images'])) {
+            if (
+                empty($newGroup['metal_code'])
+                || (empty($newGroup['images']) && empty($newGroup['frames']))
+            ) {
                 continue;
             }
 
@@ -261,6 +353,14 @@ class SolitaireProductAdminController extends Controller
                         $newGroup['images'] ?? []
                     ));
 
+                    if (!empty($newGroup['video'])) {
+                        $existingGroup['video'] = $newGroup['video'];
+                    }
+
+                    if (!empty($newGroup['frames'])) {
+                        $existingGroup['frames'] = $newGroup['frames'];
+                    }
+
                     $found = true;
                     break;
                 }
@@ -272,8 +372,27 @@ class SolitaireProductAdminController extends Controller
         }
 
         return array_values(array_filter($existing, function ($group) {
-            return !empty($group['metal_code']) && !empty($group['images']);
+            return !empty($group['metal_code'])
+                && (!empty($group['images']) || !empty($group['frames']));
         }));
+    }
+
+    private function normalizeMetalImageOrder(array $groups): array
+    {
+        foreach ($groups as &$group) {
+            if (empty($group['images']) || !is_array($group['images'])) {
+                $group['images'] = [];
+                continue;
+            }
+
+            $group['images'] = array_values($group['images']);
+
+            foreach ($group['images'] as $index => &$image) {
+                $image['sort_order'] = $index + 1;
+            }
+        }
+
+        return array_values($groups);
     }
 
     private function cleanMetals(array $metals): array
@@ -402,6 +521,16 @@ class SolitaireProductAdminController extends Controller
         }
     }
 
+    private function deleteRemovedMetalFrameFolders(array $oldGroups, array $newGroups): void
+    {
+        $oldFolders = $this->extractMetalFrameFolders($oldGroups);
+        $newFolders = $this->extractMetalFrameFolders($newGroups);
+
+        foreach (array_diff($oldFolders, $newFolders) as $folder) {
+            $this->deletePublicDirectory($folder);
+        }
+    }
+
     private function extractMetalImagePaths(array $groups): array
     {
         $paths = [];
@@ -412,9 +541,26 @@ class SolitaireProductAdminController extends Controller
                     $paths[] = $image['image_path'];
                 }
             }
+
+            if (!empty($group['video']['video_path'])) {
+                $paths[] = $group['video']['video_path'];
+            }
         }
 
         return array_values(array_filter($paths));
+    }
+
+    private function extractMetalFrameFolders(array $groups): array
+    {
+        $folders = [];
+
+        foreach ($groups as $group) {
+            if (!empty($group['frames']['folder'])) {
+                $folders[] = $group['frames']['folder'];
+            }
+        }
+
+        return array_values(array_filter($folders));
     }
 
     private function deleteAllProductFiles(SolitaireProduct $product): void
@@ -430,6 +576,14 @@ class SolitaireProductAdminController extends Controller
                 if (!empty($image['image_path'])) {
                     $this->deletePublicFile($image['image_path']);
                 }
+            }
+
+            if (!empty($group['video']['video_path'])) {
+                $this->deletePublicFile($group['video']['video_path']);
+            }
+
+            if (!empty($group['frames']['folder'])) {
+                $this->deletePublicDirectory($group['frames']['folder']);
             }
         }
     }
@@ -453,5 +607,29 @@ class SolitaireProductAdminController extends Controller
         if (file_exists($fullPath)) {
             @unlink($fullPath);
         }
+    }
+
+    private function deletePublicDirectory(?string $path): void
+    {
+        if (!$path || !Str::startsWith($path, 'uploads/solitaire-products/')) {
+            return;
+        }
+
+        $fullPath = public_path($path);
+
+        if (!is_dir($fullPath)) {
+            return;
+        }
+
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($fullPath, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($items as $item) {
+            $item->isDir() ? @rmdir($item->getRealPath()) : @unlink($item->getRealPath());
+        }
+
+        @rmdir($fullPath);
     }
 }

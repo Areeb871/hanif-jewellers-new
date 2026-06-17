@@ -2,23 +2,8 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}?v={{ filemtime(public_path('assets/f_assets/css/details.css')) }}">
-<script src="{{ asset('assets/f_assets/js/filter.js') }}" defer></script>
+<script src="{{ asset('assets/f_assets/js/filter.js') }}?v={{ filemtime(public_path('assets/f_assets/js/filter.js')) }}" defer></script>
 <section class="hj-product-detail-page">
-<div class="hj-360-viewer"
-     data-folder="{{ asset('assets/f_assets/image/solitaire/frames') }}/"
-     data-frame-count="60"
-     data-extension="jpg"
-    data-source-fps="12">
-
-    <img
-        src="{{ asset('assets/f_assets/image/solitaire/frames/frame_001.jpg') }}"
-        alt="360 Product View"
-        class="hj-360-image"
-        draggable="false"
-    >
-
-    <div class="hj-360-hint">Drag left or right to rotate</div>
-</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const viewers = document.querySelectorAll('.hj-360-viewer');
@@ -26,19 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
     viewers.forEach(function (viewer) {
         const img = viewer.querySelector('.hj-360-image');
 
-        const folder = viewer.dataset.folder;
-        const frameCount = parseInt(viewer.dataset.frameCount, 10);
-        const extension = viewer.dataset.extension || 'jpg';
-
-        /*
-            This must match your extracted video FPS.
-            You extracted frames with fps=12, so keep 12.
-        */
-        const sourceFps = parseFloat(viewer.dataset.sourceFps || 12);
-
         let currentFrame = 1;
         let isDragging = false;
         let isLoaded = false;
+        let frameCount = 0;
+        let folder = '';
+        let extension = 'jpg';
+        let frameInterval = 1000 / 12;
+        let loadToken = 0;
 
         let lastX = 0;
         let dragAccumulator = 0;
@@ -54,13 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
         */
         const pixelsPerFrame = 22;
 
-        /*
-            Auto smooth timing:
-            Because source video is 12fps,
-            each frame should change after 1000 / 12 ms.
-        */
-        const frameInterval = 1000 / sourceFps;
-
         function getFramePath(frameNumber) {
             const padded = String(frameNumber).padStart(3, '0');
             return `${folder}frame_${padded}.${extension}`;
@@ -73,6 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function setFrame(frameNumber) {
+            if (!frameCount || !folder) return;
+
             currentFrame = normalizeFrame(frameNumber);
             img.src = getFramePath(currentFrame);
         }
@@ -87,12 +62,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function preloadFrames(callback) {
             let loaded = 0;
-            let hasError = false;
+            const token = ++loadToken;
 
             for (let i = 1; i <= frameCount; i++) {
                 const preloadImg = new Image();
 
                 preloadImg.onload = function () {
+                    if (token !== loadToken) return;
+
                     loaded++;
 
                     if (loaded === frameCount) {
@@ -104,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
 
                 preloadImg.onerror = function () {
-                    hasError = true;
+                    if (token !== loadToken) return;
+
                     console.warn('Missing or broken 360 frame:', preloadImg.src);
 
                     loaded++;
@@ -122,6 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function autoLoop(now) {
+            if (!frameCount || !folder) {
+                rafId = requestAnimationFrame(autoLoop);
+                return;
+            }
+
             if (!isLoaded) {
                 rafId = requestAnimationFrame(autoLoop);
                 return;
@@ -157,10 +140,53 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        preloadFrames(function () {
+        function loadFrames(config) {
+            frameCount = parseInt(config.frame_count || config.frameCount || 0, 10);
+            folder = config.folder_url || config.folder || '';
+            extension = config.extension || 'jpg';
+            frameInterval = 1000 / parseFloat(config.source_fps || config.sourceFps || 12);
+            currentFrame = 1;
+            isLoaded = false;
+
+            if (!folder || !frameCount) {
+                viewer.style.display = 'none';
+                img.removeAttribute('src');
+                loadToken++;
+                return;
+            }
+
+            viewer.style.display = '';
+            viewer.classList.remove('loaded');
             setFrame(1);
+            preloadFrames(function () {
+                setFrame(1);
+            });
             startAuto();
+        }
+
+        loadFrames({
+            folder: viewer.dataset.folder,
+            frame_count: viewer.dataset.frameCount,
+            extension: viewer.dataset.extension,
+            source_fps: viewer.dataset.sourceFps
         });
+
+        window.hjUpdate360Viewer = function (frames) {
+            if (!frames) {
+                loadFrames({});
+                return;
+            }
+
+            const baseUrl = @json(url('/'));
+            const folderUrl = frames.folder_url || (frames.folder ? baseUrl.replace(/\/$/, '') + '/' + String(frames.folder).replace(/^\/+/, '') + '/' : '');
+
+            loadFrames({
+                folder: folderUrl,
+                frame_count: frames.frame_count,
+                extension: frames.extension,
+                source_fps: frames.source_fps
+            });
+        };
 
         viewer.addEventListener('pointerdown', function (e) {
             isDragging = true;
@@ -232,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="hj-product-container">
 
      {{-- LEFT IMAGE GALLERY --}}
-     <div class="hj-gallery-slider-wrap">
+     <div class="hj-gallery-slider-wrap" id="hjGallerySliderWrap" data-mobile-view="gallery">
 @php
     $metals = collect($product->metals ?? [])->values();
     $carats = collect($product->diamond_carats ?? [])->values();
@@ -283,10 +309,20 @@ document.addEventListener('DOMContentLoaded', function () {
         3. If gallery images are also empty, show no image message.
     */
     $selectedMetalImageGroup = $metalImages->firstWhere('metal_code', $selectedMetalCode);
-    $detailImages = collect(data_get($selectedMetalImageGroup, 'images', []));
+    $detailImages = collect(data_get($selectedMetalImageGroup, 'images', []))
+        ->sortBy(function ($image, $index) {
+            return $image['sort_order'] ?? ($index + 1);
+        })
+        ->values();
+    $selectedFrames = data_get($selectedMetalImageGroup, 'frames', []);
+    $hasSelectedFrames = !empty(data_get($selectedFrames, 'frame_count'));
 
     if ($detailImages->isEmpty() && $galleryImages->isNotEmpty()) {
-        $detailImages = $galleryImages;
+        $detailImages = $galleryImages
+            ->sortBy(function ($image, $index) {
+                return $image['sort_order'] ?? ($index + 1);
+            })
+            ->values();
     }
 
     $currency = $product->currency ?? 'AED';
@@ -326,9 +362,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {{-- PRODUCT DETAIL GALLERY --}}
 <div class="hj-product-gallery" id="hjProductGallery">
+    <div class="hj-gallery-item hj-360-gallery-item" id="hj360GalleryItem" style="{{ $hasSelectedFrames ? '' : 'display:none;' }}">
+        <div class="hj-360-viewer"
+             id="hj360Viewer"
+             style="{{ $hasSelectedFrames ? '' : 'display:none;' }}"
+             data-folder="{{ !empty($selectedFrames['folder']) ? asset($selectedFrames['folder']) . '/' : '' }}"
+             data-frame-count="{{ $selectedFrames['frame_count'] ?? 0 }}"
+             data-extension="{{ $selectedFrames['extension'] ?? 'jpg' }}"
+             data-source-fps="{{ $selectedFrames['source_fps'] ?? 12 }}">
 
-    @forelse($detailImages as $index => $image)
-        <div class="hj-gallery-item">
+            <img
+                src="{{ !empty($selectedFrames['first_frame']) ? asset($selectedFrames['first_frame']) : '' }}"
+                alt="360 Product View"
+                class="hj-360-image"
+                draggable="false"
+            >
+
+            <div class="hj-360-hint">
+                <svg viewBox="0 0 40 32" aria-hidden="true">
+                    <path d="M12.8 10.5c2-2.2 5.3-3.6 9-3.6 6.5 0 11.8 3.5 11.8 7.8s-5.3 7.8-11.8 7.8c-5.9 0-10.8-2.9-11.6-6.7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="m8.5 11.4 4.8-1.6-.8 5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <ellipse cx="20" cy="16" rx="5.6" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.1"/>
+                    <path d="M19.5 6.2c.2-2 1.7-3.5 3.6-3.5 2 0 3.7 1.7 3.7 3.7" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                </svg>
+                <span>Drag to spin</span>
+            </div>
+        </div>
+    </div>
+
+    @foreach($detailImages as $index => $image)
+        <div class="hj-gallery-item hj-product-image-item">
             @if($index === 0)
                 <span class="hj-badge">TRADE IN AVAILABLE</span>
             @endif
@@ -338,11 +401,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 alt="{{ $image['alt_text'] ?? $product->name }}"
             >
         </div>
-    @empty
+    @endforeach
+
+    @if($detailImages->isEmpty())
         <div class="hj-gallery-no-image">
             No images available for this metal.
         </div>
-    @endforelse
+    @endif
 
 </div>
     {{-- MOBILE SLIDER CONTROLS --}}
@@ -353,8 +418,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="hj-mobile-gallery-bottom">
         <div class="hj-gallery-tabs">
-            <!-- <button type="button">Spin</button> -->
-            <button type="button" class="active">Gallery</button>
+            <button
+                type="button"
+                class="hj-mobile-media-tab {{ $hasSelectedFrames ? 'active' : '' }}"
+                id="hjMobileSpinTab"
+                data-mobile-view="spin"
+                aria-label="Spin"
+                {{ $hasSelectedFrames ? '' : 'hidden' }}
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7.5 7.8c1.1-1 2.7-1.6 4.5-1.6 3.7 0 6.7 2.2 6.7 4.9S15.7 16 12 16c-3.3 0-6.1-1.8-6.6-4.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    <path d="M5.1 8.4 7.7 7l-.3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="11.1" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+            </button>
+
+            <button
+                type="button"
+                class="hj-mobile-media-tab {{ $hasSelectedFrames ? '' : 'active' }}"
+                id="hjMobileGalleryTab"
+                data-mobile-view="gallery"
+                aria-label="Gallery"
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                    <path d="m7 16 3.5-4 2.5 2.8 1.8-2.1L18 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="15.8" cy="9" r="1.2" fill="currentColor"/>
+                </svg>
+            </button>
         </div>
 
         <div class="hj-gallery-dots" id="hjGalleryDots"></div>
@@ -1376,6 +1467,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!dataScript || !gallery) return;
 
     const data = JSON.parse(dataScript.textContent);
+    const galleryWrap = document.getElementById('hjGallerySliderWrap');
+    const spinItem = document.getElementById('hj360GalleryItem');
+    const mobileSpinTab = document.getElementById('hjMobileSpinTab');
+    const mobileGalleryTab = document.getElementById('hjMobileGalleryTab');
+    const compactMediaQuery = window.matchMedia('(max-width: 991px)');
 
     let selectedMetalCode = data.selected_metal_code || '';
     let selectedCaratIndex = Number(data.selected_carat_index || 0);
@@ -1527,14 +1623,71 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (group && group.images && group.images.length > 0) {
-            return group.images;
+            return group.images.slice().sort(function (a, b) {
+                return Number(a.sort_order || 0) - Number(b.sort_order || 0);
+            });
         }
 
         if (data.gallery_images && data.gallery_images.length > 0) {
-            return data.gallery_images;
+            return data.gallery_images.slice().sort(function (a, b) {
+                return Number(a.sort_order || 0) - Number(b.sort_order || 0);
+            });
         }
 
         return [];
+    }
+
+    function getMetalFrames(metalCode) {
+        const group = (data.metal_images || []).find(function (item) {
+            return String(item.metal_code) === String(metalCode);
+        });
+
+        if (group && group.frames && group.frames.frame_count) {
+            return group.frames;
+        }
+
+        return null;
+    }
+
+    function setMobileMediaView(view) {
+        const hasSpin = mobileSpinTab && !mobileSpinTab.hidden;
+        const nextView = view === 'spin' && hasSpin ? 'spin' : 'gallery';
+
+        if (galleryWrap) {
+            galleryWrap.dataset.mobileView = nextView;
+        }
+
+        if (mobileSpinTab) {
+            mobileSpinTab.classList.toggle('active', nextView === 'spin');
+        }
+
+        if (mobileGalleryTab) {
+            mobileGalleryTab.classList.toggle('active', nextView === 'gallery');
+        }
+
+        gallery.scrollLeft = 0;
+
+        if (typeof window.hjInitGallerySlider === 'function') {
+            window.hjInitGallerySlider();
+        }
+    }
+
+    function syncSpinAvailability(frames) {
+        const hasFrames = !!(frames && frames.frame_count);
+
+        if (spinItem) {
+            spinItem.style.display = hasFrames ? '' : 'none';
+        }
+
+        if (mobileSpinTab) {
+            mobileSpinTab.hidden = !hasFrames;
+        }
+
+        if (compactMediaQuery.matches) {
+            setMobileMediaView(hasFrames ? 'spin' : 'gallery');
+        } else if (galleryWrap) {
+            galleryWrap.dataset.mobileView = 'gallery';
+        }
     }
 
     function renderGallery(metalCode) {
@@ -1553,7 +1706,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const imagePath = makeAssetUrl(image.image_path);
 
                 html += `
-                    <div class="hj-gallery-item">
+                    <div class="hj-gallery-item hj-product-image-item">
                         ${index === 0 ? '<span class="hj-badge">TRADE IN AVAILABLE</span>' : ''}
                         <img 
                             src="${imagePath}" 
@@ -1564,11 +1717,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        gallery.innerHTML = html;
+        gallery.querySelectorAll('.hj-product-image-item, .hj-gallery-no-image').forEach(function (item) {
+            item.remove();
+        });
 
-        if (typeof window.hjInitGallerySlider === 'function') {
-            window.hjInitGallerySlider();
-        }
+        gallery.insertAdjacentHTML('beforeend', html);
 
         const cartSelectedImageInput = document.getElementById('cartSelectedImageInput');
 
@@ -1609,6 +1762,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (settings.refreshGallery) {
             renderGallery(selectedMetalCode);
+
+            const frames = getMetalFrames(selectedMetalCode);
+
+            if (typeof window.hjUpdate360Viewer === 'function') {
+                window.hjUpdate360Viewer(frames);
+            }
+
+            syncSpinAvailability(frames);
+
+            if (typeof window.hjInitGallerySlider === 'function') {
+                window.hjInitGallerySlider();
+            }
 
             document.querySelectorAll('.metal-chip').forEach(function (btn) {
                 btn.classList.toggle(
@@ -1730,6 +1895,22 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedMetalCode = this.dataset.metalCode;
             updateDetail();
         });
+    });
+
+    if (mobileSpinTab) {
+        mobileSpinTab.addEventListener('click', function () {
+            setMobileMediaView('spin');
+        });
+    }
+
+    if (mobileGalleryTab) {
+        mobileGalleryTab.addEventListener('click', function () {
+            setMobileMediaView('gallery');
+        });
+    }
+
+    compactMediaQuery.addEventListener('change', function () {
+        syncSpinAvailability(getMetalFrames(selectedMetalCode));
     });
 
     if (caratRange) {
