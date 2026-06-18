@@ -295,8 +295,12 @@
         </section>
     </div>
 
-
-    
+    <div class="fm-wrap text-center">
+        <a href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hi, I\'d like to connect with a sales expert about Book an Appointment.') }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="fm-cta-btn">BOOK AN APPOINTMENT</a>
+    </div>
 
 </main>
 @endsection

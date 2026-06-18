@@ -49,7 +49,7 @@
 }
 .custom-banner-btn {
   position: absolute;
-  bottom: -43px;
+  bottom: 35px;
   left: 50%;
   transform: translateX(-50%);
   padding: 13px 10px;
@@ -437,7 +437,7 @@ padding:10px 4px 10px 4px;
   <span style="width:100vw;background:#e6ded3;"></span>
 </div>
 
-<section class="custom-banner d-none d-md-block position-relative">
+<!-- <section class="custom-banner d-none d-md-block position-relative">
     <img 
         src="{{ asset('assets/f_assets/image/misterio_data/new3.jpeg') }}" 
         alt="Nagar Collection" 
@@ -456,7 +456,18 @@ culminating in a true resemblance of experience pure art.</div>
         DISCOVER MORE
     </a>
 </div>
+</section> -->
+
+<section class="custom-banner d-none d-md-block position-relative">
+    <video class="custom-banner-video" autoplay muted loop playsinline>
+        <source src="{{  asset('assets/f_assets/image/highend/main.webm') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+            <a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>
 </section>
+
+
+
 <!--<section class="custom-banner d-none d-md-block position-relative">-->
 <!--    <video class="custom-banner-video" autoplay muted loop playsinline>-->
 <!--        <source src="{{ asset('assets/f_assets/image/nagar/main.mp4') }}" type="video/mp4">-->
@@ -499,16 +510,16 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-    <!--<video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata" poster="{{ asset('assets/f_assets/image/nagar/mobile.mp4') }}" > <source src="{{ asset('assets/f_assets/image/nagar/mobile.mp4') }}" type="video/mp4"> </video>-->
- <img
+  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata" poster="{{  asset('assets/f_assets/image/highend/main.webm') }}" > <source src="{{  asset('assets/f_assets/image/highend/main.webm')}}" type="video/mp4"> </video>
+ <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"
   alt="Divine Treasure"
   loading="lazy"
-/>
+/> -->
 
   </div>
-<a href="/collections/nagar" class="custom-banner-btn-new">DISCOVER MORE</a>
+<a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
     <!-- Desktop/Tablet Section -->
 <!-- Desktop/Tablet WATCHES Section -->
@@ -1051,72 +1062,101 @@ FARAH KHAN
     </div>
   </div>
 </section>
-<section class="container py-4">
+<section class="pb-5 home-brands">
 
-  <h4 class="section-title text-center"style="margin-top:20px">
+  <h4 class="section-title text-center" style="margin-top:20px">
     INTERNATIONAL WATCH BRAND
   </h4>
 
  <style>
-/* GRID */
 .brand-grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    max-width:1400px;
-    margin:auto;
-    gap:40px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+align-items:flex-start;
+max-width:1400px;
+margin:auto;
+gap:40px;
 }
 
-/* ITEM */
 .brand-item{
-    flex:0 0 calc(25% - 40px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
-    padding:10px;
-    text-decoration:none;
+flex:0 0 calc(25% - 40px);
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+padding:10px;
+text-decoration:none;
 }
 
-/* IMAGE STYLE */
+.brand-item::before,
+.brand-item::after{
+content:"";
+position:absolute;
+inset:0;
+border:2px solid transparent;
+transition:all .5s ease;
+pointer-events:none;
+}
+
+.home-brands .brand-item::before{
+border-top-color:#c8a46a;
+border-bottom-color:#c8a46a;
+transform:scaleX(0);
+transform-origin:center;
+}
+
+.home-brands .brand-item::after{
+border-left-color:#c8a46a;
+border-right-color:#c8a46a;
+transform:scaleY(0);
+transform-origin:center;
+}
+
+.home-brands .brand-item:hover::before{
+transform:scaleX(1);
+}
+
+.home-brands .brand-item:hover::after{
+transform:scaleY(1);
+}
+
 .brand-item img{
-    width:100%;
-    max-width:306px;
-    height:236px;
-    object-fit:contain;
-    background:#fff;
-    padding:25px;
-    transition:opacity 0.3s ease, transform 0.3s ease;
+width:100%;
+max-width:306px;
+height:236px;
+object-fit:contain;
+background:#fff;
+padding:25px;
+transition:all .3s ease;
+display:block;
 }
 
-/* HOVER SCALE */
-.brand-item:hover img{
-    transform:scale(1.06);
+.brand-item img:hover{
+transform:scale(1.06);
 }
 
-/* TABLET */
 @media(max-width:992px){
-    .brand-item{
-        flex:0 0 calc(33.33% - 40px);
-    }
+.brand-item{
+flex:0 0 calc(33.33% - 40px);
+}
 }
 
-/* MOBILE */
 @media(max-width:768px){
 
-    .brand-grid{
-        gap:20px;
-    }
+.brand-grid{
+gap:20px;
+}
 
-    .brand-item{
-        flex:0 0 calc(50% - 20px);
-    }
+.brand-item{
+flex:0 0 calc(50% - 20px);
+}
 
-    .brand-item img{
-        height:120px;
-        padding:15px;
-    }
+.brand-item img{
+height:120px;
+padding:15px;
+}
+
 }
 
 </style>
@@ -1151,11 +1191,11 @@ $brands = [
 
 <a class="brand-item" href="{{ route('subcategory',['subcategory'=>$brand['slug']]) }}">
 
-    <img 
-        src="{{ asset('assets/f_assets/image/watch logo new/'.$brand['img']) }}"
-        data-hover="{{ asset('assets/f_assets/image/watch logo new/hover/'.$brand['img']) }}"
-        alt="{{ $brand['name'] }} logo"
-        loading="lazy">
+<img 
+src="{{ asset('assets/f_assets/image/watch logo new/'.$brand['img']) }}"
+data-hover="{{ asset('assets/f_assets/image/watch logo new/hover/'.$brand['img']) }}"
+alt="{{ $brand['name'] }} logo"
+loading="lazy">
 
 </a>
 
@@ -1163,31 +1203,19 @@ $brands = [
 
 </div>
 
-<!-- JS HOVER EFFECT -->
 <script>
 document.querySelectorAll('.brand-item img').forEach(function(img){
-
     const original = img.src;
-    const hover = img.getAttribute('data-hover');
+    const hover = img.dataset.hover;
+    if (hover) { const pre = new Image(); pre.src = hover; }
 
     img.addEventListener('mouseenter', function(){
-        if(hover){
-            img.style.opacity = '0.3';
-            setTimeout(() => {
-                img.src = hover;
-                img.style.opacity = '1';
-            }, 150);
-        }
+        if (hover) img.src = hover;
     });
 
     img.addEventListener('mouseleave', function(){
-        img.style.opacity = '0.3';
-        setTimeout(() => {
-            img.src = original;
-            img.style.opacity = '1';
-        }, 150);
+        img.src = original;
     });
-
 });
 </script>
 

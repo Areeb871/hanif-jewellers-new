@@ -881,7 +881,7 @@ a {
   .gehnawaSection > div[style*="background-image"] {
     width: 100% !important;
     height: auto !important;
-    /* aspect-ratio: 16 / 9; */
+    aspect-ratio: 16 / 9;
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;

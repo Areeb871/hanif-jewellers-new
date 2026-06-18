@@ -313,6 +313,27 @@
   color: #999;
 }
 
+.fm-cta-btn {
+  display: inline-block;
+  padding: 0.625rem 2rem;
+  border: var(--fm-line) solid var(--fm-color-line);
+  background: transparent;
+  color: var(--fm-color-heading);
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.fm-cta-btn:hover {
+  background-color: var(--fm-color-line);
+  color: #fff;
+}
+
 /* Tablet */
 @media (max-width: 64em) {
   .fm-page {
