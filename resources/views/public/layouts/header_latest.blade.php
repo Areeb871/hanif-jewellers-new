@@ -828,9 +828,9 @@ $menus = [
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/tawoos/009.jpg',
+    'img' => 'assets/f_assets/image/highend/9.png',
     'btn' => 'EXPLORE COLLECTION',
-    'url' => url('collections/tawoos'),
+    'url' => url('highend-jewellery'),
 ];
 @endphp
 
@@ -891,7 +891,7 @@ $card = [
         </a>
         <br>
         <div class="hanif-mega-title">
-              TAWOOS
+              HIGH END JEWELLERY
         </div>
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
