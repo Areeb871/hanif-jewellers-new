@@ -954,27 +954,8 @@ $card = [
 <div class="header-spacer"></div>
 
   @php
-    $searchItems = \App\Models\Products::with('images')
-        ->where('status', 1)
-        ->select('id', 'name', 'slug', 'image', 'hover_image', 'description')
-        ->orderBy('name')
-        ->get()
-        ->map(function ($product) {
-            $relatedImage = optional($product->images)->firstWhere('image', '!=', null)->image ?? null;
-            $imagePath = $relatedImage ?: $product->hover_image ?: $product->image;
-
-            return [
-                'label' => $product->name,
-                'slug' => $product->slug,
-                'image' => $imagePath ? asset($imagePath) : asset('assets/f_assets/image/logo.png'),
-                'subtitle' => \Illuminate\Support\Str::limit(strip_tags($product->description ?? ''), 60, '…'),
-                'url' => route('product.details', ['slug' => $product->slug]),
-                'type' => 'product',
-            ];
-        })
-        ->values()
-        ->toArray();
-@endphp
+    $searchItems = app(\App\Services\ProductSearchService::class)->itemsForCurrentPage();
+  @endphp
 
     <style>
         .nav-search-wrapper {
@@ -1223,11 +1204,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const matches = searchData
-      .filter(item => {
-        const label = (item.label || '').toLowerCase();
-        const slug  = (item.slug  || '').toLowerCase();
-        return label ? label.includes(normalized) : slug.includes(normalized);
-      })
+      .filter(item => (item.searchText || item.label || '').includes(normalized))
       .slice(0, 10);
 
     if (!matches.length) {
@@ -1266,11 +1243,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const term = (searchInput.value || '').trim().toLowerCase();
       if (!term) return;
 
-      const match = searchData.find(item => {
-        const label = (item.label || '').toLowerCase();
-        const slug  = (item.slug  || '').toLowerCase();
-        return label ? label.includes(term) : slug.includes(term);
-      });
+      const match = searchData.find(item => (item.searchText || item.label || '').includes(term));
 
       if (match) window.location.href = match.url;
       else renderResults(term);
