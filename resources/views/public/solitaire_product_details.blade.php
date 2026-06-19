@@ -1973,6 +1973,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sizeBox = document.getElementById('hjRingSizeBox');
     const sizeToggle = document.getElementById('hjRingSizeToggle');
     const sizeSelected = document.getElementById('hjRingSizeSelected');
+    const sizeHelp = document.querySelector('.hj-ring-size-help');
 
     const mainRingSizeInput = document.getElementById('hjRingSizeInput');
     const cartRingSizeInput = document.getElementById('cartRingSizeInput');
@@ -1981,6 +1982,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (sizeToggle && sizeBox) {
         sizeToggle.addEventListener('click', function (event) {
+            event.stopPropagation();
+            sizeBox.classList.toggle('active');
+        });
+    }
+
+    if (sizeHelp && sizeBox) {
+        sizeHelp.addEventListener('click', function (event) {
+            if (!window.matchMedia('(max-width: 991px)').matches) return;
+
+            event.preventDefault();
             event.stopPropagation();
             sizeBox.classList.toggle('active');
         });
