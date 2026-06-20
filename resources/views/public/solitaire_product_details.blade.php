@@ -458,19 +458,21 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="hj-product-top">
 
     <div class="hj-breadcrumb">
-        <a href="#">Home</a>
+        <a href="{{ url('/') }}">Home</a>
         <span>/</span>
-        <a href="#">Solitaire Rings</a>
+        <a href="{{ route('solitaire') }}">Solitaire Rings</a>
         <span>/</span>
-<a href="#" id="selectedMetalTitle">
-    Solitaire Engagement Ring - {{ $selectedMetal['name'] ?? '14K White Gold' }}
-</a>
+        <span id="selectedMetalTitle">Solitaire Engagement Ring - {{ $selectedMetal['name'] ?? '14K White Gold' }}</span>
     </div>
 
     <h1>{{ $product->name ?? 'Julia Solitaire Ring' }}</h1>
 
     <p class="hj-sku">
-        SKU: {{ $product->sku ?? 'N/A' }} | {{ $product->tag_label ?? 'N/A' }} | Gemological certificate included
+        <span>SKU: {{ $product->sku ?? 'N/A' }}</span>
+        <span class="hj-sku-sep" aria-hidden="true">|</span>
+        <span>{{ $product->tag_label ?? 'N/A' }}</span>
+        <span class="hj-sku-sep" aria-hidden="true">|</span>
+        <span>Gemological certificate included</span>
     </p>
 
 </div>
@@ -517,6 +519,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     type="button"
                     class="metal-chip {{ $metalColorClass }} {{ $metalCode === $selectedMetalCode ? 'active' : '' }}"
                     data-metal-code="{{ $metalCode }}"
+                    aria-label="{{ $metal['name'] ?? $metal['short_label'] ?? 'Metal option' }}"
+                    aria-pressed="{{ $metalCode === $selectedMetalCode ? 'true' : 'false' }}"
                 >
                     {{ $metal['short_label'] ?? $metal['purity'] ?? '14K' }}
                 </button>
@@ -525,9 +529,9 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 
     <div class="hj-metal-btn-wrap">
-        <button type="button" class="hj-side-btn" id="selectedMetalBtn">
+        <span class="hj-value-badge" id="selectedMetalBtn" aria-live="polite">
             {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
-        </button>
+        </span>
     </div>
 </div>
 
@@ -553,13 +557,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 max="{{ max($carats->count() - 1, 0) }}"
                 step="1"
                 value="{{ $selectedCaratIndex }}"
+                aria-label="Total carat weight"
+                aria-valuemin="0"
+                aria-valuemax="{{ max($carats->count() - 1, 0) }}"
+                aria-valuenow="{{ $selectedCaratIndex }}"
             >
         </div>
 
         <div class="hj-carat-btn-wrap">
-            <button type="button" class="hj-side-btn" id="caratBtn">
+            <span class="hj-value-badge" id="caratBtn" aria-live="polite">
                 {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
-            </button>
+            </span>
         </div>
     </div>
 
@@ -568,9 +576,16 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="hj-ring-size-box" id="hjRingSizeBox">
 
     <div class="hj-ring-size-head">
-        <button type="button" class="hj-ring-size-toggle" id="hjRingSizeToggle">
-            <span id="hjRingSizeSelected">Ring size</span>
-<span class="hj-ring-size-arrow">
+        <button
+            type="button"
+            class="hj-ring-size-toggle"
+            id="hjRingSizeToggle"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-controls="hjRingSizeDropdown"
+        >
+            <span id="hjRingSizeSelected" class="hj-ring-size-placeholder">Please select</span>
+            <span class="hj-ring-size-arrow" aria-hidden="true">
     <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
         <path 
             fill-rule="evenodd" 
@@ -581,12 +596,14 @@ document.addEventListener('DOMContentLoaded', function () {
 </span>
         </button>
 
-        <button type="button" class="hj-ring-size-help">
+        <button type="button" class="hj-ring-size-help" aria-label="Ring size help — opens size selector">
             Need help?
         </button>
     </div>
 
-    <div class="hj-ring-size-dropdown" id="hjRingSizeDropdown">
+    <p class="hj-ring-size-error" id="hjRingSizeError" role="alert" hidden>Please select a ring size.</p>
+
+    <div class="hj-ring-size-dropdown" id="hjRingSizeDropdown" role="listbox" aria-label="Ring sizes">
         @for($size = 3; $size <= 12.75; $size += 0.25)
             @php
                 $sizeValue = number_format($size, 2);
@@ -596,6 +613,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 type="button" 
                 class="hj-ring-size-option"
                 data-size="{{ $sizeValue }}"
+                role="option"
+                aria-selected="false"
             >
                 {{ $sizeValue }}
             </button>
@@ -639,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </span>
         </div>
 
-        <button type="submit" class="hj-cart-btn">
+        <button type="submit" class="hj-cart-btn" id="hjCartSubmitBtn">
             ADD TO CART
         </button>
     </div>
@@ -1478,7 +1497,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const caratRange = document.getElementById('caratRange');
     const caratBtn = document.getElementById('caratBtn');
-
     function applyCaratRangeBackground(rangeEl, caratCount) {
         if (!rangeEl) {
             return;
@@ -1760,6 +1778,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const variant = findVariant(selectedMetalCode, carat.value);
         const baseVariant = findBaseVariant(selectedMetalCode);
 
+        document.querySelectorAll('.metal-chip').forEach(function (btn) {
+            const isActive = String(btn.dataset.metalCode) === String(selectedMetalCode);
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
         if (settings.refreshGallery) {
             renderGallery(selectedMetalCode);
 
@@ -1774,39 +1798,40 @@ document.addEventListener('DOMContentLoaded', function () {
             if (typeof window.hjInitGallerySlider === 'function') {
                 window.hjInitGallerySlider();
             }
+        }
 
-            document.querySelectorAll('.metal-chip').forEach(function (btn) {
-                btn.classList.toggle(
-                    'active',
-                    String(btn.dataset.metalCode) === String(selectedMetalCode)
-                );
-            });
+        const metalName = metal && metal.name
+            ? metal.name
+            : selectedMetalCode;
 
-            const metalName = metal && metal.name
-                ? metal.name
-                : selectedMetalCode;
+        const metalColor = getMetalColor(metal);
 
-            const metalColor = getMetalColor(metal);
+        if (selectedMetalBtn) {
+            selectedMetalBtn.textContent = metalName.toUpperCase();
+        }
 
-            if (selectedMetalBtn) {
-                selectedMetalBtn.textContent = metalName.toUpperCase();
-            }
+        if (selectedMetalTitle) {
+            selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
+        }
 
-            if (selectedMetalTitle) {
-                selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
-            }
+        if (selectedMetalSpec) {
+            selectedMetalSpec.textContent = metalName.toUpperCase();
+        }
 
-            if (selectedMetalSpec) {
-                selectedMetalSpec.textContent = metalName.toUpperCase();
-            }
-
-            if (selectedMetalColorSpec) {
-                selectedMetalColorSpec.textContent = metalColor;
-            }
+        if (selectedMetalColorSpec) {
+            selectedMetalColorSpec.textContent = metalColor;
         }
 
         if (settings.syncCaratRange && caratRange) {
             caratRange.value = String(selectedCaratIndex);
+        }
+
+        if (caratRange) {
+            caratRange.setAttribute('aria-valuenow', String(selectedCaratIndex));
+            caratRange.setAttribute(
+                'aria-valuetext',
+                String((carat.label || carat.value) + ' carat')
+            );
         }
 
         if (caratBtn) {
@@ -1864,6 +1889,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (settings.updateUrl) {
             updateUrl();
         }
+
     }
 
     function snapCaratRangeToPointer(rangeEl, clientX) {
@@ -1973,6 +1999,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sizeBox = document.getElementById('hjRingSizeBox');
     const sizeToggle = document.getElementById('hjRingSizeToggle');
     const sizeSelected = document.getElementById('hjRingSizeSelected');
+    const sizeError = document.getElementById('hjRingSizeError');
     const sizeHelp = document.querySelector('.hj-ring-size-help');
 
     const mainRingSizeInput = document.getElementById('hjRingSizeInput');
@@ -1980,10 +2007,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const sizeOptions = document.querySelectorAll('.hj-ring-size-option');
 
+    function setRingSizeOpen(isOpen) {
+        if (!sizeBox) return;
+        sizeBox.classList.toggle('active', isOpen);
+        if (sizeToggle) {
+            sizeToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+    }
+
+    function clearRingSizeError() {
+        if (sizeBox) {
+            sizeBox.classList.remove('is-invalid');
+        }
+        if (sizeError) {
+            sizeError.hidden = true;
+        }
+    }
+
+    function showRingSizeError() {
+        if (sizeBox) {
+            sizeBox.classList.add('is-invalid');
+        }
+        if (sizeError) {
+            sizeError.hidden = false;
+        }
+    }
+
     if (sizeToggle && sizeBox) {
         sizeToggle.addEventListener('click', function (event) {
             event.stopPropagation();
-            sizeBox.classList.toggle('active');
+            setRingSizeOpen(!sizeBox.classList.contains('active'));
         });
     }
 
@@ -1993,7 +2046,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             event.preventDefault();
             event.stopPropagation();
-            sizeBox.classList.toggle('active');
+            setRingSizeOpen(!sizeBox.classList.contains('active'));
         });
     }
 
@@ -2008,6 +2061,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (sizeSelected) {
                 sizeSelected.textContent = selectedSize;
+                sizeSelected.classList.remove('hj-ring-size-placeholder');
             }
 
             if (mainRingSizeInput) {
@@ -2020,19 +2074,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             sizeOptions.forEach(function (btn) {
                 btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
             });
 
             this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
 
-            if (sizeBox) {
-                sizeBox.classList.remove('active');
-            }
+            clearRingSizeError();
+            setRingSizeOpen(false);
         });
     });
 
     document.addEventListener('click', function (event) {
         if (sizeBox && !sizeBox.contains(event.target)) {
-            sizeBox.classList.remove('active');
+            setRingSizeOpen(false);
         }
     });
 
@@ -2058,8 +2113,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!cartSelectedImageInput || !imagePath) return;
 
         cartSelectedImageInput.value = cleanImagePath(imagePath);
-
-        console.log('Cart selected image:', cartSelectedImageInput.value);
     }
 
     function syncCurrentMainImage() {
@@ -2144,11 +2197,16 @@ document.addEventListener('DOMContentLoaded', function () {
     */
 
     const form = document.getElementById('hjAddToCartForm');
+    const cartSubmitBtn = document.getElementById('hjCartSubmitBtn');
 
     if (!form) return;
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
+
+        if (cartSubmitBtn && cartSubmitBtn.disabled) {
+            return;
+        }
 
         const ringSizeMain = document.getElementById('hjRingSizeInput');
         const inscriptionMain = document.getElementById('hjInscriptionHidden');
@@ -2182,11 +2240,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!cartRingSize || !cartRingSize.value) {
+            showRingSizeError();
             showToast('error', 'Please select ring size.');
+            if (sizeToggle) {
+                sizeToggle.focus();
+            }
             return;
         }
 
+        clearRingSizeError();
+
         const formData = new FormData(form);
+        const defaultCartLabel = cartSubmitBtn ? cartSubmitBtn.textContent : 'ADD TO CART';
+
+        if (cartSubmitBtn) {
+            cartSubmitBtn.disabled = true;
+            cartSubmitBtn.textContent = 'ADDING...';
+            cartSubmitBtn.setAttribute('aria-busy', 'true');
+        }
 
         fetch("{{ route('cart.add') }}", {
             method: 'POST',
@@ -2214,9 +2285,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 800);
             }
         })
-        .catch(error => {
-            console.log(error);
+        .catch(function (error) {
             showToast('error', error.message || 'Something went wrong. Please try again.');
+        })
+        .finally(function () {
+            if (cartSubmitBtn) {
+                cartSubmitBtn.disabled = false;
+                cartSubmitBtn.textContent = defaultCartLabel;
+                cartSubmitBtn.removeAttribute('aria-busy');
+            }
         });
     });
 

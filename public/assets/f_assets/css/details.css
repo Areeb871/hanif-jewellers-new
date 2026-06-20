@@ -131,6 +131,39 @@ body{
     color: #1D1D1B;
     font-weight: 400;
     opacity: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+}
+
+.hj-sku-sep {
+    opacity: 0.45;
+}
+
+.hj-breadcrumb span:last-child {
+    color: #1D1D1B;
+    opacity: 0.85;
+    white-space: normal;
+}
+
+/* Read-only selection badge (metal / carat) */
+.hj-value-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    border: 0;
+    border-radius: 1.5em;
+    background: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    pointer-events: none;
+    user-select: none;
 }
 
 
@@ -149,6 +182,82 @@ body{
     border-radius: 12px;
     padding: 20px 22px 16px;
     box-shadow: 0 8px 26px rgba(0, 0, 0, 0.075);
+    overflow: visible;
+    font-size: clamp(0.75rem, 0.62rem + 0.45vw, 0.9375rem);
+    --hj-opt-chip-size: clamp(1.2rem, 0.7rem + 1.8vw, 2rem);
+    --hj-opt-chip-gap: clamp(0.35rem, 0.2rem + 0.65vw, 1.1rem);
+}
+
+.hj-option-card .metal-chip {
+    flex: 1 1 0;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    max-width: var(--hj-opt-chip-size);
+    max-height: var(--hj-opt-chip-size);
+    aspect-ratio: 1;
+    container-type: inline-size;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    /* Ring + spacing scale with actual rendered chip width (cqi) */
+    --hj-chip-ring: clamp(2px, 14cqi, 5px);
+    --hj-chip-ring-active-in: clamp(2px, 11cqi, 4px);
+    --hj-chip-ring-active-out: clamp(4px, 20cqi, 7px);
+    --hj-chip-space: clamp(2px, 4cqi, 5px);
+    margin-inline: calc(var(--hj-chip-ring) + var(--hj-chip-space) * 0.3);
+    font-size: clamp(0.4375rem, 34cqi, calc(var(--hj-opt-chip-size) * 0.355));
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    box-shadow: 0 0 0 var(--hj-chip-ring) #c7c7c7;
+}
+
+.hj-option-card .metal-chip::before {
+    inset: calc(var(--hj-chip-ring-active-out) * -1.1);
+}
+
+.hj-option-card .metal-chip.rose {
+    box-shadow: 0 0 0 var(--hj-chip-ring) #efb69d;
+}
+
+.hj-option-card .metal-chip.yellow {
+    box-shadow: 0 0 0 var(--hj-chip-ring) #f0da8d;
+}
+
+.hj-option-card .metal-chip.white,
+.hj-option-card .metal-chip.silver {
+    box-shadow: 0 0 0 var(--hj-chip-ring) #e8e8e8;
+}
+
+.hj-option-card .metal-chip.active {
+    box-shadow: 0 0 0 var(--hj-chip-ring-active-in) #c7c7c7, 0 0 0 var(--hj-chip-ring-active-out) #111;
+}
+
+.hj-option-card .metal-chip.rose.active {
+    box-shadow: 0 0 0 var(--hj-chip-ring-active-in) #efb69d, 0 0 0 var(--hj-chip-ring-active-out) #111;
+}
+
+.hj-option-card .metal-chip.yellow.active {
+    box-shadow: 0 0 0 var(--hj-chip-ring-active-in) #f0da8d, 0 0 0 var(--hj-chip-ring-active-out) #111;
+}
+
+.hj-option-card .metal-chip.white.active,
+.hj-option-card .metal-chip.silver.active {
+    box-shadow: 0 0 0 var(--hj-chip-ring-active-in) #e8e8e8, 0 0 0 var(--hj-chip-ring-active-out) #111;
+}
+
+.hj-option-card .hj-metal-options {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    gap: 0;
+    padding: clamp(8px, calc(var(--hj-opt-chip-size) * 0.35), 12px) 0;
     overflow: visible;
 }
 
@@ -301,7 +410,7 @@ body{
     align-content: center;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
+    gap: 11.5px;
     overflow: visible;
     padding: 0 8px 0 4px;
     box-sizing: border-box;
@@ -322,6 +431,17 @@ body{
     isolation: isolate;
 }
 
+.hj-option-card .hj-value-badge {
+    width: auto;
+    max-width: 11rem;
+    height: 38px;
+    font-size: 10px;
+    font-weight: 400;
+    color: #222;
+    padding: 0 12px;
+    box-shadow: 0 5px 13px rgba(0, 0, 0, 0.08);
+}
+
 .hj-carat-row .hj-carat-btn-wrap {
     display: flex;
     align-items: center;
@@ -329,7 +449,8 @@ body{
 
 /* BASE CHIP */
 .metal-chip {
-    margin: 1px;
+    margin: 0;
+    position: relative;
     width: 31px;
     height: 31px;
     min-width: 31px;
@@ -351,6 +472,13 @@ body{
     transition: none !important;
     -webkit-tap-highlight-color: transparent;
     flex-shrink: 0;
+}
+
+.metal-chip::before {
+    content: "";
+    position: absolute;
+    inset: -0.55rem;
+    border-radius: 50%;
 }
 
 /* DEFAULT GREY */
@@ -527,6 +655,7 @@ body{
 }
 
 .hj-price-left {
+    /* border: 1px solid red; */
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1498,12 +1627,6 @@ body{
         box-sizing: border-box;
     }
 
-    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn {
-        width: 98px;
-        height: 38px;
-        flex-shrink: 0;
-    }
-
     .hj-carat-row .hj-carat-btn-wrap {
         grid-column: 1;
         grid-row: 3;
@@ -1514,38 +1637,14 @@ body{
         box-sizing: border-box;
     }
 
-    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn {
-        width: 98px;
-        height: 38px;
-        flex-shrink: 0;
-    }
-
-    .metal-chip {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        min-height: 38px;
-        max-width: 38px;
-        max-height: 38px;
-        font-size: 10px;
-    }
-
-    .hj-price-row {
-        justify-content: flex-start;
-        align-items: flex-start;
-        text-align: left;
-    }
-
-    .hj-price-left {
-        align-items: flex-start;
-        text-align: left;
-    }
-
-    .hj-cart-btn {
-        width: 200px;
-        align-self: flex-start;
-        margin-left: 0;
-        margin-right: auto;
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-value-badge {
+        width: auto;
+        max-width: 100%;
+        flex-shrink: 1;
+        min-width: 0;
     }
 
     .hj-slider-box {
@@ -1569,19 +1668,6 @@ body{
 }
 
 @media (max-width: 575px) {
-
-    .hj-price-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .hj-price-left {
-        flex-wrap: wrap;
-    }
-
-    .hj-price-row del {
-        margin: 0;
-    }
 
     .hj-appointment-bottom {
         flex-direction: column;
@@ -2263,20 +2349,6 @@ a.hj-lab-product-card {
         max-width: 100%;
         margin: 0 auto;
     }
-
-    .hj-price-row .hj-side-btn,
-    .hj-price-row .hj-cart-btn {
-        width: 78%;
-        max-width: 280px;
-        height: 48px;
-        justify-self: start;
-        margin-left: 0;
-        margin-right: auto;
-    }
-
-    .hj-price-row {
-        align-items: flex-start;
-    }
 }
 
 /* MOBILE */
@@ -2754,11 +2826,18 @@ a.hj-lab-product-card {
     }
 }
 
-/* Solitaire option replica: tablet and mobile only */
+/* Solitaire option card: single-line rows on tablet + mobile */
 @media (max-width: 991px) {
     .hj-option-card {
+        /* Fluid base — scales smoothly 320px → 991px (no sudden text drop) */
+        font-size: clamp(0.6875rem, 0.5625rem + 0.52vw, 0.875rem);
+        --hj-opt-label-col: clamp(2.5rem, 1.4rem + 4vw, 7.375rem);
+        --hj-opt-btn-px: clamp(0.5rem, 0.35rem + 0.55vw, 0.85rem);
+        --hj-opt-chip-size: clamp(1.2rem, 0.7rem + 2vw, 1.85rem);
+        --hj-opt-chip-gap: clamp(0.3rem, 0.15rem + 0.75vw, 0.95rem);
+        --hj-opt-row-min-h: clamp(3.25rem, 2.75rem + 1.4vw, 4.75rem);
         border-radius: 13px;
-        padding: 18px 16px;
+        padding: clamp(0.75rem, 0.55rem + 0.9vw, 1.125rem) clamp(0.625rem, 0.4rem + 1vw, 1rem);
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         overflow: visible;
     }
@@ -2767,11 +2846,11 @@ a.hj-lab-product-card {
     .hj-option-card .hj-row.hj-metal-row,
     .hj-option-card .hj-row.hj-carat-row {
         display: grid;
-        grid-template-columns: 118px minmax(0, 1fr) 112px;
+        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) auto;
         column-gap: 0;
         row-gap: 0;
         align-items: center;
-        min-height: 76px;
+        min-height: var(--hj-opt-row-min-h);
         margin: 0;
         position: relative;
     }
@@ -2792,7 +2871,7 @@ a.hj-lab-product-card {
         height: auto;
         display: flex;
         align-items: center;
-        font-size: 14px;
+        font-size: 0.95em;
         line-height: 1.2;
         font-weight: 400;
         color: #1D1D1B;
@@ -2802,7 +2881,7 @@ a.hj-lab-product-card {
     }
 
     .hj-option-card .hj-label small {
-        font-size: 11px;
+        font-size: 0.75em;
         color: #1D1D1B;
         opacity: 0.72;
     }
@@ -2812,18 +2891,28 @@ a.hj-lab-product-card {
         grid-column: 2;
         grid-row: 1;
         width: 100%;
-        padding: 0 20px 0 0;
+        padding: 0 0.5em 0 0;
         margin: 0;
+    }
+
+    .hj-option-card .hj-metal-track-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: visible;
     }
 
     .hj-option-card .hj-metal-btn-wrap,
     .hj-option-card .hj-carat-btn-wrap {
         grid-column: 3;
         grid-row: 1;
-        width: 100%;
+        width: auto;
+        max-width: 100%;
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        justify-self: end;
     }
 
     .hj-option-card .hj-row.hj-metal-row .hj-metal-track-wrap,
@@ -2840,95 +2929,68 @@ a.hj-lab-product-card {
         justify-content: flex-end;
     }
 
-    .hj-option-card .hj-metal-options {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        gap: 20px;
-        padding: 10px 7px;
-        overflow: visible;
-        width: auto;
-        max-width: 100%;
-        margin: 0;
-    }
-
-    .hj-option-card .metal-chip {
-        width: 27px;
-        height: 27px;
-        min-width: 27px;
-        min-height: 27px;
-        font-size: 9px;
-        font-weight: 500;
-        box-shadow: 0 0 0 4px #c7c7c7;
-    }
-
-    .hj-option-card .metal-chip.rose {
-        box-shadow: 0 0 0 4px #efb69d;
-    }
-
-    .hj-option-card .metal-chip.yellow {
-        box-shadow: 0 0 0 4px #f0da8d;
-    }
-
-    .hj-option-card .metal-chip.white,
-    .hj-option-card .metal-chip.silver {
-        box-shadow: 0 0 0 4px #e7e7e7;
-    }
-
-    .hj-option-card .metal-chip.active {
-        box-shadow: 0 0 0 4px #c7c7c7, 0 0 0 6px #222;
-    }
-
-    .hj-option-card .metal-chip.rose.active {
-        box-shadow: 0 0 0 4px #efb69d, 0 0 0 6px #222;
-    }
-
-    .hj-option-card .metal-chip.yellow.active {
-        box-shadow: 0 0 0 4px #f0da8d, 0 0 0 6px #222;
-    }
-
-    .hj-option-card .metal-chip.white.active,
-    .hj-option-card .metal-chip.silver.active {
-        box-shadow: 0 0 0 4px #e7e7e7, 0 0 0 6px #222;
-    }
-
     .hj-option-card .hj-side-btn,
+    .hj-option-card .hj-value-badge,
     .hj-option-card .hj-ring-size-help {
-        width: 108px;
-        height: 44px;
+        width: auto;
+        max-width: min(100%, 11rem);
+        height: clamp(1.875rem, 1.55rem + 0.85vw, 2.75rem);
         border: 0;
-        border-radius: 24px;
+        border-radius: 1.5em;
         background: #fff;
-        font-size: 12px;
+        font-size: 0.8em;
         font-weight: 400;
         color: #1D1D1B;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
         text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 var(--hj-opt-btn-px);
+        box-sizing: border-box;
+    }
+
+    .hj-option-card .hj-value-badge {
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-value-badge {
+        width: auto;
+        max-width: min(100%, 11rem);
+        height: clamp(1.875rem, 1.55rem + 0.85vw, 2.75rem);
+        flex-shrink: 1;
+        min-width: 0;
+        padding: 0 var(--hj-opt-btn-px);
     }
 
     .hj-option-card .hj-slider-text {
-        margin-bottom: 7px;
-        font-size: 11px;
+        margin-bottom: 0.45em;
+        font-size: 0.75em;
         color: #777;
     }
 
     .hj-option-card .hj-carat-range {
-        height: 7px;
+        height: 0.45em;
     }
 
     .hj-option-card .hj-carat-range::-webkit-slider-thumb {
-        width: 14px;
-        height: 14px;
+        width: 0.85em;
+        height: 0.85em;
     }
 
     .hj-option-card .hj-carat-range::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
+        width: 0.85em;
+        height: 0.85em;
     }
 
     .hj-option-card .hj-ring-size-box {
         display: grid;
-        grid-template-columns: 118px minmax(0, 1fr) 132px;
-        grid-template-rows: 76px auto;
+        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) auto;
+        grid-template-rows: var(--hj-opt-row-min-h) auto auto;
         align-items: center;
         margin: 0;
         border-radius: 0;
@@ -2941,7 +3003,7 @@ a.hj-lab-product-card {
     }
 
     .hj-option-card .hj-ring-size-box::before {
-        content: "RING SIZE";
+        content: "RING SIZE *";
         grid-column: 1;
         grid-row: 1;
     }
@@ -2959,42 +3021,57 @@ a.hj-lab-product-card {
         grid-column: 2;
         grid-row: 1;
         width: 100%;
-        height: 44px;
+        height: clamp(1.875rem, 1.55rem + 0.85vw, 2.75rem);
         border: 0;
         background: transparent;
-        padding: 0 20px 0 0;
+        padding: 0 1em 0 0;
         justify-content: flex-start;
-        font-size: 17px;
+        font-size: 1.05em;
         font-weight: 400;
         color: #1D1D1B;
     }
 
     .hj-option-card #hjRingSizeSelected {
-        font-size: 0;
+        font-size: 1.05em;
     }
 
-    .hj-option-card #hjRingSizeSelected::after {
-        content: "Please select";
-        font-size: 17px;
+    .hj-option-card #hjRingSizeSelected.hj-ring-size-placeholder {
+        opacity: 0.55;
     }
 
     .hj-option-card .hj-ring-size-arrow {
-        display: none;
+        display: inline-flex;
+        flex-shrink: 0;
+    }
+
+    .hj-option-card .hj-ring-size-error {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin: 0.35rem 0 0;
+        font-size: 0.75em;
+        line-height: 1.3;
+        color: #b42318;
+    }
+
+    .hj-option-card .hj-ring-size-box.is-invalid .hj-ring-size-toggle,
+    .hj-option-card .hj-ring-size-box.is-invalid .hj-ring-size-help {
+        box-shadow: 0 0 0 1px #f04438, 0 4px 10px rgba(240, 68, 56, 0.12);
     }
 
     .hj-option-card .hj-ring-size-help {
         grid-column: 3;
         grid-row: 1;
-        width: 132px;
+        width: auto;
+        max-width: 100%;
         margin: 0;
-        padding: 0;
+        padding: 0 var(--hj-opt-btn-px);
         justify-self: end;
     }
 
     .hj-option-card .hj-ring-size-dropdown {
         position: static;
         grid-column: 1 / -1;
-        grid-row: 2;
+        grid-row: 3;
         width: 100%;
         min-width: 100%;
         max-width: none;
@@ -3014,386 +3091,129 @@ a.hj-lab-product-card {
     }
 
     .hj-option-card .hj-ring-size-option {
-        height: 41px;
-        padding: 0 16px;
+        height: 2.6em;
+        padding: 0 1em;
         background: #fff;
-        font-size: 15px;
-        line-height: 41px;
+        font-size: 1em;
+        line-height: 2.6em;
         color: #111;
     }
 }
 
-@media (max-width: 575px) {
-    .hj-option-card {
-        padding: 16px 14px;
-    }
-
-    .hj-option-card .hj-row,
-    .hj-option-card .hj-row.hj-metal-row,
-    .hj-option-card .hj-row.hj-carat-row {
-        grid-template-columns: 82px minmax(0, 1fr) 94px;
-        min-height: 72px;
-    }
-
-    .hj-option-card .hj-ring-size-box {
-        grid-template-columns: 82px minmax(0, 1fr) 104px;
-        grid-template-rows: 72px auto;
+/* ≤767px: layout tweaks only — sizes inherit fluid tokens from 991px block */
+@media (max-width: 767px) {
+    .hj-option-card .hj-row.hj-metal-row::after,
+    .hj-option-card .hj-row.hj-carat-row::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: #efefef;
     }
 
     .hj-option-card .hj-label,
     .hj-option-card .hj-ring-size-box::before {
-        font-size: 12px;
-    }
-
-    .hj-option-card .hj-label small {
-        font-size: 9px;
-    }
-
-    .hj-option-card .hj-middle,
-    .hj-option-card .hj-metal-track-wrap {
-        padding-right: 10px;
-    }
-
-    .hj-option-card .hj-metal-options {
-        gap: 12px;
-        overflow-x: auto;
-        overflow-y: visible;
-        padding: 10px 8px;
-        scrollbar-width: none;
-    }
-
-    .hj-option-card .hj-metal-options::-webkit-scrollbar {
-        display: none;
-    }
-
-    .hj-option-card .metal-chip {
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        min-height: 24px;
-        font-size: 8px;
-    }
-
-    .hj-option-card .hj-side-btn,
-    .hj-option-card .hj-ring-size-help {
-        width: 94px;
-        height: 40px;
-        font-size: 10px;
-    }
-
-    .hj-option-card .hj-ring-size-help {
-        width: 104px;
-    }
-
-    .hj-option-card .hj-ring-size-toggle {
-        height: 40px;
-        padding-right: 10px;
-    }
-
-    .hj-option-card #hjRingSizeSelected::after {
-        font-size: 14px;
-    }
-
-    .hj-option-card .hj-slider-text {
-        font-size: 9px;
-    }
-
-    .hj-option-card .hj-ring-size-dropdown {
-        width: 100%;
-        min-width: 100%;
-        max-width: none;
-    }
-}
-
-@media (max-width: 991px) {
-    .hj-price-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(150px, 42%);
-        align-items: center;
-        gap: 14px;
-        margin: 22px 0 12px;
-        text-align: left;
-    }
-
-    .hj-price-left {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        min-width: 0;
-    }
-
-    .hj-price-row del {
-        margin: 0;
-        font-size: 13px;
-        white-space: nowrap;
-    }
-
-    .hj-price-row strong {
-        font-size: 22px;
-        white-space: nowrap;
-    }
-
-    .hj-price-row span {
-        font-size: 10px;
-        line-height: 1;
-        padding: 7px 9px;
-        border-radius: 2px;
-        white-space: nowrap;
-    }
-
-    .hj-price-row .hj-cart-btn {
-        width: 100%;
-        max-width: none;
-        min-width: 150px;
-        height: 54px;
-        margin: 0;
-        justify-self: stretch;
+        white-space: normal;
         align-self: center;
-        border-radius: 30px;
-        font-size: 13px;
-    }
-}
-
-@media (max-width: 575px) {
-    .hj-price-row {
-        grid-template-columns: minmax(0, 1fr) 112px;
-        gap: 8px;
     }
 
-    .hj-price-left {
-        gap: 4px 6px;
-        align-content: center;
-    }
-
-    .hj-price-row del {
-        font-size: 10px;
-    }
-
-    .hj-price-row strong {
-        font-size: 17px;
-    }
-
-    .hj-price-row span {
-        font-size: 7px;
-        padding: 6px 6px;
-        max-width: 70px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .hj-price-row .hj-cart-btn {
-        min-width: 112px;
-        height: 42px;
-        font-size: 10px;
-        padding: 0 10px;
-    }
-}
-
-@media (max-width: 991px) {
-    .hj-price-row {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 26px;
-        width: 100%;
-        margin: 24px 0 14px;
-        text-align: left;
-    }
-
-    .hj-price-left {
-        display: flex;
-        flex: 0 1 auto;
-        align-items: center;
-        flex-wrap: nowrap;
-        gap: 9px;
-        min-width: 0;
-    }
-
-    .hj-price-row del {
-        margin: 0;
-        font-size: 16px;
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    .hj-price-row strong {
-        font-size: 24px;
-        line-height: 1;
-        font-weight: 400;
-        white-space: nowrap;
-    }
-
-    .hj-price-row span {
-        display: inline-flex;
-        align-items: center;
-        height: 36px;
-        padding: 0 11px;
-        border-radius: 2px;
-        font-size: 12px;
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    .hj-price-row .hj-cart-btn {
-        flex: 1 1 260px;
-        width: auto;
-        max-width: 330px;
-        min-width: 230px;
-        height: 58px;
-        margin: 0;
-        border-radius: 31px;
-        font-size: 16px;
-        font-weight: 400;
-        white-space: nowrap;
-    }
-}
-
-@media (max-width: 575px) {
-    .hj-price-row {
-        gap: 9px;
-        margin-top: 20px;
-    }
-
-    .hj-price-left {
-        gap: 5px;
-    }
-
-    .hj-price-row del {
-        font-size: clamp(9px, 2.7vw, 12px);
-    }
-
-    .hj-price-row strong {
-        font-size: clamp(15px, 4.4vw, 19px);
-    }
-
-    .hj-price-row span {
-        height: 30px;
-        padding: 0 6px;
-        font-size: clamp(7px, 2vw, 9px);
-        max-width: none;
-    }
-
-    .hj-price-row .hj-cart-btn {
-        flex: 1 1 126px;
-        min-width: 126px;
-        max-width: none;
-        height: 46px;
-        padding: 0 12px;
-        font-size: clamp(10px, 2.8vw, 12px);
-    }
-}
-
-@media (max-width: 390px) {
-    .hj-price-row {
-        gap: 6px;
-    }
-
-    .hj-price-left {
-        gap: 4px;
-    }
-
-    .hj-price-row span {
-        padding: 0 5px;
-    }
-
-    .hj-price-row .hj-cart-btn {
-        flex-basis: 112px;
-        min-width: 112px;
-        height: 42px;
-    }
-}
-
-@media (min-width: 320px) and (max-width: 470px) {
-    .hj-option-card {
-        padding: 16px 8px;
-    }
-
-    .hj-option-card .hj-row,
-    .hj-option-card .hj-row.hj-metal-row,
-    .hj-option-card .hj-row.hj-carat-row {
-        grid-template-columns: 56px minmax(0, 1fr) 96px;
-        min-height: 72px;
-    }
-
-    .hj-option-card .hj-ring-size-box {
-        grid-template-columns: 56px minmax(0, 1fr) 96px;
-    }
-
-    .hj-option-card .hj-middle,
-    .hj-option-card .hj-metal-track-wrap {
-        min-width: 0;
-        padding-right: 6px;
+    .hj-option-card .hj-metal-track-wrap,
+    .hj-option-card .hj-middle {
+        padding: 0 0.25em 0 0.125em;
         overflow: visible;
     }
 
-    .hj-option-card .hj-metal-options {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        gap: 8px;
-        padding: 10px 7px;
-        overflow-x: auto;
-        overflow-y: visible;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        margin-left: -11px;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .hj-option-card .hj-metal-options::-webkit-scrollbar {
-        display: none;
-    }
-
     .hj-option-card .metal-chip {
-        width: 21px;
-        height: 22px;
-        min-width: 22px;
-        min-height: 22px;
-        font-size: 7px;
+        --hj-chip-ring: clamp(1.5px, 11cqi, 4px);
+        --hj-chip-ring-active-in: clamp(1.5px, 9cqi, 3.5px);
+        --hj-chip-ring-active-out: clamp(3px, 16cqi, 6px);
+        --hj-chip-space: clamp(1.5px, 3cqi, 4px);
+        margin-inline: calc(var(--hj-chip-ring) + var(--hj-chip-space) * 0.25);
     }
 
-    .hj-option-card .hj-side-btn,
-    .hj-option-card .hj-ring-size-help {
-        width: 96px;
-        height: 38px;
-        font-size: 8px;
-        padding: 0 6px;
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge {
+        max-width: min(5.75rem, 24vw);
     }
 
-    .hj-option-card .hj-ring-size-help {
-        width: 96px;
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn,
+    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-value-badge {
+        flex-shrink: 0;
+        max-width: min(100%, 9.5rem);
+    }
+}
+
+@media (max-width: 991px) {
+    .hj-product-info {
+        font-size: clamp(0.6875rem, 0.5625rem + 0.52vw, 0.875rem);
     }
 
-    .hj-option-card .hj-label,
-    .hj-option-card .hj-ring-size-box::before {
-        font-size: 10px;
-        white-space: normal;
-    }
-
-    .hj-option-card .hj-label small {
-        font-size: 8px;
-        white-space: nowrap;
-    }
-
-    .hj-option-card .hj-slider-text {
-        font-size: 8px;
-        margin-bottom: 6px;
-    }
-
-    .hj-option-card .hj-carat-range {
+    /* Price + cart: grid keeps one line without breaking other sections */
+    .hj-price-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: clamp(0.375rem, 2vw, 1.375rem);
+        margin: 1.5625rem 0 0.75rem;
         width: 100%;
+    }
+
+    .hj-price-left {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        min-width: 0;
+        gap: clamp(0.0625rem, 0.5vw, 0.2rem);
+    }
+
+    .hj-price-row del,
+    .hj-price-row strong,
+    .hj-price-row span {
+        white-space: nowrap;
         min-width: 0;
     }
 
-    .hj-option-card .hj-ring-size-toggle {
-        padding-right: 6px;
+    .hj-price-row del {
+        font-size: clamp(0.125rem, 2.5vw, 0.875rem);
+        margin: 0;
+        flex-shrink: 1;
     }
 
-    .hj-option-card #hjRingSizeSelected::after {
-        font-size: 13px;
+    .hj-price-row strong {
+        font-size: clamp(0.675rem, 3.5vw, 1.75rem);
+        flex-shrink: 1;
+    }
+
+    .hj-price-row span {
+        font-size: clamp(0.1rem, 2vw, 0.6875rem);
+        padding: 0.1em 0.45em;
+        border-radius: 0.1875rem;
+        flex-shrink: 0;
+        margin-inline-start: 0px;
+    }
+
+    .hj-price-row .hj-cart-btn {
+        width: auto;
+        min-width: clamp(4.75rem,35vw, 14.375rem);
+        max-width: 14.375rem;
+        height: clamp(2.5rem, 10vw, 3rem);
+        padding: 0 clamp(1rem, 4.5vw, 1.75rem);
+        font-size: clamp(0.6875rem, 2.8vw, 0.875rem);
+        border-radius: 1.75rem;
+        white-space: nowrap;
+        justify-self: end;
+    }
+
+    .hj-price-row .hj-cart-btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .hj-sku {
+        font-size: 0.85em;
     }
 }
 .hj-360-viewer {
