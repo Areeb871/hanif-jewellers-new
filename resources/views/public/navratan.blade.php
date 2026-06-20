@@ -2,26 +2,32 @@
 
 @section('content')
 
-@if(isset($subcategory) && $subcategory->banner_url && Str::endsWith($subcategory->banner_url, ['.mp4', '.webm', '.ogg']))
+@if(isset($subcategory) && $subcategory->banner_url)
+@php
+    $bannerUrl = $subcategory->banner_url;
+    $bannerIsVideo = Str::endsWith(strtolower($bannerUrl), ['.mp4', '.webm', '.ogg']);
+    $bannerAlt = ($subcategory->name ?? 'Navratan collection') . ' banner';
+    $mobileBannerUrl = 'assets/f_assets/image/watches mobile view/fm_new_mobile.jpg';
+@endphp
 
 <!-- DESKTOP -->
 <section class="sectionOne d-md-block d-none">
-    <video autoplay loop muted playsinline>
-        <source src="{{ asset($subcategory->banner_url) }}" type="video/{{ pathinfo($subcategory->banner_url, PATHINFO_EXTENSION) }}">
-        Your browser does not support the video tag.
-    </video>
+    @if($bannerIsVideo)
+        <video autoplay loop muted playsinline>
+            <source
+                src="{{ asset($bannerUrl) }}"
+                type="video/{{ strtolower(pathinfo($bannerUrl, PATHINFO_EXTENSION)) }}"
+            >
+            Your browser does not support the video tag.
+        </video>
+    @else
+        <img src="{{ asset($bannerUrl) }}" alt="{{ $bannerAlt }}">
+    @endif
 </section>
 
 <!-- MOBILE -->
-@php
-    $mobileVideo = 'assets/f_assets/image/Navratan Banner Mob View.mp4';
-@endphp
-
 <section class="sectionMobile d-md-none">
-    <video autoplay loop muted playsinline>
-        <source src="{{ asset($mobileVideo) }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <img src="{{ asset($mobileBannerUrl) }}" alt="{{ $bannerAlt }}">
 </section>
 
 @endif
@@ -67,6 +73,8 @@ header .col,
 }
 
 /* responsive video - no crop */
+.sectionOne img,
+.sectionMobile img,
 .sectionOne video,
 .sectionMobile video{
     width: 100%;
@@ -119,12 +127,28 @@ margin:auto;
             </div>
             
 
-            <!-- Row 1: 3 carousels -->
             <div class="row g-3 pt-4">
+
+
                 <div class="col-md-4">
-                @php
-                       $navratanRedImages = [];
-                        for ($i = 1; $i <= 4; $i++) {
+                    @php
+                        $navratanImages = [];
+                        for ($i = 1; $i <= 3; $i++) {
+                            $navratanImages[] = [
+                                'src' => asset('assets/f_assets/image/Navratan/Navratan/' . $i . '.png'),
+                                'alt' => 'navratan-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'navratanCarousel-1',
+                        'images' => $navratanImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanRedImages = [];
+                        for ($i = 1; $i <= 5; $i++) {
                             $navratanRedImages[] = [
                                 'src' => asset('assets/f_assets/image/Navratan/Red/' . $i . '.png'),
                                 'alt' => 'navratan-red-' . $i,
@@ -132,7 +156,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-red',
+                        'id' => 'navratanCarousel-2',
                         'images' => $navratanRedImages,
                     ])
                 </div>
@@ -147,11 +171,17 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-blue',
+                        'id' => 'navratanCarousel-3',
                         'images' => $navratanBlueImages,
                     ])
                 </div>
-                <div class="col-md-4">
+
+            </div>
+
+            <!-- Row 2: 3 carousels -->
+            <div class="row g-3 pt-4">
+
+             <div class="col-md-4">
                     @php
                         $navratanLook3 = [];
                         for ($i = 1; $i <= 4; $i++) {
@@ -162,15 +192,12 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-3',
+                        'id' => 'navratanCarousel-4',
                         'images' => $navratanLook3,
                     ])
                 </div>
-            </div>
 
-            <!-- Row 2: 2 carousels -->
-            <div class="row g-3 pt-4">
-                <div class="col-md-4 offset-md-2">
+                <div class="col-md-4 ">
                     @php
                         $navratanLook4 = [];
                         for ($i = 1; $i <= 4; $i++) {
@@ -181,7 +208,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-4',
+                        'id' => 'navratanCarousel-5',
                         'images' => $navratanLook4,
                     ])
                 </div>
@@ -196,7 +223,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-5',
+                        'id' => 'navratanCarousel-6',
                         'images' => $navratanLook5,
                     ])
                 </div>
@@ -222,7 +249,7 @@ margin:auto;
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    for (let i = 1; i <= 5; i++) {
+                    for (let i = 1; i <= 6; i++) {
                         const el = document.getElementById('navratanCarousel-' + i);
                         if (el) new bootstrap.Carousel(el, { interval: false, wrap: true, touch: true });
                     }
@@ -231,5 +258,3 @@ margin:auto;
         </div>
     </section>
 @endsection
-
-

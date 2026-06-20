@@ -18,7 +18,7 @@
         </div>
 
         <div class="hj-ring-hero-image">
-            <img src="{{ asset('assets/f_assets/image/solitaire/image.png') }}" alt="Solitaire Engagement Rings">
+            <img src="{{ asset('assets/f_assets/image/solitaire/Final banner.png') }}" alt="Solitaire Engagement Rings">
         </div>
     </section>
 
