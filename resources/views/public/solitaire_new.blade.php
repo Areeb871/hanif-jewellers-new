@@ -977,46 +977,17 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        card.addEventListener('click', function (event) {
-            if (
-                event.target.closest('.hj-metal') ||
-                event.target.closest('.hj-size-options button')
-            ) {
-                return;
-            }
+        const imageBox = card.querySelector('.hj-product-image-box');
 
-            if (card.dataset.productUrl) {
-                window.location.href = card.dataset.productUrl;
-            }
-        });
+        if (imageBox) {
+            imageBox.addEventListener('click', function () {
+                if (card.dataset.productUrl) {
+                    window.location.href = card.dataset.productUrl;
+                }
+            });
+        }
 
         updateCard();
-    });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[data-product-card]').forEach(function (card) {
-        card.addEventListener('click', function (e) {
-
-            if (
-                e.target.closest('.hj-metal') ||
-                e.target.closest('.hj-size-options') ||
-                e.target.closest('button') ||
-                e.target.closest('a')
-            ) {
-                return;
-            }
-
-            let url = card.dataset.productUrl;
-            let metal = card.dataset.selectedMetal;
-
-            if (metal) {
-                url = url + '?metal=' + encodeURIComponent(metal);
-            }
-
-            window.location.href = url;
-        });
     });
 });
 </script>
