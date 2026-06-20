@@ -252,7 +252,7 @@ body{
 .hj-option-card .hj-metal-options {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
     max-width: 100%;
@@ -395,8 +395,33 @@ body{
         padding: 0 8px 0 4px;
     }
 
+    .hj-option-card .hj-metal-options {
+        justify-content: flex-start;
+    }
+
+    .hj-option-card .hj-metal-track-wrap {
+        padding-left: 39px;
+    }
+
     .hj-slider-box {
         padding-top: 0;
+    }
+
+    .hj-option-card .hj-metal-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-carat-btn-wrap .hj-value-badge {
+        width: 6.5rem;
+        max-width: 6.5rem;
+        height: 36px;
+        font-size: 10px;
+        justify-content: center;
+    }
+
+    .hj-option-card .hj-label {
+        font-size: 12px;
+    }
+
+    .hj-option-card .hj-label small {
+        font-size: 9px;
     }
 }
 
@@ -2836,6 +2861,7 @@ a.hj-lab-product-card {
         --hj-opt-chip-size: clamp(1.2rem, 0.7rem + 2vw, 1.85rem);
         --hj-opt-chip-gap: clamp(0.3rem, 0.15rem + 0.75vw, 0.95rem);
         --hj-opt-row-min-h: clamp(3.25rem, 2.75rem + 1.4vw, 4.75rem);
+        --hj-opt-action-w: clamp(4.5rem, 18vw, 6rem);
         border-radius: 13px;
         padding: clamp(0.75rem, 0.55rem + 0.9vw, 1.125rem) clamp(0.625rem, 0.4rem + 1vw, 1rem);
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
@@ -2846,13 +2872,22 @@ a.hj-lab-product-card {
     .hj-option-card .hj-row.hj-metal-row,
     .hj-option-card .hj-row.hj-carat-row {
         display: grid;
-        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) auto;
+        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) var(--hj-opt-action-w);
         column-gap: 0;
         row-gap: 0;
         align-items: center;
         min-height: var(--hj-opt-row-min-h);
         margin: 0;
         position: relative;
+    }
+
+    .hj-option-card .hj-metal-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-carat-btn-wrap .hj-value-badge,
+    .hj-option-card .hj-ring-size-help {
+        width: var(--hj-opt-action-w);
+        max-width: var(--hj-opt-action-w);
+        flex-shrink: 0;
+        justify-content: center;
     }
 
     .hj-option-card .hj-row:not(:last-child)::after,
@@ -2871,7 +2906,7 @@ a.hj-lab-product-card {
         height: auto;
         display: flex;
         align-items: center;
-        font-size: 0.95em;
+        font-size: 0.9em;
         line-height: 1.2;
         font-weight: 400;
         color: #1D1D1B;
@@ -2897,7 +2932,7 @@ a.hj-lab-product-card {
 
     .hj-option-card .hj-metal-track-wrap {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         position: relative;
         overflow: visible;
@@ -2932,13 +2967,11 @@ a.hj-lab-product-card {
     .hj-option-card .hj-side-btn,
     .hj-option-card .hj-value-badge,
     .hj-option-card .hj-ring-size-help {
-        width: auto;
-        max-width: min(100%, 11rem);
         height: clamp(1.875rem, 1.55rem + 0.85vw, 2.75rem);
         border: 0;
         border-radius: 1.5em;
         background: #fff;
-        font-size: 0.8em;
+        font-size: 0.85em;
         font-weight: 400;
         color: #1D1D1B;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
@@ -2959,12 +2992,13 @@ a.hj-lab-product-card {
     .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn,
     .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge,
     .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-value-badge {
-        width: auto;
-        max-width: min(100%, 11rem);
+        width: var(--hj-opt-action-w);
+        max-width: var(--hj-opt-action-w);
         height: clamp(1.875rem, 1.55rem + 0.85vw, 2.75rem);
-        flex-shrink: 1;
+        flex-shrink: 0;
         min-width: 0;
         padding: 0 var(--hj-opt-btn-px);
+        font-size: 0.85em;
     }
 
     .hj-option-card .hj-slider-text {
@@ -2989,7 +3023,7 @@ a.hj-lab-product-card {
 
     .hj-option-card .hj-ring-size-box {
         display: grid;
-        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) auto;
+        grid-template-columns: var(--hj-opt-label-col) minmax(0, 1fr) var(--hj-opt-action-w);
         grid-template-rows: var(--hj-opt-row-min-h) auto auto;
         align-items: center;
         margin: 0;
@@ -3061,8 +3095,6 @@ a.hj-lab-product-card {
     .hj-option-card .hj-ring-size-help {
         grid-column: 3;
         grid-row: 1;
-        width: auto;
-        max-width: 100%;
         margin: 0;
         padding: 0 var(--hj-opt-btn-px);
         justify-self: end;
@@ -3131,18 +3163,6 @@ a.hj-lab-product-card {
         --hj-chip-ring-active-out: clamp(3px, 16cqi, 6px);
         --hj-chip-space: clamp(1.5px, 3cqi, 4px);
         margin-inline: calc(var(--hj-chip-ring) + var(--hj-chip-space) * 0.25);
-    }
-
-    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge {
-        max-width: min(5.75rem, 24vw);
-    }
-
-    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-side-btn,
-    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-side-btn,
-    .hj-option-card .hj-metal-row .hj-metal-btn-wrap .hj-value-badge,
-    .hj-option-card .hj-carat-row .hj-carat-btn-wrap .hj-value-badge {
-        flex-shrink: 0;
-        max-width: min(100%, 9.5rem);
     }
 }
 
