@@ -270,8 +270,8 @@ img{
         /* mobile banner dynamic */
         $mobileBanner = $desktopBanner;
 
-        if ($mauriceLacroixSubcategory->slug === 'maurice-lacroix ') {
-            $mobileBanner = 'assets/f_assets/image/watches mobile view/maurice_mobile.mp4';
+        if (trim(strtolower($mauriceLacroixSubcategory->slug ?? '')) === 'maurice-lacroix') {
+            $mobileBanner = 'assets/f_assets/image/watches mobile view/ML-mobile-view.png';
         }
 
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);
