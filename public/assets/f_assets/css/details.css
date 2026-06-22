@@ -2906,7 +2906,7 @@ a.hj-lab-product-card {
         height: auto;
         display: flex;
         align-items: center;
-        font-size: 0.9em;
+        font-size: 10px;
         line-height: 1.2;
         font-weight: 400;
         color: #1D1D1B;
@@ -3328,5 +3328,67 @@ a.hj-lab-product-card {
 
     .hj-360-hint span {
         display: block;
+    }
+}
+
+/* Mobile: equal padding and width for metal, carat, and help badges. */
+@media (max-width: 767px) {
+    .hj-option-card {
+        --hj-opt-action-w: 7.5rem;
+        --hj-opt-btn-px: 0.75rem;
+    }
+
+    .hj-option-card .hj-metal-track-wrap,
+    .hj-option-card .hj-row.hj-carat-row .hj-middle,
+    .hj-option-card .hj-ring-size-toggle {
+        width: 80%;
+        margin-inline: auto;
+        padding-inline: 0;
+        justify-self: center;
+    }
+
+    .hj-option-card .hj-metal-track-wrap {
+        justify-content: center;
+    }
+
+    .hj-option-card .hj-metal-options {
+        width: 100%;
+        gap: 3px 6px;
+        padding-inline: 0;
+        justify-content: flex-start;
+    }
+
+    .hj-option-card .metal-chip {
+        box-shadow: 0 0 0 2px #c7c7c7;
+    }
+
+    .hj-option-card .metal-chip.white,
+    .hj-option-card .metal-chip.silver {
+        box-shadow: 0 0 0 2px #e8e8e8;
+    }
+
+    .hj-option-card .metal-chip.rose {
+        box-shadow: 0 0 0 2px #efb69d;
+    }
+
+    .hj-option-card .metal-chip.yellow {
+        box-shadow: 0 0 0 2px #f0da8d;
+    }
+
+    .hj-option-card .metal-chip.active {
+        box-shadow: 0 0 0 2px #c7c7c7, 0 0 0 4px #111;
+    }
+
+    .hj-option-card .metal-chip.white.active,
+    .hj-option-card .metal-chip.silver.active {
+        box-shadow: 0 0 0 2px #e8e8e8, 0 0 0 4px #111;
+    }
+
+    .hj-option-card .metal-chip.rose.active {
+        box-shadow: 0 0 0 2px #efb69d, 0 0 0 4px #111;
+    }
+
+    .hj-option-card .metal-chip.yellow.active {
+        box-shadow: 0 0 0 2px #f0da8d, 0 0 0 4px #111;
     }
 }
