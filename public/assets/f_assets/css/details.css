@@ -1830,7 +1830,7 @@ body{
 .hj-handcrafted-banner {
     width: 100%;
     background: #FAFAFA;
-    padding: 46px 20px 68px;
+    padding: 46px 20px;
 }
 
 .hj-handcrafted-container {
@@ -1866,11 +1866,11 @@ body{
 /* Tablet */
 @media (max-width: 768px) {
     .hj-handcrafted-banner {
-        padding: 36px 16px 50px;
+        padding: 36px 16px;
     }
 
     .hj-handcrafted-container h2 {
-        font-size: 18px;
+        font-size: 22px;
         line-height: 1.35;
         margin-bottom: 24px;
     }
@@ -1883,11 +1883,11 @@ body{
 /* Mobile */
 @media (max-width: 480px) {
     .hj-handcrafted-banner {
-        padding: 30px 14px 42px;
+        padding: 30px 14px;
     }
 
     .hj-handcrafted-container h2 {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .hj-handcrafted-image {
@@ -3133,7 +3133,7 @@ a.hj-lab-product-card {
 }
 
 /* ≤767px: layout tweaks only — sizes inherit fluid tokens from 991px block */
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .hj-option-card .hj-row.hj-metal-row::after,
     .hj-option-card .hj-row.hj-carat-row::after {
         content: "";

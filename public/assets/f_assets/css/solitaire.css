@@ -903,7 +903,7 @@ font-family: "Barlow", sans-serif;
 
 .hj-price-inputs input {
     width: 100px;
-    height: 28px;
+    height: 36px;
     border: 1px solid #cfcfcf;
     border-radius: 18px;
     background: #fff;
@@ -914,8 +914,9 @@ font-family: "Barlow", sans-serif;
 }
 
 .hj-price-inputs .hj-price-max.is-active {
-    background: #767676;
-    color: #fff;
+    background: #fff;
+    border-color: #111;
+    color: #111;
 }
 
 .hj-price-inputs span {

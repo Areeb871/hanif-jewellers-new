@@ -112,8 +112,130 @@ margin:auto;
 </p>
             </div>
 
-            <!-- Row 1: 3 carousels -->
-            <div class="row g-3 pt-4">
+
+
+
+             <div class="row g-3 pt-4 taj-mahal-collection-grid">
+                <div class="col-md-4">
+                @php
+                       $navratanRedImages = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanRedImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/11/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-11',
+                        'images' => $navratanRedImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanBlueImages = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanBlueImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/12/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-12',
+                        'images' => $navratanBlueImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanLook3 = [];
+                        for ($i = 1; $i <= 3; $i++) {
+                            $navratanLook3[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/13/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-13',
+                        'images' => $navratanLook3,
+                    ])
+                </div>
+                <div class="col-md-4">
+                @php
+                       $navratanRedImages = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanRedImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/14/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-14',
+                        'images' => $navratanRedImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanBlueImages = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanBlueImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/15/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-15',
+                        'images' => $navratanBlueImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanLook3 = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanLook3[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/16/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-16',
+                        'images' => $navratanLook3,
+                    ])
+                </div>
+                <div class="col-md-4">
+                @php
+                       $navratanRedImages = [];
+                        for ($i = 1; $i <= 3; $i++) {
+                            $navratanRedImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/17/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-17',
+                        'images' => $navratanRedImages,
+                    ])
+                </div>
+                <div class="col-md-4">
+                    @php
+                        $navratanBlueImages = [];
+                        for ($i = 1; $i <= 2; $i++) {
+                            $navratanBlueImages[] = [
+                                'src' => asset('assets/f_assets/image/Taj Mahal/18/' . $i . '.png'),
+                                'alt' => 'taj-mahal-collection-' . $i,
+                            ];
+                        }
+                    @endphp
+                    @include('public.partials.carousel', [
+                        'id' => 'tajMahalCarousel-18',
+                        'images' => $navratanBlueImages,
+                    ])
+                </div>
                 <div class="col-md-4">
                 @php
                        $navratanRedImages = [];
@@ -125,7 +247,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-red',
+                        'id' => 'tajMahalCarousel-3',
                         'images' => $navratanRedImages,
                     ])
                 </div>
@@ -140,7 +262,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-blue',
+                        'id' => 'tajMahalCarousel-4',
                         'images' => $navratanBlueImages,
                     ])
                 </div>
@@ -155,15 +277,11 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-3',
+                        'id' => 'tajMahalCarousel-2',
                         'images' => $navratanLook3,
                     ])
                 </div>
-            </div>
-
-            <!-- Row 2: 2 carousels -->
-            <div class="row g-3 pt-4">
-                <div class="col-md-4 offset-md-2">
+                <div class="col-md-4">
                     @php
                         $navratanLook4 = [];
                         for ($i = 1; $i <= 4; $i++) {
@@ -174,7 +292,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-4',
+                        'id' => 'tajMahalCarousel-5',
                         'images' => $navratanLook4,
                     ])
                 </div>
@@ -189,7 +307,7 @@ margin:auto;
                         }
                     @endphp
                     @include('public.partials.carousel', [
-                        'id' => 'navratanCarousel-5',
+                        'id' => 'tajMahalCarousel-1',
                         'images' => $navratanLook5,
                     ])
                 </div>
@@ -215,16 +333,17 @@ margin:auto;
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    for (let i = 1; i <= 5; i++) {
-                        const el = document.getElementById('navratanCarousel-' + i);
-                        if (el) new bootstrap.Carousel(el, { interval: false, wrap: true, touch: true });
-                    }
+                    document.querySelectorAll('.taj-mahal-collection-grid .carousel').forEach(function(el) {
+                        bootstrap.Carousel.getOrCreateInstance(el, {
+                            interval: false,
+                            wrap: true,
+                            touch: true
+                        });
+                    });
                 });
             </script>
         </div>
     </section>
 @endsection
-
-
 
 

@@ -252,14 +252,14 @@
                 class="hj-price-min"
             >
 
-            <span>-</span>
+            <!-- <span>-</span> -->
 
             <input 
                 type="text" 
                 id="desktopPriceMaxText" 
                 value="PKR {{ number_format((float) $desktopMaxPrice, 0) }}" 
                 readonly 
-                class="hj-price-max"
+                class="hj-price-max is-active"
             >
         </div>
 

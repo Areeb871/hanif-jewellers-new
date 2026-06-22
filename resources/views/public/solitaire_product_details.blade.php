@@ -1053,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </h2>
 
         <div class="hj-handcrafted-image">
-            <img src="{{ asset('assets/f_assets/image/solitaire/image1.png') }}" alt="Handcrafted Jewellery Banner">
+            <img src="{{ asset('assets/f_assets/image/solitaire/solitaire21.jpeg') }}" alt="Handcrafted Jewellery Banner">
         </div>
 
     </div>
