@@ -1152,7 +1152,7 @@ font-family: "Barlow", sans-serif;
 
 .hj-price-row del {
     color: #777777;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 400;
 }
 
@@ -1302,7 +1302,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-price-row del {
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .hj-price-row strong {
@@ -1356,9 +1356,12 @@ font-family: "Barlow", sans-serif;
         font-size: 10px;
     }
 
-    .hj-price-row del,
+    .hj-price-row del {
+        font-size: 9px;
+    }
+
     .hj-price-row strong {
-        font-size: 14px;
+        font-size: 11px;
     }
 }
 
@@ -1463,7 +1466,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-price-row del {
-        font-size: 11px;
+        font-size: 8px;
     }
 
     .hj-price-row strong {
@@ -1471,8 +1474,8 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-price-row span {
-        font-size: 8px;
-        padding: 4px 6px;
+        font-size: 6px;
+        padding: 3px 4px;
     }
 }
 .hj-pagination {
