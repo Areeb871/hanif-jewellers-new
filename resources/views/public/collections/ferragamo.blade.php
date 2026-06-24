@@ -56,7 +56,7 @@
         </section>
     @endif
 
-    <section class="py-4">
+    <section class="pb-4">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -126,30 +126,37 @@
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
-                width: 10%;
+                width: 12%;
                 height: auto;
+            }
+            .ferragamo-brand-bar {
+                padding: 0.75rem 0;
+            }
+            .ferragamo-brand-bar .brand-logo-wrapper {
+                margin: 0;
             }
             /* Responsive logo sizing */
             @media (max-width: 575px) {
                 .brand-logo {
-                    width: 40%;
-                    margin-top: -75px;
+                    width: 45%;
+                }
+                .ferragamo-brand-bar {
+                    padding: 0.5rem 0;
                 }
             }
             @media (min-width: 576px) and (max-width: 767px) {
                 .brand-logo {
-                    width: 30%;
+                    width: 35%;
                 }
             }
             @media (min-width: 768px) and (max-width: 991px) {
                 .brand-logo {
-                    width: 20%;
+                    width: 24%;
                 }
             }
             @media (min-width: 992px) {
                 .brand-logo {
-                    width: 20%;
-                    margin-top: -75px;
+                    width: 24%;
                 }
             }
             /* Responsive SORT & FILTER button positioning */
@@ -202,10 +209,59 @@
 .offcanvas-backdrop{
   z-index: 19999 !important;
 }
+            @media (min-width: 992px) {
+                .ferragamo-hero-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    grid-template-rows: auto auto;
+                    gap: 0.5rem;
+                }
+                .ferragamo-hero-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+                .ferragamo-hero-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+                .ferragamo-hero-card:nth-child(3) { grid-column: 1; grid-row: 2; }
+                .ferragamo-hero-card:nth-child(4) { grid-column: 2; grid-row: 2; }
+                .ferragamo-hero-row > .ferragamo-inline-banner {
+                    grid-column: 3 / 5;
+                    grid-row: 1 / 3;
+                    position: relative;
+                    overflow: hidden;
+                    min-height: 0;
+                }
+                .ferragamo-hero-row > .ferragamo-inline-banner img {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    display: block;
+                }
+            }
+            @media (max-width: 991.98px) {
+                .ferragamo-hero-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.5rem;
+                }
+                .ferragamo-hero-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+                .ferragamo-hero-card:nth-child(2) { grid-column: 2; grid-row: 1; }
+                .ferragamo-hero-card:nth-child(3) { grid-column: 1; grid-row: 2; }
+                .ferragamo-hero-card:nth-child(4) { grid-column: 2; grid-row: 2; }
+                .ferragamo-hero-row > .ferragamo-inline-banner {
+                    grid-column: 1 / -1;
+                    grid-row: 3;
+                }
+                .ferragamo-inline-banner img {
+                    position: static;
+                    width: 100%;
+                    height: auto;
+                    object-fit: contain;
+                    display: block;
+                }
+            }
         </style>
 
-        <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
-            <div class="brand-logo-wrapper w-70 my-3 text-center">
+        <div class="navbar navbar-white align-items-center filter position-relative justify-content-center ferragamo-brand-bar">
+            <div class="brand-logo-wrapper w-70 text-center">
                 <img src="{{ asset('assets/f_assets/image/watch logo/Ferragamo.png') }}" alt="Ferragamo logo" class="brand-logo">
             </div>
             <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFerragamo" aria-controls="offcanvasFerragamo" aria-label="Toggle navigation">
@@ -214,9 +270,30 @@
         </div>
 
         <div class="container-fluid px-3">
-        <div class="row onlineStore g-2 pt-3" id="ferragamoGrid">
+        <div class="row onlineStore g-2" id="ferragamoGrid">
             @if(isset($products) && $products->count())
-                @foreach($products as $prod)
+                @php
+                    $showHero = $products->currentPage() == 1;
+                    $heroProducts = $showHero ? $products->take(4) : collect();
+                    $gridProducts = $showHero ? $products->slice(4) : $products;
+                @endphp
+
+                @if($showHero)
+                    <div class="col-12">
+                        <div class="ferragamo-hero-row">
+                            @foreach($heroProducts as $prod)
+                                <div class="ferragamo-hero-card">
+                                    @include('public.partials.product-card-watches', ['product' => $prod])
+                                </div>
+                            @endforeach
+                            <div class="ferragamo-inline-banner">
+                                <img src="{{ asset('assets/f_assets/image/ferragamo-grid.jpeg') }}" alt="Ferragamo">
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @foreach($gridProducts as $prod)
                     <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                         @include('public.partials.product-card-watches', ['product' => $prod])
                     </div>
