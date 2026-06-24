@@ -70,8 +70,8 @@ font-family: "Barlow", sans-serif;
 .hj-ring-hero-image img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center;
+    object-fit: cover;
+    object-position: bottom;
     display: block;
 }
 /* BREADCRUMB */
@@ -1743,6 +1743,20 @@ font-family: "Barlow", sans-serif;
         z-index: 40;
     }
 
+    .hj-custom-sort.show .hj-sort-toggle {
+        border-radius: 20px 20px 0 0;
+        border-bottom-color: transparent;
+        box-shadow: none;
+    }
+
+    .hj-sort-dropdown {
+        top: calc(100% - 1px);
+        border-top: none;
+        border-radius: 0 0 20px 20px;
+        padding: 6px 16px 10px;
+        box-shadow: none;
+    }
+
     .hj-product-grid {
         position: relative;
         z-index: 1;
@@ -2371,4 +2385,53 @@ header,
     .hj-price-inputs {
         gap: 18px;
     }
+}
+
+/* Product-card metal selector: match the product-details design. */
+.hj-product-card .hj-metal-options {
+    gap: 12px;
+}
+
+.hj-product-card .hj-metal {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    flex: 0 0 26px;
+    border: 0;
+    background: #fff;
+    color: #555;
+    font-size: 9px;
+    font-weight: 400;
+    box-shadow: 0 0 0 3px #c7c7c7;
+}
+
+.hj-product-card .hj-metal.white,
+.hj-product-card .hj-metal.silver {
+    box-shadow: 0 0 0 3px #d6d6d6;
+}
+
+.hj-product-card .hj-metal.rose {
+    box-shadow: 0 0 0 3px #e4a083;
+}
+
+.hj-product-card .hj-metal.yellow {
+    box-shadow: 0 0 0 3px #dfc258;
+}
+
+.hj-product-card .hj-metal.active {
+    box-shadow: 0 0 0 2px #c7c7c7, 0 0 0 4px #111;
+}
+
+.hj-product-card .hj-metal.white.active,
+.hj-product-card .hj-metal.silver.active {
+    box-shadow: 0 0 0 2px #d6d6d6, 0 0 0 4px #111;
+}
+
+.hj-product-card .hj-metal.rose.active {
+    box-shadow: 0 0 0 2px #e4a083, 0 0 0 4px #111;
+}
+
+.hj-product-card .hj-metal.yellow.active {
+    box-shadow: 0 0 0 2px #dfc258, 0 0 0 4px #111;
 }

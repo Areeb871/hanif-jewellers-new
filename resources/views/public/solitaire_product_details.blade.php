@@ -791,7 +791,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <span>◎</span>
+            <img class="hj-certificate-logo"
+                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
+                alt="Hanif Jewellers logo">
             <div>
                 <small>Certification</small>
                 <strong>GEMOLOGICAL CERTIFICATE INCLUDED</strong>
@@ -899,7 +901,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <span>◎</span>
+            <img class="hj-certificate-logo"
+                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
+                alt="Hanif Jewellers logo">
             <div>
                 <small>Certification</small>
                 <strong>GEMOLOGICAL CERTIFICATE INCLUDED</strong>
@@ -1044,18 +1048,47 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 </section>
+<div class="hj-details-lower-container">
 <section class="hj-handcrafted-banner">
     <div class="hj-handcrafted-container">
+        <div class="hj-handcrafted-hero">
+            <picture>
+                <source
+                    media="(max-width: 768px)"
+                    srcset="{{ asset('assets/f_assets/image/solitaire/product-card-mobile-latest.png') }}">
+                <img src="{{ asset('assets/f_assets/image/solitaire/product-card-desktop-latest.png') }}"
+                    alt="Timeless solitaire rings">
+            </picture>
 
-        <h2>
-            Beautifully Handcrafted, Each Piece Is A Celebration Of Your <br>
-            Love, Your Life, And Everything In Between.
-        </h2>
-
-        <div class="hj-handcrafted-image">
-            <img src="{{ asset('assets/f_assets/image/solitaire/solitaire21.jpeg') }}" alt="Handcrafted Jewellery Banner">
+            <!-- <div class="hj-handcrafted-hero-content">
+                <img class="hj-handcrafted-logo"
+                    src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
+                    alt="Hanif Jewellers">
+                <h2>Timeless Styles, Made to Last</h2>
+                <p>Each Piece Is A Celebration Of Your Love, Your<br> Life, And Everything In Between.</p>
+            </div> -->
         </div>
 
+        <div class="hj-handcrafted-experience">
+            <div class="hj-handcrafted-image">
+                <picture>
+                    <source
+                        media="(max-width: 768px)"
+                        srcset="{{ asset('assets/f_assets/image/solitaire/mobile_latest_banner.png') }}">
+                    <img src="{{ asset('assets/f_assets/image/solitaire/latest_banner.png') }}"
+                        alt="Hanif Jewellers ring packaging">
+                </picture>
+            </div>
+
+            <div class="hj-handcrafted-copy">
+                <div>
+                    <h3>We're committed to making your entire experience a pleasant one</h3>
+                    <p>Every item we send comes in our signature Hanif packaging. The presentation box also secures your appraisal certificate and diamond grading report.</p>
+                </div>
+
+                <a href="{{ route('solitaire') }}">SHOP NOW</a>
+            </div>
+        </div>
     </div>
 </section>
 <section class="hj-lab-products-section">
@@ -1362,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-question-actions">
  <a 
-    href="https://wa.me/923236314044" 
+    href="https://wa.me/923070222666" 
     class="hj-question-btn" 
     target="_blank"
 >
@@ -1372,6 +1405,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     </div>
 </section>
+
+</div>
 
 <script>
     /** Inscription Modal Script */
@@ -1861,12 +1896,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     : '';
             }
 
-            if (caratPriceDiffEl && baseVariant && variant.price && baseVariant.price) {
-                const diff = Number(variant.price) - Number(baseVariant.price);
+            if (caratPriceDiffEl) {
+                let priceDifferenceText = '';
 
-                caratPriceDiffEl.textContent = diff > 0
-                    ? '(+' + formatMoney(diff) + ')'
-                    : '';
+                if (baseVariant && variant.price && baseVariant.price) {
+                    const diff = Number(variant.price) - Number(baseVariant.price);
+
+                    priceDifferenceText = diff === 0
+                        ? ''
+                        : (diff > 0 ? '+' : '-') + formatMoney(Math.abs(diff));
+                }
+
+                caratPriceDiffEl.textContent = priceDifferenceText;
             }
         } else {
             if (oldPriceEl) oldPriceEl.textContent = '';

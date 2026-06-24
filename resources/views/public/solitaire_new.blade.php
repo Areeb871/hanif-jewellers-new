@@ -33,13 +33,13 @@
 
 @php
     $sortLabels = [
-        'featured' => 'Sort: Featured',
+        'featured' => 'Sort: Best Selling',
         'newest' => 'Sort: Newest first',
         'price_low_high' => 'Sort: Price: low to high',
         'price_high_low' => 'Sort: Price: high to low',
     ];
 
-    $activeSortLabel = $sortLabels[$selectedSort ?? 'featured'] ?? 'Sort: Featured';
+    $activeSortLabel = $sortLabels[$selectedSort ?? 'featured'] ?? 'Sort: Best Selling';
 
     $desktopMinPrice = $selectedMinPrice !== null && $selectedMinPrice !== '' ? $selectedMinPrice : 0;
     $desktopMaxPrice = $selectedMaxPrice !== null && $selectedMaxPrice !== '' ? $selectedMaxPrice : $maxFilterPrice;
@@ -85,7 +85,7 @@
             </button>
 
             <div class="hj-sort-dropdown" id="hjDesktopSortDropdown">
-                <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
+                <button type="button" data-sort-value="featured" data-sort-label="Sort: Best Selling">Best Selling</button>
                 <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
                 <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
                 <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
@@ -134,7 +134,7 @@
    <div class="hj-material-panel" id="materialPanel">
     <div class="hj-material-list">
 
-        <button 
+        <!-- <button 
             class="hj-material-item {{ request('metal') === '14k_white' ? 'active' : '' }}" 
             type="button"
             data-filter-metal="14k_white"
@@ -159,7 +159,7 @@
         >
             <span class="hj-material-circle gold">14K</span>
             <span>14K Gold</span>
-        </button>
+        </button> -->
 
         <button 
             class="hj-material-item {{ request('metal') === '18k_white' ? 'active' : '' }}" 
@@ -188,14 +188,14 @@
             <span>18K Gold</span>
         </button>
 
-        <button 
+        <!-- <button 
             class="hj-material-item {{ request('metal') === 'platinum' ? 'active' : '' }}" 
             type="button"
             data-filter-metal="platinum"
         >
             <span class="hj-material-circle platinum">PT</span>
             <span>Platinum</span>
-        </button>
+        </button> -->
 
     </div>
 
@@ -296,7 +296,7 @@
             </button>
 
             <div class="hj-modal-sort-dropdown" id="hjModalSortDropdown">
-                <button type="button" data-sort-value="featured" data-sort-label="Sort: Featured">Featured</button>
+                <button type="button" data-sort-value="featured" data-sort-label="Sort: Best Selling">Best Selling</button>
                 <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
                 <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
                 <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
@@ -313,7 +313,7 @@
     <div class="hj-mobile-filter-content">
         <div class="hj-mobile-metal-list">
 
-            <button 
+            <!-- <button 
                 type="button" 
                 class="{{ request('metal') === '14k_white' ? 'active' : '' }}"
                 data-value="14k_white"
@@ -338,7 +338,7 @@
             >
                 <span class="hj-mobile-metal-circle gold">14K</span>
                 <small>14K Gold</small>
-            </button>
+            </button> -->
 
             <button 
                 type="button" 
@@ -367,14 +367,14 @@
                 <small>18K Gold</small>
             </button>
 
-            <button 
+            <!-- <button 
                 type="button" 
                 class="{{ request('metal') === 'platinum' ? 'active' : '' }}"
                 data-value="platinum"
             >
                 <span class="hj-mobile-metal-circle platinum">PT</span>
                 <small>Platinum</small>
-            </button>
+            </button> -->
 
         </div>
 

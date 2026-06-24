@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setSortText(value) {
-        let label = "Sort: Featured";
+        let label = "Sort: Best Selling";
         const finalValue = value || "featured";
 
         $all("[data-sort-value]").forEach(function (option) {
