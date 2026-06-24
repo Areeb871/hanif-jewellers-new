@@ -622,7 +622,7 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/Perrelet Desktop Banner.jpg') }}"
+                        src="{{ asset('assets/f_assets/image/watches/Perrelet-web-banner.jpeg') }}"
                         alt="Nagar"
                         class="hero-bg-img">
 
