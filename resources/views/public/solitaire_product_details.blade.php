@@ -604,19 +604,15 @@ document.addEventListener('DOMContentLoaded', function () {
     <p class="hj-ring-size-error" id="hjRingSizeError" role="alert" hidden>Please select a ring size.</p>
 
     <div class="hj-ring-size-dropdown" id="hjRingSizeDropdown" role="listbox" aria-label="Ring sizes">
-        @for($size = 3; $size <= 12.75; $size += 0.25)
-            @php
-                $sizeValue = number_format($size, 2);
-            @endphp
-
+        @for($size = 4; $size <= 27; $size++)
             <button 
                 type="button" 
                 class="hj-ring-size-option"
-                data-size="{{ $sizeValue }}"
+                data-size="{{ $size }}"
                 role="option"
                 aria-selected="false"
             >
-                {{ $sizeValue }}
+                {{ $size }}
             </button>
         @endfor
     </div>
@@ -1055,18 +1051,18 @@ document.addEventListener('DOMContentLoaded', function () {
             <picture>
                 <source
                     media="(max-width: 768px)"
-                    srcset="{{ asset('assets/f_assets/image/solitaire/product-card-mobile-latest.png') }}">
-                <img src="{{ asset('assets/f_assets/image/solitaire/product-card-desktop-latest.png') }}"
+                    srcset="{{ asset('assets/f_assets/image/solitaire/mobile.png') }}">
+                <img src="{{ asset('assets/f_assets/image/solitaire/desktop.png') }}"
                     alt="Timeless solitaire rings">
             </picture>
 
-            <!-- <div class="hj-handcrafted-hero-content">
+            <div class="hj-handcrafted-hero-content">
                 <img class="hj-handcrafted-logo"
-                    src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
+                    src="{{ asset('assets/f_assets/image/solitaire/emb1.png') }}"
                     alt="Hanif Jewellers">
                 <h2>Timeless Styles, Made to Last</h2>
                 <p>Each Piece Is A Celebration Of Your Love, Your<br> Life, And Everything In Between.</p>
-            </div> -->
+            </div>
         </div>
 
         <div class="hj-handcrafted-experience">
@@ -1322,7 +1318,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <div 
                     class="hj-review-item hj-review-load-item"
-                    style="{{ $index >= 10 ? 'display:none;' : '' }}"
+                    style="{{ $index >= 3 ? 'display:none;' : '' }}"
                 >
 
                     <div class="hj-review-text">

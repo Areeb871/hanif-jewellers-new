@@ -685,6 +685,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* ===============================
+       REVIEW LOAD MORE
+    =============================== */
+
+    const reviewLoadMoreBtn = $("#hjLoadMoreReviews");
+    const reviewLoadMoreWrap = $("#hjLoadMoreWrap");
+    const reviewItems = $all(".hj-review-load-item");
+    const reviewsPerClick = 3;
+
+    if (reviewLoadMoreBtn && reviewItems.length) {
+        reviewLoadMoreBtn.addEventListener("click", function () {
+            const hiddenItems = reviewItems.filter(function (item) {
+                return item.style.display === "none";
+            });
+
+            hiddenItems.slice(0, reviewsPerClick).forEach(function (item) {
+                item.style.display = "";
+            });
+
+            const remainingHiddenItems = reviewItems.filter(function (item) {
+                return item.style.display === "none";
+            });
+
+            if (!remainingHiddenItems.length && reviewLoadMoreWrap) {
+                reviewLoadMoreWrap.style.display = "none";
+            }
+        });
+    }
+
+    /* ===============================
        FALLBACK CARAT BUTTON UPDATE
     =============================== */
 
