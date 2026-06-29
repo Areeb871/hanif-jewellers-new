@@ -1405,6 +1405,7 @@ font-family: "Barlow", sans-serif;
     }
 
     .hj-product-info h3 {
+        margin-top: 3px;
         font-size: 12px;
         line-height: 1.25;
         display: -webkit-box;
@@ -2434,4 +2435,51 @@ header,
 
 .hj-product-card .hj-metal.yellow.active {
     box-shadow: 0 0 0 2px #dfc258, 0 0 0 4px #111;
+}
+
+@media (max-width: 767px) {
+    .hj-product-card .hj-metal-options {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .hj-product-card .hj-metal {
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        min-height: 18px;
+        flex: 0 0 18px;
+        font-size: 7px;
+        box-shadow: 0 0 0 2px #c7c7c7;
+    }
+
+    .hj-product-card .hj-metal.white,
+    .hj-product-card .hj-metal.silver {
+        box-shadow: 0 0 0 2px #d6d6d6;
+    }
+
+    .hj-product-card .hj-metal.rose {
+        box-shadow: 0 0 0 2px #e4a083;
+    }
+
+    .hj-product-card .hj-metal.yellow {
+        box-shadow: 0 0 0 2px #dfc258;
+    }
+
+    .hj-product-card .hj-metal.active {
+        box-shadow: 0 0 0 1px #c7c7c7, 0 0 0 3px #111;
+    }
+
+    .hj-product-card .hj-metal.white.active,
+    .hj-product-card .hj-metal.silver.active {
+        box-shadow: 0 0 0 1px #d6d6d6, 0 0 0 3px #111;
+    }
+
+    .hj-product-card .hj-metal.rose.active {
+        box-shadow: 0 0 0 1px #e4a083, 0 0 0 3px #111;
+    }
+
+    .hj-product-card .hj-metal.yellow.active {
+        box-shadow: 0 0 0 1px #dfc258, 0 0 0 3px #111;
+    }
 }
