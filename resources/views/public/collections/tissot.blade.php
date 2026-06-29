@@ -1,217 +1,363 @@
 @extends('public.layouts.header_latest')
 
 @section('content')
+    <style>
+        /* ── Tissot page: typography & spacing tokens ── */
+        .tissot-home-content,
+        .tissot-products,
+        .tissot-brand-bar,
+        .offcanvas-modern {
+            font-family: "Lato", Helvetica Neue, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .tissot-home-hero,
+        .tissot-video-hero video,
+        .tissot-video-hero .tissot-video-fallback {
+            width: 100%;
+            height: min(70vh, 680px);
+            min-height: 300px;
+        }
+        .tissot-home-hero {
+            overflow: hidden;
+            background: #c9b89a;
+            line-height: 0;
+        }
+        .tissot-home-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        .tissot-video-hero {
+            margin: 0;
+            padding: 0;
+            line-height: 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 0;
+        }
+        .tissot-video-hero video,
+        .tissot-video-hero .tissot-video-fallback {
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            vertical-align: top;
+        }
+
+        /* Shared type roles */
+        .tissot-label {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.5;
+            color: #5c5c5c;
+        }
+        .tissot-body {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            font-style: italic;
+            color: #4a4a4a;
+        }
+        .tissot-section-x {
+            padding-left: clamp(24px, 4vw, 48px);
+            padding-right: clamp(24px, 4vw, 48px);
+        }
+
+        .tissot-home-content {
+            background: #fff;
+            padding-top: clamp(48px, 6vw, 64px);
+            padding-bottom: clamp(48px, 6vw, 64px);
+        }
+        .tissot-home-content__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .tissot-home-content__eyebrow {
+            margin: 0 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            line-height: 1.5;
+            color: #5c5c5c;
+        }
+        .tissot-home-content__heading {
+            margin: 0;
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.12;
+            color: #1a1a1a;
+        }
+        .tissot-home-content__text {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.7;
+            font-style: italic;
+            color: #4a4a4a;
+        }
+        .tissot-home-content__cta {
+            display: inline-block;
+            margin-top: 24px;
+            color: #1a1a1a;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 4px;
+        }
+        .tissot-home-content__cta:hover { color: #1a1a1a; opacity: 0.55; }
+
+        .tissot-brand-bar-wrap {
+            --tissot-bar-space: clamp(32px, 4vw, 40px);
+            padding: var(--tissot-bar-space) clamp(24px, 4vw, 48px);
+        }
+        .tissot-brand-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 0;
+            margin: 0;
+            min-height: auto;
+        }
+        .tissot-brand-bar.navbar {
+            --bs-navbar-padding-y: 0;
+            --bs-navbar-padding-x: 0;
+        }
+        .tissot-brand-bar .brand-logo-wrapper {
+            width: 100%;
+            margin: 0;
+        }
+        .tissot-brand-bar .brand-logo {
+            display: block;
+            margin: 0 auto;
+            width: clamp(120px, 14vw, 180px);
+            height: auto;
+        }
+        .tissot-brand-bar__filter-row {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .tissot-brand-bar .navbar-toggler {
+            position: static !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.5;
+        }
+
+        .tissot-products {
+            padding: 0 0 48px;
+        }
+        .tissot-products .container-fluid {
+            padding-left: clamp(24px, 4vw, 48px);
+            padding-right: clamp(24px, 4vw, 48px);
+        }
+        .tissot-products .onlineStore {
+            padding-top: 0;
+        }
+        .tissot-footer {
+            padding-top: 32px;
+            padding-bottom: 16px;
+        }
+        .tissot-products-counter {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #5c5c5c;
+            margin-bottom: 24px;
+        }
+        .tissot-load-more-btn {
+            background: #e3e4e5;
+            border: none;
+            color: #1a1a1a;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border-radius: 8px;
+            transition: background 0.2s, opacity 0.2s;
+        }
+        .tissot-load-more-btn:hover {
+            background: #d8d9da;
+        }
+
+        @media (max-width: 767px) {
+            .tissot-home-content__grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .tissot-home-hero,
+            .tissot-video-hero video,
+            .tissot-video-hero .tissot-video-fallback {
+                height: min(52vh, 480px);
+                min-height: 260px;
+            }
+            .tissot-home-content {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+            .tissot-home-content__heading {
+                font-size: clamp(28px, 8vw, 36px);
+            }
+            .tissot-home-content__text {
+                font-size: 15px;
+            }
+            .tissot-brand-bar-wrap {
+                --tissot-bar-space: 28px;
+            }
+            .tissot-brand-bar {
+                gap: 10px;
+            }
+            .tissot-brand-bar .brand-logo {
+                width: clamp(100px, 36vw, 150px);
+            }
+        }
+
+        .offcanvas-modern { background:#fff !important; color:#222; min-width:320px; max-width:380px; }
+        @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
+        .offcanvas-modern .offcanvas-header { border-bottom:1px solid #ecebe7; padding-bottom:0.75rem; background:#fff; }
+        .offcanvas-modern .offcanvas-title { font-size:12px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:#1a1a1a; }
+        .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
+        .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:12px; font-weight:500; letter-spacing:0.12em; line-height:1.5; display:flex; align-items:center; gap:6px; z-index:10; font-family:inherit; }
+        .filter .navbar-toggler:focus,
+        .filter .navbar-toggler:hover,
+        .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
+        .filter .navbar-toggler-icon {
+            width: 18px; height: 14px; background: none; display: inline-block; position: relative;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
+            background-size: 100% 100%; background-repeat: no-repeat; margin-right: 2px;
+        }
+        .sort-list, .category-list, .subcategory-list { list-style:none; padding-left:0; margin-bottom:0; }
+        .sort-list { max-height: 0; overflow:hidden; transition: max-height 0.3s ease-out; }
+        .sort-list.show { max-height: 300px; transition: max-height 0.3s ease-in; }
+        .sort-list li { padding: 0.5rem 0; font-size: 15px; font-weight: 400; display:flex; align-items:center; color:#4a4a4a; cursor:pointer; line-height: 1.5; }
+        .sort-list li.selected { font-weight: 500; color:#1a1a1a; }
+        .sort-list li .diamond { font-size: 0.7em; margin-right: 0.7em; color: #b2b2b2; }
+        .sort-list li.selected .diamond { color:#1a1a1a; }
+        .category-list > li { padding: 0.5rem 0; font-size: 15px; font-weight: 400; display:flex; align-items:center; color:#4a4a4a; cursor:pointer; line-height: 1.5; }
+        .filter-section-title { font-size:12px; font-weight:500; letter-spacing:0.12em; margin-bottom:16px; margin-top:24px; text-transform:uppercase; color:#1a1a1a; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #ecebe7; padding-bottom:8px; cursor:pointer; }
+        .filter-section-title:first-child { margin-top: 0; }
+        .category-list { list-style:none; padding-left:0; margin-bottom:0; }
+        .category-list.collapsible { max-height:1000px; overflow:hidden; transition:max-height .3s ease-out; }
+        .category-list.collapsible:not(.show) { max-height:0; transition:max-height .3s ease-in; }
+        .category-toggle { font-size:1.1em; color:#b2b2b2; cursor:pointer; user-select:none; width:20px; text-align:center; margin-left:10px; }
+        .form-check-input.filter-tag-checkbox { accent-color:#111; border-color:#bbb; box-shadow:none !important; }
+        .form-check-input.filter-tag-checkbox:checked { background-color:#111; border-color:#111; }
+        .filter-actions { position:sticky; bottom:-16px; background:#fff; padding:16px 0 0 0; }
+        .filter-actions-inner { border-top:1px solid #ecebe7; padding-top:16px; display:flex; gap:12px; }
+        .filter-actions .btn { border-radius:8px; font-size:12px; font-weight:500; letter-spacing:0.08em; padding:10px 16px; font-family:inherit; }
+        .offcanvas-modern .offcanvas-body { background: rgb(255, 255, 255); padding: 1.25rem; }
+        .onlineStore .col-6, .onlineStore .col-sm-4, .onlineStore .col-md-3, .onlineStore .col-lg-3 { display: flex; flex-direction: column; }
+        .onlineStore .card { flex: 1; display: flex; flex-direction: column; }
+        .onlineStore .card-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .discover-more-btn { align-self: center; margin: 0 auto; }
+        .filter-tag-checkbox { margin-right: 8px; }
+        .offcanvas.offcanvas-modern { z-index: 20000 !important; }
+        .offcanvas { z-index: 20000 !important; }
+        .offcanvas-backdrop { z-index: 19999 !important; }
+    </style>
+
+    <section class="tissot-home-hero">
+        <img src="{{ asset('assets/f_assets/image/Tissot-banner.jpeg') }}" alt="Tissot Collection">
+    </section>
+
+    <section class="tissot-home-content tissot-section-x">
+        <div class="tissot-home-content__grid">
+            <div>
+                <p class="tissot-home-content__eyebrow">Set your own pace.<br>Own your time.</p>
+                <h2 class="tissot-home-content__heading">Embrace Every<br>Possibility</h2>
+            </div>
+            <div>
+                <p class="tissot-home-content__text">Discover the latest additions to the tissot collections and find the perfect timepiece, to wear or to gift.</p>
+                <a href="#tissotGrid" class="tissot-home-content__cta">Discover</a>
+            </div>
+        </div>
+    </section>
+
     @if(isset($tissotSubcategory) && $tissotSubcategory && $tissotSubcategory->banner_url)
-        <section class="gehnawaSection p-0 position-relative">
+        <section class="tissot-video-hero p-0 position-relative">
             {{-- Desktop Video --}}
             @if(Str::endsWith($tissotSubcategory->banner_url, ['.mp4', '.webm', '.ogg']))
-                <video 
-                    autoplay 
-                    loop 
-                    muted 
-                    playsinline 
+                <video
+                    autoplay
+                    loop
+                    muted
+                    playsinline
                     class="video-desktop d-none d-md-block"
-                    style="width:100%; height:120vh; object-fit:cover;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($tissotSubcategory->banner_url) }}" type="video/{{ pathinfo($tissotSubcategory->banner_url, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
-                {{-- Fallback image for desktop --}}
-                <!-- <div class="video-fallback-desktop d-none d-md-block" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($tissotSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div> -->
             @else
                 {{-- Static image for desktop --}}
-                <div class="d-none d-md-block" style="width:100%; height:120vh; background-image:url('{{ asset($tissotSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
+                <div class="d-none d-md-block tissot-video-fallback" style="background-image:url('{{ asset($tissotSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
             @endif
 
             {{-- Mobile Video (Dynamic based on subcategory) --}}
             @php
                 $mobileVideo = null;
-                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/tissot_mobile.mp4'; // Corrected path without assets/ prefix
+                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/tissot_mobile.mp4';
                 if ($tissotSubcategory->slug === 'tissot') {
                     $mobileVideo = $mobileVideoPath;
                 } else {
-                    // fallback if no specific mobile version exists
                     $mobileVideo = $tissotSubcategory->banner_url;
                 }
             @endphp
 
             @if(Str::endsWith($mobileVideo, ['.mp4', '.webm', '.ogg']))
-                <video 
-                    autoplay 
-                    loop 
-                    muted 
-                    playsinline 
+                <video
+                    autoplay
+                    loop
+                    muted
+                    playsinline
                     class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                 <!-- <div class="video-fallback-mobile d-block d-md-none tissot-video-fallback" style="display:none; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div> -->
             @else
                 {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="d-block d-md-none tissot-video-fallback" style="background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
             @endif
         </section>
     @endif
 
-    <section class="py-4">
-        <style>
-            .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
-            @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
-            .offcanvas-modern .offcanvas-header { border-bottom:1px solid #fff; padding-bottom:0.5rem; background:#fff; }
-            .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
-            .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
-            /* Simple SORT & FILTER button - no borders on any state */
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
-            .filter .navbar-toggler:focus,
-            .filter .navbar-toggler:hover,
-            .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
-            /* Match Online Shopping Store hamburger symbol */
-            .filter .navbar-toggler-icon {
-                width: 18px; height: 14px; background: none; display: inline-block; position: relative;
-                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
-                background-size: 100% 100%; background-repeat: no-repeat; margin-right: 2px;
-            }
-            /* Online Shopping Store spacing and typography for lists */
-            .sort-list, .category-list, .subcategory-list { list-style:none; padding-left:0; margin-bottom:0; }
-            .sort-list { max-height: 0; overflow:hidden; transition: max-height 0.3s ease-out; }
-            .sort-list.show { max-height: 300px; transition: max-height 0.3s ease-in; }
-            .sort-list li { padding: 0.4rem 0; font-size: 0.97rem; display:flex; align-items:center; color:#222; cursor:pointer; }
-            .sort-list li.selected { font-weight: 600; color:#111; }
-            .sort-list li .diamond { font-size: 0.7em; margin-right: 0.7em; color: #b2b2b2; }
-            .sort-list li.selected .diamond { color:#111; }
-            .category-list > li { padding: 0.4rem 0; font-size: 0.97rem; display:flex; align-items:center; color:#222; cursor:pointer; }
-            .filter-section-title { font-size:.98rem; font-weight:300; letter-spacing:.01em; margin-bottom:.8rem; margin-top:1.5rem; text-transform:uppercase; color:#222; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #ecebe7; padding-bottom:.5rem; cursor:pointer; }
-            .category-list { list-style:none; padding-left:0; margin-bottom:0; }
-            .category-list.collapsible { max-height:1000px; overflow:hidden; transition:max-height .3s ease-out; }
-            .category-list.collapsible:not(.show) { max-height:0; transition:max-height .3s ease-in; }
-            .category-list > li { padding:.4rem 0; font-size:.97rem; display:flex; align-items:center; color:#222; cursor:pointer; }
-            .category-toggle { font-size:1.1em; color:#b2b2b2; cursor:pointer; user-select:none; width:20px; text-align:center; margin-left:10px; }
-            .form-check-input.filter-tag-checkbox { accent-color:#111; border-color:#bbb; box-shadow:none !important; }
-            .form-check-input.filter-tag-checkbox:checked { background-color:#111; border-color:#111; }
-            .filter-actions { position:sticky; bottom:-16px; background:#fff; padding:12px 0 0 0; }
-            .filter-actions-inner { border-top:1px solid #fff; padding-top:12px; display:flex; gap:10px; }
-            .filter-actions .btn { border-radius:10px; font-size:13px; padding:8px 14px; }
-            .offcanvas-modern .offcanvas-body { background: rgb(255, 255, 255); padding: 1rem; }
-            /* Ensure cards fill available space */
-            .onlineStore .col-6, .onlineStore .col-sm-4, .onlineStore .col-md-3, .onlineStore .col-lg-3 {
-                display: flex;
-                flex-direction: column;
-            }
-            .onlineStore .card {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            .onlineStore .card-body {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-            /* Center the Discover More button */
-            .discover-more-btn {
-                align-self: center;
-                margin: 0 auto;
-            }
-            /* Add space between checkbox and text */
-            .filter-tag-checkbox {
-                margin-right: 8px;
-            }
-                       .brand-logo {
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                width: 10%;
-                height: auto;
-            }
-            /* Responsive logo sizing */
-            @media (max-width: 575px) {
-                .brand-logo {
-                    width: 40%;
-                    margin-top: -75px;
-                }
-            }
-            @media (min-width: 576px) and (max-width: 767px) {
-                .brand-logo {
-                    width: 30%;
-                }
-            }
-            @media (min-width: 768px) and (max-width: 991px) {
-                .brand-logo {
-                    width: 20%;
-                }
-            }
-            @media (min-width: 992px) {
-                .brand-logo {
-                    width: 20%;
-                    margin-top: -75px;
-                }
-            }
-            /* Responsive SORT & FILTER button positioning */
-            .filter .navbar-toggler {
-                position: absolute !important;
-                right: 0 !important;
-                z-index: 10;
-            }
-            /* Mobile screens (up to 575px) */
-            @media (max-width: 575px) {
-                .filter .navbar-toggler {
-                    margin-top: 80px !important;
-                    margin-right: 10px !important;
-                    font-size: 12px !important;
-                    padding: 4px 8px !important;
-                }
-            }
-            /* Small mobile screens (576px to 767px) */
-            @media (min-width: 576px) and (max-width: 767px) {
-                .filter .navbar-toggler {
-                    margin-top: 100px !important;
-                    margin-right: 15px !important;
-                    font-size: 13px !important;
-                }
-            }
-            /* Tablet screens (768px to 991px) */
-            @media (min-width: 768px) and (max-width: 991px) {
-                .filter .navbar-toggler {
-                    margin-top: 120px !important;
-                    margin-right: 20px !important;
-                }
-            }
-            /* Desktop screens (992px and above) */
-            @media (min-width: 992px) {
-                .filter .navbar-toggler {
-                    margin-top: 127px !important;
-                    margin-right: 23px !important;
-                }
-            }
-                          .offcanvas.offcanvas-modern{
-  z-index: 20000 !important;
-}
-
-/* Offcanvas must be above any fixed header */
-.offcanvas{
-  z-index: 20000 !important;
-}
-
-/* Backdrop should stay below offcanvas */
-.offcanvas-backdrop{
-  z-index: 19999 !important;
-}
-        </style>
-        <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
-            <div class="brand-logo-wrapper w-70 my-3 text-center">
-                <img src="{{ asset('assets/f_assets/image/watch logo/Tissot.png') }}" alt="Tissot logo" class="brand-logo">
+    <section class="tissot-products">
+        <div class="tissot-brand-bar-wrap">
+        <div class="navbar navbar-white filter tissot-brand-bar">
+            <div class="brand-logo-wrapper text-center">
+                <img src="{{ asset('assets/f_assets/image/watch logo/Tissot-logo.png') }}" alt="Tissot logo" class="brand-logo">
             </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTissot" aria-controls="offcanvasTissot" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span> SORT & FILTER
-            </button>
+            <div class="tissot-brand-bar__filter-row">
+                <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTissot" aria-controls="offcanvasTissot" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span> SORT & FILTER
+                </button>
+            </div>
+        </div>
         </div>
 
-        <div class="container-fluid px-3">
-        <div class="row onlineStore g-2 pt-3" id="tissotGrid">
+        <div class="container-fluid">
+        <div class="row onlineStore g-3" id="tissotGrid">
             @if(isset($products) && $products->count())
                 @foreach($products as $prod)
                     <div class="col-6 col-sm-4 col-md-3 col-lg-3">
@@ -231,7 +377,7 @@
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter tissot-products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -241,7 +387,7 @@
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        class="tissot-load-more-btn"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"
@@ -260,7 +406,7 @@
         </div>
         <div class="offcanvas-body">
             <div>
-                <div class="filter-section-title" onclick="toggleCategory('tissotSortList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">
+                <div class="filter-section-title" onclick="toggleCategory('tissotSortList', this.querySelector('.category-toggle'))">
                     Sort By <span class="category-toggle">+</span>
                 </div>
                 <ul class="sort-list" id="tissotSortList">
@@ -290,7 +436,7 @@
                 </ul>
             </div>
             <div>
-                <div class="filter-section-title" onclick="toggleCategory('tissotGenderList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Gender <span class="category-toggle">+</span></div>
+                <div class="filter-section-title" onclick="toggleCategory('tissotGenderList', this.querySelector('.category-toggle'))">Gender <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="tissotGenderList">
                     @php $selectedTags = collect(explode(',', request('tags', '')))->map(fn($s)=>trim($s)); @endphp
                     <li><input type="checkbox" class="form-check-input filter-tag-checkbox tissot-filter" data-group="gender" value="mens" {{ $selectedTags->contains('mens') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Men's</span></li>
@@ -298,7 +444,7 @@
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('tissotSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <div class="filter-section-title" onclick="toggleCategory('tissotSeriesList', this.querySelector('.category-toggle'))">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="tissotSeriesList">
                     @php $series = ['prx','prc 200','prs 200','pr 100','prs 516','desire','classic dream','carson','couturier','tradition','t-race','bridge port','quickster']; @endphp
                     @foreach($series as $s)
