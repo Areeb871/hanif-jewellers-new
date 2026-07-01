@@ -1213,7 +1213,8 @@ body{
     opacity: 75%;
 }
 
-.hj-appointment-bottom button {
+.hj-appointment-bottom button,
+.hj-appointment-bottom a {
     border: none;
     background: transparent;
     padding: 0;
@@ -1227,9 +1228,11 @@ body{
     gap: 6px;
     white-space: nowrap;
     margin-right:26px;
+    text-decoration: none;
 }
 
-.hj-appointment-bottom button svg {
+.hj-appointment-bottom button svg,
+.hj-appointment-bottom a svg {
     width: 14px;
     height: 14px;
     fill: none;
@@ -1766,7 +1769,8 @@ body{
         align-items: flex-start;
     }
 
-    .hj-appointment-bottom button {
+    .hj-appointment-bottom button,
+    .hj-appointment-bottom a {
         margin-right: 0;
     }
 
@@ -3001,6 +3005,25 @@ a.hj-lab-product-card {
     color: #fff;
 }
 
+.hj-footer-brand-strip {
+    width: 100%;
+    height: 84px;
+    margin: 0;
+    padding: 31px 0;
+    background: #222222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.hj-footer-brand-strip img {
+    width: auto;
+    height: 46px;
+    display: block;
+    object-fit: contain;
+}
+
 /* Mobile responsive */
 @media (max-width: 575px) {
     .hj-other-questions {
@@ -3026,6 +3049,11 @@ a.hj-lab-product-card {
         width: 220px;
         min-width: 220px;
     }
+
+    .hj-footer-brand-strip img {
+        width: auto;
+        height: 20px;
+    }
 }
 
 /* Keep every desktop section aligned with the top product container. */
@@ -3038,7 +3066,8 @@ a.hj-lab-product-card {
     .hj-details-lower-container > .hj-handcrafted-banner,
     .hj-details-lower-container > .hj-lab-products-section,
     .hj-details-lower-container > .hj-review-section,
-    .hj-details-lower-container > .hj-other-questions {
+    .hj-details-lower-container > .hj-other-questions,
+    .hj-details-lower-container > .hj-footer-brand-strip {
         width: 100%;
         max-width: 100%;
         margin: 0;

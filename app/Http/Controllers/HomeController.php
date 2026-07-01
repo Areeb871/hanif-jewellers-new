@@ -610,7 +610,7 @@ public function valentine(Request $request)
                 $products_new = Products::with('category', 'subcategory')
                     ->where([
                         ['status', 'published'],
-                        ['subcategory_id', 54]
+                        ['subcategory_id', 49]
                     ])->get();
 // Number of products per category
 $perCategory = 5;

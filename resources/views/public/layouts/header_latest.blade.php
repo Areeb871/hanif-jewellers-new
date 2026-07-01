@@ -454,17 +454,15 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
   }
 
   header .hj-mega .dropdown-menu.mega-menu{
-    /* margin-top: 10px; !important; */
-    /* width: 100% !important; */
     position: fixed !important;
-    /* left: 0 !important; */
-    /* right: 0 !important; */
-    /* width: 100% !important; */
-    /* top: calc(var(--megaTop) + 24px) !important; */
-    /* transform: none !important; */
-    /* inset: auto 0 auto 0 !important; */
-    /* z-index: 10000 !important; */
-    /* border: 1px solid red !important; */
+    top: var(--megaTop, 72px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    margin-top: 0 !important;
+    transform: none !important;
+    inset: var(--megaTop, 72px) 0 auto 0 !important;
+    z-index: 9998 !important;
   }
 }
 
@@ -791,7 +789,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="row py-4">
 
         <div class="col-md-2 border-end d-flex flex-column align-items-center justify-content-center">
-          <a href="#" class="fw-bold text-dark">Our House <span class="break-line">Collections</span></a>
+          <a href="#" class="fw-bold text-dark">House <span class="break-line">Collections</span></a>
         </div>
  <div class="col-md-10">
 
@@ -868,7 +866,7 @@ $card = [
             </div>
 
             <!-- FESTIVE -->
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="mega-heading">FESTIVE</div>
                 <div class="mega-links">
                     @foreach($menus['Festive'] as $item)
@@ -877,7 +875,7 @@ $card = [
                         </a>
                     @endforeach
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
@@ -1126,11 +1124,7 @@ $card = [
 
     @yield('content')
 
-@if (in_array(Route::currentRouteName(), ['index', 'collections.valentine']))
-    @include('public.layouts.footer_home_page')
-@else
-    @include('public.layouts.footer')
-@endif
+@include('public.layouts.footer_home_page')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1153,16 +1147,31 @@ document.addEventListener('DOMContentLoaded', function () {
   if (window.innerWidth >= 992 && window.bootstrap) {
     document.querySelectorAll('header .hj-mega').forEach(function (dd) {
       const toggle = dd.querySelector('[data-bs-toggle="dropdown"]');
+      const menu = dd.querySelector('.dropdown-menu.mega-menu');
       if (!toggle) return;
+      const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+      let closeTimer = null;
 
-      dd.addEventListener('mouseenter', function () {
+      function openMega() {
+        clearTimeout(closeTimer);
         setMegaTop();
-        bootstrap.Dropdown.getOrCreateInstance(toggle).show();
-      });
+        dropdown.show();
+      }
 
-      dd.addEventListener('mouseleave', function () {
-        bootstrap.Dropdown.getOrCreateInstance(toggle).hide();
-      });
+      function closeMega() {
+        closeTimer = setTimeout(function () {
+          if (dd.matches(':hover') || (menu && menu.matches(':hover'))) return;
+          dropdown.hide();
+        }, 180);
+      }
+
+      dd.addEventListener('mouseenter', openMega);
+      dd.addEventListener('mouseleave', closeMega);
+
+      if (menu) {
+        menu.addEventListener('mouseenter', openMega);
+        menu.addEventListener('mouseleave', closeMega);
+      }
     });
 
     const settingsDropdown = document.querySelector('header .header-static-tools .dropdown');

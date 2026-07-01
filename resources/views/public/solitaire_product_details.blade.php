@@ -931,13 +931,18 @@ document.addEventListener('DOMContentLoaded', function () {
             in person at your device
         </p>
 
-        <button type="button">
+        <a
+            href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="Book appointment on WhatsApp"
+        >
             <svg viewBox="0 0 24 24" aria-hidden="true">
                 <rect x="4" y="5" width="16" height="15" rx="2"></rect>
                 <path d="M8 3v4M16 3v4M4 10h16"></path>
             </svg>
             BOOK APPOINTMENT
-        </button>
+        </a>
     </div>
 
 </div>
@@ -1382,7 +1387,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 
 </section>
-<section class="hj-other-questions">
+<!-- <section class="hj-other-questions">
     <div class="hj-other-questions-inner">
 
         <h2>Other Questions?</h2>
@@ -1400,10 +1405,15 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
     </div>
-</section>
+</section> -->
 
 </div>
-
+<section class="hj-footer-brand-strip" aria-label="Hanif Jewellers">
+    <img
+        src="{{ asset('assets/f_assets/image/solitaire/emb1.png') }}"
+        alt="Hanif Jewellers"
+    >
+</section>
 <script>
     /** Inscription Modal Script */
 document.addEventListener('DOMContentLoaded', function () {

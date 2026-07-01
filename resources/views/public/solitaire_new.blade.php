@@ -644,6 +644,8 @@
                     @foreach($carats as $carat)
                         @php
                             $caratValue = $carat['value'] ?? '';
+                            $caratLabel = $carat['label'] ?? $caratValue;
+                            $caratTooltip = trim('Carat weight: ' . $caratLabel);
 
                             $activeCarat = number_format((float) $caratValue, 2, '.', '') 
                                 == number_format((float) $selectedCaratValue, 2, '.', '');
@@ -653,8 +655,10 @@
                             type="button"
                             class="{{ $activeCarat ? 'active' : '' }}"
                             data-carat-value="{{ $caratValue }}"
+                            data-carat-tooltip="{{ $caratTooltip }}"
+                            aria-label="{{ $caratTooltip }}"
                         >
-                            {{ $carat['label'] ?? $caratValue }}
+                            {{ $caratLabel }}
                         </button>
                     @endforeach
                 </div>
@@ -859,6 +863,26 @@ document.addEventListener('DOMContentLoaded', function () {
         return url.toString();
     }
 
+    function showCaratTooltip(button) {
+        if (!button) {
+            return;
+        }
+
+        document.querySelectorAll('.hj-size-options button.hj-carat-tooltip-visible').forEach(function (openButton) {
+            if (openButton !== button) {
+                window.clearTimeout(openButton.hjCaratTooltipTimer);
+                openButton.classList.remove('hj-carat-tooltip-visible');
+            }
+        });
+
+        window.clearTimeout(button.hjCaratTooltipTimer);
+        button.classList.add('hj-carat-tooltip-visible');
+
+        button.hjCaratTooltipTimer = window.setTimeout(function () {
+            button.classList.remove('hj-carat-tooltip-visible');
+        }, 1000);
+    }
+
     document.querySelectorAll('[data-product-card]').forEach(function (card) {
         const jsonScript = card.querySelector('.hj-product-json');
 
@@ -967,9 +991,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         card.querySelectorAll('.hj-size-options button').forEach(function (btn) {
+            btn.addEventListener('mouseenter', function () {
+                showCaratTooltip(this);
+            });
+
+            btn.addEventListener('focus', function () {
+                showCaratTooltip(this);
+            });
+
             btn.addEventListener('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
+
+                showCaratTooltip(this);
 
                 selectedCarat = this.dataset.caratValue || selectedCarat;
 

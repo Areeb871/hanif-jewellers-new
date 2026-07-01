@@ -1121,6 +1121,7 @@ font-family: "Barlow", sans-serif;
 }
 
 .hj-size-options button {
+    position: relative;
     min-width: 36px;
     height: 24px;
     padding: 0 9px;
@@ -1134,6 +1135,64 @@ font-family: "Barlow", sans-serif;
     line-height: 1;
     box-sizing: border-box;
     transition: none;
+}
+
+.hj-size-options button::before,
+.hj-size-options button::after {
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, visibility 0.18s ease;
+    z-index: 5;
+}
+
+.hj-size-options button::before {
+    content: attr(data-carat-tooltip);
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    min-width: max-content;
+    max-width: 150px;
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: #333333;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 1.25;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.hj-size-options button::after {
+    content: "";
+    bottom: calc(100% + 3px);
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #333333 transparent transparent;
+}
+
+.hj-size-options button.hj-carat-tooltip-visible::before,
+.hj-size-options button.hj-carat-tooltip-visible::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 767px) {
+    .hj-size-options button::before {
+        bottom: calc(100% + 6px);
+        max-width: 96px;
+        padding: 4px 6px;
+        border-radius: 5px;
+        font-size: 7px;
+        line-height: 1.2;
+    }
+
+    .hj-size-options button::after {
+        bottom: calc(100% + 2px);
+        border-width: 4px 4px 0;
+    }
 }
 
 .hj-size-options button.active {
@@ -2467,19 +2526,19 @@ header,
     }
 
     .hj-product-card .hj-metal.active {
-        box-shadow: 0 0 0 1px #c7c7c7, 0 0 0 3px #111;
+        box-shadow: 0 0 0 2px #c7c7c7, 0 0 0 3px #111;
     }
 
     .hj-product-card .hj-metal.white.active,
     .hj-product-card .hj-metal.silver.active {
-        box-shadow: 0 0 0 1px #d6d6d6, 0 0 0 3px #111;
+        box-shadow: 0 0 0 2px #d6d6d6, 0 0 0 3px #111;
     }
 
     .hj-product-card .hj-metal.rose.active {
-        box-shadow: 0 0 0 1px #e4a083, 0 0 0 3px #111;
+        box-shadow: 0 0 0 2px #e4a083, 0 0 0 3px #111;
     }
 
     .hj-product-card .hj-metal.yellow.active {
-        box-shadow: 0 0 0 1px #dfc258, 0 0 0 3px #111;
+        box-shadow: 0 0 0 2px #dfc258, 0 0 0 3px #111;
     }
 }
