@@ -1,87 +1,122 @@
 @extends('public.layouts.header_latest')
 @section('content')
 <style>
-<style>
-body {
-    background: #f3f3f3;
-    font-family: "Georgia", serif;
-    margin: 0;
-    padding: 0;
+.highend-page {
+    --highend-gold: #c7a76a;
+    --highend-cream: #f5f0e8;
+    --highend-muted: rgba(245, 240, 232, 0.78);
+    background: #0a0a0a;
+    color: var(--highend-cream);
+    font-family: "Montserrat", sans-serif;
 }
 
-/* Container */
+.highend-eyebrow {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--highend-gold);
+    margin-bottom: 22px;
+}
+
+.highend-heading {
+    font-family: "Cormorant Garamond", "Times New Roman", Times, serif;
+    font-size: 42px;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+    color: var(--highend-cream);
+    margin: 0 0 32px;
+    text-transform: uppercase;
+}
+
+.highend-heading::after {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 1px;
+    background: var(--highend-gold);
+    margin: 28px auto 0;
+    opacity: 0.9;
+}
+
+.highend-heading--left::after {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.highend-body {
+    font-family: "Montserrat", sans-serif;
+    font-size: 15px;
+    line-height: 2;
+    color: var(--highend-muted);
+    font-weight: 300;
+    margin: 0;
+}
+
 .polychroma-section {
-    padding: 40px 0 70px;
-    background-color:black;
+    padding: 100px 0 110px;
+    background-color: #000;
 }
 
 .polychroma-container {
-    max-width: 1300px;
+    max-width: 1240px;
     margin: auto;
-    padding: 0 20px;
+    padding: 0 32px;
 }
 
-/* Header */
 .polychroma-header {
     text-align: center;
-    max-width: 760px;
-    margin: 0 auto 70px;
+    max-width: 720px;
+    margin: 0 auto 90px;
 }
 
-.polychroma-header h2 {
-    font-size: 34px;
-    line-height: 1.25;
-    letter-spacing: 8px;
-    font-weight: 400;
-    color: white;
-    margin: 0 0 18px;
-    text-transform: uppercase;
-    font-family: "Bulgari_Capitalis" !important;
+.polychroma-header .highend-heading::after {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.polychroma-header p {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.8;
-    color: white;
-    font-weight: 300;
-    margin: 0 auto;
-    max-width: 760px;
-}
-
-/* Slider wrapper */
 .polychroma-slider-wrapper {
     position: relative;
-    padding: 0 40px;
+    padding: 0 48px;
 }
 
-/* IMPORTANT: this hides extra images */
 .polychroma-slider-viewport {
     overflow: hidden;
     width: 100%;
+    touch-action: pan-y;
 }
 
-/* Track */
 .polychroma-slider-track {
     display: flex;
     transition: transform 0.6s ease;
 }
 
-/* Desktop: exactly 3 items */
 .polychroma-item {
     flex: 0 0 33.3333%;
     max-width: 33.3333%;
     box-sizing: border-box;
-    padding: 0 15px;
+    padding: 0 18px;
     text-align: center;
 }
 
-/* Image */
+.polychroma-item a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.polychroma-item a:hover h3 {
+    color: var(--highend-gold);
+}
+
 .image-box {
     width: 100%;
-    height: 500px;
-    background: #eaeaea;
-    margin-bottom: 25px;
+    height: 520px;
+    background: #141414;
+    margin-bottom: 36px;
     overflow: hidden;
 }
 
@@ -90,72 +125,86 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s ease;
 }
 
-/* Title */
+.polychroma-item a:hover .image-box img {
+    transform: scale(1.04);
+}
+
 .polychroma-item h3 {
-    font-size: 14px;
-    letter-spacing: 3px;
+    font-family: "Cormorant Garamond", "Times New Roman", Times, serif;
+    font-size: 17px;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: white;
+    color: var(--highend-cream);
     margin: 0;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-/* Arrows */
 .arrow-btn {
     position: absolute;
-    top: 42%;
+    top: 260px;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: transparent;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(199, 167, 106, 0.35);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.25);
     cursor: pointer;
     z-index: 10;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-.arrow-btn.left {
-    left: 0;
+.arrow-btn:hover:not(:disabled) {
+    border-color: var(--highend-gold);
+    background: rgba(199, 167, 106, 0.12);
 }
 
-.arrow-btn.right {
-    right: 0;
+.arrow-btn.left { left: 0; }
+.arrow-btn.right { right: 0; }
+
+.arrow-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
 }
 
 .arrow-icon {
-    width: 76px;
-    height: 76px;
-    fill: white;
+    width: 22px;
+    height: 22px;
+    fill: var(--highend-gold);
     display: block;
+    pointer-events: none;
 }
 
-/* Dots */
 .slider-dots {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 48px;
 }
 
-.slider-dots span {
+.slider-dots button {
     display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin: 0 6px;
-    background: #ccc;
+    width: 6px;
+    height: 6px;
+    margin: 0 8px;
+    padding: 0;
+    border: none;
+    background: rgba(199, 167, 106, 0.3);
     border-radius: 50%;
     cursor: pointer;
     transition: 0.3s ease;
 }
 
-.slider-dots span.active {
-    background: #111;
-    transform: scale(1.2);
+.slider-dots button.active {
+    background: var(--highend-gold);
+    transform: scale(1.4);
 }
 
-/* Banner */
 .sectionOne,
 .sectionMobile {
     position: relative;
@@ -164,6 +213,7 @@ body {
     overflow: hidden;
     margin: 0 !important;
     padding: 0 !important;
+    z-index: 1;
 }
 
 .sectionOne video,
@@ -174,22 +224,108 @@ body {
     object-fit: contain;
 }
 
-/* Tablet */
+.infinite-section {
+    background: #000;
+    padding: 90px 0;
+    border-top: 1px solid rgba(199, 167, 106, 0.15);
+}
+
+.infinite-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    gap: 48px;
+}
+
+.infinite-image {
+    width: 68%;
+    flex-shrink: 0;
+}
+
+.infinite-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.infinite-content {
+    width: 32%;
+    padding: 0 20px 0 0;
+    text-align: left;
+}
+
+.infinite-content .highend-heading {
+    font-size: 32px;
+    letter-spacing: 0.1em;
+    margin-bottom: 28px;
+}
+
+.infinite-content .highend-body {
+    font-size: 14px;
+    line-height: 1.95;
+}
+
 @media (max-width: 992px) {
+    .polychroma-section {
+        padding: 72px 0 80px;
+    }
+
     .polychroma-item {
         flex: 0 0 50%;
         max-width: 50%;
     }
 
     .image-box {
-        height: 440px;
+        height: 460px;
+    }
+
+    .arrow-btn {
+        top: 230px;
+    }
+
+    .infinite-section {
+        padding: 64px 0;
+    }
+
+    .infinite-wrapper {
+        flex-direction: column;
+        gap: 36px;
+    }
+
+    .infinite-image,
+    .infinite-content {
+        width: 100%;
+    }
+
+    .infinite-content {
+        padding: 0 12px;
+        text-align: center;
+    }
+
+    .infinite-content .highend-heading::after {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .infinite-wrapper--image-first-mobile .infinite-image {
+        order: -1;
+    }
+
+    .highend-heading {
+        font-size: 34px;
+    }
+
+    .infinite-content .highend-heading {
+        font-size: 28px;
     }
 }
 
-/* Mobile */
 @media (max-width: 576px) {
     .polychroma-slider-wrapper {
-        padding: 0 30px;
+        padding: 0 36px;
     }
 
     .polychroma-item {
@@ -198,20 +334,38 @@ body {
     }
 
     .image-box {
-        height: 400px;
+        height: 420px;
+        margin-bottom: 28px;
     }
 
-    .polychroma-header h2 {
-        font-size: 26px;
-        letter-spacing: 5px;
+    .arrow-btn {
+        top: 210px;
+        width: 42px;
+        height: 42px;
     }
 
-    .polychroma-header p {
+    .polychroma-header {
+        margin-bottom: 56px;
+    }
+
+    .highend-heading {
+        font-size: 28px;
+        letter-spacing: 0.08em;
+    }
+
+    .highend-body {
         font-size: 14px;
+        line-height: 1.85;
+    }
+
+    .polychroma-item h3 {
+        font-size: 15px;
+        letter-spacing: 0.18em;
     }
 }
 </style>
 
+<div class="highend-page">
 <!-- DESKTOP BANNER -->
 <section class="sectionOne d-md-block d-none">
     <video autoplay loop muted playsinline>
@@ -228,78 +382,95 @@ body {
     </video>
 </section>
 
-<section class="polychroma-section">
+<section class="polychroma-section" id="jewels-of-the-crown">
     <div class="polychroma-container">
 
         <div class="polychroma-header">
-            <h2>JEWELS OF THE CROWN</h2>
-            <p>
-                Behold the "Jewel of the Crown"—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon.
+            <span class="highend-eyebrow">Hanif High Jewellery</span>
+            <h2 class="highend-heading">Jewels of the Crown</h2>
+            <p class="highend-body">
+                Behold the Jewel of the Crown—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon.
             </p>
         </div>
 
         <div class="polychroma-slider-wrapper">
 
-            <button class="arrow-btn left" onclick="moveSlide(-1)" aria-label="Previous Slide">
+            <button type="button" class="arrow-btn left" id="sliderPrev" aria-label="Previous slide">
                 <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M14.7 6.3a1 1 0 0 1 0 1.4L10.41 12l4.29 4.3a1 1 0 1 1-1.41 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.41 0z"/>
                 </svg>
             </button>
 
-            <div class="polychroma-slider-viewport">
+            <div class="polychroma-slider-viewport" id="sliderViewport">
                 <div class="polychroma-slider-track" id="sliderTrack">
 
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/1.jpeg') }}" alt="Tawoos">
-                        </div>
-                        <h3>TAWOOS</h3>
+                        <a href="{{ url('/collections/tawoos') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/1.jpeg') }}" alt="Tawoos Collection">
+                            </div>
+                            <h3>TAWOOS</h3>
+                        </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/2.jpeg') }}" alt="Gohar">
-                        </div>
-                        <h3>GOHAR</h3>
+                        <a href="{{ url('/collections/gohar') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/2.jpeg') }}" alt="Gohar Collection">
+                            </div>
+                            <h3>GOHAR</h3>
+                        </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/3.jpeg') }}" alt="Gulposh">
-                        </div>
-                        <h3>GULPOSH</h3>
+                        <a href="{{ url('/collections/gulposh') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/3.jpeg') }}" alt="Gulposh Collection">
+                            </div>
+                            <h3>GULPOSH</h3>
+                        </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/4.jpeg') }}" alt="Misterio">
-                        </div>
-                        <h3>MISTERIO</h3>
+                        <a href="{{ url('/collections/misterio') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/4.jpeg') }}" alt="Misterio Collection">
+                            </div>
+                            <h3>MISTERIO</h3>
+                        </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/5.jpeg') }}" alt="Nagar">
-                        </div>
-                        <h3>NAGAR</h3>
+                        <a href="{{ url('/collections/nagar') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/5.jpeg') }}" alt="Nagar Collection">
+                            </div>
+                            <h3>NAGAR</h3>
+                        </a>
                     </div>
-                    <!-- <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/6.png') }}" alt="JOC">
-                        </div>
-                        <h3>JOC</h3>
-                    </div>
+
                     <div class="polychroma-item">
-                        <div class="image-box">
-                            <img src="{{ asset('assets/f_assets/image/highend/7.png') }}" alt="Timeless Blue">
-                        </div>
-                        <h3>Timeless Blue</h3>
-                    </div> -->
+                        <a href="{{ url('/highend-jewellery') }}#jewels-of-the-crown">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/6.png') }}" alt="Jewels of the Crown">
+                            </div>
+                            <h3>JOC</h3>
+                        </a>
+                    </div>
+
+                    <div class="polychroma-item">
+                        <a href="{{ url('/collections/timeless-jewels') }}">
+                            <div class="image-box">
+                                <img src="{{ asset('assets/f_assets/image/highend/7.png') }}" alt="Timeless Blue Collection">
+                            </div>
+                            <h3>TIMELESS BLUE</h3>
+                        </a>
+                    </div>
 
                 </div>
             </div>
 
-            <button class="arrow-btn right" onclick="moveSlide(1)" aria-label="Next Slide">
+            <button type="button" class="arrow-btn right" id="sliderNext" aria-label="Next slide">
                 <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M9.3 17.7a1 1 0 0 1 0-1.4L13.59 12 9.3 7.7a1 1 0 1 1 1.41-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.41 0z"/>
                 </svg>
@@ -313,200 +484,135 @@ body {
 </section>
 
 <script>
-const track = document.getElementById('sliderTrack');
-const items = document.querySelectorAll('.polychroma-item');
-const dotsContainer = document.getElementById('sliderDots');
+document.addEventListener('DOMContentLoaded', function () {
+    const track = document.getElementById('sliderTrack');
+    const viewport = document.getElementById('sliderViewport');
+    const dotsEl = document.getElementById('sliderDots');
+    const prevBtn = document.getElementById('sliderPrev');
+    const nextBtn = document.getElementById('sliderNext');
 
-let currentIndex = 0;
-let itemsPerView = getItemsPerView();
-let maxIndex = items.length - itemsPerView;
+    if (!track || !viewport || !dotsEl || !prevBtn || !nextBtn) {
+        return;
+    }
 
-function getItemsPerView() {
-    if (window.innerWidth <= 576) return 1;
-    if (window.innerWidth <= 992) return 2;
-    return 3;
-}
+    const items = track.querySelectorAll('.polychroma-item');
+    if (!items.length) {
+        return;
+    }
 
-function createDots() {
-    dotsContainer.innerHTML = '';
-    itemsPerView = getItemsPerView();
-    maxIndex = items.length - itemsPerView;
+    let index = 0;
+    let resizeTimer = null;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-    for (let i = 0; i <= maxIndex; i++) {
-        const dot = document.createElement('span');
-        if (i === currentIndex) dot.classList.add('active');
+    function itemsPerView() {
+        if (window.innerWidth <= 576) return 1;
+        if (window.innerWidth <= 992) return 2;
+        return 3;
+    }
 
-        dot.addEventListener('click', function () {
-            currentIndex = i;
-            updateSlider();
+    function lastIndex() {
+        return Math.max(0, items.length - itemsPerView());
+    }
+
+    function buildDots() {
+        dotsEl.innerHTML = '';
+        for (let i = 0; i <= lastIndex(); i++) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', function () { goTo(i); });
+            dotsEl.appendChild(dot);
+        }
+    }
+
+    function goTo(i) {
+        index = Math.max(0, Math.min(i, lastIndex()));
+        track.style.transform = 'translateX(-' + (index * items[0].offsetWidth) + 'px)';
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === lastIndex();
+        dotsEl.querySelectorAll('button').forEach(function (dot, n) {
+            dot.classList.toggle('active', n === index);
         });
-
-        dotsContainer.appendChild(dot);
     }
-}
 
-function updateSlider() {
-    itemsPerView = getItemsPerView();
-    maxIndex = items.length - itemsPerView;
+    function refreshSlider() {
+        buildDots();
+        goTo(index);
+    }
 
-    if (currentIndex < 0) currentIndex = 0;
-    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    prevBtn.addEventListener('click', function () { goTo(index - 1); });
+    nextBtn.addEventListener('click', function () { goTo(index + 1); });
 
-    const itemWidth = items[0].offsetWidth;
-    track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    viewport.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
 
-    const dots = dotsContainer.querySelectorAll('span');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentIndex);
+    viewport.addEventListener('touchend', function (e) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const diffX = touchStartX - touchEndX;
+        const diffY = touchStartY - touchEndY;
+
+        if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+            goTo(index + (diffX > 0 ? 1 : -1));
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(refreshSlider, 150);
     });
-}
 
-function moveSlide(direction) {
-    currentIndex += direction;
+    window.addEventListener('load', refreshSlider);
 
-    if (currentIndex > maxIndex) currentIndex = 0;
-    if (currentIndex < 0) currentIndex = maxIndex;
+    track.querySelectorAll('img').forEach(function (img) {
+        if (!img.complete) {
+            img.addEventListener('load', goTo.bind(null, index), { once: true });
+        }
+    });
 
-    updateSlider();
-}
-
-window.addEventListener('resize', function () {
-    itemsPerView = getItemsPerView();
-    maxIndex = items.length - itemsPerView;
-
-    if (currentIndex > maxIndex) {
-        currentIndex = maxIndex;
-    }
-
-    createDots();
-    updateSlider();
+    refreshSlider();
 });
-
-createDots();
-updateSlider();
 </script>
+
 <section class="infinite-section">
     <div class="infinite-wrapper">
 
-        <!-- LEFT IMAGE -->
         <div class="infinite-image">
-          <img src="{{ asset('assets/f_assets/image/highend/banner1.jpeg') }}">
+            <img src="{{ asset('assets/f_assets/image/highend/banner1.jpeg') }}" alt="High End Jewellery Collection">
         </div>
 
-        <!-- RIGHT CONTENT -->
         <div class="infinite-content">
-            <h2>HIGH END JEWELLRY</h2>
-            <!-- <p>
-                Bold asymmetry, dynamic volumes and unexpected contrasts embody Bvlgari’s unique 
-                approach to High Jewelry. Drawing from a plurality of inspirations, each creation 
-                is a fluid expression of endless transformation, reinventing colors, forms, textures 
-                and jewelry-making techniques with audacious creativity and artisanal mastery.
-            </p> -->
+            <span class="highend-eyebrow">The Collection</span>
+            <h2 class="highend-heading highend-heading--left">High End Jewellery</h2>
+            <p class="highend-body">
+                Bold asymmetry, dynamic volumes and unexpected contrasts define Hanif's unique approach to high jewellery. Each creation is a fluid expression of endless transformation—reinventing colour, form and artisanal mastery with audacious creativity.
+            </p>
         </div>
 
     </div>
 </section>
 
 <section class="infinite-section">
-    <div class="infinite-wrapper">
+    <div class="infinite-wrapper infinite-wrapper--image-first-mobile">
 
-        <!-- RIGHT CONTENT -->
         <div class="infinite-content">
-            <h2>EMERALD NECKLACE</h2>
-            <p>
-                A symphony composed with the rarest brilliance and timeless allure, 
-                Timeless Jewels ensemble the epitome of refined artistry.
+            <span class="highend-eyebrow">Masterpiece</span>
+            <h2 class="highend-heading highend-heading--left">Emerald Necklace</h2>
+            <p class="highend-body">
+                A symphony composed with the rarest brilliance and timeless allure. Each stone is selected for its depth of colour and character, brought together through generations of craftsmanship into a piece worthy of becoming an heirloom.
             </p>
         </div>
-         <!-- LEFT IMAGE -->
+
         <div class="infinite-image">
-          <img src="{{ asset('assets/f_assets/image/highend/banner2.jpeg') }}">
+            <img src="{{ asset('assets/f_assets/image/highend/banner2.jpeg') }}" alt="Emerald Necklace">
         </div>
 
     </div>
 </section>
-<!-- <section class="infinite-section">
-    <div class="infinite-wrapper">
 
-         LEFT IMAGE -
-        <div class="infinite-image">
-          <img src="{{ asset('assets/f_assets/image/highend/banner3.avif') }}">
-        </div>
-
-        RIGHT CONTENT 
-        <div class="infinite-content">
-            <h2>INFINITE SHAPES</h2>
-            <p>
-                Bold asymmetry, dynamic volumes and unexpected contrasts embody Bvlgari’s unique 
-                approach to High Jewelry. Drawing from a plurality of inspirations, each creation 
-                is a fluid expression of endless transformation, reinventing colors, forms, textures 
-                and jewelry-making techniques with audacious creativity and artisanal mastery.
-            </p>
-        </div>
-
-    </div>
-</section> -->
-<style>
-    .infinite-section {
-    background:black;
-    padding: 40px 0;
-}
-
-.infinite-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* LEFT IMAGE */
-.infinite-image {
-    width: 70%;
-}
-
-.infinite-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* RIGHT TEXT */
-.infinite-content {
-    width: 30%;
-    padding: 0 60px;
-}
-
-.infinite-content h2 {
- font-size: 26px;
-    letter-spacing: 6px;
-    font-weight: 400;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    color: white;
-    font-family: "Bulgari_Capitalis" !important;
-    text-align: center;
-}
-
-.infinite-content p {
-    font-size: 14px;
-    line-height: 1.8;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-@media (max-width: 992px) {
-    .infinite-wrapper {
-        flex-direction: column;
-    }
-
-    .infinite-image,
-    .infinite-content {
-        width: 100%;
-    }
-
-    .infinite-content {
-        padding: 30px 20px;
-        text-align: center;
-    }
-}
-</style>
+</div>
 
 @endsection
