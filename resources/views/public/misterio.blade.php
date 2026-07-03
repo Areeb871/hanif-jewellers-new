@@ -290,6 +290,43 @@ html, body{
         </div>
     </div>
 </div>
+<!-- <div class="row g-3 mt-3 mb-3">
+     <div class="col-md-6 d-flex align-items-center justify-content-center order-2 order-md-1">
+        <div class="text-center my-5">
+            <p class="p-5">
+               Exquisite masterpieces crafted with beautiful Sapphire and Diamonds, prized for its unparalleled depth and vibrant hues, paired with precious metal, expertly calibrated to radiate warmth and sophistication. Showcasing timeless artisanal craftsmanship and uniqueness, culminating in a true resemblance of Experience pure art.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-6 order-1 order-md-2">
+        <div id="marchisioSlider4" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ asset('assets/f_assets/image/misterio_data/New look/Miterio-Web-001.png') }}" class="img-fluid" alt="misterio 4 - 1" style="cursor: pointer;" onclick="openImageModal('marchisioSlider4', 0)">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('assets/f_assets/image/misterio_data/New look/Miterio-Web-002.png') }}" class="img-fluid" alt="misterio 4 - 2" style="cursor: pointer;" onclick="openImageModal('marchisioSlider4', 1)">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('assets/f_assets/image/misterio_data/New look/Miterio-Web-003.png') }}" class="img-fluid" alt="misterio 4 - 3" style="cursor: pointer;" onclick="openImageModal('marchisioSlider4', 2)">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('assets/f_assets/image/misterio_data/New look/Miterio-Web-004.png') }}" class="img-fluid" alt="misterio 4 - 4" style="cursor: pointer;" onclick="openImageModal('marchisioSlider4', 3)">
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#marchisioSlider4" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#marchisioSlider4" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div> -->
 
 <div class="row">
             <style>

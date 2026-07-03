@@ -596,7 +596,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </span>
         </button>
 
-        <button type="button" class="hj-ring-size-help" aria-label="Ring size help — opens size selector">
+        <button type="button" class="hj-ring-size-help" aria-label="Open ring size guide">
             Need help?
         </button>
     </div>
@@ -680,6 +680,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <p>Add a short personal message inside your ring.</p>
 
+        <img
+            class="hj-inscription-image"
+            src="{{ asset('assets/f_assets/image/solitaire/Engraving image.jpg') }}"
+            alt="Ring engraving preview"
+        >
+
         <div class="hj-inscription-input-wrap">
             <input 
                 type="text" 
@@ -706,6 +712,27 @@ document.addEventListener('DOMContentLoaded', function () {
             </button>
         </div>
 
+    </div>
+</div>
+
+<div class="hj-ring-guide-modal" id="hjRingGuideModal" aria-hidden="true">
+    <div class="hj-ring-guide-backdrop" data-ring-guide-close></div>
+    <div class="hj-ring-guide-dialog" role="dialog" aria-modal="true" aria-label="Ring size guide">
+        <div class="hj-ring-guide-header">
+            <button type="button" class="hj-ring-guide-close" aria-label="Close ring size guide" data-ring-guide-close>
+                &times;
+            </button>
+        </div>
+        <div class="hj-ring-guide-images">
+            <img
+                src="{{ asset('assets/f_assets/image/solitaire/ring guide/1.jpg') }}"
+                alt="Ring size guide"
+            >
+            <img
+                src="{{ asset('assets/f_assets/image/solitaire/ring guide/2.jpg') }}"
+                alt="Ring size measurement guide"
+            >
+        </div>
     </div>
 </div>
 
@@ -905,16 +932,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 <strong>GEMOLOGICAL CERTIFICATE INCLUDED</strong>
                 <p>Guaranteed authenticity</p>
             </div>
-        </div>
+</div>
 
-    </div>
+</div>
 
 </div>
 <div class="hj-appointment-card">
 
     <div class="hj-avatars">
-        <img src="{{ asset('assets/f_assets/image/avators/one.jpg') }}" alt="Expert">
-        <img src="{{ asset('assets/f_assets/image/avators/one.jpg') }}" alt="Expert">
         <img src="{{ asset('assets/f_assets/image/avators/one.jpg') }}" alt="Expert">
         <span></span>
     </div>
@@ -2048,6 +2073,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sizeSelected = document.getElementById('hjRingSizeSelected');
     const sizeError = document.getElementById('hjRingSizeError');
     const sizeHelp = document.querySelector('.hj-ring-size-help');
+    const ringGuideModal = document.getElementById('hjRingGuideModal');
 
     const mainRingSizeInput = document.getElementById('hjRingSizeInput');
     const cartRingSizeInput = document.getElementById('cartRingSizeInput');
@@ -2080,6 +2106,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function setRingGuideOpen(isOpen) {
+        if (!ringGuideModal) return;
+
+        ringGuideModal.classList.toggle('is-open', isOpen);
+        ringGuideModal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        document.body.classList.toggle('hj-ring-guide-open', isOpen);
+    }
+
     if (sizeToggle && sizeBox) {
         sizeToggle.addEventListener('click', function (event) {
             event.stopPropagation();
@@ -2089,13 +2123,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (sizeHelp && sizeBox) {
         sizeHelp.addEventListener('click', function (event) {
-            if (!window.matchMedia('(max-width: 991px)').matches) return;
-
             event.preventDefault();
             event.stopPropagation();
-            setRingSizeOpen(!sizeBox.classList.contains('active'));
+            setRingSizeOpen(false);
+            setRingGuideOpen(true);
         });
     }
+
+    document.querySelectorAll('[data-ring-guide-close]').forEach(function (closeTrigger) {
+        closeTrigger.addEventListener('click', function () {
+            setRingGuideOpen(false);
+        });
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            setRingGuideOpen(false);
+        }
+    });
 
     sizeOptions.forEach(function (option) {
         option.addEventListener('click', function (event) {

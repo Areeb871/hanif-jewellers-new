@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.headerCheckout')
 
 @section('content')
 <style>

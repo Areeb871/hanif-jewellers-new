@@ -808,8 +808,6 @@ $menus = [
 
     'LIFESTYLE' => [
         ['label' => 'EHED',         'url' => route('ehed')],
-        ['label' => 'JEWELPHABETS', 'url' => url('collections/jewelphabets')],
-        ['label' => 'MONA LISA',    'url' => url('collections/mona-lisa')],
         ['label' => 'PURE LOCK',    'url' => route('pure-lock')],
         ['label' => 'SELENE',       'url' => url('collections/selene')], // ✅ FIXED
         ['label' => 'MARCHISIO',        'url' => route('marchisio')],

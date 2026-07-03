@@ -17,7 +17,7 @@
     }
     
     header.mobile-header-main {
-        padding: 12px 0;
+        padding: 6px 0;
         background: #fff !important;
     }
 
@@ -27,7 +27,9 @@
     
     .mobile-logo {
         max-width: 150px;
-        height: auto;
+        height: 37px;
+        width: auto;
+        object-fit: contain;
     }
     
     .mobile-nav-icons {
@@ -578,22 +580,22 @@ BRIDALS
     
     <ul>
         <li><a href="/collections/ehed">EHED</a></li>
-<li><a href="/collections/jewelphabets">JEWELPHABETS</a></li>
-<li><a href="/collections/mona-lisa">MONA LISA</a></li>
+<!-- <li><a href="/collections/jewelphabets">JEWELPHABETS</a></li> -->
+<!-- <li><a href="/collections/mona-lisa">MONA LISA</a></li> -->
 <li><a href="/collections/pure-lock">PURE LOCK</a></li>
 <li><a href="/collections/selene">SELENE</a></li>
 <li><a href="{{ url('/collections/divine-treasures') }}">DIVINE TREASURES</a></li>
 <li><a href="{{ url('/collections/marchisio') }}">MARCHISIO</a></li>
     </ul>
     
-     <div class="menu-section-title">
+     <!-- <div class="menu-section-title">
         Festive
-    </div>
-<ul>
+    </div> -->
+<!-- <ul>
         <li><a href="/collections/eid-par-sony-ki-choriyan">Eid Par Sone Ki Choriyan</a></li>
        <li><a href="/collections/valentine-jewels">Valentine Hearts</a></li>
 
-    </ul>
+    </ul> -->
 
 </div>
   </div>
