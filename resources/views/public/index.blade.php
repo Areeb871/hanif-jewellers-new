@@ -110,18 +110,21 @@
   }
 }
 
-/* Tablet + desktop: banner heights (restored from legacy) + flush bespoke join */
+/* Tablet + desktop: banner scales with screen, no crop */
 @media (min-width: 768px) {
   #carouselExampleRide {
     padding: 0;
     width: 100%;
+    height: auto;
     background: #000;
     overflow: hidden;
   }
 
   #carouselExampleRide .carousel-inner,
-  #carouselExampleRide .carousel-item {
-    height: 100%;
+  #carouselExampleRide .carousel-item,
+  #carouselExampleRide .hero-slide,
+  #carouselExampleRide .hero-slide picture {
+    height: auto;
   }
 
   #carouselExampleRide .carousel-inner {
@@ -130,21 +133,17 @@
 
   #carouselExampleRide .hero-slide {
     width: 100%;
-    height: 100%;
     background: #000;
   }
 
   #carouselExampleRide .hero-slide picture {
     width: 100%;
-    height: 100%;
     display: block;
   }
 
   #carouselExampleRide .hero-slide img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    height: auto;
     display: block;
   }
 
@@ -152,25 +151,9 @@
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
-
-  section.bespoke-collections.d-none.d-md-block .bespoke-collections__title {
-    margin-top: 0 !important;
-    padding-top: 10 !important;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-  #carouselExampleRide {
-    height: clamp(400px, 60vh, 600px);
-  }
 }
 
 @media (min-width: 992px) {
-  #carouselExampleRide {
-    height: clamp(500px, 65vh, 700px);
-    max-height: none;
-  }
-
   #carouselExampleRide .carousel-control-prev,
   #carouselExampleRide .carousel-control-next {
     width: 50px;
@@ -178,17 +161,7 @@
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1365.98px) {
-  #carouselExampleRide {
-    height: clamp(600px, 70vh, 800px);
-  }
-}
-
 @media (min-width: 1366px) {
-  #carouselExampleRide {
-    height: clamp(700px, 75vh, 900px);
-  }
-
   #carouselExampleRide .carousel-control-prev,
   #carouselExampleRide .carousel-control-next {
     width: 60px;
@@ -197,10 +170,6 @@
 }
 
 @media (min-width: 1920px) {
-  #carouselExampleRide {
-    height: clamp(800px, 80vh, 1000px);
-  }
-
   #carouselExampleRide .carousel-control-prev,
   #carouselExampleRide .carousel-control-next {
     width: 70px;
@@ -563,10 +532,11 @@ section.watch .watch-scroller-arrow:disabled,
 
     .bespoke-collections.d-md-none .watch-progress__track {
         position: relative;
-        width: 64px;
-        height: 1px;
-        background: rgba(0, 0, 0, 0.1);
+        width: 88px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.12);
         overflow: hidden;
+        border-radius: 1px;
     }
 
     .bespoke-collections.d-md-none .watch-progress__fill {
@@ -655,10 +625,11 @@ section.watch .addToCartProductDetailsTop .carousel-item {
 
     section.watch .watch-progress__track {
         position: relative;
-        width: 64px;
-        height: 1px;
-        background: rgba(0, 0, 0, 0.1);
+        width: 88px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.12);
         overflow: hidden;
+        border-radius: 1px;
     }
 
     section.watch .watch-progress__fill {
@@ -764,24 +735,33 @@ section.watch .card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.watch-brands-section {
-    padding: 3rem 0;
+/* Section headings — equal space above & below */
+.section-title,
+.bespoke-collections__title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(28px, 1.3vw, 44px);
+    font-weight: 600;
+    padding: 1.5rem 0;
+    /* padding: 0; */
+    color: #111;
 }
 
-.watch-brands-section .section-title {
-    font-size: 1.75rem;
-    margin-bottom: 3rem;
-    letter-spacing: 1.5px;
-    font-weight: 200;
-}
-
-@media (max-width: 540px) {
-    .watch-brands-section .section-title {
-        font-size: 1.35rem;
-        line-height: 1.3;
-        margin-bottom: 1.25rem;
-        margin-top: 1rem;
+@media (min-width: 768px) {
+    .section-title,
+    .bespoke-collections__title {
+        padding: 2rem 0;
     }
+}
+
+@media (min-width: 1366px) {
+    .section-title,
+    .bespoke-collections__title {
+        padding: 2.5rem 0;
+    }
+}
+
+.watch-brands-section {
+    padding: 0;
 }
 
 #carouselExampleRide .carousel-control-prev,
@@ -935,7 +915,7 @@ towering peaks</div>
                 <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
                     <div class="hero-slide">
                         <picture>
-                            <source media="(max-width: 991.98px)" srcset="{{ asset($slide['mobile']) }}">
+                            <source media="(max-width: 767.98px)" srcset="{{ asset($slide['mobile']) }}">
                             <img src="{{ asset($slide['desktop']) }}" alt="{{ $slide['alt'] }}" @if($idx === 0) fetchpriority="high" @endif>
                         </picture>
                     </div>
@@ -966,7 +946,7 @@ towering peaks</div>
     @endphp
 
     <section class="onlineStore bespoke-collections d-none d-md-block" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title" style="font-family:Cormorant Garamond, serif;">
+    <h2 class="text-center bespoke-collections__title">
         Bespoke Collections
     </h2>
 
@@ -1013,7 +993,7 @@ towering peaks</div>
 
 <!-- ========================= MOBILE SECTION ========================= -->
 <section class="mobile-jewelry-section bespoke-collections d-md-none" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title" style="font-family:'Fancy Cut', Almarai, 'Times New Roman', serif;">
+    <h2 class="text-center bespoke-collections__title">
         Bespoke Collection
     </h2>
 
@@ -1052,19 +1032,6 @@ towering peaks</div>
 </section>
 
 <style>
-/* Bespoke section title */
-.bespoke-collections__title {
-    margin-top: 0 !important;
-    margin-bottom: 1.5rem !important;
-}
-
-@media (min-width: 1366px) {
-    .bespoke-collections__title {
-        margin-top: 0 !important;
-        margin-bottom: 2rem !important;
-    }
-}
-
 /* Bespoke collections scroller (same scroll pattern as watch) */
 .bespoke-collections .mobile-product-scroller {
     width: 100%;
@@ -1117,11 +1084,6 @@ towering peaks</div>
         padding-top: 0;
     }
 
-    .bespoke-collections.d-md-none .bespoke-collections__title {
-        margin-top: 0 !important;
-        padding-top:2rem;
-    }
-
     .bespoke-collections.d-md-none .watch-slider-viewport {
         padding: 0 10px;
     }
@@ -1138,8 +1100,8 @@ towering peaks</div>
     }
 }
 </style>
-<section class="container py-4">
-<h4 class="section-title text-center py-3 pb-5 mt-4">
+<section class="container">
+<h4 class="section-title text-center">
   INTERNATIONAL JEWELLERY BRAND
 </h4>
   <!-- ROW 1: Image Left | Content Right -->
@@ -1188,8 +1150,8 @@ FARAH KHAN
     </div>
   </div>
 </section>
-<section class="pb-5 home-brands watch-brands-section">
-  <h4 class="section-title text-center" style="margin-top:20px">
+<section class="home-brands watch-brands-section">
+  <h4 class="section-title text-center">
     INTERNATIONAL WATCH BRAND
   </h4>
 
@@ -1387,13 +1349,6 @@ document.querySelectorAll('.home-brands .brand-item img').forEach(function(img) 
     display: block;
   }
 
-}
-    .section-title {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(28px, 1.3vw, 44px);
-  font-weight: 600;
-  margin: 0 0 14px;
-  color: #111;
 }
 .fixed-media{
   width: 520px;     /* fixed width */
