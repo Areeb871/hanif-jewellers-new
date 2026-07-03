@@ -215,7 +215,7 @@ body {
 <!-- DESKTOP BANNER -->
 <section class="sectionOne d-md-block d-none">
     <video autoplay loop muted playsinline>
-        <source src="{{ asset('assets/f_assets/image/highend/main.webm') }}" type="video/webm">
+        <source src="{{ asset('assets/f_assets/image/highend/banner.mp4') }}" type="video/webm">
         Your browser does not support the video tag.
     </video>
 </section>
@@ -223,7 +223,7 @@ body {
 <!-- MOBILE BANNER -->
 <section class="sectionMobile d-md-none">
     <video autoplay loop muted playsinline>
-        <source src="{{ asset('assets/f_assets/image/highend/main.webm') }}" type="video/webm">
+        <source src="{{ asset('assets/f_assets/image/highend/mobview.mp4') }}" type="video/webm">
         Your browser does not support the video tag.
     </video>
 </section>

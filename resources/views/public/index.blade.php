@@ -2,39 +2,7 @@
 
 @section('content')
 <style>
-/* =========================
-   Banner Container
-========================= */
-/* .custom-banner{
-    position: relative;
-    width: 100%;
-    height: 130vh;
-    overflow: hidden;
-    margin-top: -10rem;
-}
 
-/* Video Background 
-.custom-banner-video{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-}
-
-/* Image Background 
-.custom-banner-image{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-} */
-/* Remove any container restriction */
 .custom-banner {
     width: 100%;
     margin: 0;
@@ -64,59 +32,154 @@
   display: inline-block;
   z-index: 10;
 }
-/* .custom-banner-btn{
-  position: absolute;
-  bottom: 30px;
-  left: 20%;
-  transform: translateX(-50%);
-padding:10px 4px 10px 4px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  background: transparent;              /* ✅ transparent 
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0px;
-  display: inline-block;
-  z-index: 10;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.6); /* luxury outline 
-    border-radius: 0;
-    transition: all 0.3s ease;
-} */
-/* .custom-banner-btn:hover{
-  background: rgba(180,180,180,0.95);
+
 } */
 /* remove any spacing around the section */
-.carousel-section { padding:0 !important; margin:0 !important; }
-
-/* FORCE the carousel to keep the correct banner height */
-#carouselExampleRide,
-#carouselExampleRide .carousel-inner,
-#carouselExampleRide .carousel-item {
-  width: 100%;
-  height: calc(100vw * 1080 / 1935); /* ✅ exact 1935x1080 ratio */
-  max-height: 1080px;               /* optional safety */
+.carousel-section {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* the slide wrapper must fill */
-.hero-slide{
+/* Brand banner carousel */
+.hero-slide {
   width: 100%;
   height: 100%;
-  background: #000;
+  background: transparent;
   overflow: hidden;
 }
-
-/* no crop: show full banner */
-.hero-slide img{
+.hero-slide picture,
+.hero-slide img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;   /* ✅ NO cutting */
-  object-position: center;
-  display: block;        /* ✅ removes white strip under image */
+  display: block;
+}
+#carouselExampleRide { width: 100%; }
+#carouselExampleRide .carousel-item { line-height: 0; }
+
+/* Carousel nav — visible on all screens */
+#carouselExampleRide .carousel-control-prev,
+#carouselExampleRide .carousel-control-next {
+  width: 48px;
+  height: 48px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+#carouselExampleRide .carousel-control-prev-icon,
+#carouselExampleRide .carousel-control-next-icon {
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
 }
 
-/* remove baseline/line-height gaps */
-#carouselExampleRide .carousel-item { line-height: 0; }
+/* Mobile: fixed height box */
+@media (max-width: 767.98px) {
+  #carouselExampleRide {
+    padding: 0;
+    width: 100%;
+    height: clamp(720px, 92vh, 980px);
+    background: #000;
+    overflow: hidden;
+  }
+
+  #carouselExampleRide .carousel-inner {
+    height: 100%;
+    position: relative;
+  }
+
+  #carouselExampleRide.carousel.carousel-fade .carousel-item {
+    height: 100%;
+  }
+
+  #carouselExampleRide .hero-slide {
+    width: 100%;
+    height: 100%;
+    background: #000;
+  }
+
+  #carouselExampleRide .hero-slide picture {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  #carouselExampleRide .hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+}
+
+/* Tablet + desktop: banner scales with screen, no crop */
+@media (min-width: 768px) {
+  #carouselExampleRide {
+    padding: 0;
+    width: 100%;
+    height: auto;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #carouselExampleRide .carousel-inner,
+  #carouselExampleRide .carousel-item,
+  #carouselExampleRide .hero-slide,
+  #carouselExampleRide .hero-slide picture {
+    height: auto;
+  }
+
+  #carouselExampleRide .carousel-inner {
+    position: relative;
+  }
+
+  #carouselExampleRide .hero-slide {
+    width: 100%;
+    background: #000;
+  }
+
+  #carouselExampleRide .hero-slide picture {
+    width: 100%;
+    display: block;
+  }
+
+  #carouselExampleRide .hero-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  section.bespoke-collections.d-none.d-md-block {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+@media (min-width: 992px) {
+  #carouselExampleRide .carousel-control-prev,
+  #carouselExampleRide .carousel-control-next {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (min-width: 1366px) {
+  #carouselExampleRide .carousel-control-prev,
+  #carouselExampleRide .carousel-control-next {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (min-width: 1920px) {
+  #carouselExampleRide .carousel-control-prev,
+  #carouselExampleRide .carousel-control-next {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+#carouselExampleRide.carousel.carousel-fade .carousel-item {
+  transition: opacity 1.5s ease-in-out !important;
+}
  header * {
     line-height: normal;
   }
@@ -138,17 +201,24 @@ padding:10px 4px 10px 4px;
   width: 100%;
   overflow: hidden;
   background: #000;
+  height: 82vh;
+  min-height: 520px;
+  max-height: 92vh;
 }
 
 .mobileStackImg{
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 .mobileStackVideo{
   width: 100%;
-  height: auto;     /* keeps proportions like image */
-  display: block;   /* removes gaps */
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
 }
 /* =========================
    Overlay Content (Haphazard + Discover + Location)
@@ -356,79 +426,349 @@ padding:10px 4px 10px 4px;
   .lux-card::before, .lux-card::after{ inset: 10px; }
 }
 /* =========================
-   WATCHES SCROLLER
+   WATCHES SCROLLER — no snap/animation, first card flush left
 ========================= */
+section.watch .mobile-product-scroller {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+}
+
+section.watch .mobile-product-scroller::-webkit-scrollbar {
+    display: none;
+}
+
+section.watch .scroller-item {
+    scroll-snap-align: none;
+}
+
+section.watch .scroller-container {
+    display: flex;
+    width: max-content;
+    padding-inline: 16px;
+    gap: 10px;
+}
+
+/* Watch + Bespoke scroller arrows */
+section.watch .watch-slider-viewport,
+.bespoke-collections .watch-slider-viewport {
+    position: relative;
+    width: 100%;
+    overflow: visible;
+}
+
+section.watch .watch-scroller-arrow,
+.bespoke-collections .watch-scroller-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #2a2a2a;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+section.watch .watch-scroller-arrow--prev,
+.bespoke-collections .watch-scroller-arrow--prev {
+    left: 6px;
+}
+
+section.watch .watch-scroller-arrow--next,
+.bespoke-collections .watch-scroller-arrow--next {
+    right: 6px;
+}
+
+section.watch .watch-scroller-arrow .arrow-left svg,
+.bespoke-collections .watch-scroller-arrow .arrow-left svg {
+    transform: rotate(180deg);
+}
+
+section.watch .watch-scroller-arrow:hover:not(:disabled),
+.bespoke-collections .watch-scroller-arrow:hover:not(:disabled) {
+    transform: translateY(-50%) scale(1.04);
+    background: #fff;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
+}
+
+section.watch .watch-scroller-arrow:disabled,
+.bespoke-collections .watch-scroller-arrow:disabled {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 @media (max-width: 767.98px) {
-    .mobile-watches-only-section {
-        overflow: hidden;
+    section.watch .watch-scroller-arrow,
+    .bespoke-collections.d-md-none .watch-scroller-arrow {
+        display: none !important;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-scroller {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    .bespoke-collections.d-md-none .watch-progress {
+        display: flex;
+        justify-content: center;
+        padding: 22px 24px 14px;
+    }
+
+    .bespoke-collections.d-md-none .watch-progress.is-hidden {
+        visibility: hidden;
+    }
+
+    .bespoke-collections.d-md-none .watch-progress__track {
+        position: relative;
+        width: 88px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        border-radius: 1px;
+    }
+
+    .bespoke-collections.d-md-none .watch-progress__fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        transition: left 0.2s ease-out, width 0.2s ease-out;
+        will-change: left, width;
+    }
+}
+
+@media (min-width: 992px) {
+    section.watch .watch-scroller-arrow,
+    .bespoke-collections .watch-scroller-arrow {
+        width: 46px;
+        height: 46px;
+    }
+
+    section.watch .watch-scroller-arrow--prev,
+    .bespoke-collections .watch-scroller-arrow--prev {
+        left: 10px;
+    }
+
+    section.watch .watch-scroller-arrow--next,
+    .bespoke-collections .watch-scroller-arrow--next {
+        right: 10px;
+    }
+}
+
+section.watch .addToCartProductDetailsTop .carousel .carousel-item img,
+section.watch .addToCartProductDetailsTop .product-image {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+}
+
+section.watch .addToCartProductDetailsTop .card-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section.watch .addToCartProductDetailsTop .carousel,
+section.watch .addToCartProductDetailsTop .carousel-inner,
+section.watch .addToCartProductDetailsTop .carousel-item {
+    width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    section.watch .mobile-product-scroller {
         touch-action: pan-x pan-y;
         overscroll-behavior-x: contain;
-        width: 100%;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-scroller::-webkit-scrollbar {
-        display: none;
-    }
-
-    .mobile-watches-only-section .mobile-watches-only-track {
-        display: flex;
+    section.watch .scroller-container {
         gap: 14px;
-        width: max-content;
-        padding: 0 10px;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-item {
-        flex: 0 0 calc(100vw - 60px);
-        width: calc(100vw - 60px);
-        max-width: calc(100vw - 60px);
-        scroll-snap-align: start;
+    section.watch .scroller-item {
+        flex: 0 0 86vw;
+        width: 86vw;
+        max-width: 86vw;
+        min-width: 86vw;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-item .card,
-    .mobile-watches-only-section .mobile-watches-only-item > * {
+    section.watch .scroller-item .card,
+    section.watch .scroller-item > * {
         width: 100%;
         max-width: 100%;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-dots {
+    /* Minimal scroll progress — mobile only, no dots */
+    section.watch .watch-progress {
         display: flex;
         justify-content: center;
+        padding: 22px 24px 14px;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-dots-container {
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    section.watch .watch-progress.is-hidden {
+        visibility: hidden;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-dots-container::-webkit-scrollbar {
-        display: none;
+    section.watch .watch-progress__track {
+        position: relative;
+        width: 88px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        border-radius: 1px;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #c9c9c9;
-        flex: 0 0 auto;
-        cursor: pointer;
-        transition: 0.25s ease;
+    section.watch .watch-progress__fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        transition: left 0.2s ease-out, width 0.2s ease-out;
+        will-change: left, width;
+    }
+}
+
+/* Tablet — horizontal scroll, fixed card width (product cards need ~300px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    section.watch .scroller-item {
+        flex: 0 0 300px;
+        width: 300px;
+        max-width: 300px;
+        min-width: 300px;
     }
 
-    .mobile-watches-only-section .mobile-watches-only-dot.active {
-        background: #000;
+    section.watch .watch-progress {
+        display: none !important;
     }
+}
+
+/* Migrated from legacy desktopStyle injection */
+section.watch {
+    padding: 1.5rem 0;
+}
+
+@media (min-width: 992px) {
+    section.watch .mobile-product-scroller {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    section.watch .scroller-item {
+        flex: 0 0 300px;
+        max-width: 300px;
+        min-width: 300px;
+    }
+
+    section.watch .scroller-item .card {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    section.watch .scroller-item {
+        flex: 0 0 340px;
+        max-width: 340px;
+        min-width: 340px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1365.98px) {
+    section.watch .scroller-item {
+        flex: 0 0 360px;
+        max-width: 360px;
+        min-width: 360px;
+    }
+}
+
+@media (min-width: 1366px) {
+    section.watch .scroller-container {
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    section.watch .scroller-item {
+        flex: 0 0 380px;
+        max-width: 380px;
+        min-width: 380px;
+    }
+}
+
+@media (min-width: 1920px) {
+    section.watch .scroller-container {
+        gap: 25px;
+        padding: 0 25px;
+    }
+
+    section.watch .scroller-item {
+        flex: 0 0 400px;
+        max-width: 400px;
+        min-width: 400px;
+    }
+}
+
+section.watch .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.watch .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Section headings — equal space above & below */
+.section-title,
+.bespoke-collections__title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(28px, 1.3vw, 44px);
+    font-weight: 600;
+    padding: 1.5rem 0;
+    /* padding: 0; */
+    color: #111;
+}
+
+@media (min-width: 768px) {
+    .section-title,
+    .bespoke-collections__title {
+        padding: 2rem 0;
+    }
+}
+
+@media (min-width: 1366px) {
+    .section-title,
+    .bespoke-collections__title {
+        padding: 2.5rem 0;
+    }
+}
+
+.watch-brands-section {
+    padding: 0;
+}
+
+#carouselExampleRide .carousel-control-prev,
+#carouselExampleRide .carousel-control-next {
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
 }
 
 </style>
@@ -521,224 +861,129 @@ towering peaks</div>
   </div>
 <a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
-    <!-- Desktop/Tablet Section -->
-<!-- Desktop/Tablet WATCHES Section -->
-    <section class="onlineStore watch d-none d-md-block"style="background-color:#f6f3ee;">
-        <!-- <h2 class="text-center mb-3" style="font-family: 'Fancy Cut', Almarai, 'Times New Roman', serif;margin-top:-22px">WATCHES</h2> -->
-        <div class="mobile-product-scroller onlineStore">
-            <div class="scroller-container">
-                @foreach ($products  as $key => $product)
-                    <div class="scroller-item">
-                        @include('public.partials.product-card-new', ['product' => $product])
-                    </div>
-                @endforeach
+    <!-- Watches / Featured Products Scroller (unified responsive) -->
+    <section class="onlineStore watch" style="background-color:#f6f3ee;">
+        <div class="watch-slider-viewport">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous products" disabled>
+                <span aria-hidden="true" class="arrow-icon arrow-left">
+                    <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
+                        <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+                    </svg>
+                </span>
+            </button>
+            <div class="mobile-product-scroller onlineStore">
+                <div class="scroller-container">
+                    @foreach ($products as $key => $product)
+                        <div class="scroller-item">
+                            @include('public.partials.product-card-new', ['product' => $product])
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next products">
+                <span aria-hidden="true" class="arrow-icon">
+                    <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
+                        <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+                    </svg>
+                </span>
+            </button>
+        </div>
+        @if (count($products) > 1)
+        <div class="watch-progress d-lg-none" aria-hidden="true">
+            <div class="watch-progress__track">
+                <div class="watch-progress__fill"></div>
             </div>
         </div>
-        <div class="scroller-dots mt-3">
-            <div class="dots-container">
-                @php
-                    $totalWatches = count($products);
-                    $watchesPerView = 4;
-                    $totalWatchDots = max(0, $totalWatches - $watchesPerView + 1);
-                @endphp
-                @for ($i = 0; $i < $totalWatchDots; $i++)
-                    <div class="dot {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i + $watchesPerView - 1 }}"></div>
-                @endfor
-            </div>
-        </div>
+        @endif
     </section>
 
-    <!-- Mobile WATCHES Section with Horizontal Scroller -->
-  <section class="mobile-watches-only-section py-5 d-md-none" style="background-color:#f6f3ee;">
-    <div class="mobile-watches-only-scroller">
-        <div class="mobile-watches-only-track">
-            @foreach ($products as $key => $product)
-                <div class="mobile-watches-only-item">
-                    @include('public.partials.product-card-new', ['product' => $product])
-                </div>
-            @endforeach
-        </div>
-    </div>
+    @php
+    $brandBannerSlides = [
+        ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet Web Banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet_mobile.avif'],
+        ['alt' => 'Louis Moinet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/loius_monet.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/lm-mob.avif'],
+        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg'],
+        ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
+        ['alt' => 'Corum', 'desktop' => 'assets/f_assets/image/homepage_2_banner/corum.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/favre_leuba_mobile.avif'],
+    ];
+    @endphp
 
-    <div class="mobile-watches-only-dots mt-3">
-        <div class="mobile-watches-only-dots-container">
-            @for ($i = 0; $i < count($products); $i++)
-                <div class="mobile-watches-only-dot {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}"></div>
-            @endfor
-        </div>
-    </div>
-</section>
-
-   <section class="d-md-block d-none carousel-section p-0 m-0">
-  <div id="carouselExampleRide" class="carousel slide carousel-fade" data-bs-ride="carousel">
-
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="hero-slide">
-          <img src="{{ asset('assets/f_assets/image/homepage_2_banner/Bovet Web Banner.avif') }}" alt="Bovet Watch">
-        </div>
-      </div>
-
-       <div class="carousel-item">
-        <div class="hero-slide">
-          <img src="{{ asset('assets/f_assets/image/homepage_2_banner/loius_monet.jpeg') }}" alt="Louis Moinet">
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="hero-slide">
-          <img src="{{ asset('assets/f_assets/image/homepage_2_banner/fm_new.avif') }}" alt="Franck Muller">
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="hero-slide">
-          <img src="{{ asset('assets/f_assets/image/homepage_2_banner/ml_new.avif') }}" alt="Maurice Lacroix">
-        </div>
-      </div>
-
-      <!--<div class="carousel-item">-->
-      <!--  <div class="hero-slide">-->
-      <!--    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/Perrelet.avif') }}" alt="Perrelet">-->
-      <!--  </div>-->
-      <!--</div>-->
-
-       <div class="carousel-item">
-        <div class="hero-slide">
-          <img src="{{ asset('assets/f_assets/image/homepage_2_banner/corum.jpeg') }}" alt="Favre Leuba">
-        </div>
-      </div>
-    </div>
-
-    <!-- controls must be inside -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-
-  </div>
-</section>
-
-    <!-- Mobile Banner Carousel Section -->
-    <section class="d-md-none">
-        <div id="carouselMobileBanner" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <!-- Brand Banner Carousel (unified responsive) -->
+    <section class="carousel-section p-0 m-0">
+        <div id="carouselExampleRide" class="carousel slide carousel-fade">
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/Bovet_mobile.avif') }}" class="d-block w-100" alt="Franck Muller Mobile">
+                @foreach ($brandBannerSlides as $idx => $slide)
+                <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
+                    <div class="hero-slide">
+                        <picture>
+                            <source media="(max-width: 767.98px)" srcset="{{ asset($slide['mobile']) }}">
+                            <img src="{{ asset($slide['desktop']) }}" alt="{{ $slide['alt'] }}" @if($idx === 0) fetchpriority="high" @endif>
+                        </picture>
+                    </div>
                 </div>
-                  <div class="carousel-item">
-                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/LM Watch Mobile.avif') }}" class="d-block w-100" alt="Perrelet Mobile">
-                </div>
-                <div class="carousel-item active">
-                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/fm_new_mobile.avif') }}" class="d-block w-100" alt="Franck Muller Mobile">
-                </div>
-                <div class="carousel-item">
-                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif') }}" class="d-block w-100" alt="Maurice Mobile">
-                </div>
-                <!--<div class="carousel-item">-->
-                <!--    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/Perrelet-Mobile.avif') }}" class="d-block w-100" alt="Perrelet Mobile">-->
-                <!--</div>-->
-                 <div class="carousel-item">
-                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/favre_leuba_mobile.avif') }}" class="d-block w-100" alt="Perrelet Mobile">
-                </div>
+                @endforeach
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselMobileBanner"
-                data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselMobileBanner"
-                data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
     </section>
-    <section class="onlineStore d-none d-md-block" style="background-color:#f6f3ee;">
-    <h2 class="text-center" style="font-family:Cormorant Garamond, serif;">
+
+    @php
+    $bespokeCollectionLinks = [
+        0 => 'hasht',
+        1 => 'qaws-al-matar',
+        2 => 'nagar',
+        3 => 'gulposh',
+        4 => 'tawoos',
+        5 => 'gohar',
+        6 => 'haphazard',
+    ];
+    @endphp
+
+    <section class="onlineStore bespoke-collections d-none d-md-block" style="background-color:#f6f3ee;">
+    <h2 class="text-center bespoke-collections__title">
         Bespoke Collections
     </h2>
 
-    <div class="slider-viewport">
-        <!-- Prev -->
-        <button type="button" class="slider-arrow prev" id="desktopPrevBtn" aria-label="Previous">
+    <div class="watch-slider-viewport">
+        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous" disabled>
             <span aria-hidden="true" class="arrow-icon arrow-left">
-                <svg viewBox="0 0 24 24" height="24" width="24" fill="currentColor">
+                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                     <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
                 </svg>
             </span>
         </button>
-
-        <!-- Slider -->
-        <div class="mobile-product-scroller onlineStore" style="background-color:#f6f3ee;">
-            <div class="scroller-track" id="productSliderDesktop">
-
+        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
+            <div class="scroller-container">
                 @foreach ($products_new as $key => $product)
-              <div class="scroller-item">
-
-@php
-$collectionLinks = [
-    0 => 'hasht',
-    1 => 'qaws-al-matar',
-    2 => 'nagar',
-    3 => 'gulposh',
-    4 => 'tawoos',
-    5 => 'gohar',
-    6 => 'haphazard',
-];
-@endphp
-
-<a href="{{ url('collections/' . ($collectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-
-    <div class="lux-card">
-
-        <span class="lux-ratio"></span>
-
-        <img 
-            src="{{ asset($product->image) }}"
-            alt="{{ $product->name }}"
-            class="lux-img"
-            loading="lazy"
-        >
-
-        <div class="lux-hover">
-            <div class="lux-box">
-
-                @if(!empty($product->hover_image))
-                    <img 
-                        src="{{ asset($product->hover_image) }}"
-                        alt="{{ $product->name }}"
-                        class="lux-logo"
-                    >
-                @else
-                    <span class="text-dark fw-semibold text-center px-2">
-                        {{ $product->name }}
-                    </span>
-                @endif
-
-            </div>
-        </div>
-
-    </div>
-
-</a>
-
-</div>
-
+                <div class="scroller-item">
+                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
+                        <div class="lux-card">
+                            <span class="lux-ratio"></span>
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
+                            <div class="lux-hover">
+                                <div class="lux-box">
+                                    @if(!empty($product->hover_image))
+                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
+                                    @else
+                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 @endforeach
-
             </div>
         </div>
-
-        <!-- Next -->
-        <button type="button" class="slider-arrow next" id="desktopNextBtn" aria-label="Next">
+        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next">
             <span aria-hidden="true" class="arrow-icon">
-                <svg viewBox="0 0 24 24" height="24" width="24" fill="currentColor">
+                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                     <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
                 </svg>
             </span>
@@ -747,273 +992,116 @@ $collectionLinks = [
 </section>
 
 <!-- ========================= MOBILE SECTION ========================= -->
-<section class="mobile-jewelry-section d-md-none" style="background-color:#f6f3ee;">
-    <h2 class="text-center mb-4" style="font-family:'Fancy Cut', Almarai, 'Times New Roman', serif;">
+<section class="mobile-jewelry-section bespoke-collections d-md-none" style="background-color:#f6f3ee;">
+    <h2 class="text-center bespoke-collections__title">
         Bespoke Collection
     </h2>
 
-    <div class="slider-viewport">
-
-        <!-- Prev -->
-        <button type="button" class="slider-arrow prev" id="mobilePrevBtn" aria-label="Previous">
-            <span aria-hidden="true" class="arrow-icon arrow-left">
-                <svg viewBox="0 0 24 24" height="24" width="24" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
-                </svg>
-            </span>
-        </button>
-
-        <!-- Slider -->
-        <div class="mobile-product-scroller onlineStore" style="background-color:#f6f3ee;">
-            <div class="scroller-track" id="productSliderMobile">
-
+    <div class="watch-slider-viewport">
+        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
+            <div class="scroller-container">
                 @foreach ($products_new as $key => $product)
-<div class="scroller-item">
-
-@php
-$collectionLinks = [
-    0 => 'hasht',
-    1 => 'qaws-al-matar',
-    2 => 'nagar',
-    3 => 'gulposh',
-    4 => 'tawoos',
-    5 => 'gohar',
-    6 => 'haphazard',
-];
-@endphp
-
-<a href="{{ url('collections/' . ($collectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-
-    <div class="lux-card">
-
-        <span class="lux-ratio"></span>
-
-        <img 
-            src="{{ asset($product->image) }}"
-            alt="{{ $product->name }}"
-            class="lux-img"
-            loading="lazy"
-        >
-
-        <div class="lux-hover">
-            <div class="lux-box">
-
-                @if(!empty($product->hover_image))
-                    <img 
-                        src="{{ asset($product->hover_image) }}"
-                        alt="{{ $product->name }}"
-                        class="lux-logo"
-                    >
-                @else
-                    <span class="text-dark fw-semibold text-center px-2">
-                        {{ $product->name }}
-                    </span>
-                @endif
-
+                <div class="scroller-item">
+                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
+                        <div class="lux-card">
+                            <span class="lux-ratio"></span>
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
+                            <div class="lux-hover">
+                                <div class="lux-box">
+                                    @if(!empty($product->hover_image))
+                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
+                                    @else
+                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                @endforeach
             </div>
         </div>
-
     </div>
-
-</a>
-
-</div>
-@endforeach
-
-            </div>
+    @if (count($products_new) > 1)
+    <div class="watch-progress" aria-hidden="true">
+        <div class="watch-progress__track">
+            <div class="watch-progress__fill"></div>
         </div>
-
-        <!-- Next -->
-        <button type="button" class="slider-arrow next" id="mobileNextBtn" aria-label="Next">
-            <span aria-hidden="true" class="arrow-icon">
-                <svg viewBox="0 0 24 24" height="24" width="24" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
-                </svg>
-            </span>
-        </button>
-
     </div>
+    @endif
 </section>
 
 <style>
-/* ========================= SLIDER VIEWPORT ========================= */
-.slider-viewport{
-    position: relative;
+/* Bespoke collections scroller (same scroll pattern as watch) */
+.bespoke-collections .mobile-product-scroller {
     width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto;
+    scroll-snap-type: none;
 }
 
-.mobile-product-scroller{
-    width: 100%;
-    overflow: hidden;
+.bespoke-collections .mobile-product-scroller::-webkit-scrollbar {
+    display: none;
 }
 
-/* ========================= TRACK ========================= */
-.scroller-track{
+.bespoke-collections .scroller-container {
     display: flex;
     gap: 20px;
-    transition: transform 0.45s ease;
-    will-change: transform;
-}
-
-/* ========================= ITEMS ========================= */
-.scroller-item{
-    flex: 0 0 auto;
-}
-
-/* Desktop item width */
-.d-none.d-md-block .scroller-item{
-    width: calc((100% - 60px) / 4);
-}
-
-/* Mobile item width */
-.d-md-none .scroller-item{
-    width: calc(100% - 60px);
-}
-
-/* ========================= ARROWS ========================= */
-.slider-arrow{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.92);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 9999;
-    transition: all 0.25s ease;
+    width: max-content;
     padding: 0;
 }
 
-.slider-arrow.prev{ left: 0; }
-.slider-arrow.next{ right: 0; }
-
-.slider-arrow:hover{
-    background: #000;
-    transform: translateY(-50%) scale(1.08);
+.bespoke-collections .scroller-item {
+    flex: 0 0 auto;
+    scroll-snap-align: none;
 }
 
-.slider-arrow:disabled{
-    opacity: 0.35;
-    cursor: not-allowed;
-}
-
-.arrow-icon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-}
-
-.arrow-icon svg{
-    width: 22px;
-    height: 22px;
-    display: block;
-}
-
-.arrow-left svg{
-    transform: rotate(180deg);
-}
-
-/* keep arrows a little inside */
-@media (min-width: 768px){
-    .slider-arrow.prev{ left: 8px; }
-    .slider-arrow.next{ right: 8px; }
-    .slider-viewport{ padding: 0 20px; }
-}
-
-@media (max-width: 767.98px){
-    .slider-arrow{
-        width: 42px;
-        height: 42px;
+@media (min-width: 768px) {
+    .bespoke-collections.d-none.d-md-block .watch-slider-viewport {
+        padding: 0 20px;
     }
 
-    .slider-arrow.prev{ left: 4px; }
-    .slider-arrow.next{ right: 4px; }
+    .bespoke-collections.d-none.d-md-block .scroller-item {
+        flex: 0 0 calc((100vw - 120px) / 4);
+        width: calc((100vw - 120px) / 4);
+        max-width: calc((100vw - 120px) / 4);
+        min-width: calc((100vw - 120px) / 4);
+    }
+}
 
-    .slider-viewport{ padding: 0 10px; }
-    .scroller-track{ gap: 14px; }
+@media (max-width: 767.98px) {
+    .carousel-section {
+        margin-bottom: 0 !important;
+        /* padding-top:20px !important; */
+    }
 
-    .d-md-none .scroller-item{
-        width: calc(100% - 30px);
+    .bespoke-collections.d-md-none {
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+    .bespoke-collections.d-md-none .watch-slider-viewport {
+        padding: 0 10px;
+    }
+
+    .bespoke-collections.d-md-none .scroller-container {
+        gap: 14px;
+    }
+
+    .bespoke-collections.d-md-none .scroller-item {
+        flex: 0 0 86vw;
+        width: 86vw;
+        max-width: 86vw;
+        min-width: 86vw;
     }
 }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    function setupArrowOnlySlider(sliderId, prevBtnId, nextBtnId, itemsPerViewDesktop = 4, itemsPerViewMobile = 1) {
-        const track = document.getElementById(sliderId);
-        const prevBtn = document.getElementById(prevBtnId);
-        const nextBtn = document.getElementById(nextBtnId);
-
-        if (!track || !prevBtn || !nextBtn) return;
-
-        const items = track.querySelectorAll('.scroller-item');
-        if (!items.length) return;
-
-        let currentIndex = 0;
-
-        function getGap() {
-            const styles = window.getComputedStyle(track);
-            return parseFloat(styles.gap) || 20;
-        }
-
-        function getItemsPerView() {
-            return window.innerWidth >= 768 ? itemsPerViewDesktop : itemsPerViewMobile;
-        }
-
-        function getMaxIndex() {
-            return Math.max(0, items.length - getItemsPerView());
-        }
-
-        function updateSlider() {
-            const item = items[0];
-            const itemWidth = item.getBoundingClientRect().width;
-            const gap = getGap();
-            const moveAmount = itemWidth + gap;
-
-            track.style.transform = `translateX(-${currentIndex * moveAmount}px)`;
-
-            prevBtn.disabled = currentIndex <= 0;
-            nextBtn.disabled = currentIndex >= getMaxIndex();
-        }
-
-        nextBtn.addEventListener('click', function () {
-            if (currentIndex < getMaxIndex()) {
-                currentIndex++;
-                updateSlider();
-            }
-        });
-
-        prevBtn.addEventListener('click', function () {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlider();
-            }
-        });
-
-        window.addEventListener('resize', function () {
-            if (currentIndex > getMaxIndex()) {
-                currentIndex = getMaxIndex();
-            }
-            updateSlider();
-        });
-
-        updateSlider();
-    }
-
-    setupArrowOnlySlider('productSliderDesktop', 'desktopPrevBtn', 'desktopNextBtn', 4, 1);
-    setupArrowOnlySlider('productSliderMobile', 'mobilePrevBtn', 'mobileNextBtn', 4, 1);
-});
-</script>
-<section class="container py-4">
-<h4 class="section-title text-center py-3 pb-5 mt-4">
+<section class="container">
+<h4 class="section-title text-center">
   INTERNATIONAL JEWELLERY BRAND
 </h4>
   <!-- ROW 1: Image Left | Content Right -->
@@ -1062,158 +1150,172 @@ FARAH KHAN
     </div>
   </div>
 </section>
-<section class="pb-5 home-brands">
-
-  <h4 class="section-title text-center" style="margin-top:20px">
+<section class="home-brands watch-brands-section">
+  <h4 class="section-title text-center">
     INTERNATIONAL WATCH BRAND
   </h4>
 
- <style>
-.brand-grid{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-align-items:flex-start;
-max-width:1400px;
-margin:auto;
-gap:40px;
+<style>
+.home-brands .brand-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px;
 }
 
-.brand-item{
-flex:0 0 calc(25% - 40px);
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
-padding:10px;
-text-decoration:none;
+.home-brands .brand-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 24px;
+    text-decoration: none;
+    background: #fff;
+    box-sizing: border-box;
 }
 
-.brand-item::before,
-.brand-item::after{
-content:"";
-position:absolute;
-inset:0;
-border:2px solid transparent;
-transition:all .5s ease;
-pointer-events:none;
+.home-brands .brand-item::before,
+.home-brands .brand-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    transition: all 0.5s ease;
+    pointer-events: none;
 }
 
-.home-brands .brand-item::before{
-border-top-color:#c8a46a;
-border-bottom-color:#c8a46a;
-transform:scaleX(0);
-transform-origin:center;
+.home-brands .brand-item::before {
+    border-top-color: #c8a46a;
+    border-bottom-color: #c8a46a;
+    transform: scaleX(0);
+    transform-origin: center;
 }
 
-.home-brands .brand-item::after{
-border-left-color:#c8a46a;
-border-right-color:#c8a46a;
-transform:scaleY(0);
-transform-origin:center;
+.home-brands .brand-item::after {
+    border-left-color: #c8a46a;
+    border-right-color: #c8a46a;
+    transform: scaleY(0);
+    transform-origin: center;
 }
 
-.home-brands .brand-item:hover::before{
-transform:scaleX(1);
+.home-brands .brand-item:hover::before {
+    transform: scaleX(1);
 }
 
-.home-brands .brand-item:hover::after{
-transform:scaleY(1);
+.home-brands .brand-item:hover::after {
+    transform: scaleY(1);
 }
 
-.brand-item img{
-width:100%;
-max-width:306px;
-height:236px;
-object-fit:contain;
-background:#fff;
-padding:25px;
-transition:all .3s ease;
-display:block;
+.home-brands .brand-item img {
+    width: 100%;
+    max-width: 252px;
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
+    object-position: center center;
+    background: transparent;
+    padding: 0;
+    transition: transform 0.3s ease;
+    display: block;
 }
 
-.brand-item img:hover{
-transform:scale(1.06);
+.home-brands .brand-item:hover img {
+    transform: scale(1.06);
 }
 
-@media(max-width:992px){
-.brand-item{
-flex:0 0 calc(33.33% - 40px);
-}
-}
-
-@media(max-width:768px){
-
-.brand-grid{
-gap:20px;
+/* Desktop: exactly 4 per row → 19 logos = 4+4+4+4+3 (last 3 centered) */
+@media (min-width: 992px) {
+    .home-brands .brand-item {
+        flex: 0 0 calc((100% - 120px) / 4);
+        width: calc((100% - 120px) / 4);
+        min-height: 256px;
+    }
 }
 
-.brand-item{
-flex:0 0 calc(50% - 20px);
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .home-brands .brand-item {
+        flex: 0 0 calc((100% - 80px) / 3);
+        width: calc((100% - 80px) / 3);
+        min-height: 220px;
+        padding: 20px;
+    }
+
+    .home-brands .brand-item img {
+        max-height: 150px;
+    }
 }
 
-.brand-item img{
-height:120px;
-padding:15px;
-}
+@media (max-width: 767.98px) {
+    .home-brands .brand-grid {
+        gap: 16px;
+        padding: 0 10px;
+    }
 
-}
+    .home-brands .brand-item {
+        flex: 0 0 calc((100% - 16px) / 2);
+        width: calc((100% - 16px) / 2);
+        min-height: 168px;
+        padding: 14px;
+    }
 
+    .home-brands .brand-item img {
+        max-width: 100%;
+        max-height: 120px;
+    }
+}
 </style>
 
 @php
 $brands = [
-['name'=> 'Bovet', 'slug' => 'bovet', 'img' => 'Bovet.avif'],
-['name'=> 'Louis Moinet', 'slug' => 'louis-moinet', 'img' => 'LM.avif'],
-['name'=> 'Franck Muller', 'slug' => 'franck-muller', 'img' => 'FM.avif'],
-['name'=> 'Corum', 'slug' => 'corum', 'img' => 'Corum.avif'],
-['name'=> 'Artya', 'slug' => 'Artya', 'img' => 'Artya.avif'],
-['name'=> 'Chronoswiss', 'slug' => 'chronoswiss', 'img' => 'Chronoswiss.avif'],
-['name'=> 'Cuervo-Y-Sobrinos', 'slug' => 'cuervo-y-sobrinos', 'img' => 'CYS.avif'],
-['name'=> 'Favre Leuba', 'slug' => 'favre-leuba', 'img' => 'favre-leuba.avif'],
-['name'=> 'Perrelet', 'slug' => 'perrelet', 'img' => 'Perrelet.avif'],
-['name'=> 'Maurice Lacroix', 'slug' => 'maurice-lacroix', 'img' => 'Maurice Lacroix.avif'],
-['name'=> 'Louis Erard', 'slug' => 'louis-erard', 'img' => 'Louis Erard.avif'],
-['name'=> 'Rado', 'slug' => 'rado', 'img' => 'Rado.avif'],
-['name'=> 'Tissot', 'slug' => 'tissot', 'img' => 'Tisot.avif'],
-['name'=> 'EPOS', 'slug' => 'epos', 'img' => 'EPOS.avif'],
-['name'=> 'Armand Nicolet', 'slug' => 'armand-nicolet', 'img' => 'Armand Nicolet.avif'],
-['name'=> 'Garaham', 'slug' => 'graham', 'img' => 'Garaham.avif'],
-['name'=> 'Versace', 'slug' => 'versace', 'img' => 'Versace.avif'],
-['name'=> 'Feregamo', 'slug' => 'ferragamo', 'img' => 'Feregamo.avif'],
-['name'=> 'Swiss Military', 'slug' => 'swiss-military', 'img' => 'Swiss Military.avif'],
+    ['name' => 'Bovet', 'slug' => 'bovet', 'img' => 'Bovet.avif'],
+    ['name' => 'Louis Moinet', 'slug' => 'louis-moinet', 'img' => 'LM.avif'],
+    ['name' => 'Franck Muller', 'slug' => 'franck-muller', 'img' => 'FM.avif'],
+    ['name' => 'Corum', 'slug' => 'corum', 'img' => 'Corum.avif'],
+    ['name' => 'Artya', 'slug' => 'Artya', 'img' => 'Artya.avif'],
+    ['name' => 'Chronoswiss', 'slug' => 'chronoswiss', 'img' => 'Chronoswiss.avif'],
+    ['name' => 'Cuervo-Y-Sobrinos', 'slug' => 'cuervo-y-sobrinos', 'img' => 'CYS.avif'],
+    ['name' => 'Favre Leuba', 'slug' => 'favre-leuba', 'img' => 'favre-leuba.avif'],
+    ['name' => 'Perrelet', 'slug' => 'perrelet', 'img' => 'Perrelet.avif'],
+    ['name' => 'Maurice Lacroix', 'slug' => 'maurice-lacroix', 'img' => 'Maurice Lacroix.avif'],
+    ['name' => 'Louis Erard', 'slug' => 'louis-erard', 'img' => 'Louis Erard.avif'],
+    ['name' => 'Rado', 'slug' => 'rado', 'img' => 'Rado.avif'],
+    ['name' => 'Tissot', 'slug' => 'tissot', 'img' => 'Tisot.avif'],
+    ['name' => 'EPOS', 'slug' => 'epos', 'img' => 'EPOS.avif'],
+    ['name' => 'Armand Nicolet', 'slug' => 'armand-nicolet', 'img' => 'Armand Nicolet.avif'],
+    ['name' => 'Garaham', 'slug' => 'graham', 'img' => 'Garaham.avif'],
+    ['name' => 'Versace', 'slug' => 'versace', 'img' => 'Versace.avif'],
+    ['name' => 'Feregamo', 'slug' => 'ferragamo', 'img' => 'Feregamo.avif'],
+    ['name' => 'Swiss Military', 'slug' => 'swiss-military', 'img' => 'Swiss Military.avif'],
 ];
 @endphp
 
 <div class="brand-grid">
-
-@foreach($brands as $brand)
-
-<a class="brand-item" href="{{ route('subcategory',['subcategory'=>$brand['slug']]) }}">
-
-<img 
-src="{{ asset('assets/f_assets/image/watch logo new/'.$brand['img']) }}"
-data-hover="{{ asset('assets/f_assets/image/watch logo new/hover/'.$brand['img']) }}"
-alt="{{ $brand['name'] }} logo"
-loading="lazy">
-
-</a>
-
+@foreach ($brands as $brand)
+    <a class="brand-item" href="{{ route('subcategory', ['subcategory' => $brand['slug']]) }}">
+        <img
+            src="{{ asset('assets/f_assets/image/watch logo new/'.$brand['img']) }}"
+            data-hover="{{ asset('assets/f_assets/image/watch logo new/hover/'.$brand['img']) }}"
+            alt="{{ $brand['name'] }} logo"
+            loading="lazy">
+    </a>
 @endforeach
-
 </div>
 
 <script>
-document.querySelectorAll('.brand-item img').forEach(function(img){
+document.querySelectorAll('.home-brands .brand-item img').forEach(function(img) {
     const original = img.src;
     const hover = img.dataset.hover;
     if (hover) { const pre = new Image(); pre.src = hover; }
 
-    img.addEventListener('mouseenter', function(){
+    img.addEventListener('mouseenter', function() {
         if (hover) img.src = hover;
     });
 
-    img.addEventListener('mouseleave', function(){
+    img.addEventListener('mouseleave', function() {
         img.src = original;
     });
 });
@@ -1247,13 +1349,6 @@ document.querySelectorAll('.brand-item img').forEach(function(img){
     display: block;
   }
 
-}
-    .section-title {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(28px, 1.3vw, 44px);
-  font-weight: 600;
-  margin: 0 0 14px;
-  color: #111;
 }
 .fixed-media{
   width: 520px;     /* fixed width */
@@ -1354,367 +1449,193 @@ document.querySelectorAll('.brand-item img').forEach(function(img){
 </style>
 @endsection
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const section = document.querySelector('.mobile-watches-only-section');
-    if (!section) return;
-
-    const scroller = section.querySelector('.mobile-watches-only-scroller');
-    const items = section.querySelectorAll('.mobile-watches-only-item');
-    const dots = section.querySelectorAll('.mobile-watches-only-dot');
-
-    if (!scroller || !items.length || !dots.length) return;
-
-    function getStep() {
-        if (items.length > 1) {
-            const step = items[1].offsetLeft - items[0].offsetLeft;
-            return step > 0 ? step : items[0].offsetWidth;
-        }
-        return items[0].offsetWidth;
-    }
-
-    function updateDots() {
-        const step = getStep();
-        if (!step) return;
-
-        const index = Math.max(
-            0,
-            Math.min(dots.length - 1, Math.round(scroller.scrollLeft / step))
-        );
-
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-    }
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', function () {
-            if (!items[index]) return;
-
-            scroller.scrollTo({
-                left: items[index].offsetLeft,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    scroller.addEventListener('scroll', updateDots, { passive: true });
-    window.addEventListener('resize', updateDots);
-
-    updateDots();
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const section = document.querySelector('.mobile-watches-only-section');
-    if (!section) return;
-
-    const scroller = section.querySelector('.mobile-watches-only-scroller');
-    const items = section.querySelectorAll('.mobile-watches-only-item');
-    const dots = section.querySelectorAll('.mobile-watches-only-dot');
-
-    if (!scroller || !items.length || !dots.length) return;
-
-    function getStep() {
-        if (items.length > 1) {
-            return items[1].offsetLeft - items[0].offsetLeft;
-        }
-        return items[0].offsetWidth;
-    }
-
-    function updateDots() {
-        const step = getStep();
-        if (!step) return;
-
-        const index = Math.max(0, Math.min(dots.length - 1, Math.round(scroller.scrollLeft / step)));
-
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-    }
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', function () {
-            if (!items[index]) return;
-
-            scroller.scrollTo({
-                left: items[index].offsetLeft,
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    scroller.addEventListener('scroll', updateDots, { passive: true });
-    window.addEventListener('resize', updateDots);
-
-    updateDots();
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    function initWatchScroller(sectionSelector, itemsPerViewDesktop = 4) {
-        const section = document.querySelector(sectionSelector);
-        if (!section) return;
-
-        const scroller = section.querySelector('.mobile-product-scroller');
-        const container = section.querySelector('.scroller-container');
-        const items = section.querySelectorAll('.scroller-item');
-        const dots = section.querySelectorAll('.dot');
-
-        if (!scroller || !container || !items.length) return;
-
-        const isMobile = window.innerWidth < 768;
-
-        function getStep() {
-            if (items.length > 1) {
-                return items[1].offsetLeft - items[0].offsetLeft;
-            }
-            return items[0].offsetWidth;
-        }
-
-        function getDesktopIndex() {
-            const step = getStep();
-            if (!step) return 0;
-            return Math.round(scroller.scrollLeft / step);
-        }
-
-        function getMobileIndex() {
-            const step = getStep();
-            if (!step) return 0;
-            return Math.round(scroller.scrollLeft / step);
-        }
-
-        function updateDots() {
-            if (!dots.length) return;
-
-            if (window.innerWidth < 768) {
-                const activeIndex = Math.max(0, Math.min(dots.length - 1, getMobileIndex()));
-                dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
-            } else {
-                const maxDesktopIndex = Math.max(0, items.length - itemsPerViewDesktop);
-                const activeIndex = Math.max(0, Math.min(maxDesktopIndex, getDesktopIndex()));
-                dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
-            }
-        }
-
-        function scrollToIndex(index) {
-            if (!items[index]) return;
-
-            scroller.scrollTo({
-                left: items[index].offsetLeft,
-                behavior: 'smooth'
-            });
-        }
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', function () {
-                scrollToIndex(index);
-            });
-        });
-
-        scroller.addEventListener('scroll', updateDots, { passive: true });
-        window.addEventListener('resize', updateDots);
-
-        updateDots();
-    }
-
-    initWatchScroller('.mobile-watches-section', 1);
-    initWatchScroller('section.onlineStore.watch', 4);
-});
-</script>
-<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Function to initialize scroller for a specific section
-    function initializeScroller(sectionClass) {
-        const scroller = document.querySelector(`${sectionClass} .mobile-product-scroller`);
-        const dots = document.querySelectorAll(`${sectionClass} .dot`);
-        const dotsContainer = document.querySelector(`${sectionClass} .dots-container`);
-        const items = document.querySelectorAll(`${sectionClass} .scroller-item`);
-        
-        if (!scroller || !dots.length || !items.length) {
-            return;
-        }
-        
-        let isAnimating = false;
-        let startX = 0;
-        let startY = 0;
-        let startScrollLeft = 0;
-        let manualDotSelection = false;
-        let isInteractingWithCarousel = false;
-        
-        // Smooth animated scroll with easing for better UX
-        function smoothScrollTo(element, target) {
-            isAnimating = true;
-            const startLeft = element.scrollLeft;
-            const distance = target - startLeft;
-            const duration = 500; // ms: adjust for speed
-            let startTime = null;
+    function initializeArrowScroller(sectionClass) {
+        document.querySelectorAll(sectionClass).forEach(function(section) {
+            const scroller = section.querySelector('.mobile-product-scroller');
+            const items = section.querySelectorAll('.scroller-item');
 
-            function easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            }
-
-            function step(timestamp) {
-                if (startTime === null) startTime = timestamp;
-                const elapsed = timestamp - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = easeInOutCubic(progress);
-                element.scrollLeft = startLeft + distance * eased;
-                if (elapsed < duration) {
-                    requestAnimationFrame(step);
-                } else {
-                    isAnimating = false;
-                }
-            }
-
-            requestAnimationFrame(step);
-        }
-        
-        // Helper: get horizontal step between consecutive items
-        function getItemStep() {
-            if (items.length >= 2) {
-                const step = items[1].offsetLeft - items[0].offsetLeft;
-                return step > 0 ? step : items[0].getBoundingClientRect().width;
-            }
-            return items[0].getBoundingClientRect().width;
-        }
-        
-        // Helper: get nearest item index to current scrollLeft using measured step
-        function getNearestIndex() {
-            const step = getItemStep();
-            if (!step || step <= 0) return 0;
-            const rawIndex = Math.round(scroller.scrollLeft / step);
-            const clamped = Math.max(0, Math.min(items.length - 1, rawIndex));
-            return clamped;
-        }
-        
-        function updateActiveDot() {
-            if (manualDotSelection) {
+            if (!scroller || !items.length) {
                 return;
             }
-            
-            const boundedIndex = getNearestIndex();
-            const isDesktopJewellery = scroller.closest('section.onlineStore:not(.watch)');
-            const isDesktopWatches = scroller.closest('section.watch');
-            
-            if (isDesktopJewellery || isDesktopWatches) {
-                let mappedDotIndex = 1;
-                if (boundedIndex >= 0) {
-                    mappedDotIndex = Math.min(dots.length - 1, boundedIndex);
+
+            let isAnimating = false;
+            let isMouseDown = false;
+            let mouseStartX = 0;
+            let mouseStartScrollLeft = 0;
+            let startX = 0;
+            let startY = 0;
+            let isInteractingWithCarousel = false;
+
+            const arrowPrevBtn = section.querySelector('.watch-scroller-arrow--prev');
+            const arrowNextBtn = section.querySelector('.watch-scroller-arrow--next');
+            const watchProgressEl = section.querySelector('.watch-progress');
+            const watchProgressFill = section.querySelector('.watch-progress__fill');
+
+            function isDesktopScrollerSection() {
+                const isDesktopBespoke = scroller.closest('section.bespoke-collections.d-none.d-md-block');
+                const isDesktopWatches = scroller.closest('section.watch');
+                return !!(isDesktopBespoke || isDesktopWatches);
+            }
+
+            function getItemScrollTarget(item) {
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const itemIndex = Array.from(items).indexOf(item);
+                if (itemIndex === 0) {
+                    return 0;
                 }
-                
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === mappedDotIndex);
-                });
-                
-                if (dotsContainer && dots[mappedDotIndex]) {
-                    const activeDot = dots[mappedDotIndex];
-                    const containerWidth = dotsContainer.offsetWidth;
-                    const dotLeft = activeDot.offsetLeft;
-                    const dotCenter = dotLeft + (activeDot.offsetWidth / 2);
-                    const containerCenter = containerWidth / 2;
-                    const scrollLeftDots = Math.max(0, dotCenter - containerCenter);
-                    dotsContainer.scrollTo({ left: scrollLeftDots, behavior: 'auto' });
+                if (itemIndex === items.length - 1) {
+                    const endAligned = item.offsetLeft + item.offsetWidth - scroller.clientWidth;
+                    return Math.max(0, Math.min(maxScroll, endAligned));
                 }
-            } else {
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === boundedIndex);
+                return Math.max(0, Math.min(maxScroll, item.offsetLeft));
+            }
+
+            function smoothScrollTo(element, target) {
+                isAnimating = true;
+                const startLeft = element.scrollLeft;
+                const distance = target - startLeft;
+                const duration = 500;
+                let startTime = null;
+
+                function easeInOutCubic(t) {
+                    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                }
+
+                function step(timestamp) {
+                    if (startTime === null) startTime = timestamp;
+                    const elapsed = timestamp - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = easeInOutCubic(progress);
+                    element.scrollLeft = startLeft + distance * eased;
+                    if (elapsed < duration) {
+                        requestAnimationFrame(step);
+                    } else {
+                        element.scrollLeft = target;
+                        isAnimating = false;
+                        updateArrowButtons();
+                        updateWatchProgress();
+                    }
+                }
+
+                requestAnimationFrame(step);
+            }
+
+            function scrollWatchTo(target) {
+                if (isAnimating) return;
+                smoothScrollTo(scroller, target);
+            }
+
+            function getItemStep() {
+                if (items.length >= 2) {
+                    const step = items[1].offsetLeft - items[0].offsetLeft;
+                    return step > 0 ? step : items[0].getBoundingClientRect().width;
+                }
+                return items[0].getBoundingClientRect().width;
+            }
+
+            function getNearestIndex() {
+                const step = getItemStep();
+                if (!step || step <= 0) return 0;
+                const rawIndex = Math.round(scroller.scrollLeft / step);
+                return Math.max(0, Math.min(items.length - 1, rawIndex));
+            }
+
+            function updateWatchProgress() {
+                if (!watchProgressFill || !watchProgressEl) return;
+
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                if (maxScroll <= 2 || items.length <= 1) {
+                    watchProgressEl.classList.add('is-hidden');
+                    return;
+                }
+
+                watchProgressEl.classList.remove('is-hidden');
+                const segmentPct = 100 / items.length;
+                const progress = scroller.scrollLeft / maxScroll;
+                watchProgressFill.style.width = segmentPct + '%';
+                watchProgressFill.style.left = (progress * (100 - segmentPct)) + '%';
+            }
+
+            function updateArrowButtons() {
+                if (!arrowPrevBtn || !arrowNextBtn || !items.length) return;
+
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const noScroll = maxScroll <= 2 || items.length <= 1;
+
+                arrowPrevBtn.disabled = noScroll || scroller.scrollLeft <= 5;
+                arrowNextBtn.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+            }
+
+            function scrollToItemByIndex(itemIndex) {
+                const bounded = Math.max(0, Math.min(items.length - 1, itemIndex));
+                const targetItem = items[bounded];
+                if (!targetItem) return;
+
+                scrollWatchTo(getItemScrollTarget(targetItem));
+
+                setTimeout(() => {
+                    updateArrowButtons();
+                    updateWatchProgress();
+                }, 520);
+            }
+
+            function resetScrollerPosition() {
+                scroller.scrollLeft = 0;
+            }
+
+            function refreshScrollerUi() {
+                updateArrowButtons();
+                updateWatchProgress();
+            }
+
+            if (arrowPrevBtn && arrowNextBtn) {
+                arrowPrevBtn.addEventListener('click', function() {
+                    scrollToItemByIndex(getNearestIndex() - 1);
+                });
+                arrowNextBtn.addEventListener('click', function() {
+                    scrollToItemByIndex(getNearestIndex() + 1);
                 });
             }
-        }
-        
-        // Snap using the same native smooth scroll as arrows
-        function snapToNearest() {
-            if (isAnimating) return;
-            const index = getNearestIndex();
-            const targetLeft = items[index].offsetLeft;
-            smoothScrollTo(scroller, targetLeft);
-        }
-        
-        function scrollToIndex(index) {
-            // For desktop sections (jewellery and watches), each dot represents a specific product
-            const isDesktopJewellery = scroller.closest('section.onlineStore:not(.watch)');
-            const isDesktopWatches = scroller.closest('section.watch');
-            
-            if (isDesktopJewellery || isDesktopWatches) {
-                // Index now directly represents the product position
-                const targetItem = items[index];
-                if (!targetItem) return;
-                
-                const targetLeft = targetItem.offsetLeft;
-                isAnimating = true;
-                smoothScrollTo(scroller, targetLeft);
-            } else {
-                // Original logic for mobile sections
-                const targetItem = items[index];
-                if (!targetItem) return;
-                
-                const targetLeft = targetItem.offsetLeft;
-                isAnimating = true;
-                smoothScrollTo(scroller, targetLeft);
+
+            scroller.addEventListener('mousedown', function(e) {
+                if (!isDesktopScrollerSection()) return;
+
+                isMouseDown = true;
+                mouseStartX = e.clientX;
+                mouseStartScrollLeft = scroller.scrollLeft;
+                scroller.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            scroller.addEventListener('mousemove', function(e) {
+                if (!isMouseDown) return;
+                e.preventDefault();
+                scroller.scrollLeft = mouseStartScrollLeft + (mouseStartX - e.clientX) * 2;
+            });
+
+            scroller.addEventListener('mouseup', function() {
+                isMouseDown = false;
+                scroller.style.cursor = 'grab';
+            });
+
+            scroller.addEventListener('mouseleave', function() {
+                isMouseDown = false;
+                scroller.style.cursor = 'grab';
+            });
+
+            if (isDesktopScrollerSection()) {
+                scroller.style.cursor = 'grab';
             }
-        }
-        
-        // Mouse click and drag functionality for desktop
-        let isMouseDown = false;
-        let mouseStartX = 0;
-        let mouseStartScrollLeft = 0;
 
-        scroller.addEventListener('mousedown', function(e) {
-            // Only enable for desktop sections
-            const isDesktopSection = scroller.closest('section.onlineStore:not(.watch)') || scroller.closest('section.watch');
-            if (!isDesktopSection) return;
-            
-            isMouseDown = true;
-            mouseStartX = e.clientX;
-            mouseStartScrollLeft = scroller.scrollLeft;
-            scroller.style.cursor = 'grabbing';
-            e.preventDefault();
-        });
+            scroller.addEventListener('touchstart', function(e) {
+                isInteractingWithCarousel = !!e.target.closest('.carousel');
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, { passive: true });
 
-        scroller.addEventListener('mousemove', function(e) {
-            if (!isMouseDown) return;
-            e.preventDefault();
-            const x = e.clientX;
-            const walk = (mouseStartX - x) * 2; // Scroll speed multiplier
-            scroller.scrollLeft = mouseStartScrollLeft + walk;
-        });
-
-        scroller.addEventListener('mouseup', function() {
-            isMouseDown = false;
-            scroller.style.cursor = 'grab';
-            // Snap to nearest item for carousel-like behavior
-            snapToNearest();
-        });
-
-        scroller.addEventListener('mouseleave', function() {
-            isMouseDown = false;
-            scroller.style.cursor = 'grab';
-            // Snap to nearest item when leaving
-            snapToNearest();
-        });
-
-        // Set initial cursor style for desktop sections
-        const isDesktopSection = scroller.closest('section.onlineStore:not(.watch)') || scroller.closest('section.watch');
-        if (isDesktopSection) {
-            scroller.style.cursor = 'grab';
-        }
-
-        // Touch handling on outer scroller
-        scroller.addEventListener('touchstart', function(e) {
-            const carousel = e.target.closest('.carousel');
-            if (carousel) {
-                isInteractingWithCarousel = true;
-            } else {
-                isInteractingWithCarousel = false;
-            }
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            startScrollLeft = scroller.scrollLeft;
-        }, { passive: true });
-        
-        scroller.addEventListener('touchmove', function(e) {
-            if (isInteractingWithCarousel) {
+            scroller.addEventListener('touchmove', function(e) {
+                if (!isInteractingWithCarousel) return;
                 const currentX = e.touches[0].clientX;
                 const currentY = e.touches[0].clientY;
                 const diffX = Math.abs(currentX - startX);
@@ -1723,1417 +1644,56 @@ document.addEventListener('DOMContentLoaded', function() {
                     e.preventDefault();
                     e.stopPropagation();
                 }
-            }
-        }, { passive: false });
-        
-        scroller.addEventListener('touchend', function() {
-            // Don't snap to nearest to avoid jerky behavior
-            isInteractingWithCarousel = false;
-            startX = 0;
-            startY = 0;
-            startScrollLeft = 0;
-        }, { passive: true });
-        
-        // Wheel handling: snap shortly after user stops scrolling
-        let wheelSnapTimer = null;
-        scroller.addEventListener('wheel', function() {
-            const isDesktopSection = scroller.closest('section.onlineStore:not(.watch)') || scroller.closest('section.watch');
-            if (!isDesktopSection) return;
-            if (wheelSnapTimer) clearTimeout(wheelSnapTimer);
-            wheelSnapTimer = setTimeout(() => {
-                snapToNearest();
-            }, 120);
-        }, { passive: true });
-        
-        // Dot clicks using the same native smooth scroll as arrows
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', function() {
-                // Set flag to prevent updateActiveDot from overriding
-                manualDotSelection = true;
-                // Clear all active states
-                dots.forEach((d) => d.classList.remove('active'));
-                // Set clicked dot as active
-                dot.classList.add('active');
-                // Scroll to the target
-                scrollToIndex(index);
-                // Reset flag after scroll completes
-                setTimeout(() => {
-                    manualDotSelection = false;
-                }, 500);
+            }, { passive: false });
+
+            scroller.addEventListener('touchend', function() {
+                isInteractingWithCarousel = false;
+                startX = 0;
+                startY = 0;
+            }, { passive: true });
+
+            let scrollRAF = null;
+            scroller.addEventListener('scroll', function() {
+                if (scrollRAF) cancelAnimationFrame(scrollRAF);
+                scrollRAF = requestAnimationFrame(() => {
+                    refreshScrollerUi();
+                    scrollRAF = null;
+                });
+            });
+
+            resetScrollerPosition();
+            refreshScrollerUi();
+
+            let resizeTimer = null;
+            window.addEventListener('resize', function() {
+                if (resizeTimer) clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    resetScrollerPosition();
+                    refreshScrollerUi();
+                }, 150);
+            });
+
+            window.addEventListener('load', function() {
+                resetScrollerPosition();
+                refreshScrollerUi();
             });
         });
-        
-        // Scroll updates for dots only (no snap)
-        let scrollRAF = null;
-        scroller.addEventListener('scroll', function() {
-            // Throttle with rAF for smooth active-dot updates
-            if (scrollRAF) cancelAnimationFrame(scrollRAF);
-            scrollRAF = requestAnimationFrame(() => {
-                updateActiveDot();
-                scrollRAF = null;
-            });
-        });
-        
-        // Initialize first indicator as active
-        // For desktop sections, ensure first dot is active on page load
-        const isDesktopJewellery = scroller.closest('section.onlineStore:not(.watch)');
-        const isDesktopWatches = scroller.closest('section.watch');
-        
-        if (isDesktopJewellery || isDesktopWatches) {
-            // Clear all active states first
-            dots.forEach((dot) => {
-                dot.classList.remove('active');
-            });
-            // Set first dot as active by default (represents 4th product)
-            if (dots.length > 0) {
-                dots[0].classList.add('active');
-            }
-        } else {
-            updateActiveDot();
-        }
     }
+
+    initializeArrowScroller('section.watch');
+    initializeArrowScroller('section.bespoke-collections');
     
-    // Initialize all sections
-    initializeScroller('.mobile-jewelry-section');
-    initializeScroller('.mobile-watches-section');
-    initializeScroller('section.onlineStore:not(.watch)'); // Desktop jewellery section (not watches)
-    initializeScroller('section.watch'); // Desktop watches section
-    
-    // Add desktop-specific CSS for single row layout and responsive banners
-    const desktopStyle = document.createElement('style');
-    desktopStyle.textContent = `
-        /* Responsive Main Banner Styles */
-        .main-banner-video {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            /* Ensure video maintains aspect ratio on all screen sizes */
-            min-width: 100%;
-            min-height: 100%;
-        }
-        
-        .main-banner-image {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            /* Ensure image maintains aspect ratio on all screen sizes */
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-        }
-        
-        .main-banner-content {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 24px;
-        }
-        
-        /* Ensure banner section maintains proper aspect ratio */
-        .sectionOne {
-            position: relative;
-            overflow: hidden;
-            /* Maintain 16:9 aspect ratio on larger screens */
-            aspect-ratio: 16/9;
-        }
-        
-        /* Override aspect ratio for smaller screens */
-        @media (max-width: 991.98px) {
-            .sectionOne {
-                aspect-ratio: unset;
-            }
-        }
-        
-        /* Responsive banner heights for different screen sizes */
-        .sectionOne {
-            min-height: 500px;
-        }
-        
-        /* Small screens (up to 576px) */
-        @media (max-width: 575.98px) {
-            .sectionOne {
-                min-height: 400px;
-            }
-            .main-banner-content {
-                padding: 16px;
-            }
-        }
-        
-        /* Medium screens (576px to 768px) */
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            .sectionOne {
-                min-height: 450px;
-            }
-        }
-        
-        /* Large screens (768px to 992px) */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            .sectionOne {
-                min-height: 500px;
-            }
-        }
-        
-        /* Extra large screens (992px to 1200px) */
-        @media (min-width: 992px) and (max-width: 1199.98px) {
-            .sectionOne {
-                min-height: 600px;
-            }
-        }
-        
-        /* XXL screens (1200px to 1366px) */
-        @media (min-width: 1200px) and (max-width: 1365.98px) {
-            .sectionOne {
-                min-height: 650px;
-            }
-        }
-        
-        /* Ultra-wide screens (1366px and above) */
-        @media (min-width: 1366px) {
-            .sectionOne {
-                min-height: 700px;
-            }
-            .main-banner-content {
-                padding: 32px;
-            }
-        }
-        
-        /* 4K and larger screens (1920px and above) */
-        @media (min-width: 1920px) {
-            .sectionOne {
-                min-height: 800px;
-            }
-            .main-banner-content {
-                padding: 40px;
-            }
-        }
-        
-        /* Desktop jewellery scroller - single row layout */
-        section.onlineStore .mobile-product-scroller {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            user-select: none; /* Prevent text selection during drag */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        section.onlineStore .mobile-product-scroller::-webkit-scrollbar {
-            display: none;
-        }
-        section.onlineStore .scroller-container {
-            display: flex;
-            gap: 10px;
-            padding: 0 0px;
-            width: max-content;
-        }
-        section.onlineStore .scroller-item {
-            flex: 0 0 300px;
-            max-width: 300px;
-            min-width: 300px;
-        }
-        
-        /* Responsive product card sizing */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            section.onlineStore .scroller-item {
-                flex: 0 0 320px;
-                max-width: 320px;
-                min-width: 320px;
-            }
-        }
-        
-        @media (min-width: 992px) and (max-width: 1199.98px) {
-            section.onlineStore .scroller-item {
-                flex: 0 0 340px;
-                max-width: 340px;
-                min-width: 340px;
-            }
-        }
-        
-        @media (min-width: 1200px) and (max-width: 1365.98px) {
-            section.onlineStore .scroller-item {
-                flex: 0 0 360px;
-                max-width: 360px;
-                min-width: 360px;
-            }
-        }
-        
-        @media (min-width: 1366px) {
-            section.onlineStore .scroller-item {
-                flex: 0 0 380px;
-                max-width: 380px;
-                min-width: 380px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            section.onlineStore .scroller-item {
-                flex: 0 0 400px;
-                max-width: 400px;
-                min-width: 400px;
-            }
-        }
-        section.onlineStore .scroller-item .card {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Desktop jewellery dots styling */
-        section.onlineStore:not(.watch) .scroller-dots {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        section.onlineStore:not(.watch) .dots-container {
-            display: flex;
-            gap: 8px;
-        }
-        section.onlineStore:not(.watch) .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        section.onlineStore:not(.watch) .dot.active {
-            background-color: #000 !important;
-        }
-        section.onlineStore:not(.watch) .dot:hover {
-            background-color: #666;
-        }
-        
-        /* Desktop watches scroller - same layout as jewellery */
-        section.watch .mobile-product-scroller {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            user-select: none; /* Prevent text selection during drag */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        section.watch .mobile-product-scroller::-webkit-scrollbar {
-            display: none;
-        }
-        section.watch .scroller-container {
-            display: flex;
-            gap: 10px;
-            padding: 0 0px;
-            width: max-content;
-        }
-        section.watch .scroller-item {
-            flex: 0 0 300px;
-            max-width: 300px;
-            min-width: 300px;
-        }
-        
-        /* Responsive watch card sizing */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            section.watch .scroller-item {
-                flex: 0 0 320px;
-                max-width: 320px;
-                min-width: 320px;
-            }
-        }
-        
-        @media (min-width: 992px) and (max-width: 1199.98px) {
-            section.watch .scroller-item {
-                flex: 0 0 340px;
-                max-width: 340px;
-                min-width: 340px;
-            }
-        }
-        
-        @media (min-width: 1200px) and (max-width: 1365.98px) {
-            section.watch .scroller-item {
-                flex: 0 0 360px;
-                max-width: 360px;
-                min-width: 360px;
-            }
-        }
-        
-        @media (min-width: 1366px) {
-            section.watch .scroller-item {
-                flex: 0 0 380px;
-                max-width: 380px;
-                min-width: 380px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            section.watch .scroller-item {
-                flex: 0 0 400px;
-                max-width: 400px;
-                min-width: 400px;
-            }
-        }
-        section.watch .scroller-item .card {
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* Desktop watches dots styling */
-        section.watch .scroller-dots {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        section.watch .dots-container {
-            display: flex;
-            gap: 8px;
-        }
-        section.watch .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        section.watch .dot.active {
-            background-color: #000 !important;
-        }
-        section.watch .dot:hover {
-            background-color: #666;
-        }
-        
-        /* Responsive brand logos section */
-        .brandLogo {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .brandLogo .col-md-3 {
-            flex: 0 0 auto;
-            max-width: 280px;
-        }
-        
-        .brandLogo img {
-            width: 100%;
-            height: auto;
-            max-height: 120px;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-        
-        .brandLogo img:hover {
-            transform: scale(1.05);
-        }
-        
-        /* Mobile: Force 2 items per row */
-        @media (max-width: 767.98px) {
-            .brandLogo .col-6 {
-                flex: 0 0 calc(50% - 0.5rem) !important;
-                max-width: calc(50% - 0.5rem) !important;
-                width: calc(50% - 0.5rem) !important;
-            }
-        }
-        
-        /* Responsive adjustments for brand logos */
-        @media (min-width: 1366px) {
-            .brandLogo .col-md-3 {
-                max-width: 320px;
-            }
-            .brandLogo img {
-                max-height: 140px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .brandLogo .col-md-3 {
-                max-width: 360px;
-            }
-            .brandLogo img {
-                max-height: 160px;
-            }
-        }
-        
-        /* Responsive international jewellery brands section */
-        .brands-section .container .row.g-3 {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .brands-section .container .row.g-3 .col-md-6 {
-            flex: 0 0 calc(50% - 0.5rem);
-            max-width: calc(50% - 0.5rem);
-        }
-        
-        /* Mobile: Full width for brand images */
-        @media (max-width: 767.98px) {
-            .brands-section .container .row.g-3 .col-md-6,
-            .brands-section .container .row.g-3 .col-12 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-        }
-        
-        .brands-section .container .row.g-3 img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-        
-        .brands-section .container .row.g-3 img:hover {
-            transform: scale(1.02);
-        }
-        
-        /* Responsive adjustments for jewellery brands */
-        @media (min-width: 1366px) {
-            .brands-section .container .row.g-3 .col-md-6 {
-                flex: 0 0 calc(50% - 1rem);
-                max-width: calc(50% - 1rem);
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .brands-section .container .row.g-3 .col-md-6 {
-                flex: 0 0 calc(50% - 1.5rem);
-                max-width: calc(50% - 1.5rem);
-            }
-        }
-        
-        /* Responsive Typography */
-        h2 {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: 200;
-            letter-spacing: 1px;
-            margin-bottom: 0rem;
-        }
-        
-        /* Small screens */
-        @media (max-width: 575.98px) {
-            h2 {
-                font-size: 1.35rem;
-                margin-bottom: 1.5rem;
-                margin-top: 30px;
-            }
-            .watch-brands-section h2 {
-                font-size: 1.5rem;
-            }
-            .mb-4 {
-                margin-bottom: -0.4rem !important;
-            }
-            .py-5 {
-                padding-top: 2rem !important;
-                padding-bottom: 2rem !important;
-            }
-        }
-        
-        /* Medium screens */
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            h2 {
-                font-size: 1.5rem;
-                margin-bottom: 1.75rem;
-            }
-        }
-        
-        /* Large screens */
-        @media (min-width: 768px) and (max-width: 991.98px) {
-            h2 {
-                font-size: 2rem;
-                margin-bottom: 0rem;
-            }
-        }
-        
-        /* Extra large screens */
-        @media (min-width: 992px) and (max-width: 1199.98px) {
-            h2 {
-                font-size: 2rem;
-                margin-bottom: 0rem;
-            }
-        }
-        
-        /* XXL screens */
-        @media (min-width: 1200px) and (max-width: 1365.98px) {
-            h2 {
-                   margin-bottom: 2.5rem;
-                margin-bottom: 0rem;
-            }
-        }
-        
-        /* Ultra-wide screens */
-        @media (min-width: 1366px) {
-            h2 {
-                font-size: 2.75rem;
-                margin-bottom: 0rem;
-            }
-            .py-5 {
-                padding-top: 4rem !important;
-                padding-bottom: 4rem !important;
-            }
-        }
-        
-        /* 4K and larger screens */
-        @media (min-width: 1920px) {
-            h2 {
-                font-size: 3rem;
-                margin-bottom: 3.5rem;
-            }
-            .py-5 {
-                padding-top: 5rem !important;
-                padding-bottom: 5rem !important;
-            }
-        }
-        
-        /* Responsive Product Cards */
-        .card {
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .card-title {
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            font-weight: 500;
-            line-height: 1.4;
-            margin-bottom: 0.75rem;
-        }
-        
-        .card-text {
-            font-size: clamp(0.85rem, 2vw, 1rem);
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .btn {
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        /* Responsive Container Padding */
-        .container {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-        
-        @media (min-width: 576px) {
-            .container {
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .container {
-                padding-left: 2rem;
-                padding-right: 2rem;
-            }
-        }
-        
-        @media (min-width: 992px) {
-            .container {
-                padding-left: 2.5rem;
-                padding-right: 2.5rem;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .container {
-                padding-left: 3rem;
-                padding-right: 3rem;
-            }
-        }
-        
-        @media (min-width: 1366px) {
-            .container {
-                padding-left: 4rem;
-                padding-right: 4rem;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .container {
-                padding-left: 5rem;
-                padding-right: 5rem;
-            }
-        }
-        
-        /* Responsive Section Spacing */
-        section {
-            margin-bottom: 0;
-        }
-        
-        @media (min-width: 1366px) {
-            // section {
-            //     margin-bottom: 1rem;
-            // }
-        }
-        
-        @media (min-width: 1920px) {
-            // section {
-            //     margin-bottom: 2rem;
-            // }
-        }
-        
-        /* Mobile Banner Responsive Improvements */
-        .mobile-banner-section {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            background-color: #000;
-        }
 
-        .mobile-banner-section::before {
-            content: "";
-            display: block;
-            padding-top: 140%;
-        }
-
-        @supports (aspect-ratio: 3 / 4) {
-            .mobile-banner-section {
-                aspect-ratio: 3 / 4;
-            }
-
-            .mobile-banner-section::before {
-                display: none;
-            }
-        }
-        
-        .mobile-banner-video {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            z-index: 0;
-        }
-        
-        .mobile-banner-content {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 16px;
-        }
-        
-        /* Responsive mobile banner aspect ratio adjustments */
-        @media (max-width: 375px) {
-            .mobile-banner-section::before {
-                padding-top: 150%;
-            }
-        }
-        
-        @media (min-width: 415px) and (max-width: 575px) {
-            .mobile-banner-section::before {
-                padding-top: 135%;
-            }
-            .mobile-banner-content {
-                padding: 20px;
-            }
-        }
-        
-        /* Responsive Button Improvements */
-        .btn-white {
-            background-color: rgba(255, 255, 255, 0.95);
-            color: #333;
-            border: 2px solid rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        
-        .btn-white:hover {
-            background-color: rgba(255, 255, 255, 1);
-            color: #000;
-            border-color: rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-        }
-        
-        /* Responsive Carousel Controls */
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 50px;
-            height: 50px;
-            background: none;
-            border: none;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-        
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            opacity: 1;
-            background: none;
-        }
-        
-        @media (min-width: 1366px) {
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 60px;
-                height: 60px;
-                background: none;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 70px;
-                height: 70px;
-                background: none;
-            }
-        }
-        
-        /* Mobile Product Scroller Responsive Improvements */
-        .mobile-product-scroller {
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .mobile-product-scroller::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .scroller-container {
-            display: flex;
-            gap: 15px;
-            padding: 0 10px;
-            width: max-content;
-        }
-        
-        .scroller-item {
-            flex: 0 0 280px;
-            max-width: 280px;
-            min-width: 280px;
-        }
-        
-        /* Responsive mobile scroller item sizing */
-        @media (max-width: 375px) {
-            .scroller-item {
-                flex: 0 0 250px;
-                max-width: 250px;
-                min-width: 250px;
-            }
-            .scroller-container {
-                gap: 10px;
-                padding: 0 5px;
-            }
-        }
-        
-        @media (min-width: 376px) and (max-width: 414px) {
-            .scroller-item {
-                flex: 0 0 260px;
-                max-width: 260px;
-                min-width: 260px;
-            }
-        }
-        
-        @media (min-width: 415px) and (max-width: 575px) {
-            .scroller-item {
-                flex: 0 0 270px;
-                max-width: 270px;
-                min-width: 270px;
-            }
-        }
-        
-        /* Responsive dots styling */
-        .scroller-dots {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .dots-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            margin-bottom:16px;
-        }
-        
-        .dots-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ccc;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            flex-shrink: 0;
-        }
-        
-        .dot.active {
-            background-color: #000 !important;
-        }
-        
-        .dot:hover {
-            background-color: #666;
-        }
-        
-        /* Responsive dot sizing */
-        @media (min-width: 768px) {
-            .dot {
-                width: 12px;
-                height: 12px;
-            }
-        }
-        
-        @media (min-width: 1366px) {
-            .dot {
-                width: 14px;
-                height: 14px;
-            }
-        }
-        
-        /* Comprehensive Section Responsiveness for 1366x768+ Screens */
-        
-        /* Jewellery Section Responsive Improvements */
-        .onlineStore {
-            padding: 1.5rem 0;
-        }
-        
-        @media (min-width: 1366px) {
-            .onlineStore {
-                padding: 1.5rem 0;
-            }
-            .onlineStore h2 {
-                 font-size: 2rem;
-                margin-bottom: 0rem;
-                letter-spacing: 2px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .onlineStore {
-                padding: 0.5rem 0;
-            }
-            .onlineStore h2 {
-                 font-size: 2rem;
-                margin-bottom: 1rem;
-                margin-top:1rem;
-                letter-spacing: 3px;
-            }
-        }
-        
-        /* Watch Carousel Section Responsive Improvements */
-        .carousel-section {
-            margin: 2rem 0;
-        }
-        
-        @media (min-width: 1366px) {
-            .carousel-section {
-                margin: 3rem 0;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .carousel-section {
-                margin: 4rem 0;
-            }
-        }
-        
-        /* Watches Section Responsive Improvements */
-        .watch {
-            padding: 3rem 0;
-        }
-        
-        @media (min-width: 1366px) {
-            .watch {
-                padding: 1.5rem 0;
-            }
-            .watch h2 {
-                font-size: 3rem;
-                margin-bottom: 3.5rem;
-                letter-spacing: 2px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .watch {
-                padding: 1.5rem 0;
-            }
-            .watch h2 {
-                font-size: 3.5rem;
-                margin-bottom: 4rem;
-                letter-spacing: 3px;
-            }
-        }
-        
-        /* International Brands Section Responsive Improvements */
-        .brands-section {
-            padding: 3rem 0;
-        }
-        
-        @media (min-width: 1366px) {
-            .brands-section {
-                padding: 4rem 0;
-            }
-            // .brands-section h2 {
-            //     font-size: 2.75rem;
-            //     margin-bottom: 3rem;
-            //     letter-spacing: 2px;
-            // }
-        }
-        
-        @media (min-width: 1920px) {
-            .brands-section {
-                padding: 5rem 0;
-            }
-            // .brands-section h2 {
-            //     font-size: 3.25rem;
-            //     margin-bottom: 3.5rem;
-            //     letter-spacing: 3px;
-            // }
-        }
-        
-        /* Watch Brands Section Responsive Improvements */
-        .watch-brands-section {
-            padding: 3rem 0;
-        }
-        
-        /* Base desktop/tablet styles */
-        .watch-brands-section h2 {
-            font-size: 1.75rem;
-            margin-bottom: 3rem;
-            letter-spacing: 1.5px;
-            font-weight: 200;
-        }
-        
-        @media (min-width: 300px) and (max-width: 540px) {
-            .watch-brands-section h2,
-            .watch-brands-heading {
-                font-size: 1.35rem;
-                line-height: 1.3;
-                margin-bottom: 1.25rem;
-                margin-top:70px;
-            }
-        }
-        
-        @media (min-width: 1366px) {
-            .watch-brands-section {
-                padding: 4rem 0;
-            }
-            .watch-brands-section h2 {
-                font-size: 2.2rem;
-                margin-bottom: 3rem;
-                letter-spacing: 2px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .watch-brands-section {
-                padding: 5rem 0;
-            }
-            .watch-brands-section h2 {
-                font-size: 1.75rem;
-                margin-bottom: 3.5rem;
-                letter-spacing: 3px;
-            }
-        }
-        
-        /* Enhanced Product Card Responsiveness for Larger Screens */
-        @media (min-width: 1366px) {
-            .card {
-                border-radius: 16px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-            }
-            
-            .card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 12px 35px rgba(0,0,0,0.2);
-            }
-            
-            .card-title {
-                font-size: 1.2rem;
-                margin-bottom: 1rem;
-            }
-            
-            .card-text {
-                font-size: 1.1rem;
-            }
-            
-            .btn {
-                font-size: 1rem;
-                padding: 0.75rem 1.5rem;
-                border-radius: 8px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .card {
-                border-radius: 20px;
-                box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-            }
-            
-            .card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 16px 45px rgba(0,0,0,0.25);
-            }
-            
-            .card-title {
-                font-size: 1.3rem;
-                margin-bottom: 1.25rem;
-            }
-            
-            .card-text {
-                font-size: 1.2rem;
-            }
-            
-            .btn {
-                font-size: 1.1rem;
-                padding: 0.875rem 1.75rem;
-                border-radius: 10px;
-            }
-        }
-        
-        /* Enhanced Scroller Responsiveness */
-        @media (min-width: 1366px) {
-            section.onlineStore .scroller-container,
-            section.watch .scroller-container {
-                gap: 20px;
-                padding: 0 20px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            section.onlineStore .scroller-container,
-            section.watch .scroller-container {
-                gap: 25px;
-                padding: 0 25px;
-            }
-        }
-        
-        /* Enhanced Dots Responsiveness */
-        @media (min-width: 1366px) {
-            .scroller-dots {
-                margin-top: 30px;
-            }
-            
-            .dots-container {
-                gap: 12px;
-            }
-            
-            .dot {
-                width: 16px;
-                height: 16px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .scroller-dots {
-                margin-top: 35px;
-            }
-            
-            .dots-container {
-                gap: 15px;
-            }
-            
-            .dot {
-                width: 18px;
-                height: 18px;
-            }
-        }
-        
-        /* Enhanced Brand Logo Responsiveness */
-        @media (min-width: 1366px) {
-            .brandLogo {
-                gap: 1.5rem;
-            }
-            
-            .brandLogo .col-md-3 {
-                max-width: 240px;
-            }
-            
-            .brandLogo img {
-                max-height: 100px;
-                border-radius: 8px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .brandLogo {
-                gap: 2rem;
-            }
-            
-            .brandLogo .col-md-3 {
-                max-width: 280px;
-            }
-            
-            .brandLogo img {
-                max-height: 120px;
-                border-radius: 10px;
-            }
-        }
-        
-        /* Enhanced International Brands Responsiveness */
-        @media (min-width: 1366px) {
-            .brands-section .container .row.g-3 {
-                gap: 1.5rem;
-            }
-            
-            .brands-section .container .row.g-3 .col-md-6 {
-                flex: 0 0 calc(50% - 0.75rem);
-                max-width: calc(50% - 0.75rem);
-            }
-            
-            .brands-section .container .row.g-3 img {
-                border-radius: 12px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .brands-section .container .row.g-3 {
-                gap: 2rem;
-            }
-            
-            .brands-section .container .row.g-3 .col-md-6 {
-                flex: 0 0 calc(50% - 1rem);
-                max-width: calc(50% - 1rem);
-            }
-            
-            .brands-section .container .row.g-3 img {
-                border-radius: 16px;
-            }
-        }
-        
-        /* Enhanced Button Responsiveness */
-        @media (min-width: 1366px) {
-            .btn-white {
-                font-size: 1.1rem;
-                padding: 0.875rem 2rem;
-                letter-spacing: 1px;
-                border-radius: 8px;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .btn-white {
-                font-size: 1.2rem;
-                padding: 1rem 2.25rem;
-                letter-spacing: 1.5px;
-                border-radius: 10px;
-            }
-        }
-        
-        /* Enhanced Carousel Control Responsiveness */
-        @media (min-width: 1366px) {
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 65px;
-                height: 65px;
-                background: none;
-            }
-        }
-        
-        @media (min-width: 1920px) {
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 75px;
-                height: 75px;
-                background: none;
-            }
-        }
-        
-        /* Remove all carousel backgrounds */
-        .carousel-control-prev,
-        .carousel-control-next {
-            background: none !important;
-            background-color: transparent !important;
-            border: none !important;
-        }
-        
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            background: none !important;
-            background-color: transparent !important;
-        }
-        
-        .carousel-control-prev:focus,
-        .carousel-control-next:focus {
-            background: none !important;
-            background-color: transparent !important;
-        }
-        
-        .carousel-control-prev:active,
-        .carousel-control-next:active {
-            background: none !important;
-            background-color: transparent !important;
-        }
-        
-        /* Remove carousel inner backgrounds */
-        .carousel-inner {
-            background: none !important;
-        }
-        
-        .carousel-item {
-            background: none !important;
-        }
-        
-        /* Remove any Bootstrap carousel backgrounds */
-        .carousel {
-            background: none !important;
-        }
-    `;
-    document.head.appendChild(desktopStyle);
-
-    // Slow down homepage banner carousel (between Jewellery and Watches)
+    // Brand banner carousel (single init — no duplicate data-bs-* on HTML)
     const carouselEl = document.getElementById('carouselExampleRide');
     if (carouselEl && window.bootstrap && bootstrap.Carousel) {
-        bootstrap.Carousel.getOrCreateInstance(carouselEl, {
-            interval: 7000, // slower auto-advance (7s)
+        new bootstrap.Carousel(carouselEl, {
+            interval: 5000,
             ride: 'carousel',
             wrap: true,
-            pause: 'hover',
+            pause: false,
             keyboard: false
         });
-        // Soften the fade transition
-        const style = document.createElement('style');
-        style.textContent = `
-            /* Responsive desktop carousel height */
-            #carouselExampleRide {
-                height: clamp(700px, 65vh, 820px);
-            }
-            
-            /* Small screens (up to 576px) */
-            @media (max-width: 575.98px) {
-                #carouselExampleRide { height: clamp(300px, 50vh, 400px); }
-            }
-            
-            /* Medium screens (576px to 768px) */
-            @media (min-width: 576px) and (max-width: 767.98px) {
-                #carouselExampleRide { height: clamp(350px, 55vh, 500px); }
-            }
-            
-            /* Large screens (768px to 992px) */
-            @media (min-width: 768px) and (max-width: 991.98px) {
-                #carouselExampleRide { height: clamp(400px, 60vh, 600px); }
-            }
-            
-            /* Extra large screens (992px to 1200px) */
-            @media (min-width: 992px) and (max-width: 1199.98px) {
-                #carouselExampleRide { height: clamp(500px, 65vh, 700px); }
-            }
-            
-            /* XXL screens (1200px to 1366px) */
-            @media (min-width: 1200px) and (max-width: 1365.98px) {
-                #carouselExampleRide { height: clamp(600px, 70vh, 800px); }
-            }
-            
-            /* Ultra-wide screens (1366px and above) */
-            @media (min-width: 1366px) {
-                #carouselExampleRide { height: clamp(700px, 75vh, 900px); }
-            }
-            
-            /* 4K and larger screens (1920px and above) */
-            @media (min-width: 1920px) {
-                #carouselExampleRide { height: clamp(800px, 80vh, 1000px); }
-            }
-            
-            #carouselExampleRide .carousel-inner,
-            #carouselExampleRide .carousel-item {
-                height: 100%;
-            }
-            #carouselExampleRide .carousel-item img {
-                height: 100%;
-                object-fit: cover;
-            }
-            #carouselExampleRide.carousel.carousel-fade .carousel-item {
-                transition: opacity 1.5s ease-in-out !important;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // Initialize mobile banner carousel with same slow timing
-    const mobileCarouselEl = document.getElementById('carouselMobileBanner');
-    if (mobileCarouselEl && window.bootstrap && bootstrap.Carousel) {
-        bootstrap.Carousel.getOrCreateInstance(mobileCarouselEl, {
-            interval: 7000, // slower auto-advance (7s)
-            ride: 'carousel',
-            wrap: true,
-            pause: 'hover',
-            keyboard: false
-        });
-        // Soften the fade transition for mobile
-        const mobileStyle = document.createElement('style');
-        mobileStyle.textContent = `
-            /* Mobile carousel: show full image to keep all text visible */
-            #carouselMobileBanner {
-                height: auto;
-            }
-            #carouselMobileBanner .carousel-inner,
-            #carouselMobileBanner .carousel-item {
-                height: auto;
-            }
-            #carouselMobileBanner .carousel-item img {
-                width: 100%;
-                height: auto;
-                object-fit: contain; /* ensure no cropping of text in images */
-                background: none; /* remove background */
-                display: block;
-            }
-            
-            /* Small devices: add some vertical breathing room */
-            @media (max-width: 575.98px) {
-                // #carouselMobileBanner { 
-                //     padding-top: 8px; 
-                //     padding-bottom: 8px; 
-                // }
-            }
-            
-            /* Medium devices: slightly more padding */
-            @media (min-width: 576px) and (max-width: 767.98px) {
-                #carouselMobileBanner { 
-                    padding-top: 12px; 
-                    padding-bottom: 12px; 
-                }
-            }
-            
-            #carouselMobileBanner.carousel.carousel-fade .carousel-item {
-                transition: opacity 1.5s ease-in-out !important;
-            }
-        `;
-        document.head.appendChild(mobileStyle);
     }
 });
 </script>
