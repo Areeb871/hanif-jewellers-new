@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 @php
     use Illuminate\Support\Facades\File;
 @endphp

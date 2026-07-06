@@ -1219,7 +1219,7 @@ public function Online_Shopping_Store(Request $request)
 
     // Default page: featured collections only (backend-only; not tied to filter buttons).
     if ($activeTags === '' && $useDefaults) {
-        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht';
+        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
     }
 
     // Featured collections: subcategory slugs (primary) + tag aliases (fallback for ordering/filters).
@@ -1231,6 +1231,7 @@ public function Online_Shopping_Store(Request $request)
         ['ehed', 'love-engagement', 'love engagement'],
         ['selene'],
         ['hasht'],
+        
     ];
 
     $productBelongsToCollection = function ($product, array $aliases): bool {
@@ -4189,15 +4190,26 @@ public function ehedCollection(Request $request)
             $base = preg_replace('/\s+/', '-', $v);
 
             $candidates = [$base];
-            // Chronoswiss series synonyms
-            if (in_array($base, ['tourbillon'], true)) { $candidates = array_merge($candidates, ['tourbillon']); }
-            if (in_array($base, ['skeltec','skel-tec'], true)) { $candidates = array_merge($candidates, ['skeltec']); }
-            if (in_array($base, ['open-gear','open gear'], true)) { $candidates = array_merge($candidates, ['open-gear']); }
-            if (in_array($base, ['flying'], true)) { $candidates = array_merge($candidates, ['flying']); }
-            if (in_array($base, ['classic'], true)) { $candidates = array_merge($candidates, ['classic']); }
-            if (in_array($base, ['sirius'], true)) { $candidates = array_merge($candidates, ['sirius']); }
-            if (in_array($base, ['artist-collection','artist collection'], true)) { $candidates = array_merge($candidates, ['artist-collection']); }
-            if (in_array($base, ['heritage'], true)) { $candidates = array_merge($candidates, ['heritage']); }
+            // Chronoswiss series synonyms.
+            $seriesSynonyms = [
+                'pulse-one' => ['pulse-one', 'pulse one'],
+                'delphis' => ['delphis'],
+                'resec' => ['resec'],
+                'opus-chronograph' => ['opus-chronograph', 'opus chronograph'],
+                'srtike-two' => ['srtike-two', 'srtike two', 'strike-two', 'strike two'],
+                'strike-two' => ['strike-two', 'strike two', 'srtike-two', 'srtike two'],
+                'open-gear' => ['open-gear', 'open gear'],
+                'classic' => ['classic'],
+                'flying' => ['flying'],
+                'lunar' => ['lunar'],
+                'skeltec' => ['skeltec', 'skel-tec'],
+                'night-day' => ['night-day', 'night day', 'night & day'],
+                'small-second' => ['small-second', 'small second'],
+            ];
+
+            if (isset($seriesSynonyms[$base])) {
+                $candidates = array_merge($candidates, $seriesSynonyms[$base]);
+            }
 
             return array_unique($candidates);
         };

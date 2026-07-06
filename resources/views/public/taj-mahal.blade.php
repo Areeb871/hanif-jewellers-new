@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 
 @section('content')
 @if(isset($subcategory) && $subcategory->banner_url && Str::endsWith($subcategory->banner_url, ['.mp4', '.webm', '.ogg']))
