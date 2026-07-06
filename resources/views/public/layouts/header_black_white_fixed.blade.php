@@ -76,7 +76,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
 :root{
-  --bg:transparent;
+  --bg:#ffffff;
   --text:#000000;
   --border:#e5e5e5;
 
@@ -101,9 +101,8 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
 /* Spacer keeps page from jumping */
 .header-spacer{
-  display: none !important;
-  height: 0 !important;
-  background: transparent !important;
+  height: 0;              /* JS will set exact height */
+  background: var(--bg);
 }
 
 /* Cartier-like centered “shell” so left/logo/right stay together */
@@ -239,7 +238,7 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 
   .luxury-header,
   .luxury-header:hover{
-    background-color:transparent !important;
+    background-color:#ffffff !important;
   }
 
   /* Keep top-level header links transparent without forcing dropdown internals */
@@ -753,6 +752,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <!-- Include Mobile Header -->
     @include('public.partials.mobile-header')
+    <style>
+      @media (max-width: 991.98px) {
+        header.mobile-header-main {
+          position: fixed !important;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 10050;
+          background: #ffffff !important;
+          box-shadow: none !important;
+        }
+
+        header.mobile-header-main > .mobile-header-main {
+          background: #ffffff !important;
+        }
+      }
+    </style>
 <header class="luxury-header scrolled d-none d-lg-block">
   <div class="luxury-shell">
 
@@ -1187,8 +1203,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const mobileHeader = document.querySelector('header.mobile-header-main');
   const heroSelectors = [
     '[data-header-hero]',
-    '.tissot-home-hero',
-    '.tissot-video-hero',
     '.heroBanner',
     '.bovet-hero',
     '.chronoswiss-hero-media',

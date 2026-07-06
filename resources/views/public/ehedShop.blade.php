@@ -1,4 +1,4 @@
-@extends('public.layouts.header_black_without_border')
+@extends('public.layouts.header_black')
 
 @section('content')
  <!-- Desktop Video Banner (match gehnawa.blade structure) -->

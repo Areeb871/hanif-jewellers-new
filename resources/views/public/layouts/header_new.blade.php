@@ -445,6 +445,74 @@ body{ margin:0; font-family:'OptimaNovaLTPro, sans-serif'; background:#fff; }
 .luxury-header.scrolled .main-nav {
   margin-top: 0;
 }
+
+.luxury-header.hero-passed{
+  background: #ffffff !important;
+}
+
+.luxury-header.hero-passed .header-logo-img,
+.luxury-header.hero-passed .scroll-logo img{
+  filter: brightness(0) saturate(100%);
+}
+
+.luxury-header.hero-passed .nav-divider{
+  background: #000000 !important;
+}
+
+@media (min-width: 992px){
+  .luxury-header.hero-passed,
+  .luxury-header.hero-passed:hover{
+    background-color:#ffffff !important;
+  }
+
+  .luxury-header.hero-passed .header-left > a,
+  .luxury-header.hero-passed .header-left > a:hover,
+  .luxury-header.hero-passed .header-left > a:focus,
+  .luxury-header.hero-passed .header-left > a:active,
+  .luxury-header.hero-passed .header-left > a:visited,
+  .luxury-header.hero-passed .header-right > a,
+  .luxury-header.hero-passed .header-right > a:hover,
+  .luxury-header.hero-passed .header-right > a:focus,
+  .luxury-header.hero-passed .header-right > a:active,
+  .luxury-header.hero-passed .header-right > a:visited,
+  .luxury-header.hero-passed .main-nav > a,
+  .luxury-header.hero-passed .main-nav > a:hover,
+  .luxury-header.hero-passed .main-nav > a:focus,
+  .luxury-header.hero-passed .main-nav > a:active,
+  .luxury-header.hero-passed .main-nav > a:visited,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle:hover,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle:focus,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle:active,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle:visited,
+  .luxury-header.hero-passed .header-static-tools > a,
+  .luxury-header.hero-passed .header-static-tools > a:hover,
+  .luxury-header.hero-passed .header-static-tools > a:focus,
+  .luxury-header.hero-passed .header-static-tools > a:active,
+  .luxury-header.hero-passed .header-static-tools > a:visited,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a:hover,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a:focus,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a:active,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a:visited,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a:hover,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a:focus,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a:active,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a:visited{
+    color:#000000 !important;
+  }
+
+  .luxury-header.hero-passed .header-left > a i,
+  .luxury-header.hero-passed .header-right > a i,
+  .luxury-header.hero-passed .main-nav > a i,
+  .luxury-header.hero-passed .main-nav > .dropdown > .dropdown-toggle i,
+  .luxury-header.hero-passed .header-static-tools > a i,
+  .luxury-header.hero-passed .header-static-tools > .dropdown > a i,
+  .luxury-header.hero-passed .header-static-tools #cartHeader a i{
+    color:#000000 !important;
+  }
+}
 /* =========================
    FIX NAV OVERFLOW (IMPORTANT)
    dropdown was getting clipped
@@ -774,6 +842,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         header.mobile-header-main .mobile-menu-toggle .navbar-toggler-icon {
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.95%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+
+        header.mobile-header-main.hero-passed {
+          background: #ffffff !important;
+        }
+
+        header.mobile-header-main.hero-passed .mobile-logo {
+          filter: brightness(0) saturate(100%);
+        }
+
+        header.mobile-header-main.hero-passed .mobile-nav-icon {
+          color: #000000 !important;
+        }
+
+        header.mobile-header-main.hero-passed .mobile-menu-toggle .navbar-toggler-icon {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.95%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
         }
       }
     </style>
@@ -1203,6 +1287,62 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const desktopHeader = document.querySelector('.luxury-header');
+  const mobileHeader = document.querySelector('header.mobile-header-main');
+  const heroSelectors = [
+    '[data-header-hero]',
+    '.heroBanner',
+    '.bovet-hero',
+    '.chronoswiss-hero-media',
+    '.corum-hero-media',
+    '.fm-hero',
+    '.sectionOne',
+    '.rolex-carousel',
+    '.ehed-hero-section'
+  ];
+
+  function isVisible(el) {
+    const style = window.getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetHeight > 0;
+  }
+
+  function getHero() {
+    for (const selector of heroSelectors) {
+      const hero = Array.from(document.querySelectorAll(selector)).find(isVisible);
+      if (hero) return hero;
+    }
+
+    return Array.from(document.querySelectorAll('section')).find(isVisible);
+  }
+
+  function setHeaderAfterHero() {
+    const hero = getHero();
+    const activeHeader = window.innerWidth < 992 ? mobileHeader : desktopHeader;
+    const headerHeight = activeHeader ? activeHeader.offsetHeight : 0;
+    const isHeroPassed = hero ? hero.getBoundingClientRect().bottom <= headerHeight : window.scrollY > 80;
+
+    if (desktopHeader) desktopHeader.classList.toggle('hero-passed', isHeroPassed);
+    if (mobileHeader) mobileHeader.classList.toggle('hero-passed', isHeroPassed);
+  }
+
+  let ticking = false;
+  function requestHeaderUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      setHeaderAfterHero();
+      ticking = false;
+    });
+  }
+
+  setHeaderAfterHero();
+  window.addEventListener('scroll', requestHeaderUpdate, { passive: true });
+  window.addEventListener('resize', requestHeaderUpdate);
+  window.addEventListener('load', setHeaderAfterHero);
 });
 </script>
 <script>
