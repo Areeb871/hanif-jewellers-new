@@ -69,83 +69,43 @@
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
 }
 
-/* Mobile: fixed height box */
-@media (max-width: 767.98px) {
-  #carouselExampleRide {
-    padding: 0;
-    width: 100%;
-    height: clamp(720px, 92vh, 980px);
-    background: #000;
-    overflow: hidden;
-  }
-
-  #carouselExampleRide .carousel-inner {
-    height: 100%;
-    position: relative;
-  }
-
-  #carouselExampleRide.carousel.carousel-fade .carousel-item {
-    height: 100%;
-  }
-
-  #carouselExampleRide .hero-slide {
-    width: 100%;
-    height: 100%;
-    background: #000;
-  }
-
-  #carouselExampleRide .hero-slide picture {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  #carouselExampleRide .hero-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
+/* Banner scales with screen — no crop on any breakpoint */
+#carouselExampleRide {
+  padding: 0;
+  width: 100%;
+  height: auto;
+  background: #000;
+  overflow: hidden;
 }
 
-/* Tablet + desktop: banner scales with screen, no crop */
+#carouselExampleRide .carousel-inner,
+#carouselExampleRide .carousel-item,
+#carouselExampleRide .hero-slide,
+#carouselExampleRide .hero-slide picture {
+  height: auto;
+}
+
+#carouselExampleRide .carousel-inner {
+  position: relative;
+}
+
+#carouselExampleRide .hero-slide {
+  width: 100%;
+  background: #000;
+}
+
+#carouselExampleRide .hero-slide picture {
+  width: 100%;
+  display: block;
+}
+
+#carouselExampleRide .hero-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 @media (min-width: 768px) {
-  #carouselExampleRide {
-    padding: 0;
-    width: 100%;
-    height: auto;
-    background: #000;
-    overflow: hidden;
-  }
-
-  #carouselExampleRide .carousel-inner,
-  #carouselExampleRide .carousel-item,
-  #carouselExampleRide .hero-slide,
-  #carouselExampleRide .hero-slide picture {
-    height: auto;
-  }
-
-  #carouselExampleRide .carousel-inner {
-    position: relative;
-  }
-
-  #carouselExampleRide .hero-slide {
-    width: 100%;
-    background: #000;
-  }
-
-  #carouselExampleRide .hero-slide picture {
-    width: 100%;
-    display: block;
-  }
-
-  #carouselExampleRide .hero-slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
   section.bespoke-collections.d-none.d-md-block {
     margin-top: 0 !important;
     padding-top: 0 !important;
