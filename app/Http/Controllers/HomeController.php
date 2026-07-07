@@ -598,65 +598,95 @@ public function valentine(Request $request)
 
 }
 
-  public function index()
-    {
-        try {
-            if (isset(Auth::user()->id)) {
-                return redirect()->intended('/admin/dashboard');
-            } 
-            else {
-                $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
-                $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
-                $products_new = Products::with('category', 'subcategory')
-                    ->where([
-                        ['status', 'published'],
-                        ['subcategory_id', 49]
-                    ])->get();
-// Number of products per category
-$perCategory = 5;
+public function index()
+{
+    try {
+        if (Auth::check()) {
+            return redirect()->intended('/admin/dashboard');
+        }
 
-// Get random Jewellery
-$jewellery = Products::with(['category', 'subcategory', 'images'])
-    ->where('status', 'published')
-    ->where('is_featured', 1)
-    ->where('subcategory_id', 43)   // Jewellery
-    ->take($perCategory)
-    ->get();
+        // Jewellery categories
+        $categories = Categories::with('subcategories')
+            ->where('name', 'not like', '%watch%')
+            ->get();
 
-// Get random Watches
-$watches = Products::with(['category', 'subcategory', 'images'])
-    ->where('status', 'published')
-    ->where('is_featured', 1)
-    ->where('category_id', 3)
-    ->whereIn('subcategory_id', [32, 33, 37,34,35])
-    ->take($perCategory)
-    ->get();
+        // Watch categories
+        $watchCategories = Categories::with('subcategories')
+            ->where('name', 'like', '%watch%')
+            ->get();
 
-// Interleave: Jewellery, Watch, Jewellery, Watch...
-$products = collect();
-$max = max($jewellery->count(), $watches->count());
+        // Products for specific homepage section
+        $products_new = Products::with('category', 'subcategory')
+            ->where([
+                ['status', 'published'],
+                ['subcategory_id', 54]
+            ])
+            ->get();
 
-for ($i = 0; $i < $max; $i++) {
-    if (isset($jewellery[$i])) {
-        $products->push($jewellery[$i]);
-    }
-    if (isset($watches[$i])) {
-        $products->push($watches[$i]);
+        // Number of products per category
+        $perCategory = 5;
+
+        // Get any featured jewellery
+        // category_id != 3 means exclude watches
+        $jewellery = Products::with(['category', 'subcategory', 'images'])
+            ->where('status', 'published')
+            ->where('is_featured', 1)
+            ->where('category_id', '!=', 3)
+            ->inRandomOrder()
+            ->take($perCategory)
+            ->get();
+
+        // Get featured watches for mixed homepage section
+        $mixedWatches = Products::with(['category', 'subcategory', 'images'])
+            ->where('status', 'published')
+            ->where('is_featured', 1)
+            ->where('category_id', 3)
+            ->whereIn('subcategory_id', [32, 33, 34, 35, 37])
+            ->inRandomOrder()
+            ->take($perCategory)
+            ->get();
+
+        // Interleave: Jewellery, Watch, Jewellery, Watch...
+        $products = collect();
+        $max = max($jewellery->count(), $mixedWatches->count());
+
+        for ($i = 0; $i < $max; $i++) {
+            if (isset($jewellery[$i])) {
+                $products->push($jewellery[$i]);
+            }
+
+            if (isset($mixedWatches[$i])) {
+                $products->push($mixedWatches[$i]);
+            }
+        }
+
+        // Reset collection keys
+        $products = $products->values();
+
+        // All featured watches for watches section
+        $watches = Products::with('category', 'subcategory')
+            ->where([
+                ['status', 'published'],
+                ['is_featured', 1],
+                ['category_id', 3]
+            ])
+            ->get();
+
+        return view('public.index', compact(
+            'categories',
+            'products',
+            'watchCategories',
+            'watches',
+            'products_new'
+        ));
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            'message' => 'SOMETHING WENT WRONG',
+            'error' => $th->getMessage()
+        ], 500);
     }
 }
-$products = $products->values(); // reset keys
-                $watches = Products::with('category', 'subcategory')
-                    ->where([
-                        ['status', 'published'],
-                        ['is_featured', '1'],
-                        ['category_id', 3]
-                    ])->get();
-                return view('public.index', compact('categories', 'products', 'watchCategories','watches','products_new'));
-            }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'SOMETHING WENT WRONG', 'error' => $th->getMessage()], 500);
-        }
-    }
     
 // public function Online_Shopping_Store(Request $request)
 // {
