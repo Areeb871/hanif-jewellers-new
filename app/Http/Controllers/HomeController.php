@@ -615,11 +615,11 @@ public function index()
             ->where('name', 'like', '%watch%')
             ->get();
 
-        // Products for specific homepage section
+        // New products section
         $products_new = Products::with('category', 'subcategory')
             ->where([
                 ['status', 'published'],
-                ['subcategory_id', 54]
+                ['subcategory_id', 49]
             ])
             ->get();
 
@@ -627,7 +627,7 @@ public function index()
         $perCategory = 5;
 
         // Get any featured jewellery
-        // category_id != 3 means exclude watches
+        // category_id != 3 means watches will be excluded
         $jewellery = Products::with(['category', 'subcategory', 'images'])
             ->where('status', 'published')
             ->where('is_featured', 1)
@@ -636,7 +636,7 @@ public function index()
             ->take($perCategory)
             ->get();
 
-        // Get featured watches for mixed homepage section
+        // Get featured watches for mixed products section
         $mixedWatches = Products::with(['category', 'subcategory', 'images'])
             ->where('status', 'published')
             ->where('is_featured', 1)
@@ -646,7 +646,7 @@ public function index()
             ->take($perCategory)
             ->get();
 
-        // Interleave: Jewellery, Watch, Jewellery, Watch...
+        // Interleave: Jewellery, Watch, Jewellery, Watch
         $products = collect();
         $max = max($jewellery->count(), $mixedWatches->count());
 
@@ -660,10 +660,10 @@ public function index()
             }
         }
 
-        // Reset collection keys
+        // Reset keys
         $products = $products->values();
 
-        // All featured watches for watches section
+        // All featured watches section
         $watches = Products::with('category', 'subcategory')
             ->where([
                 ['status', 'published'],
