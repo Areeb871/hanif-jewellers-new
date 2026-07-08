@@ -315,6 +315,9 @@
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
         </div>
+        <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;">
+        All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
+      </p>
     @endif
 </div>
                         {{-- Size Selector --}}
@@ -421,7 +424,7 @@
                         <div class="cta-buttons">
                             @if($canShowPrice)
                                 {{-- First Row - Add to Cart and Buy Now --}}
-                                <div class="row g-2 mb-3">
+                                <!-- <div class="row g-2 mb-3">
                                     <div class="col-6">
                                         <button type="button" class="btn btn-dark w-100 py-2" onclick="addToCart()" 
                                                 style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
@@ -434,7 +437,7 @@
                                             BUY NOW
                                         </button>
                                     </div>
-                                </div>
+                                </div> -->
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
                                     <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 

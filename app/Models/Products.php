@@ -9,7 +9,7 @@ use App\Services\DiamondPriceCalculator;
 class Products extends Model
 {
     protected $table = 'products';
-    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_latest', 'show_price'];
+    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'gold_weight', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_latest', 'show_price'];
     protected $hidden = ['created_at', 'updated_at'];
     // public function getPriceAttribute($value)
     // {
@@ -60,7 +60,8 @@ class Products extends Model
         if ($this->shouldUseDiamondPricing()) {
             $diamond = DiamondPriceCalculator::calculateFromDescription(
                 $description ?? '',
-                (float) ($this->diamond_price ?? 0)
+                (float) ($this->diamond_price ?? 0),
+                filled($this->gold_weight) ? (float) $this->gold_weight : null
             );
             if ($diamond !== null) {
                 return $diamond;
@@ -69,7 +70,10 @@ class Products extends Model
             return (float) ($this->attributes['price'] ?? 0);
         }
 
-        $calculated = GoldPriceCalculator::calculateFromDescription($description ?? '');
+        $calculated = GoldPriceCalculator::calculateFromDescription(
+            $description ?? '',
+            filled($this->gold_weight) ? (float) $this->gold_weight : null
+        );
 
         if ($calculated !== null) {
             return $calculated;

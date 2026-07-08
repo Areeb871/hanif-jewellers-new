@@ -372,6 +372,10 @@
                 PKR {{ number_format($product->price, 0, '.', ',') }}
             </p>
         @endif -->
+
+<!-- Commented the price for data entry -->
+ 
+ <!-- <p class="card-text">
 @php
     $roundedPrice = round($livePrice, -3);
 @endphp
@@ -381,6 +385,8 @@
         PKR {{ number_format($roundedPrice, 0, '.', ',') }}
     </p>
 @endif
+
+        </p>  -->
    
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))

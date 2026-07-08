@@ -13,7 +13,7 @@ class GoldPriceCalculator
     private const MARKUP_PERCENT = 4;
     private const USE_DB_VAT_INSTEAD_OF_4_PERCENT = true;
 
-    public static function calculateFromDescription(?string $description): ?float
+    public static function calculateFromDescription(?string $description, ?float $goldWeight = null): ?float
     {
         if (!$description) {
             Log::warning('GoldPriceCalculator: empty description');
@@ -28,7 +28,6 @@ class GoldPriceCalculator
             'normalized' => $description,
         ]);
 
-        // ✅ KARAT (from Metal line or anywhere)
         $karat = self::detectKarat($description);
         if (!$karat) {
             Log::warning('GoldPriceCalculator: karat not found', ['description' => $description]);
@@ -36,22 +35,12 @@ class GoldPriceCalculator
         }
         Log::info('GoldPriceCalculator: karat detected', ['karat' => $karat]);
 
-        // ✅ WEIGHT (Gross Weight supported)
-        if (!preg_match(
-            '/(?:gross\s*weight|net\s*weight|weight)?\s*:?[\s]*([\d]+(?:\.\d+)?)\s*(g|gram|grams)\b/i',
-            $description,
-            $weightMatch
-        )) {
-            Log::warning('GoldPriceCalculator: weight not found', ['description' => $description]);
-            return null;
-        }
-
-        $grams = (float) $weightMatch[1];
+        $grams = (float) ($goldWeight ?? 0);
         if ($grams <= 0) {
-            Log::warning('GoldPriceCalculator: invalid grams', ['grams' => $grams]);
+            Log::warning('GoldPriceCalculator: gold weight not set', ['grams' => $grams]);
             return null;
         }
-        Log::info('GoldPriceCalculator: weight detected', ['grams' => $grams]);
+        Log::info('GoldPriceCalculator: weight from admin', ['grams' => $grams]);
 
         // ✅ METAL COLOR ONLY (rose/white/yellow)
         $metalColor = self::detectMetalColor($description);

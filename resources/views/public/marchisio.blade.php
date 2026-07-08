@@ -5,6 +5,7 @@
 html, body{
     margin: 0;
     padding: 0;
+    overflow-x: clip;
 }
 
 /* =========================
@@ -65,27 +66,121 @@ html, body{
     padding: 40px;
     margin: 0;
     line-height: 1.8;
+    color: #222;
 }
 
 .app-btn{
-    padding: 6px 16px !important;
+    padding: 8px 18px !important;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    letter-spacing: 0.06em;
+    white-space: normal;
+    line-height: 1.35;
+}
+
+#ehadImageSliderDesktop,
+#ehadImageSliderMobileTop,
+#ehadBottomSliderDesktop,
+#ehadBottomSliderMobile{
+    overflow: hidden;
+}
+
+#ehadImageSliderDesktop img,
+#ehadImageSliderMobileTop img,
+#ehadBottomSliderDesktop img,
+#ehadBottomSliderMobile img{
+    display: block;
+}
+
+#ehadImageSliderDesktop .carousel-control-prev,
+#ehadImageSliderDesktop .carousel-control-next,
+#ehadImageSliderMobileTop .carousel-control-prev,
+#ehadImageSliderMobileTop .carousel-control-next,
+#ehadBottomSliderDesktop .carousel-control-prev,
+#ehadBottomSliderDesktop .carousel-control-next,
+#ehadBottomSliderMobile .carousel-control-prev,
+#ehadBottomSliderMobile .carousel-control-next{
+    width: 12%;
+    opacity: 1;
+}
+
+#ehadImageSliderDesktop .carousel-control-prev-icon,
+#ehadImageSliderDesktop .carousel-control-next-icon,
+#ehadImageSliderMobileTop .carousel-control-prev-icon,
+#ehadImageSliderMobileTop .carousel-control-next-icon,
+#ehadBottomSliderDesktop .carousel-control-prev-icon,
+#ehadBottomSliderDesktop .carousel-control-next-icon,
+#ehadBottomSliderMobile .carousel-control-prev-icon,
+#ehadBottomSliderMobile .carousel-control-next-icon{
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.38);
+    background-size: 42% 42%;
 }
 
 @media (max-width: 767.98px){
+    .heroMedia{
+        min-height: 220px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .midBannerMobile{
+        width: calc(100% + 24px);
+        margin-left: -12px;
+        margin-right: -12px;
+    }
+
     .collection-text p{
-        padding: 20px 15px;
+        padding: 18px 8px 10px;
         font-size: 15px;
-        line-height: 1.7;
+        line-height: 1.75;
     }
 
     .mobile-space{
-        margin-top: 25px;
+        margin-top: 18px;
     }
 
     .mobile-btn-wrap{
         text-align: center;
-        margin-top: 25px;
-        margin-bottom: 20px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .app-btn{
+        width: min(100%, 280px);
+        padding: 10px 18px !important;
+        font-size: 13px;
+    }
+
+    #ehadImageSliderMobileTop,
+    #ehadBottomSliderMobile{
+        border-radius: 14px;
+    }
+
+    #ehadImageSliderMobileTop .carousel-control-prev,
+    #ehadImageSliderMobileTop .carousel-control-next,
+    #ehadBottomSliderMobile .carousel-control-prev,
+    #ehadBottomSliderMobile .carousel-control-next{
+        width: 18%;
+    }
+
+    #ehadImageSliderMobileTop .carousel-control-prev-icon,
+    #ehadImageSliderMobileTop .carousel-control-next-icon,
+    #ehadBottomSliderMobile .carousel-control-prev-icon,
+    #ehadBottomSliderMobile .carousel-control-next-icon{
+        width: 34px;
+        height: 34px;
+        background-color: rgba(0, 0, 0, 0.46);
+    }
+
+    .productSwiper{
+        padding-top: 28px;
+        padding-bottom: 28px;
     }
 }
 </style>
