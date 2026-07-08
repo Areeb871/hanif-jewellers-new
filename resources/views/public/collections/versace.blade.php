@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_black_without_border')
 
 @section('content')
     @if(isset($versaceSubcategory) && $versaceSubcategory && $versaceSubcategory->banner_url)

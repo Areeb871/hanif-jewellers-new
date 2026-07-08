@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 
 @section('content')
     @if(isset($grahamSubcategory) && $grahamSubcategory && $grahamSubcategory->banner_url)

@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}?v={{ filemtime(public_path('assets/f_assets/css/details.css')) }}">

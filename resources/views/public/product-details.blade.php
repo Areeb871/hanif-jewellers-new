@@ -167,7 +167,9 @@
 @if(
     optional($product->subcategory)->slug === 'favre-leuba' ||
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
-        optional($product->subcategory)->slug === 'maurice-lacroix'
+        optional($product->subcategory)->slug === 'maurice-lacroix'||
+                optional($product->subcategory)->slug === 'chronoswiss'
+
 
 )
         <h5 class="card-title product-name-fixed pb-5 pb-md-0"style="margin-bottom: 18px;margin-top:33px;">

@@ -1,5 +1,5 @@
 {{-- resources/views/public/haphazard.blade.php --}}
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 
 @section('content')
 @php

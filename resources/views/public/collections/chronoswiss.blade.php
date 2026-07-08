@@ -466,9 +466,24 @@ padding:2px 15px 0;
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('chronoswissSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="chronoswissSeriesList">
-                    @php $series = ['tourbillon','skeltec','open-gear','flying','classic','sirius','artist-collection','heritage']; @endphp
-                    @foreach($series as $s)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox chronoswiss-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
+                    @php
+                        $series = [
+                            'pulse-one' => 'Pulse One',
+                            'delphis' => 'Delphis',
+                            'resec' => 'Resec',
+                            'opus-chronograph' => 'Opus Chronograph',
+                            'srtike-two' => 'Srtike Two',
+                            'open-gear' => 'Open Gear',
+                            'classic' => 'Classic',
+                            'flying' => 'Flying',
+                            'lunar' => 'Lunar',
+                            'skeltec' => 'Skeltec',
+                            'night-day' => 'Night & Day',
+                            'small-second' => 'Small Second',
+                        ];
+                    @endphp
+                    @foreach($series as $value => $label)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox chronoswiss-filter" data-group="series" value="{{ $value }}" {{ $selectedTags->contains($value) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $label }}</span></li>
                     @endforeach
                 </ul>
             </div>

@@ -525,9 +525,8 @@ footer h4 {
 
 })();
 </script>
-<a href="javascript:void(0)" class="hanif-whatsapp-btn" id="openHanifPopup" aria-label="Open Contact Popup">
+<!-- <a href="javascript:void(0)" class="hanif-whatsapp-btn" id="openHanifPopup" aria-label="Open Contact Popup">
   
-    <!-- CLOSE X -->
     <span class="hanif-close-btn" id="hideHanifBtn">×</span>
      <svg class="hanif-bubble-shape" viewBox="0 0 64 64" aria-hidden="true">
         <path d="M32 6
@@ -547,7 +546,7 @@ footer h4 {
 
 
     <img src="{{ asset('assets/f_assets/image/emb1.png') }}" alt="HANIF Logo" class="hanif-inner-logo">
-</a>
+</a> -->
 
 <style>
 .hanif-close-btn{

@@ -598,65 +598,95 @@ public function valentine(Request $request)
 
 }
 
-  public function index()
-    {
-        try {
-            if (isset(Auth::user()->id)) {
-                return redirect()->intended('/admin/dashboard');
-            } 
-            else {
-                $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
-                $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
-                $products_new = Products::with('category', 'subcategory')
-                    ->where([
-                        ['status', 'published'],
-                        ['subcategory_id', 49]
-                    ])->get();
-// Number of products per category
-$perCategory = 5;
+public function index()
+{
+    try {
+        if (Auth::check()) {
+            return redirect()->intended('/admin/dashboard');
+        }
 
-// Get random Jewellery
-$jewellery = Products::with(['category', 'subcategory', 'images'])
-    ->where('status', 'published')
-    ->where('is_featured', 1)
-    ->where('subcategory_id', 43)   // Jewellery
-    ->take($perCategory)
-    ->get();
+        // Jewellery categories
+        $categories = Categories::with('subcategories')
+            ->where('name', 'not like', '%watch%')
+            ->get();
 
-// Get random Watches
-$watches = Products::with(['category', 'subcategory', 'images'])
-    ->where('status', 'published')
-    ->where('is_featured', 1)
-    ->where('category_id', 3)
-    ->whereIn('subcategory_id', [32, 33, 37,34,35])
-    ->take($perCategory)
-    ->get();
+        // Watch categories
+        $watchCategories = Categories::with('subcategories')
+            ->where('name', 'like', '%watch%')
+            ->get();
 
-// Interleave: Jewellery, Watch, Jewellery, Watch...
-$products = collect();
-$max = max($jewellery->count(), $watches->count());
+        // New products section
+        $products_new = Products::with('category', 'subcategory')
+            ->where([
+                ['status', 'published'],
+                ['subcategory_id', 49]
+            ])
+            ->get();
 
-for ($i = 0; $i < $max; $i++) {
-    if (isset($jewellery[$i])) {
-        $products->push($jewellery[$i]);
-    }
-    if (isset($watches[$i])) {
-        $products->push($watches[$i]);
+        // Number of products per category
+        $perCategory = 5;
+
+        // Get any featured jewellery
+        // category_id != 3 means watches will be excluded
+        $jewellery = Products::with(['category', 'subcategory', 'images'])
+            ->where('status', 'published')
+            ->where('is_featured', 1)
+            ->where('category_id', '!=', 3)
+            ->inRandomOrder()
+            ->take($perCategory)
+            ->get();
+
+        // Get featured watches for mixed products section
+        $mixedWatches = Products::with(['category', 'subcategory', 'images'])
+            ->where('status', 'published')
+            ->where('is_featured', 1)
+            ->where('category_id', 3)
+            ->whereIn('subcategory_id', [32, 33, 34, 35, 37])
+            ->inRandomOrder()
+            ->take($perCategory)
+            ->get();
+
+        // Interleave: Jewellery, Watch, Jewellery, Watch
+        $products = collect();
+        $max = max($jewellery->count(), $mixedWatches->count());
+
+        for ($i = 0; $i < $max; $i++) {
+            if (isset($jewellery[$i])) {
+                $products->push($jewellery[$i]);
+            }
+
+            if (isset($mixedWatches[$i])) {
+                $products->push($mixedWatches[$i]);
+            }
+        }
+
+        // Reset keys
+        $products = $products->values();
+
+        // All featured watches section
+        $watches = Products::with('category', 'subcategory')
+            ->where([
+                ['status', 'published'],
+                ['is_featured', 1],
+                ['category_id', 3]
+            ])
+            ->get();
+
+        return view('public.index', compact(
+            'categories',
+            'products',
+            'watchCategories',
+            'watches',
+            'products_new'
+        ));
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            'message' => 'SOMETHING WENT WRONG',
+            'error' => $th->getMessage()
+        ], 500);
     }
 }
-$products = $products->values(); // reset keys
-                $watches = Products::with('category', 'subcategory')
-                    ->where([
-                        ['status', 'published'],
-                        ['is_featured', '1'],
-                        ['category_id', 3]
-                    ])->get();
-                return view('public.index', compact('categories', 'products', 'watchCategories','watches','products_new'));
-            }
-        } catch (\Throwable $th) {
-            return response()->json(['message' => 'SOMETHING WENT WRONG', 'error' => $th->getMessage()], 500);
-        }
-    }
     
 // public function Online_Shopping_Store(Request $request)
 // {
@@ -1219,7 +1249,7 @@ public function Online_Shopping_Store(Request $request)
 
     // Default page: featured collections only (backend-only; not tied to filter buttons).
     if ($activeTags === '' && $useDefaults) {
-        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht';
+        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
     }
 
     // Featured collections: subcategory slugs (primary) + tag aliases (fallback for ordering/filters).
@@ -1231,6 +1261,7 @@ public function Online_Shopping_Store(Request $request)
         ['ehed', 'love-engagement', 'love engagement'],
         ['selene'],
         ['hasht'],
+        
     ];
 
     $productBelongsToCollection = function ($product, array $aliases): bool {
@@ -4189,15 +4220,26 @@ public function ehedCollection(Request $request)
             $base = preg_replace('/\s+/', '-', $v);
 
             $candidates = [$base];
-            // Chronoswiss series synonyms
-            if (in_array($base, ['tourbillon'], true)) { $candidates = array_merge($candidates, ['tourbillon']); }
-            if (in_array($base, ['skeltec','skel-tec'], true)) { $candidates = array_merge($candidates, ['skeltec']); }
-            if (in_array($base, ['open-gear','open gear'], true)) { $candidates = array_merge($candidates, ['open-gear']); }
-            if (in_array($base, ['flying'], true)) { $candidates = array_merge($candidates, ['flying']); }
-            if (in_array($base, ['classic'], true)) { $candidates = array_merge($candidates, ['classic']); }
-            if (in_array($base, ['sirius'], true)) { $candidates = array_merge($candidates, ['sirius']); }
-            if (in_array($base, ['artist-collection','artist collection'], true)) { $candidates = array_merge($candidates, ['artist-collection']); }
-            if (in_array($base, ['heritage'], true)) { $candidates = array_merge($candidates, ['heritage']); }
+            // Chronoswiss series synonyms.
+            $seriesSynonyms = [
+                'pulse-one' => ['pulse-one', 'pulse one'],
+                'delphis' => ['delphis'],
+                'resec' => ['resec'],
+                'opus-chronograph' => ['opus-chronograph', 'opus chronograph'],
+                'srtike-two' => ['srtike-two', 'srtike two', 'strike-two', 'strike two'],
+                'strike-two' => ['strike-two', 'strike two', 'srtike-two', 'srtike two'],
+                'open-gear' => ['open-gear', 'open gear'],
+                'classic' => ['classic'],
+                'flying' => ['flying'],
+                'lunar' => ['lunar'],
+                'skeltec' => ['skeltec', 'skel-tec'],
+                'night-day' => ['night-day', 'night day', 'night & day'],
+                'small-second' => ['small-second', 'small second'],
+            ];
+
+            if (isset($seriesSynonyms[$base])) {
+                $candidates = array_merge($candidates, $seriesSynonyms[$base]);
+            }
 
             return array_unique($candidates);
         };

@@ -1,4 +1,5 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
+
 @section('content')
 <style>
 .highend-page {
@@ -264,7 +265,7 @@
 }
 
 .infinite-content .highend-body {
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 1.95;
 }
 
@@ -363,6 +364,12 @@
         letter-spacing: 0.18em;
     }
 }
+.infinite-image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 </style>
 
 <div class="highend-page">
@@ -386,10 +393,10 @@
     <div class="polychroma-container">
 
         <div class="polychroma-header">
-            <span class="highend-eyebrow">Hanif High Jewellery</span>
-            <h2 class="highend-heading">Jewels of the Crown</h2>
+            <!-- <span class="highend-eyebrow">Hanif High Jewellery</span> -->
+            <h2 class="highend-heading">High Jewellery</h2>
             <p class="highend-body">
-                Behold the Jewel of the Crown—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon.
+                Designed as a modern interpretation of a crown, this exceptional high jewellery creation transforms the language of royalty into a necklace of extraordinary brilliance. Layer upon layer of diamonds rise with precision and grace, creating a silhouette that commands attention from every angle.
             </p>
         </div>
 
@@ -405,69 +412,50 @@
                 <div class="polychroma-slider-track" id="sliderTrack">
 
                     <div class="polychroma-item">
-                        <a href="{{ url('/collections/tawoos') }}">
+                        <a href="#">
                             <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/1.jpeg') }}" alt="Tawoos Collection">
+                                <img src="{{ asset('assets/f_assets/image/highend/1.png') }}" alt="Tawoos Collection">
                             </div>
-                            <h3>TAWOOS</h3>
+                            <!-- <h3>TAWOOS</h3> -->
                         </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <a href="{{ url('/collections/gohar') }}">
+                        <a href="#">
                             <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/2.jpeg') }}" alt="Gohar Collection">
+                                <img src="{{ asset('assets/f_assets/image/highend/2.png') }}" alt="Gohar Collection">
                             </div>
-                            <h3>GOHAR</h3>
+                            <!-- <h3>GOHAR</h3> -->
                         </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <a href="{{ url('/collections/gulposh') }}">
+                        <a href="#">
                             <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/3.jpeg') }}" alt="Gulposh Collection">
+                                <img src="{{ asset('assets/f_assets/image/highend/3.png') }}" alt="Gulposh Collection">
                             </div>
-                            <h3>GULPOSH</h3>
+                            <!-- <h3>GULPOSH</h3> -->
                         </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <a href="{{ url('/collections/misterio') }}">
+                        <a href="#">
                             <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/4.jpeg') }}" alt="Misterio Collection">
+                                <img src="{{ asset('assets/f_assets/image/highend/4.png') }}" alt="Misterio Collection">
                             </div>
-                            <h3>MISTERIO</h3>
+                            <!-- <h3>MISTERIO</h3> -->
                         </a>
                     </div>
 
                     <div class="polychroma-item">
-                        <a href="{{ url('/collections/nagar') }}">
+                        <a href="#">
                             <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/5.jpeg') }}" alt="Nagar Collection">
+                                <img src="{{ asset('assets/f_assets/image/highend/5.png') }}" alt="Nagar Collection">
                             </div>
-                            <h3>NAGAR</h3>
+                            <!-- <h3>NAGAR</h3> -->
                         </a>
                     </div>
-
-                    <div class="polychroma-item">
-                        <a href="{{ url('/highend-jewellery') }}#jewels-of-the-crown">
-                            <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/6.png') }}" alt="Jewels of the Crown">
-                            </div>
-                            <h3>JOC</h3>
-                        </a>
-                    </div>
-
-                    <div class="polychroma-item">
-                        <a href="{{ url('/collections/timeless-jewels') }}">
-                            <div class="image-box">
-                                <img src="{{ asset('assets/f_assets/image/highend/7.png') }}" alt="Timeless Blue Collection">
-                            </div>
-                            <h3>TIMELESS BLUE</h3>
-                        </a>
-                    </div>
-
-                </div>
+              </div>
             </div>
 
             <button type="button" class="arrow-btn right" id="sliderNext" aria-label="Next slide">
@@ -580,16 +568,18 @@ document.addEventListener('DOMContentLoaded', function () {
 <section class="infinite-section">
     <div class="infinite-wrapper">
 
-        <div class="infinite-image">
-            <img src="{{ asset('assets/f_assets/image/highend/banner1.jpeg') }}" alt="High End Jewellery Collection">
-        </div>
+       <div class="infinite-image">
+    <video autoplay muted loop playsinline>
+        <source src="{{ asset('assets/f_assets/image/highend/JOC.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
 
         <div class="infinite-content">
             <span class="highend-eyebrow">The Collection</span>
-            <h2 class="highend-heading highend-heading--left">High End Jewellery</h2>
+            <h2 class="highend-heading highend-heading--left">Jewels of the Crown</h2>
             <p class="highend-body">
-                Bold asymmetry, dynamic volumes and unexpected contrasts define Hanif's unique approach to high jewellery. Each creation is a fluid expression of endless transformation—reinventing colour, form and artisanal mastery with audacious creativity.
-            </p>
+         Behold the “Jewels of the Crown”—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon. Every curve of this masterpiece is lavished with glittering diamond baguettes, their brilliance orchestrated to dance under moonlight, as if the stars glisten in admiration of its grandeur.            </p>
         </div>
 
     </div>
@@ -607,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="infinite-image">
-            <img src="{{ asset('assets/f_assets/image/highend/banner2.jpeg') }}" alt="Emerald Necklace">
+            <img src="{{ asset('assets/f_assets/image/highend/banner2.png') }}" alt="Emerald Necklace">
         </div>
 
     </div>
