@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
     {{-- Success Message Display --}}
