@@ -168,22 +168,20 @@
     optional($product->subcategory)->slug === 'favre-leuba' ||
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
         optional($product->subcategory)->slug === 'maurice-lacroix'||
-                optional($product->subcategory)->slug === 'chronoswiss'
+                optional($product->subcategory)->slug === 'chronoswiss'||
+                optional($product->subcategory)->slug === 'franck-muller'
 
 
 )
-        <h5 class="card-title product-name-fixed pb-5 pb-md-0"style="margin-bottom: 18px;margin-top:33px;">
-            @if(true)
-                @php
-                    $nameParts = explode('-', $displayName, 2);
-                @endphp
-                @if(count($nameParts) > 1)
-                    {{ strtoupper($nameParts[0]) }}<br><div class="text-muted" style="font-size:0.8rem;">{{ strtoupper($nameParts[1]) }}</div>
-                @else
-                    {{ strtoupper($displayName) }}
-                @endif
+        <h5 class="card-title product-detail-full-name">
+            @php
+                $nameParts = explode('-', $displayName, 2);
+            @endphp
+            @if(count($nameParts) > 1)
+                {{ strtoupper($nameParts[0]) }}<br>
+                <div class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</div>
             @else
-                {{strtoupper($displayName) }}
+                {{ strtoupper($displayName) }}
             @endif
         </h5>
 
@@ -232,6 +230,39 @@
 .product-description b + span {
     font-weight: 700;
     color: #000;
+}
+
+.product-detail-full-name {
+    font-family: sans-serif;
+    font-size: 1.4rem !important;
+    line-height: 1.35;
+    margin: 33px 0 14px;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    word-break: normal;
+    overflow-wrap: normal;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+}
+
+.product-detail-reference {
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+@media (max-width: 767.98px) {
+    .product-detail-full-name {
+        margin: 18px 0 8px !important;
+        font-size: 1.25rem !important;
+        line-height: 1.2;
+    }
+
+    .product-info > .mb-4 {
+        margin-top: 0 !important;
+        margin-bottom: 1rem !important;
+    }
 }
 
 
@@ -430,8 +461,8 @@
         </div>
     </section>
 
-    {{-- YOU MAY ALSO LIKE Section --}}
-    <section class="py-5">
+            {{-- YOU MAY ALSO LIKE Section --}}
+    <section class="py-5 you-may-like-section">
         <div class="">
             <div class="text-center mb-5">
                 <h3 class="fw-bold" style="font-family: serif; font-size: 2rem;">YOU MAY ALSO LIKE</h3>
@@ -467,11 +498,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     <div class="dots-container">
                         @php
                             $totalProducts = $recommendedProducts->count();
-                            $productsPerView = 4;
-                            $totalDots = max(0, $totalProducts - $productsPerView + 1);
                         @endphp
-                        @for ($i = 0; $i < $totalDots; $i++)
-                            <div class="dot {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i + $productsPerView - 1 }}"></div>
+                        @for ($i = 0; $i < $totalProducts; $i++)
+                            <div
+                                class="dot {{ $i === 0 ? 'active' : '' }}"
+                                data-index="{{ $i }}"
+                                @if($i === 0) style="background-color: #000;" @endif
+                            ></div>
                         @endfor
                     </div>
                 </div>
@@ -514,10 +547,31 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 return items[0].getBoundingClientRect().width;
             }
 
+            function nearestIndex() {
+                let idx = 0;
+                let best = Infinity;
+                items.forEach((item, i) => {
+                    const dist = Math.abs(item.offsetLeft - scroller.scrollLeft);
+                    if (dist < best) {
+                        best = dist;
+                        idx = i;
+                    }
+                });
+                return idx;
+            }
+
+            function paintDot(dot, isActive) {
+                dot.classList.toggle('active', isActive);
+                if (window.matchMedia('(max-width: 767.98px)').matches) {
+                    dot.style.backgroundColor = isActive ? '#000' : '#d8d8d8';
+                } else {
+                    dot.style.backgroundColor = '';
+                }
+            }
+
             function updateDots() {
-                const step = getStep();
-                const idx = Math.round(scroller.scrollLeft / step);
-                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                const idx = nearestIndex();
+                dots.forEach((d, i) => paintDot(d, i === idx));
             }
 
             let isMouseDown = false, startX = 0, startLeft = 0;
@@ -538,8 +592,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 isMouseDown = false;
                 scroller.style.cursor = 'grab';
                 // snap to nearest
-                const step = getStep();
-                const idx = Math.round(scroller.scrollLeft / step);
+                const idx = nearestIndex();
                 const bounded = Math.max(0, Math.min(items.length - 1, idx));
                 smoothScrollTo(scroller, items[bounded].offsetLeft, 350);
             }));
@@ -560,7 +613,12 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             });
 
             // initial state
-            if (dots.length) dots.forEach((d, i) => d.classList.toggle('active', i === 0));
+            if (dots.length) {
+                if (window.matchMedia('(max-width: 767.98px)').matches) {
+                    scroller.scrollLeft = 0;
+                }
+                dots.forEach((d, i) => paintDot(d, i === 0));
+            }
             if (getComputedStyle(scroller).cursor === 'auto') scroller.style.cursor = 'grab';
         }
 
@@ -1225,6 +1283,196 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
         #ymlMobile .dot.active { background-color: #000; }
         #ymlMobile .dot:hover { background-color: #666; }
+
+        @media (max-width: 767.98px) {
+            .you-may-like-section {
+                padding-top: 2.25rem !important;
+                padding-bottom: 2rem !important;
+                overflow: hidden;
+            }
+
+            .you-may-like-section .text-center.mb-5 {
+                margin-bottom: 1.25rem !important;
+            }
+
+            .you-may-like-section h3 {
+                font-size: 1.7rem !important;
+                line-height: 1.15;
+                margin: 0;
+            }
+
+            #ymlDesktop .mobile-product-scroller {
+                width: 100%;
+                padding: 0;
+                scroll-snap-type: x mandatory;
+            }
+
+            #ymlDesktop .scroller-container {
+                gap: 10px;
+                padding: 0 12px;
+                width: max-content;
+            }
+
+            #ymlDesktop .scroller-item {
+                flex: 0 0 calc(100vw - 24px);
+                min-width: calc(100vw - 24px);
+                max-width: calc(100vw - 24px);
+                scroll-snap-align: start;
+            }
+
+            #ymlDesktop .scroller-item .card {
+                min-height: 0;
+                border: 1px solid #ece8e3;
+                background-color: #F6F4F2 !important;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .card-img {
+                height: auto !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #F6F4F2 !important;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .card-img > .position-relative {
+                width: 100%;
+                height: 100%;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .carousel,
+            #ymlDesktop .addToCartProductDetailsTop .carousel-inner,
+            #ymlDesktop .addToCartProductDetailsTop .carousel-item,
+            #ymlDesktop .addToCartProductDetailsTop .carousel-item > a,
+            #ymlDesktop .addToCartProductDetailsTop .product-image-link {
+                width: 100%;
+                height: auto;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .carousel-item > a,
+            #ymlDesktop .addToCartProductDetailsTop .product-image-link {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .card-img img,
+            #ymlDesktop .addToCartProductDetailsTop .product-image {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: none !important;
+                height: auto !important;
+                object-fit: contain;
+                margin: 0 !important;
+                display: block;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .swiper-pagination {
+                position: absolute !important;
+                left: 50% !important;
+                bottom: 12px !important;
+                transform: translateX(-50%) !important;
+                width: auto;
+                height: 18px;
+                gap: 9px;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .swiper-pagination-bullet {
+                width: 5px;
+                height: 5px;
+                background-color: #e4e1dc;
+                opacity: 1;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .swiper-pagination-bullet-active {
+                width: 36px;
+                height: 3px;
+                border-radius: 999px;
+                background-color: #222;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .card-body {
+                padding: 10px 10px 18px !important;
+                background-color: #F6F4F2 !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 0 0 auto;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .product-name-fixed {
+                width: 100%;
+                font-size: 12px !important;
+                line-height: 1.25 !important;
+                min-height: 0 !important;
+                margin: 0 0 12px !important;
+                padding: 0 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                text-align: center;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .card-text {
+                font-size: 13px !important;
+                line-height: 1.2 !important;
+                margin: -2px 0 10px !important;
+                min-height: 0;
+            }
+
+            #ymlDesktop .addToCartProductDetailsTop .discover-more-btn {
+                width: 140px !important;
+                min-height: 32px;
+                margin: 0 auto !important;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px !important;
+                line-height: 1;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            #ymlDesktop .scroller-dots {
+                margin-top: 14px !important;
+            }
+
+            #ymlDesktop .dots-container {
+                gap: 8px;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+            }
+
+            #ymlDesktop .dot {
+                width: 7px !important;
+                height: 7px !important;
+                min-width: 7px !important;
+                min-height: 7px !important;
+                border-radius: 50% !important;
+                background-color: #d8d8d8;
+            }
+
+            #ymlDesktop .dot.active {
+                width: 7px !important;
+                height: 7px !important;
+                min-width: 7px !important;
+                min-height: 7px !important;
+                border-radius: 50% !important;
+                background-color: #000 !important;
+            }
+        }
     </style>
 
     {{-- JavaScript Functionality --}}
@@ -1509,16 +1757,18 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
 
         function goToMobileSlide(slideIndex) {
-            const container = document.querySelector('.mobile-product-scroller .scroller-container');
-            const itemWidth = container.children[0].offsetWidth; // Get width of a single item
-            const targetScroll = slideIndex * itemWidth;
-            container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            const scroller = document.querySelector('#ymlDesktop .mobile-product-scroller');
+            const item = document.querySelector(`#ymlDesktop .scroller-item:nth-child(${slideIndex + 1})`);
+            if (!scroller || !item) return;
+
+            scroller.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
 
             // Update dots
-            document.querySelectorAll('.scroller-dots .dot').forEach((dot, index) => {
+            document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot) => {
                 dot.classList.remove('active');
             });
-            document.querySelector(`.scroller-dots .dot:nth-child(${slideIndex + 1})`).classList.add('active');
+            const activeDot = document.querySelector(`#ymlDesktop .scroller-dots .dot:nth-child(${slideIndex + 1})`);
+            if (activeDot) activeDot.classList.add('active');
         }
 
         function goToPopupSlide(index) {
@@ -2581,30 +2831,42 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
         // Mobile Scroller Functionality for YOU MAY ALSO LIKE
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileScroller = document.querySelector('.mobile-product-scroller .scroller-container');
-            const dotsContainer = document.querySelector('.scroller-dots .dots-container');
+            const mobileScroller = document.querySelector('#ymlDesktop .mobile-product-scroller');
+            const dotsContainer = document.querySelector('#ymlDesktop .scroller-dots .dots-container');
             
             if (!mobileScroller) return;
+            if (!window.matchMedia('(max-width: 767.98px)').matches) return;
+
+            mobileScroller.scrollLeft = 0;
 
             // Update dots based on scroll position
             function updateMobileDots() {
-                const scrollLeft = mobileScroller.scrollLeft;
-                const itemWidth = mobileScroller.children[0].offsetWidth;
-                const currentIndex = Math.round(scrollLeft / itemWidth);
+                const items = mobileScroller.querySelectorAll('.scroller-item');
+                let currentIndex = 0;
+                let best = Infinity;
+                items.forEach((item, index) => {
+                    const dist = Math.abs(item.offsetLeft - mobileScroller.scrollLeft);
+                    if (dist < best) {
+                        best = dist;
+                        currentIndex = index;
+                    }
+                });
                 
                 // Update all dots
-                document.querySelectorAll('.scroller-dots .dot').forEach((dot, index) => {
+                document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
                     if (index === currentIndex) {
                         dot.classList.add('active');
+                        dot.style.backgroundColor = '#000';
                     } else {
                         dot.classList.remove('active');
+                        dot.style.backgroundColor = '#d8d8d8';
                     }
                 });
                 
                 // Scroll dots container to keep active dot visible
-                const activeDot = document.querySelector('.scroller-dots .dot.active');
+                const activeDot = document.querySelector('#ymlDesktop .scroller-dots .dot.active');
                 if (activeDot && dotsContainer) {
-                    const dotIndex = Array.from(document.querySelectorAll('.scroller-dots .dot')).indexOf(activeDot);
+                    const dotIndex = Array.from(document.querySelectorAll('#ymlDesktop .scroller-dots .dot')).indexOf(activeDot);
                     const dotWidth = 16; // 8px dot + 8px gap
                     const containerWidth = dotsContainer.offsetWidth;
                     const scrollPosition = (dotIndex * dotWidth) - (containerWidth / 2) + (dotWidth / 2);
@@ -2620,7 +2882,19 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             mobileScroller.addEventListener('scroll', updateMobileDots);
             
             // Initialize first dot as active
-            updateMobileDots();
+            function setInitialDot() {
+                mobileScroller.scrollLeft = 0;
+                document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
+                    const isActive = index === 0;
+                    dot.classList.toggle('active', isActive);
+                    dot.style.backgroundColor = isActive ? '#000' : '#d8d8d8';
+                });
+            }
+
+            setInitialDot();
+            requestAnimationFrame(setInitialDot);
+            setTimeout(setInitialDot, 250);
+            window.addEventListener('load', setInitialDot, { once: true });
         });
 
         // Mobile: initialize YOU MAY ALSO LIKE scroller

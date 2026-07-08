@@ -53,6 +53,14 @@
         transform-origin: center center;
         will-change: transform, opacity;
     }
+
+    .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn,
+    .addToCartProductDetailsTop:hover .card-body .addToCartProductDetails.discover-more-btn,
+    .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn:hover,
+    .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn:focus,
+    .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn:active {
+        transform: none !important;
+    }
     
     /* Consistent spacing for name and price */
     .addToCartProductDetailsTop .card-body .product-name-fixed {
@@ -364,16 +372,15 @@
                 PKR {{ number_format($product->price, 0, '.', ',') }}
             </p>
         @endif -->
- <p class="card-text">
 @php
     $roundedPrice = round($livePrice, -3);
 @endphp
 
 @if($roundedPrice > 0)
-    PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+    <p class="card-text">
+        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+    </p>
 @endif
-
-        </p> 
    
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))

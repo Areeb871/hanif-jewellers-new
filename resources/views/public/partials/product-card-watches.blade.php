@@ -24,9 +24,9 @@
     
 /* Add little bit of space below Discover More button on mobile */
 .addToCartProductDetailsTop .card-body {
-      display: flex;
-        flex-direction: column;
-        align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-bottom: 15px !important;
 }
 
@@ -401,6 +401,10 @@
     box-shadow:0 3px 8px rgba(0,0,0,0.2);
 }
 
+.mobile-pagination-spacer {
+    display: none;
+}
+
 /* Tablet */
 @media (max-width: 991px){
 .sale-badge{
@@ -420,6 +424,107 @@
     padding:2px 4px;
     border-radius:2px;
 }
+}
+
+@media (max-width: 767.98px) {
+    .addToCartProductDetailsTop .card-img {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-bottom: 0 !important;
+    }
+
+    .addToCartProductDetailsTop .card-img .carousel-inner,
+    .addToCartProductDetailsTop .card-img .carousel-item,
+    .addToCartProductDetailsTop .card-img .product-image-link {
+        height: clamp(145px, 42vw, 190px);
+    }
+
+    .addToCartProductDetailsTop .card-img .carousel {
+        height: auto !important;
+    }
+
+    .addToCartProductDetailsTop .card-img .carousel-item,
+    .addToCartProductDetailsTop .card-img .product-image-link {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .addToCartProductDetailsTop .product-image {
+        width: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .addToCartProductDetailsTop .swiper-pagination {
+        height: 18px;
+        margin-top: 6px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .addToCartProductDetailsTop .mobile-pagination-spacer {
+        display: block;
+        width: 100%;
+        height: 24px;
+        flex: 0 0 24px;
+    }
+
+    .addToCartProductDetailsTop .card-body {
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        justify-content: flex-start !important;
+        padding: 10px 6px 12px !important;
+    }
+
+    .addToCartProductDetailsTop .card-body .product-name-fixed,
+    .addToCartProductDetailsTop .card-body.no-price .product-name-fixed,
+    .addToCartProductDetailsTop .card-body:not(.no-price) .product-name-fixed {
+        width: 100%;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 0 0.15rem !important;
+        padding-bottom: 0 !important;
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+        display: block !important;
+        -webkit-line-clamp: unset !important;
+        -webkit-box-orient: unset !important;
+        overflow-wrap: normal;
+        word-break: keep-all;
+    }
+
+    .addToCartProductDetailsTop .card-body .product-name-fixed small {
+        font-size: 10px !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+    }
+
+    .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn,
+    .addToCartProductDetailsTop .card-body.no-price .addToCartProductDetails.discover-more-btn {
+        margin: 0.6rem auto 0 !important;
+        align-self: center !important;
+        width: auto !important;
+        min-width: 94px;
+        max-width: calc(100% - 12px) !important;
+        min-height: 34px;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 0.45rem 0.75rem !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap;
+        text-align: center;
+        transform: translateY(2px);
+    }
+
+    .addToCartProductDetailsTop:hover .card-body .addToCartProductDetails.discover-more-btn,
+    .addToCartProductDetailsTop:hover .card-body.no-price .addToCartProductDetails.discover-more-btn {
+        transform: translateY(0) !important;
+    }
 }
 </style>
 <div class="card addToCartProductDetailsTop h-100">
@@ -490,6 +595,7 @@
         loading="lazy"
         alt="{{ $product->name }} image">
 </a>
+<span class="mobile-pagination-spacer" aria-hidden="true"></span>
     </div>
         @endif
 

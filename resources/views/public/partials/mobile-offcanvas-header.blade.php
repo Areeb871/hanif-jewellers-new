@@ -8,7 +8,7 @@
         <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers" class="mobile-logo">
     </div>
     <div class="action-section">
-        <a href="/cart" class="mobile-nav-icon position-relative" style="padding: 20px;">
+        <a href="/cart" class="mobile-nav-icon position-relative">
             <i class="fa-solid fa-cart-shopping"></i>
             @php
                 $cartCount = 0;

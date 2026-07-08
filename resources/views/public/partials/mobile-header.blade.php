@@ -93,6 +93,11 @@
     .mobile-offcanvas {
         width: 100%;
         max-width: 100%;
+        z-index: 10080 !important;
+    }
+
+    .offcanvas-backdrop {
+        z-index: 10070 !important;
     }
     
     .mobile-offcanvas-header {
@@ -153,6 +158,7 @@
         display: flex !important;
         align-items: center !important;
         justify-content: flex-end !important;
+        overflow: visible !important;
     }
     
     .mobile-offcanvas-header .action-section a {
@@ -164,6 +170,9 @@
         justify-content: center !important;
         width: 30px !important;
         height: 30px !important;
+        padding: 0 !important;
+        position: relative !important;
+        overflow: visible !important;
     }
     
     .mobile-offcanvas-body {
@@ -359,6 +368,37 @@
     .currency-toggle-btn {
         display: none !important; /* hide currency toggle on mobile */
     }
+
+    header.mobile-header-main > .mobile-header-main .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    header.mobile-header-main > .mobile-header-main .row {
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) 70px;
+        align-items: center;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    header.mobile-header-main > .mobile-header-main .row > [class*="col-"] {
+        width: auto;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    header.mobile-header-main .mobile-nav-icons {
+        gap: 6px !important;
+        justify-content: flex-end !important;
+    }
+
+    header.mobile-header-main .mobile-nav-icon {
+        width: 30px;
+        height: 34px;
+        overflow: visible;
+    }
 }
 .mobile-nav-icon {
     font-size: 18px;
@@ -367,13 +407,25 @@
 
 .mobile-cart-badge {
     position: absolute;
-    top: -4px;
-    right: -8px;
+    top: -8px;
+    right: -10px;
     background: #dc3545;
     color: #fff;
     font-size: 10px;
     padding: 2px 5px;
     border-radius: 999px;
+    min-width: 18px;
+    height: 18px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.mobile-offcanvas-header .mobile-cart-badge {
+    top: -7px;
+    right: -8px;
 }
 .menu-section-title{
   font-size:14px;

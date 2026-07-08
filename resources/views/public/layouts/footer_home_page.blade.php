@@ -648,10 +648,9 @@ footer h4 {
 </style>
 
 
-<!-- OVERLAY -->
+<!-- OVERLAY
 <div class="hanif-popup-overlay" id="hanifPopupOverlay"></div>
 
-<!-- POPUP -->
 <div class="hanif-contact-popup" id="hanifContactPopup">
     <div class="hanif-popup-header">
         <div class="hanif-popup-brand">
@@ -742,7 +741,7 @@ footer h4 {
             For more information on how to Contact Us, <a href="/pages/contact-us">click here</a>.
         </p>
     </div>
-</div>
+</div> -->
 
 <style>
 .hanif-popup-overlay{
