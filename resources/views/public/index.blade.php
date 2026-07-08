@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 
 @section('content')
 <style>
@@ -760,7 +760,7 @@ culminating in a true resemblance of experience pure art.</div>
 
 <section class="custom-banner d-none d-md-block position-relative">
     <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{  asset('assets/f_assets/image/highend/main.webm') }}" type="video/mp4">
+        <source src="{{  asset('assets/f_assets/image/highend/banner.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
             <a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>
@@ -810,7 +810,7 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata" poster="{{  asset('assets/f_assets/image/highend/main.webm') }}" > <source src="{{  asset('assets/f_assets/image/highend/main.webm')}}" type="video/mp4"> </video>
+  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata" poster="{{  asset('assets/f_assets/image/highend/banner.mp4') }}" > <source src="{{  asset('assets/f_assets/image/highend/banner.mp4')}}" type="video/mp4"> </video>
  <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"
@@ -860,10 +860,11 @@ towering peaks</div>
     @php
     $brandBannerSlides = [
         ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet Web Banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet_mobile.avif'],
-        ['alt' => 'Louis Moinet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/loius_monet.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/lm-mob.avif'],
+        ['alt' => 'Favre-leuba', 'desktop' => 'assets/f_assets/image/watches/Hompage_favre.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_mobile_favre.jpeg'],
         ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg'],
         ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
-        ['alt' => 'Corum', 'desktop' => 'assets/f_assets/image/homepage_2_banner/corum.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/favre_leuba_mobile.avif'],
+        ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
+
     ];
     @endphp
 

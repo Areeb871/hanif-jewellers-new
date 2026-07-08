@@ -14,10 +14,14 @@ class DiamondPriceCalculator
             return null;
         }
 
-        return self::calculateFromDescription($product->description ?? '', $diamondPrice);
+        return self::calculateFromDescription(
+            $product->description ?? '',
+            $diamondPrice,
+            filled($product->gold_weight) ? (float) $product->gold_weight : null
+        );
     }
 
-    public static function calculateFromDescription(?string $description, float $diamondPrice): ?float
+    public static function calculateFromDescription(?string $description, float $diamondPrice, ?float $goldWeight = null): ?float
     {
         if (!$description) {
             return null;
@@ -30,15 +34,7 @@ class DiamondPriceCalculator
             return null;
         }
 
-        if (!preg_match(
-            '/(?:gross\s*weight|net\s*weight|weight)?\s*:?[\s]*([\d]+(?:\.\d+)?)\s*(g|gram|grams)\b/i',
-            $description,
-            $weightMatch
-        )) {
-            return null;
-        }
-
-        $grams = (float) $weightMatch[1];
+        $grams = (float) ($goldWeight ?? 0);
         if ($grams <= 0) {
             return null;
         }

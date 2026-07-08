@@ -12,9 +12,46 @@ use App\Models\SubcatImages;
 use App\Models\Tags;
 use Str;
 use App\Services\GoldPriceCalculator;
+use App\Services\DiamondPriceCalculator;
 
 class ProductController extends Controller
 {
+    private function requestUsesDiamondPricing(Request $request, ?Products $product = null): bool
+    {
+        $name = strtolower($request->name ?? $product?->name ?? '');
+        if (str_contains($name, 'watch')) {
+            return false;
+        }
+
+        $tags = json_decode($request->tags ?? '[]', true);
+        if (is_array($tags)) {
+            foreach ($tags as $tagData) {
+                $tag = strtolower(is_array($tagData) ? ($tagData['value'] ?? '') : (string) $tagData);
+                if (str_contains($tag, 'diamond')) {
+                    return true;
+                }
+            }
+        }
+
+        return $product ? $product->hasDiamondTag() : false;
+    }
+
+    private function calculateAutoPrice(Request $request, ?Products $product = null): ?float
+    {
+        $description = $request->description ?? '';
+        $goldWeight = $request->filled('gold_weight') ? (float) $request->gold_weight : null;
+
+        if ($this->requestUsesDiamondPricing($request, $product) && $request->filled('diamond_price')) {
+            return DiamondPriceCalculator::calculateFromDescription(
+                $description,
+                (float) $request->diamond_price,
+                $goldWeight
+            );
+        }
+
+        return GoldPriceCalculator::calculateFromDescription($description, $goldWeight);
+    }
+
     public function allProducts(){
         try {
             $categories = Categories::all();
@@ -98,6 +135,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'gold_weight' => 'nullable|numeric|min:0',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
             ]);
@@ -137,10 +175,11 @@ class ProductController extends Controller
             $product->online_store_description = $request->online_store_description;
             $product->price = $request->price;
             // // Try to auto-calculate price from description (weight + karat)
-            $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);
+            $calculatedPrice = $this->calculateAutoPrice($request);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discounted_price = $discounted_price??0;
@@ -206,6 +245,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'gold_weight' => 'nullable|numeric|min:0',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
                 'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/avif',
@@ -312,10 +352,11 @@ class ProductController extends Controller
             $product->online_store_description = $request->online_store_description;
             $product->price = $request->price;
             // Try to auto-calculate price from description (weight + karat)
-            $calculatedPrice = GoldPriceCalculator::calculateFromDescription($request->description);
+            $calculatedPrice = $this->calculateAutoPrice($request, $product);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discount_type = $request->discount_option ?? 1;
