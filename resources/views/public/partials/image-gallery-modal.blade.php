@@ -53,7 +53,7 @@
     z-index: 999999 !important;
 }
 
-.modal-backdrop.show {
+body.image-modal-open .modal-backdrop.show {
     opacity: 0.92 !important;
     z-index: 999998 !important;
 }

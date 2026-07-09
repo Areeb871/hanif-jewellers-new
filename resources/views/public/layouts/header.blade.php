@@ -638,33 +638,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </header>
 
     @php
-        // Products-only search data
-        $productResults = \App\Models\Products::with('images')
-            ->where('status', 1)
-            ->select('id', 'name', 'slug', 'image', 'hover_image', 'description')
-            ->orderBy('name')
-            ->limit(1000)
-            ->get();
-
-        $searchItems = [];
-        foreach ($productResults as $product) {
-            $relatedImage = optional($product->images)->firstWhere('image', '!=', null)->image ?? null;
-            $imagePath = $relatedImage ?: $product->hover_image ?: $product->image;
-            $searchItems[] = [
-                'label' => $product->name,
-                'slug' => $product->slug,
-                'image' => $imagePath ? asset($imagePath) : asset('assets/f_assets/image/logo.png'),
-                'subtitle' => \Illuminate\Support\Str::limit(strip_tags($product->description ?? ''), 60, '…'),
-                'url' => route('product.details', ['slug' => $product->slug]),
-                'type' => 'product'
-            ];
-        }
+        $searchItems = app(\App\Services\ProductSearchService::class)->itemsForCurrentPage();
     @endphp
 
     <style>
         .nav-search-wrapper {
             max-width: 1200px;
             margin: 0 auto;
+        }
+        #navSearchModal .modal-content {
+            background: #fff !important;
+            color: #111;
+            opacity: 1 !important;
+            border-radius: 6px;
+            box-shadow: 0 18px 60px rgba(0,0,0,0.24) !important;
+        }
+        #navSearchModal .modal-body {
+            background: #fff;
+            padding: 22px 18px 24px;
+        }
+        #navSearchModal .btn-close {
+            opacity: 1;
         }
         .nav-search-brand {
             display: flex;
@@ -792,7 +786,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers">
                         </div>
                         <form id="navSearchForm" class="nav-search-form">
-                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="Search products" autocomplete="off">
+                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="Search collections or products" autocomplete="off">
                             <button type="submit" class="nav-search-btn">SEARCH</button>
                         </form>
                         <div class="nav-search-results">
@@ -839,7 +833,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 if (searchCount) searchCount.textContent = '';
 
                 if (!normalized) {
-                    searchEmpty.textContent = 'Start typing to search products.';
+                    searchEmpty.textContent = 'Start typing to search collections or products.';
                     return;
                 }
 
@@ -853,12 +847,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     .slice(0, 10);
 
                 if (!matches.length) {
-                    searchEmpty.textContent = 'No products found.';
+                    searchEmpty.textContent = 'No results found.';
                     return;
                 }
 
                 if (searchCount) {
-                    searchCount.textContent = `Products (${matches.length})`;
+                    searchCount.textContent = `Results (${matches.length})`;
                 }
 
                 matches.forEach(item => {
