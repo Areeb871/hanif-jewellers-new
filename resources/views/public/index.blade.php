@@ -411,6 +411,8 @@ section.watch .scroller-container {
     width: max-content;
     padding-inline: 16px;
     gap: 10px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 /* Watch + Bespoke scroller arrows */
