@@ -325,6 +325,23 @@
 }
 
 @media (max-width: 576px) {
+    .sectionMobile {
+        width: 100vw;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        overflow: visible;
+    }
+
+    .sectionMobile video {
+        width: 100vw;
+        max-width: 100vw;
+        height: auto;
+        max-height: none;
+        object-fit: contain;
+        object-position: center top;
+        background: #000;
+    }
+
     .polychroma-slider-wrapper {
         padding: 0 36px;
     }
@@ -335,12 +352,20 @@
     }
 
     .image-box {
-        height: 420px;
+        height: auto;
         margin-bottom: 28px;
+        background: #000;
+    }
+
+    .image-box img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        object-position: center center;
     }
 
     .arrow-btn {
-        top: 210px;
+        top: 50%;
         width: 42px;
         height: 42px;
     }
@@ -375,16 +400,16 @@
 <div class="highend-page">
 <!-- DESKTOP BANNER -->
 <section class="sectionOne d-md-block d-none">
-    <video autoplay loop muted playsinline>
-        <source src="{{ asset('assets/f_assets/image/highend/banner.mp4') }}" type="video/webm">
+    <video autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset('assets/f_assets/image/highend/banner.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </section>
 
 <!-- MOBILE BANNER -->
 <section class="sectionMobile d-md-none">
-    <video autoplay loop muted playsinline>
-        <source src="{{ asset('assets/f_assets/image/highend/mobview.mp4') }}" type="video/webm">
+    <video autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset('assets/f_assets/image/highend/mobview.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </section>

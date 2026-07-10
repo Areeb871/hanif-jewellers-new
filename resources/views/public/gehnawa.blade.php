@@ -88,7 +88,7 @@ section{
     <section>
         <div class="container py-5">
             <div class="text-center my-4">
-                <h4 class="text-uppercase mb-2">Discover Our Collection</h4>
+                <!-- <h4 class="text-uppercase mb-2">Discover Our Collection</h4> -->
                 <!-- <p class="mt-3" style="max-width: 780px; margin: 0 auto;">
                     Gehnawa fuses modern day bridals with their heritage jewels. Rooting from 'Gehna' (meaning
                     jewels) and 'Pehnawa' meaning 'clothes', Gehnawa is the latest essence table to be dressed

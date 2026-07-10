@@ -639,18 +639,6 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
                     <li data-value="za" class="{{ $currentSort=='za' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='za' ? '◆' : '◇' }}</span> Alphabetically, Z-A
                     </li>
-                    <li data-value="price_low_high" class="{{ $currentSort=='price_low_high' ? 'selected' : '' }}">
-                        <span class="diamond">{{ $currentSort=='price_low_high' ? '◆' : '◇' }}</span> Price, low to high
-                    </li>
-                    <li data-value="price_high_low" class="{{ $currentSort=='price_high_low' ? 'selected' : '' }}">
-                        <span class="diamond">{{ $currentSort=='price_high_low' ? '◆' : '◇' }}</span> Price, high to low
-                    </li>
-                    <li data-value="new_old" class="{{ $currentSort=='new_old' ? 'selected' : '' }}">
-                        <span class="diamond">{{ $currentSort=='new_old' ? '◆' : '◇' }}</span> Date, new to old
-                    </li>
-                    <li data-value="old_new" class="{{ $currentSort=='old_new' ? 'selected' : '' }}">
-                        <span class="diamond">{{ $currentSort=='old_new' ? '◆' : '◇' }}</span> Date, old to new
-                    </li>
 
                 </ul>
             </div>
@@ -665,9 +653,21 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('franckMullerSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="franckMullerSeriesList">
-                    @php $series = ['cintree-curvex','long-island','master-square','round','skafander','vanguard','racing']; @endphp
-                    @foreach($series as $s)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox franck-muller-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
+                    @php
+                        $series = [
+                            'cintree-curvex' => 'Cintree Curvex',
+                            'curvex-cx' => 'Curvex CX',
+                            'conquistador-gpg' => 'Conquistador GPG',
+                            'galet' => 'Galet',
+                            'heart' => 'Heart',
+                            'long-island' => 'Long Island',
+                            'master-square' => 'Master Square',
+                            'round' => 'Round',
+                            'vanguard' => 'Vanguard',
+                        ];
+                    @endphp
+                    @foreach($series as $s => $label)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox franck-muller-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $label }}</span></li>
                     @endforeach
                 </ul>
             </div>
