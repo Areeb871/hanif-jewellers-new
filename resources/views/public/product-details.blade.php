@@ -251,6 +251,11 @@
     font-size: 0.8rem;
     line-height: 1.2;
 }
+.price-display {
+    font-weight: 700;
+    font-size: 16px;
+}
+
 
 @media (max-width: 767.98px) {
     .product-detail-full-name {
@@ -311,13 +316,24 @@
             : (!empty($product->show_price) && $roundedPrice > 0);
     @endphp
 
-    @if($canShowPrice)
+    <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
         </div>
         <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;">
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
+    @endif   -->
+    @if($canShowPrice)
+    <div class="price-display">
+        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+    </div>
+
+        @if($product->category->slug != 'watches')
+            <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+            All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
+            </p>
+        @endif
     @endif
 </div>
                         {{-- Size Selector --}}
@@ -328,7 +344,8 @@
                             $hasGoldBraceletsTag = $tagSlugs->contains(function($s){ return in_array($s, ['gold_bracelets','gold-bracelets','gold-bracelet','gold-bracelets-1']); });
                             $pricePositive = ($product->price ?? 0) > 0;
                         @endphp
-                        @if($hasGoldRingsTag || $hasDiamondRingsTag && $pricePositive)
+
+                        <!-- @if($hasGoldRingsTag || $hasDiamondRingsTag && $pricePositive)
                         <div class="my-5">
                             <div class="size-selector-section">
                                 <label class="size-label" style="display: block; color: #333; font-size: 0.9rem; font-weight: 400; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif;">
@@ -382,6 +399,7 @@
                                 </select>
                             </div>
                         </div>
+
                         @elseif($hasGoldBraceletsTag && $pricePositive)
                         <div class="my-5">
                             <div class="size-selector-section">
@@ -403,7 +421,8 @@
                                 </select>
                             </div>
                         </div>
-                        @endif
+                        @endif -->
+
                         <!-- {{-- Debug Output - Always visible for troubleshooting --}}
                         <div style="font-size: 14px; color: #000; background:#ffffcc; padding:15px; margin-top:15px; border: 2px solid #ff0000;">
                             <div><strong>🔍 DEBUG SIZE SELECTOR CONDITION</strong></div>
