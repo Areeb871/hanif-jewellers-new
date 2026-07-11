@@ -1,3 +1,6 @@
+
+
+
 @extends('public.layouts.header_black')
 
 @section('content')
@@ -270,6 +273,65 @@
                 .promo-tile { display: flex; height: 100%; }
                 .promo-tile > a { flex: 1 1 auto; display: block; height: 100%; }
                 .promo-tile img { height: 100%; width: 100%; object-fit: cover; display: block; }
+
+                /* Online store: equal product card image height */
+                .onlineStore .addToCartProductDetailsTop .card-img {
+                    width: 100%;
+                    aspect-ratio: 1 / 1;
+                    max-height: 520px;
+                    overflow: hidden;
+                    padding-bottom: 0 !important;
+                    background: #f6f4f2;
+                }
+
+                .onlineStore .addToCartProductDetailsTop .card-img .carousel,
+                .onlineStore .addToCartProductDetailsTop .card-img .carousel-inner,
+                .onlineStore .addToCartProductDetailsTop .card-img .carousel-item,
+                .onlineStore .addToCartProductDetailsTop .card-img .product-image-link,
+                .onlineStore .addToCartProductDetailsTop .card-img > .position-relative,
+                .onlineStore .addToCartProductDetailsTop .card-img > .position-relative > a {
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .onlineStore .addToCartProductDetailsTop .card-img img,
+                .onlineStore .addToCartProductDetailsTop .card-img .product-image,
+                .onlineStore .addToCartProductDetailsTop .card-img .img-fluid {
+                    width: 100% !important;
+                    height: 100% !important;
+                    max-height: 520px;
+                    object-fit: cover !important;
+                    object-position: center center;
+                    display: block;
+                }
+
+                .onlineStore .addToCartProductDetailsTop .card-body {
+                    min-height: 116px;
+                }
+
+                @media (max-width: 767.98px) {
+                    .onlineStore .addToCartProductDetailsTop .card-body {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .onlineStore .addToCartProductDetailsTop .discover-more-btn {
+                        display: inline-flex !important;
+                        align-items: center;
+                        justify-content: center;
+                        align-self: center;
+                        float: none !important;
+                        width: min(120px, calc(100% - 24px)) !important;
+                        max-width: calc(100% - 24px) !important;
+                        margin-left: auto !important;
+                        margin-right: auto !important;
+                        padding-left: 10px !important;
+                        padding-right: 10px !important;
+                        text-align: center;
+                        box-sizing: border-box;
+                    }
+                }
             </style>
 
             {{-- filter --}}
@@ -742,10 +804,16 @@
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
                         <div id="osSubFilters" class="os-sub-filters">
                         <button type="button" class="filter-tag-btn" data-tags="ehed,gold_rings,diamond_rings">Rings</button>
+
+                
                         <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
+
                         <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">Pendants</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
+                        <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
                         <button type="button" class="filter-tag-btn" data-tags="mens_rings,ehed">Wedding Bands</button>
+
                         </div>
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
                     </div>
@@ -757,7 +825,9 @@
                         <span class="os-sort-filter-label">Sort &amp; Filter</span>
                     </button>
                 </div>
-               
+                <!-- <div style="display:flex;justify-content:center;width:100%;margin-top:4px;">
+                    <span style="display:block;height:2px;width:70vw;background:#e6ded3;"></span>
+                </div> -->
             </div>
             <!-- SORT & FILTER OFFCANVAS -->
             <div id="osFilterBarSpacer" class="os-filter-bar-spacer" aria-hidden="true"></div>
