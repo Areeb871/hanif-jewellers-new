@@ -460,7 +460,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="col d-flex justify-content-end mobileIcon">
                     <a class="text-white mobileIcon" href="#" data-bs-toggle="modal" data-bs-target="#navSearchModal"><i class="fa-solid fa-magnifying-glass"></i></a>
                     <a class="text-white px-3 mobileIcon position-relative" href="/cart">
-                        <i class="fa-solid fa-cart-shopping"></i>
+                        {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
                         @php
                             $cartCount = 0;
                             if (Auth::check()) {
@@ -470,9 +470,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             }
                         @endphp
                         @if($cartCount > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7em;">
+                            {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7em;">
                                 {{ $cartCount }}
-                            </span>
+                            </span> --}}
                         @endif
                     </a>
                 </div>

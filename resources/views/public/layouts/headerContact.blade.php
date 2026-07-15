@@ -320,7 +320,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </a>
                 <div class="col d-flex justify-content-end mobileIcon">
                     <a class="text-white mobileIcon" href="#" data-bs-toggle="modal" data-bs-target="#navSearchModal"><i class="fa-solid fa-magnifying-glass"></i></a>
-                    <a class="text-white px-3 mobileIcon" href="http://"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a class="text-white px-3 mobileIcon" href="http://">{{-- <i class="fa-solid fa-cart-shopping"></i> --}}</a>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
