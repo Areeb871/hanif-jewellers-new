@@ -502,6 +502,16 @@
         white-space: nowrap !important;
     }
 
+    .addToCartProductDetailsTop .card-body .card-text {
+        position: static !important;
+        width: 100%;
+        margin: 0.25rem 0 0 !important;
+        padding: 0 !important;
+        font-size: 13px !important;
+        line-height: 1.3 !important;
+        white-space: nowrap;
+    }
+
     .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn,
     .addToCartProductDetailsTop .card-body.no-price .addToCartProductDetails.discover-more-btn {
         margin: 0.6rem auto 0 !important;

@@ -12,7 +12,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        .tissot-home-hero,
         .tissot-video-hero video,
         .tissot-video-hero .tissot-video-fallback {
             width: 100%;
@@ -20,15 +19,16 @@
             min-height: 300px;
         }
         .tissot-home-hero {
-            overflow: hidden;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
             background: #c9b89a;
             line-height: 0;
         }
         .tissot-home-hero img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+            height: auto;
             display: block;
         }
         .tissot-video-hero {
@@ -200,11 +200,21 @@
         }
 
         @media (max-width: 767px) {
+            .tissot-home-hero {
+                height: min(70vh, 620px);
+                min-height: 420px;
+                overflow: hidden;
+            }
+            .tissot-home-hero img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center center;
+            }
             .tissot-home-content__grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
-            .tissot-home-hero,
             .tissot-video-hero video,
             .tissot-video-hero .tissot-video-fallback {
                 height: min(52vh, 480px);

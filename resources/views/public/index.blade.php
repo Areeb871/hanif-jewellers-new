@@ -1,4 +1,5 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
+
 @section('content')
 <style>
 
@@ -160,24 +161,25 @@
   width: 100%;
   overflow: hidden;
   background: #000;
-  height: 82vh;
-  min-height: 520px;
-  max-height: 92vh;
+  height: auto !important;
+  min-height: 0;
+  max-height: none;
 }
 
 .mobileStackImg{
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto !important;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
 .mobileStackVideo{
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto !important;
+  object-fit: contain;
   object-position: center center;
   display: block;
+  margin-top:52px;
 }
 /* =========================
    Overlay Content (Haphazard + Discover + Location)
@@ -759,10 +761,10 @@ culminating in a true resemblance of experience pure art.</div>
 
 <section class="custom-banner d-none d-md-block position-relative">
     <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{  asset('assets/f_assets/image/highend/banner.mp4') }}" type="video/mp4">
+        <source src="{{  asset('assets/f_assets/image/Annual Gold Sale Banner Desktop.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-            <a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>
+            <!--<a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>-->
 </section>
 
 
@@ -809,7 +811,9 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata" poster="{{  asset('assets/f_assets/image/highend/banner.mp4') }}" > <source src="{{  asset('assets/f_assets/image/highend/banner.mp4')}}" type="video/mp4"> </video>
+  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
+    <source src="{{ asset('assets/f_assets/image/Annual Gold Sale MOB View.mp4') }}" type="video/mp4">
+  </video>
  <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"
@@ -818,7 +822,7 @@ towering peaks</div>
 /> -->
 
   </div>
-<a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>
+<!--<a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>-->
 </section>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
