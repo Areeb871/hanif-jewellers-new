@@ -3145,6 +3145,9 @@ a.hj-lab-product-card {
 }
 
 .hj-ring-size-help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     height: 42px;
     margin-right: 4px;
     padding: 0 14px;
@@ -3156,95 +3159,7 @@ a.hj-lab-product-card {
     color: #111;
     cursor: pointer;
     white-space: nowrap;
-}
-
-.hj-ring-guide-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 20050;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-}
-
-.hj-ring-guide-modal.is-open {
-    display: flex;
-}
-
-body.hj-ring-guide-open {
-    overflow: hidden;
-}
-
-.hj-ring-guide-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.58);
-}
-
-.hj-ring-guide-dialog {
-    position: relative;
-    z-index: 1;
-    width: min(920px, 100%);
-    max-height: min(86vh, 900px);
-    padding: 0 28px 28px;
-    background: #fff;
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.hj-ring-guide-dialog::-webkit-scrollbar {
-    display: none;
-}
-
-.hj-ring-guide-header {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    min-height: 54px;
-    margin: 0 -28px 20px;
-    padding: 0 14px 0 28px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.hj-ring-guide-close {
-    flex: 0 0 auto;
-    width: 34px;
-    height: 34px;
-    border: 0;
-    background: transparent;
-    color: #111;
-    font-size: 30px;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.hj-ring-guide-title {
-    margin: 0;
-    font-family: WilliamsCaslonText, "Times New Roman", Times, serif;
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #111;
-}
-
-.hj-ring-guide-images {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-    gap: 18px;
-}
-
-.hj-ring-guide-images img {
-    width: 100%;
-    height: auto;
-    display: block;
+    text-decoration: none;
 }
 
 .hj-ring-size-arrow {
@@ -3344,31 +3259,6 @@ body.hj-ring-guide-open {
     .hj-ring-size-help {
         font-size: 12px;
         padding: 0 10px;
-    }
-
-    .hj-ring-guide-modal {
-        padding: 12px;
-    }
-
-    .hj-ring-guide-dialog {
-        max-height: 88vh;
-        padding: 0 14px 16px;
-    }
-
-    .hj-ring-guide-header {
-        min-height: 48px;
-        margin: 0 -14px 14px;
-        padding: 0 8px 0 14px;
-    }
-
-    .hj-ring-guide-title {
-        font-size: 17px;
-        margin-bottom: 14px;
-    }
-
-    .hj-ring-guide-images {
-        grid-template-columns: 1fr;
-        gap: 12px;
     }
 
     .hj-ring-size-dropdown {
