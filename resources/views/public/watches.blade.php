@@ -1,21 +1,32 @@
-@extends('public.layouts.header_new')
-<style>
+@extends('public.layouts.header_black_white_fixed')
 
+<style>
+html,
+body {
+    overflow-x: hidden;
+}
+
+img,
+video {
+    max-width: 100%;
+    display: block;
+}
 
 /* responsive banner wrapper */
 .sectionOne,
-.sectionMobile{
+.sectionOneMobile{
     position: relative;
     width: 100%;
     height: auto;
     overflow: hidden;
-    margin: 0 !important;
+    /* margin: 0 !important; */
     padding: 0 !important;
+    
 }
 
 /* responsive video - no crop */
 .sectionOne video,
-.sectionMobile video{
+.sectionOneMobile video{
     width: 100%;
     height: auto;
     display: block;
@@ -25,9 +36,9 @@
 
 /* remove unwanted top gap */
 .sectionOne,
-.sectionMobile,
+.sectionOneMobile,
 section{
-    margin-top: 0 !important;
+    margin-top: 0px !important;
 }
 </style>
 <style>
@@ -323,20 +334,22 @@ section{
     }
     .ehed-video-container video {
         position: absolute;
-        top: 10%;
+        top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
         display: block;
     }
     .ehed-media-cover {
         position: absolute;
-        top: 10px;
+        top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;
         display: block;
     }
     .ehed-content-container {
@@ -533,190 +546,27 @@ section{
 }
 </style>
 @section('content')
-<!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none" style="position: relative; min-height: 500px; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-            <source src="{{ asset('assets/f_assets/image/pakistan_watch/desktop_fm.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </section>
-     Mobile Video Banner 
-    <section class="d-md-none" style="position: relative; height: 110vh; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-            <source src="{{ asset('assets/f_assets/image/pakistan_watch/mobile_fm.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </section> -->
+
 <section class="sectionOne d-none d-md-block"
     style="position: relative; min-height: 500px; overflow: hidden;">
-
-    <div id="rolexCarousel"
-         class="carousel slide rolex-carousel h-100"
-         data-bs-ride="carousel">
-
-        <div class="carousel-inner h-100">
-
-            <!-- SLIDE 1 -->
-            <!--<div class="carousel-item active">-->
-            <!--    <div class="hero-slide">-->
-                    
-            <!--        <img src="{{ asset('assets/f_assets/image/watches/cys_web.jpg') }}"-->
-            <!--            alt="Franck Muller"-->
-            <!--            class="hero-bg-img">-->
-            <!--    </div>-->
-            <!--</div>-->
-              <!-- SLIDE 1 -->
-            <div class="carousel-item active">
-                <div class="hero-slide">
-                    
-                    <!-- FULL COVER IMAGE -->
-                    <img
-                        src="{{ asset('assets/f_assets/image/watches/fm_new.jpg') }}"
-                        alt="Franck Muller"
-                        class="hero-bg-img">
-
-                    <div class="hero-content">
-                        <!-- <h2>Carlos</h2>
-                        <h1>This crown is yours</h1> -->
-                        <!-- <a href="#" class="hero-cta">Learn more</a> -->
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- SLIDE 2 -->
-            <div class="carousel-item">
-                <div class="hero-slide">
-
-                    <img
-                        src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.png') }}"
-                        alt="Nagar"
-                        class="hero-bg-img">
-
-                    <div class="hero-content">
-                        <!-- <h2>NAGAR</h2>
-                        <h1>Royal rubies, carved in light</h1> -->
-                        <!-- <a href="#" class="hero-cta">Discover</a> -->
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="hero-slide">
-
-                    <img
-                        src="{{ asset('assets/f_assets/image/watches/ML Web Banner.jpg') }}"
-                        alt="Nagar"
-                        class="hero-bg-img">
-
-                    <div class="hero-content">
-                        <!-- <h2>NAGAR</h2>
-                        <h1>Royal rubies, carved in light</h1> -->
-                        <!-- <a href="#" class="hero-cta">Discover</a> -->
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="hero-slide">
-
-                    <img
-                        src="{{ asset('assets/f_assets/image/watches/Perrelet-web-banner.jpeg') }}"
-                        alt="Nagar"
-                        class="hero-bg-img">
-
-                    <div class="hero-content">
-                        <!-- <h2>NAGAR</h2>
-                        <h1>Royal rubies, carved in light</h1> -->
-                        <!-- <a href="#" class="hero-cta">Discover</a> -->
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Dots -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="0" class="active" style="display:none;"></button>
-            <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="1"  style="display:none;"></button>
-             <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="2"  style="display:none;"></button>
-  <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="3" style="display:none;"></button>
-   <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="4" style="display:none;"></button>
-        </div>
-
-    </div>
-</section>
-
-
-
-<!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none"
-    style="position: relative; min-height: 500px; overflow: hidden;">
-
+<!-- Desktop Hero Banner -->
     <img
-        src="{{ asset('assets/f_assets/image/franck_muller_new.jpg') }}"
-        alt="Banner"
-        style="
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-        "
-    >
-</section> -->
+        src="{{ asset('assets/f_assets/image/watches/sale-desktop-banner.jpeg') }}"
+        alt="Watches Desktop Banner"
+        class="w-100 h-100 object-fit-cover"
+        style="display:block; object-fit:contain; object-position:center;">
+
+</section>
 <!-- MOBILE HERO -->
 <section class="sectionOneMobile d-block d-md-none"
     style="position: relative; min-height: 320px; overflow: hidden;">
 
-    <div id="rolexCarouselMobile"
-         class="carousel slide h-100"
-         data-bs-ride="carousel">
+        <img src="{{ asset('assets/f_assets/image/watches-sale-banner.jpeg') }}"
+            class="w-100 object-fit-cover"
+            alt="Watches Mobile Banner"
+            style="display:block;object-fit:contain;object-position:center;margin-top: 52px;"
+            >
 
-        <div class="carousel-inner h-100">
-
-         <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/cys_mobile.jpg') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="Franck Muller Mobile">
-            </div>
-            <div class="carousel-item active">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/fm_new_mobile.jpg') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="Franck Muller Mobile">
-            </div>
-
-            <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/bovet_static.png') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="Bovet Mobile">
-            </div>
-
-            <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/ml_mobile.jpg') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="ML Mobile">
-            </div>
-
-            <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/perrelee_mobile.jpg') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="Perrelet Mobile">
-            </div>
-
-        </div>
-
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="2"></button>
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="3"></button>
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button>
-
-        </div>
-    </div>
 </section>
 
 <section class="py-5 luxury-watch-section">
@@ -1157,18 +1007,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </video>
     </section>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const el = document.getElementById('rolexCarouselMobile');
-  if (!el) return;
-
-  new bootstrap.Carousel(el, {
-    interval: 2000,   // change speed
-    pause: false,     // keep moving
-    ride: 'carousel'
-  });
-});
-</script>
 <script>
 document.querySelectorAll('.brand-item img').forEach(img => {
 

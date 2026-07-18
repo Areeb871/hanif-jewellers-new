@@ -59,11 +59,11 @@
 #cartHeader .cart-count.is-zero{ display:none !important; }
 </style>
 <a href="{{ route('cart') }}" class="cart-link" aria-label="Cart">
-    <i class="fa-solid fa-cart-shopping"></i>
+    {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
 
     @if($cartCount > 0)
-   <span class="cart-count">   
-     {{ $cartCount }}
-</span>
+    {{-- <span class="cart-count">
+        {{ $cartCount }}
+    </span> --}}
     @endif
 </a>
