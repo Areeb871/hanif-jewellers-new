@@ -48,6 +48,10 @@
     margin-right: auto;
 }
 
+.highend-heading--no-line::after {
+    display: none;
+}
+
 .highend-body {
     font-family: "Montserrat", sans-serif;
     font-size: 15px;
@@ -75,13 +79,13 @@
 }
 
 .polychroma-header .highend-heading::after {
-    margin-left: auto;
-    margin-right: auto;
+    display: none;
 }
 
 .polychroma-slider-wrapper {
     position: relative;
     padding: 0 48px;
+    --polychroma-image-height: clamp(350px, 38vw, 430px);
 }
 
 .polychroma-slider-viewport {
@@ -115,7 +119,7 @@
 
 .image-box {
     width: 100%;
-    height: 520px;
+    height: var(--polychroma-image-height);
     background: #141414;
     margin-bottom: 36px;
     overflow: hidden;
@@ -123,8 +127,9 @@
 
 .image-box img {
     width: 100%;
-    height: 100%;
+    height: 100% !important;
     object-fit: cover;
+    object-position: center;
     display: block;
     transition: transform 0.6s ease;
 }
@@ -146,7 +151,7 @@
 
 .arrow-btn {
     position: absolute;
-    top: 260px;
+    top: calc(var(--polychroma-image-height) / 2);
     transform: translateY(-50%);
     width: 48px;
     height: 48px;
@@ -163,8 +168,12 @@
 }
 
 .arrow-btn:hover:not(:disabled) {
-    border-color: var(--highend-gold);
-    background: rgba(199, 167, 106, 0.12);
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.arrow-btn:hover:not(:disabled) .arrow-icon {
+    fill: #fff;
 }
 
 .arrow-btn.left { left: 0; }
@@ -178,7 +187,7 @@
 .arrow-icon {
     width: 22px;
     height: 22px;
-    fill: var(--highend-gold);
+    fill: #fff;
     display: block;
     pointer-events: none;
 }
@@ -195,14 +204,14 @@
     margin: 0 8px;
     padding: 0;
     border: none;
-    background: rgba(199, 167, 106, 0.3);
+    background: rgba(255, 255, 255, 0.35);
     border-radius: 50%;
     cursor: pointer;
     transition: 0.3s ease;
 }
 
 .slider-dots button.active {
-    background: var(--highend-gold);
+    background: #fff;
     transform: scale(1.4);
 }
 
@@ -279,12 +288,8 @@
         max-width: 50%;
     }
 
-    .image-box {
-        height: 460px;
-    }
-
-    .arrow-btn {
-        top: 230px;
+    .polychroma-slider-wrapper {
+        --polychroma-image-height: clamp(330px, 50vw, 400px);
     }
 
     .infinite-section {
@@ -344,6 +349,7 @@
 
     .polychroma-slider-wrapper {
         padding: 0 36px;
+        --polychroma-image-height: auto;
     }
 
     .polychroma-item {
@@ -359,13 +365,13 @@
 
     .image-box img {
         width: 100%;
-        height: auto;
+        height: auto !important;
         object-fit: contain;
         object-position: center center;
     }
 
     .arrow-btn {
-        top: 50%;
+        top: calc(50% - 14px);
         width: 42px;
         height: 42px;
     }
@@ -601,8 +607,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
         <div class="infinite-content">
-            <span class="highend-eyebrow">The Collection</span>
-            <h2 class="highend-heading highend-heading--left">Jewels of the Crown</h2>
+            <h2 class="highend-heading highend-heading--left highend-heading--no-line">Jewels of the Crown</h2>
             <p class="highend-body">
          Behold the “Jewels of the Crown”—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon. Every curve of this masterpiece is lavished with glittering diamond baguettes, their brilliance orchestrated to dance under moonlight, as if the stars glisten in admiration of its grandeur.            </p>
         </div>
@@ -614,8 +619,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="infinite-wrapper infinite-wrapper--image-first-mobile">
 
         <div class="infinite-content">
-            <span class="highend-eyebrow">Masterpiece</span>
-            <h2 class="highend-heading highend-heading--left">Emerald Necklace</h2>
+            <h2 class="highend-heading highend-heading--left highend-heading--no-line">Timeless Pieces</h2>
             <p class="highend-body">
                 A symphony composed with the rarest brilliance and timeless allure. Each stone is selected for its depth of colour and character, brought together through generations of craftsmanship into a piece worthy of becoming an heirloom.
             </p>

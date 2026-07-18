@@ -596,9 +596,15 @@ document.addEventListener('DOMContentLoaded', function () {
 </span>
         </button>
 
-        <button type="button" class="hj-ring-size-help" aria-label="Open ring size guide">
+        <a
+            class="hj-ring-size-help"
+            href="{{ asset('assets/f_assets/pdf/ring-size-guide.pdf') }}"
+            target="_blank"
+            rel="noopener"
+            aria-label="Open ring size guide PDF"
+        >
             Need help?
-        </button>
+        </a>
     </div>
 
     <p class="hj-ring-size-error" id="hjRingSizeError" role="alert" hidden>Please select a ring size.</p>
@@ -712,27 +718,6 @@ document.addEventListener('DOMContentLoaded', function () {
             </button>
         </div>
 
-    </div>
-</div>
-
-<div class="hj-ring-guide-modal" id="hjRingGuideModal" aria-hidden="true">
-    <div class="hj-ring-guide-backdrop" data-ring-guide-close></div>
-    <div class="hj-ring-guide-dialog" role="dialog" aria-modal="true" aria-label="Ring size guide">
-        <div class="hj-ring-guide-header">
-            <button type="button" class="hj-ring-guide-close" aria-label="Close ring size guide" data-ring-guide-close>
-                &times;
-            </button>
-        </div>
-        <div class="hj-ring-guide-images">
-            <img
-                src="{{ asset('assets/f_assets/image/solitaire/ring guide/1.jpg') }}"
-                alt="Ring size guide"
-            >
-            <img
-                src="{{ asset('assets/f_assets/image/solitaire/ring guide/2.jpg') }}"
-                alt="Ring size measurement guide"
-            >
-        </div>
     </div>
 </div>
 
@@ -2072,9 +2057,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sizeToggle = document.getElementById('hjRingSizeToggle');
     const sizeSelected = document.getElementById('hjRingSizeSelected');
     const sizeError = document.getElementById('hjRingSizeError');
-    const sizeHelp = document.querySelector('.hj-ring-size-help');
-    const ringGuideModal = document.getElementById('hjRingGuideModal');
-
     const mainRingSizeInput = document.getElementById('hjRingSizeInput');
     const cartRingSizeInput = document.getElementById('cartRingSizeInput');
 
@@ -2106,41 +2088,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function setRingGuideOpen(isOpen) {
-        if (!ringGuideModal) return;
-
-        ringGuideModal.classList.toggle('is-open', isOpen);
-        ringGuideModal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-        document.body.classList.toggle('hj-ring-guide-open', isOpen);
-    }
-
     if (sizeToggle && sizeBox) {
         sizeToggle.addEventListener('click', function (event) {
             event.stopPropagation();
             setRingSizeOpen(!sizeBox.classList.contains('active'));
         });
     }
-
-    if (sizeHelp && sizeBox) {
-        sizeHelp.addEventListener('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            setRingSizeOpen(false);
-            setRingGuideOpen(true);
-        });
-    }
-
-    document.querySelectorAll('[data-ring-guide-close]').forEach(function (closeTrigger) {
-        closeTrigger.addEventListener('click', function () {
-            setRingGuideOpen(false);
-        });
-    });
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            setRingGuideOpen(false);
-        }
-    });
 
     sizeOptions.forEach(function (option) {
         option.addEventListener('click', function (event) {
