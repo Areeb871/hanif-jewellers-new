@@ -359,13 +359,15 @@
     </div>
     <!-- <div class="card-img-overlay pe-none">New</div> -->
     <div class="card-body text-center" style="background-color: #F6F4F2;">
-        <h5 class="card-title product-name-fixed">
-    @php
-        $nameParts = explode('-', $cardName);
-    @endphp
-
-    {{ trim($nameParts[0]) }}
-</h5>
+       <h5 class="card-title product-name-fixed pb-5 pb-md-0">
+            @php $nameParts = explode('-', $product->name, 2); @endphp
+            @if(count($nameParts) > 1)
+                {{ $nameParts[0] }}<br>
+                <small class="text-muted">{{ $nameParts[1] }}</small>
+            @else
+                {{ $product->name }}
+            @endif
+        </h5>
 
         <!-- @if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
             <p class="card-text">

@@ -426,7 +426,7 @@ section.watch .watch-slider-viewport,
 section.watch .watch-scroller-arrow,
 .bespoke-collections .watch-scroller-arrow {
     position: absolute;
-    top: 50%;
+    top: 47%;
     transform: translateY(-50%);
     z-index: 30;
     width: 44px;

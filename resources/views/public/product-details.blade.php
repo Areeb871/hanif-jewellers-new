@@ -169,7 +169,9 @@
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
         optional($product->subcategory)->slug === 'maurice-lacroix'||
                 optional($product->subcategory)->slug === 'chronoswiss'||
-                optional($product->subcategory)->slug === 'franck-muller'
+                optional($product->subcategory)->slug === 'franck-muller'||
+                optional($product->subcategory)->slug === 'mona-lisa'||
+                optional($product->subcategory)->slug === 'breathtaking'
 
 
 )
