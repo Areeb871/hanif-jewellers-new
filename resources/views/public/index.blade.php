@@ -840,7 +840,10 @@ towering peaks</div>
                 <div class="scroller-container">
                     @foreach ($products as $key => $product)
                         <div class="scroller-item">
-                            @include('public.partials.product-card-new', ['product' => $product])
+                            @include('public.partials.product-card-new', [
+                                'product' => $product,
+                                'storeContext' => strtolower(optional($product->category)->slug ?? '') !== 'watches',
+                            ])
                         </div>
                     @endforeach
                 </div>

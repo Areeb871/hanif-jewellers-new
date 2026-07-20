@@ -162,23 +162,25 @@
                             <h5 class="mb-3 fw-bold">Payment Gateway</h5>
                             <div class="payment-option">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" checked>
-                                    <label class="form-check-label fw-semibold" for="bankTransfer">
-                                        Bank Transfer
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="bankAlfalah" value="bank_alfalah" checked>
+                                    <label class="form-check-label fw-semibold" for="bankAlfalah">
+                                        Pay Online with Bank Alfalah
                                     </label>
                                 </div>
-                                <p class="text-muted mt-2">After completing your payment, please allow 4 to 5 working days for bank confirmation. Once confirmed, your product will be dispatched.</p>
+                                <p class="text-muted mt-2">You will be redirected to Bank Alfalah's secure payment page.</p>
                             </div>
-                        </div>
 
-                        <!-- Bank Details -->
-                        <div class="bank-details mb-4">
-                            <h5 class="mb-3 fw-bold">Bank Account Details</h5>
-                            <div class="bank-info-card">
-                                <p class="text-muted mt-2">If you want to expedite the process, you may request our bank details from our representatives. Please contact us at +92 307 0222666.</p>
-                            </div>
-                            <div class="bank-info-card mt-2">
-                                <p class="text-muted mt-2">(The confirmation of payment and delivery of the product is not facilitated on Saturdays, Sundays, and public holidays.) Debit/Credit Card: After clicking "Pay now," you will be redirected to the secure payment gateway to complete your purchase.</p>
+                            <div id="alfalahTransactionOptions" class="mt-3">
+                                <label for="transactionTypeId" class="form-label fw-semibold">Payment Type</label>
+                                <select id="transactionTypeId" name="transactionTypeId" class="form-select">
+                                    <option value="">Select payment type</option>
+                                    <option value="1">Alfa Wallet</option>
+                                    <option value="2">Alfalah Bank Account</option>
+                                    <option value="3">Credit/Debit Card</option>
+
+
+
+                                </select>
                             </div>
                         </div>
 
@@ -219,7 +221,7 @@
                         <button type="button" class="btn btn-outline-dark px-4 py-3 fw-bold me-3" onclick="previousStep()">
                             <i class="fas fa-arrow-left me-2"></i> Back to Shipping
                         </button>
-                        <button type="button" class="btn btn-dark px-5 py-3 fw-bold" onclick="processCheckout()">
+                        <button type="button" class="btn btn-dark px-5 py-3 fw-bold" id="completeOrderButton" onclick="processCheckout()">
                             Complete Order <i class="fas fa-check ms-2"></i>
                         </button>
                     </div>
@@ -1346,7 +1348,10 @@ function nextStep() {
         updateProgress();
 
         // Update transfer amount
-        document.getElementById('transferAmount').textContent = '{{ number_format($total, 2) }}';
+        const transferAmount = document.getElementById('transferAmount');
+        if (transferAmount) {
+            transferAmount.textContent = '{{ number_format($total, 2) }}';
+        }
     }
 }
 
@@ -1447,8 +1452,15 @@ function validateShippingForm() {
     return true;
 }
 
+let checkoutSubmissionInProgress = false;
+
 function processCheckout() {
+    if (checkoutSubmissionInProgress) {
+        return;
+    }
+
     const form = document.getElementById('shippingForm');
+    const completeOrderButton = document.getElementById('completeOrderButton');
 
     if (!form) {
         alert('Shipping form not found.');
@@ -1462,11 +1474,29 @@ function processCheckout() {
         formData.set('deliveryOption', deliveryOption.value || deliveryOption.id);
     }
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
-if (paymentMethod) {
+    if (!paymentMethod) {
+        alert('Please select a payment method.');
+        return;
+    }
+
     formData.set('paymentMethod', paymentMethod.value);
-} else {
-    formData.set('paymentMethod', 'bank_transfer');
-}
+
+    if (paymentMethod.value === 'bank_alfalah') {
+        const transactionType = document.getElementById('transactionTypeId');
+
+        if (!transactionType || !transactionType.value) {
+            alert('Please select a Bank Alfalah payment type.');
+            return;
+        }
+
+        formData.set('transactionTypeId', transactionType.value);
+    }
+
+    checkoutSubmissionInProgress = true;
+    if (completeOrderButton) {
+        completeOrderButton.disabled = true;
+        completeOrderButton.textContent = 'Processing...';
+    }
 
     fetch("{{ route('checkout.process') }}", {
         method: "POST",
@@ -1488,12 +1518,19 @@ if (paymentMethod) {
     .then(data => {
         if (data.success) {
             window.location.href = data.redirect;
-        } else {
-            alert(data.message || 'Checkout failed.');
+            return;
         }
+
+        throw data;
     })
     .catch(error => {
         console.log('Checkout error:', error);
+
+        checkoutSubmissionInProgress = false;
+        if (completeOrderButton) {
+            completeOrderButton.disabled = false;
+            completeOrderButton.innerHTML = 'Complete Order <i class="fas fa-check ms-2"></i>';
+        }
 
         if (error.errors) {
             alert(Object.values(error.errors).flat().join("\n"));
@@ -1535,6 +1572,31 @@ function showSuccess(message) {
    DOM READY (your existing + new)
 ========================= */
 document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+    const alfalahTransactionOptions = document.getElementById('alfalahTransactionOptions');
+    const transactionType = document.getElementById('transactionTypeId');
+    const bankTransferDetails = document.getElementById('bankTransferDetails');
+
+    const updatePaymentMethodFields = () => {
+        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+        const isBankAlfalah = selectedMethod === 'bank_alfalah';
+
+        if (alfalahTransactionOptions) {
+            alfalahTransactionOptions.style.display = isBankAlfalah ? 'block' : 'none';
+        }
+        if (transactionType) {
+            transactionType.required = isBankAlfalah;
+        }
+        if (bankTransferDetails) {
+            bankTransferDetails.style.display = isBankAlfalah ? 'none' : 'block';
+        }
+    };
+
+    paymentMethods.forEach(radio => {
+        radio.addEventListener('change', updatePaymentMethodFields);
+    });
+    updatePaymentMethodFields();
+
     // gift box interactivity
     const giftBox = document.querySelector('.gift-box');
     if (giftBox) {
