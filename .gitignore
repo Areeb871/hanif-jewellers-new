@@ -1,0 +1,6 @@
+/.env
+/.env.*
+!/.env.example
+/ngrok
+/ngrok-v3-stable-linux-amd64.tgz
+.env

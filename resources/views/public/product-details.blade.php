@@ -4,19 +4,19 @@
     {{-- Success Message Display --}}
     
     {{-- Main Product Details Section --}}
-    <section class="py-5">
+    <section class="product-details-main-section">
         <div class="">
             {{-- Product Details Layout --}}
-            <div class="row gy-5" style="margin-left: 0px; margin-right: 0px;">
+            <div class="row gy-4 product-details-layout">
                 {{-- Left Side - Product Image Gallery (Desktop) --}}
-                <div class="col-lg-8 d-none d-lg-block" style="padding-right: 60px;">
+                <div class="col-md-8 col-lg-8 d-none d-md-block" style="padding-right: 30px; padding-left:40px;">
                     <div class="product-gallery">
                         {{-- Main Product Image - Full Width --}}
                         <div class="mb-2">
                             <div class="position-relative">
                                 <img 
                                     src="{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}" 
-                                    class="img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="img-fluid w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="{{ $product->name }}"
                                     onclick="openImagePopup('{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}')"
@@ -30,7 +30,7 @@
                                 <div class="col-6">
                                     <img 
                                         src="{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}" 
-                                        class="img-fluid rounded-3 w-100 cursor-pointer"
+                                        class="img-fluid w-100 cursor-pointer"
                                         style="object-fit: contain; background-color: #F6F4F2;"
                                         alt="Lifestyle view"
                                         onclick="openImagePopup('{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}')"
@@ -40,7 +40,7 @@
                                     <div class="col-6">
                                         <img 
                                             src="{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}" 
-                                            class="img-fluid rounded-3 w-100 cursor-pointer"
+                                            class="img-fluid w-100 cursor-pointer"
                                             style="object-fit: contain; background-color: #F6F4F2;"
                                             alt="Detail view"
                                             onclick="openImagePopup('{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}')"
@@ -54,7 +54,7 @@
                             <div class="mb-2">
                                 <img 
                                     src="{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}" 
-                                    class="img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="img-fluid w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="Additional view"
                                     onclick="openImagePopup('{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}')"
@@ -74,7 +74,7 @@
                                         <div class="col-6">
                                             <img 
                                                 src="{{ asset($img->image) }}" 
-                                                class="img-fluid rounded-3 w-100 cursor-pointer"
+                                                class="img-fluid w-100 cursor-pointer"
                                                 style="object-fit: contain; background-color: #F6F4F2;"
                                                 alt="Additional view {{ $imgIndex + 4 }}"
                                                 onclick="openImagePopup('{{ asset($img->image) }}')"
@@ -88,7 +88,7 @@
                             </div>
 
                 {{-- Mobile Product Image Gallery --}}
-                <div class="col-12 d-lg-none" style="padding: unset; margin: unset;">
+                <div class="col-12 d-md-none" style="padding: unset; margin: unset;">
                     <div class="mobile-product-gallery">
                         <div id="mobileProductCarousel" class="carousel slide">
                             @php
@@ -130,7 +130,7 @@
                                             <div class="mobile-carousel-image-wrapper">
                                                 <img 
                                                     src="{{ asset($img->image) }}" 
-                                                    class="d-block w-100"
+                                                    class="d-block"
                                                     alt="{{ $product->name }} image {{ $imgIndex + 1 }}"
                                                     onclick="openImagePopup('{{ asset($img->image) }}')"
                                                 />
@@ -142,7 +142,7 @@
                                         <div class="mobile-carousel-image-wrapper">
                                             <img 
                                                 src="{{ $mainImage }}" 
-                                                class="d-block w-100"
+                                                class="d-block"
                                                 alt="{{ $product->name }}"
                                                 onclick="openImagePopup('{{ $mainImage }}')"
                                             />
@@ -155,7 +155,7 @@
                 </div>
 
                 {{-- Right Side - Product Information (Sticky) --}}
-                <div class="col-lg-4 mt-0 mt-lg-5" style="padding-right: 50px; margin: unset;">
+                <div class="col-md-4 col-lg-4 mt-0" style="padding-right: 40px; margin: unset;">
                     <div class="product-info sticky-sidebar">
 
 @php
@@ -189,8 +189,8 @@
 
 @else
 
-    <div class="mb-4">
-        <h1 class="h2 mb-0" style="font-family: sans-serif; font-size: 1.4rem !important;">
+    <div class="product-title-wrap">
+        <h1 class="product-detail-title">
             {{ $displayName }}
         </h1>
     </div>
@@ -203,10 +203,66 @@
 
 
 <style>
+.product-details-main-section {
+    padding: 1.25rem 0 0;
+    background: #fff;
+}
+
+@media (min-width: 992px) {
+    .product-details-main-section {
+        padding-top: 1.15rem;
+    }
+}
+
+.product-details-layout {
+    margin-left: 0;
+    margin-right: 0;
+    --bs-gutter-x: 0;
+}
+
+.product-gallery {
+    width: 100%;
+}
+
+.product-title-wrap {
+    margin-bottom: 1.35rem;
+}
+
+.product-detail-title,
+.product-detail-full-name {
+    color: #17120f;
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: clamp(2rem, 2.7vw, 3rem) !important;
+    font-weight: 500;
+    letter-spacing: .015em;
+    line-height: 1.06;
+}
+
+.product-detail-title {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+.product-section-label {
+    margin: 0 0 12px;
+    color: #17120f;
+    font-family: inherit;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.product-features-panel {
+    margin-bottom: 1.45rem;
+    padding-bottom: 0;
+}
+
 .product-description {
-    line-height: 1.5;
+    color: #625b54;
+    font-family: inherit;
+    line-height: 1.72;
     font-size: 14px;
-    color: #666;
 }
 
 /* Paragraph & list base */
@@ -214,7 +270,7 @@
 .product-description li {
     margin: 0;
     padding: 0;
-    line-height: 1.5;
+    line-height: 1.72;
     font-size: 14px !important;
     font-weight: 400;
 }
@@ -224,21 +280,18 @@
 .product-description b {
     font-size: 14px !important;
     font-weight: 600;
-    color: #111;
+    color: #201b17;
 }
 
 /* RIGHT side values (more bold & clearer) */
 .product-description strong + span,
 .product-description b + span {
     font-weight: 700;
-    color: #000;
+    color: #17120f;
 }
 
 .product-detail-full-name {
-    font-family: sans-serif;
-    font-size: 1.4rem !important;
-    line-height: 1.35;
-    margin: 33px 0 14px;
+    margin: 0 0 1.35rem;
     overflow: visible !important;
     text-overflow: clip !important;
     white-space: normal !important;
@@ -255,11 +308,105 @@
 }
 .price-display {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 1.08rem;
+    color: #17120f;
+    letter-spacing: .03em;
+}
+
+.product-old-price {
+    /* margin-bottom: 1.35rem; */
+    color: #8f867d;
+    font-size: .9rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+}
+
+.product-price-note {
+    margin: .65rem 0 0;
+    color: #7a7169;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.product-price-panel {
+    margin: 1.35rem 0 !important;
+    padding-top: 1.35rem;
+    padding-bottom: 1.35rem;
+    border-top: 1px solid #e6ded6;
+    border-bottom: 1px solid #e6ded6;
+}
+
+.cta-buttons {
+    margin-top: 1.4rem;
+}
+
+.product-action-btn {
+    min-height: 46px;
+    border: 1px solid #17120f !important;
+    border-radius: 0 !important;
+    background: #17120f !important;
+    color: #fff !important;
+    font-family: inherit !important;
+    font-size: .72rem !important;
+    font-weight: 600 !important;
+    letter-spacing: .14em;
+    transition: background-color .24s ease, color .24s ease, border-color .24s ease;
+}
+
+.product-action-btn:hover,
+.product-action-btn:focus-visible {
+    background: #fff !important;
+    color: #17120f !important;
+    box-shadow: none !important;
+}
+
+.product-action-btn-secondary {
+    background: transparent !important;
+    color: #17120f !important;
+}
+
+.product-action-btn-secondary:hover,
+.product-action-btn-secondary:focus-visible {
+    background: #17120f !important;
+    color: #fff !important;
+}
+
+.you-may-like-section {
+    margin-top: 0;
+    border-top: 0;
+    background: linear-gradient(180deg, #fff 0%, #fbfaf8 100%);
+    padding-top: 3rem !important;
+}
+
+.section-luxury-heading {
+    margin: 0;
+    color: #17120f;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: .06em;
+    line-height: 1.1;
+}
+
+.you-may-like-section .text-center.mb-5 {
+    margin-bottom: 3rem !important;
 }
 
 
 @media (max-width: 767.98px) {
+    .product-details-main-section {
+        padding-top: 62px;
+    }
+
+    #mobileProductCarousel .mobile-carousel-image-wrapper {
+        aspect-ratio: 1 / 1;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: calc(100svh - 96px);
+    }
+
     .product-detail-full-name {
         margin: 18px 0 8px !important;
         font-size: 1.25rem !important;
@@ -272,6 +419,19 @@
     }
 }
 
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .product-details-main-section {
+        padding-top: 72px;
+    }
+
+    .product-details-layout > .col-lg-8 {
+        padding-right: 28px !important;
+    }
+
+    .product-details-layout > .col-lg-4 {
+        padding: 0 24px 0 0 !important;
+    }
+}
 
 
 </style>
@@ -291,11 +451,11 @@
 @endif
 
 @if(filled($displayDescription))
-<div class="mb-4">
-    <h3 class="fw-bold" style="text-decoration: underline; font-size:15px;margin-bottom: 4px;">
+<div class="product-features-panel">
+    <h3 class="product-section-label">
         Main Features:
     </h3>
-    <div class="product-description" style="line-height: 1.5; font-size: 14px; margin: 1; padding: 0;color:#666">
+    <div class="product-description">
         {!! $displayDescription !!}
     </div>
 </div>
@@ -309,14 +469,15 @@
                                 </div>
                             @endif
                         </div> -->
-<div class="my-5">
-    @php
-        $livePrice    = $product->displayPrice($storeContext);
-        $roundedPrice = round($livePrice, -3);
-        $canShowPrice = $storeContext
-            ? ($roundedPrice > 0)
-            : (!empty($product->show_price) && $roundedPrice > 0);
-    @endphp
+@php
+    $livePrice    = $product->displayPrice($storeContext);
+    $roundedPrice = round($livePrice, -3);
+    $isJewelleryProduct = optional($product->category)->slug !== 'watches';
+    $oldPrice = $isJewelleryProduct ? round($roundedPrice * 1.3, -3) : null;
+    $canShowPrice = $storeContext
+        ? ($roundedPrice > 0)
+        : (!empty($product->show_price) && $roundedPrice > 0);
+@endphp
 
     <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
@@ -326,18 +487,25 @@
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
     @endif   -->
-    @if($canShowPrice)
+@if($canShowPrice)
+<div class="product-price-panel">
+    @if($isJewelleryProduct && $oldPrice > $roundedPrice)
+        <div class="product-old-price">
+            PKR {{ number_format($oldPrice, 0, '.', ',') }}
+        </div>
+    @endif
+
     <div class="price-display">
         PKR {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
-        @if($product->category->slug != 'watches')
-            <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+    @if($isJewelleryProduct)
+        <p class="product-price-note">
             All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
-            </p>
-        @endif
+        </p>
     @endif
 </div>
+@endif
                         {{-- Size Selector --}}
                         @php
                             $tagSlugs = $product->tags ? $product->tags->pluck('slug')->map(function($s){ return strtolower($s); }) : collect();
@@ -461,16 +629,14 @@
                                 </div>
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 
-                                            style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
+                                    <button type="button" class="btn btn-dark w-100 py-2 product-action-btn product-action-btn-secondary" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @else
                                 {{-- Only Talk to Expert when no price --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 
-                                            style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
+                                    <button type="button" class="btn btn-dark w-100 py-2 product-action-btn" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
@@ -489,7 +655,7 @@
     <section class="py-5 you-may-like-section">
         <div class="">
             <div class="text-center mb-5">
-                <h3 class="fw-bold" style="font-family: serif; font-size: 2rem;">YOU MAY ALSO LIKE</h3>
+                <h3 class="section-luxury-heading">YOU MAY ALSO LIKE</h3>
             </div>
 
             @php
@@ -509,7 +675,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
             <!-- Desktop: homepage-style single-row scroller -->
             <section id="ymlDesktop" class="onlineStore">
-                <div class="mobile-product-scroller">
+                <div id="recommendedProducts" class="mobile-product-scroller" tabindex="0" aria-label="You may also like products">
                     <div class="scroller-container">
                         @foreach($recommendedProducts as $recProduct)
                             <div class="scroller-item">
@@ -524,11 +690,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                             $totalProducts = $recommendedProducts->count();
                         @endphp
                         @for ($i = 0; $i < $totalProducts; $i++)
-                            <div
-                                class="dot {{ $i === 0 ? 'active' : '' }}"
+                            <button
+                                type="button"
+                                class="dot carousel-dot {{ $i === 0 ? 'active' : '' }}"
                                 data-index="{{ $i }}"
-                                @if($i === 0) style="background-color: #000;" @endif
-                            ></div>
+                                aria-label="Go to product {{ $i + 1 }}"
+                                aria-current="{{ $i === 0 ? 'true' : 'false' }}"
+                            ></button>
                         @endfor
                     </div>
                 </div>
@@ -561,6 +729,17 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             const dots = document.querySelectorAll(`${sectionSelector} .dot`);
             if (!scroller || !container || !items.length) return;
 
+            function getLastScrollableIndex() {
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                let lastIndex = 0;
+                items.forEach((item, index) => {
+                    if (item.offsetLeft <= maxScroll + 2) {
+                        lastIndex = index;
+                    }
+                });
+                return Math.max(0, lastIndex);
+            }
+
             function getStep() {
                 if (items.length < 2) return items[0].getBoundingClientRect().width;
                 const base = items[0].offsetLeft;
@@ -581,21 +760,24 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                         idx = i;
                     }
                 });
-                return idx;
+                return Math.min(idx, getLastScrollableIndex());
             }
 
             function paintDot(dot, isActive) {
                 dot.classList.toggle('active', isActive);
-                if (window.matchMedia('(max-width: 767.98px)').matches) {
-                    dot.style.backgroundColor = isActive ? '#000' : '#d8d8d8';
-                } else {
-                    dot.style.backgroundColor = '';
-                }
+                dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                dot.style.backgroundColor = '';
             }
 
             function updateDots() {
                 const idx = nearestIndex();
-                dots.forEach((d, i) => paintDot(d, i === idx));
+                const lastScrollableIndex = getLastScrollableIndex();
+                dots.forEach((dot, index) => {
+                    const isAvailable = index <= lastScrollableIndex;
+                    dot.hidden = !isAvailable;
+                    dot.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
+                    paintDot(dot, isAvailable && index === idx);
+                });
             }
 
             let isMouseDown = false, startX = 0, startLeft = 0;
@@ -625,7 +807,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 dot.addEventListener('click', () => {
                     const indexAttr = dot.getAttribute('data-index');
                     const targetIdx = indexAttr ? parseInt(indexAttr, 10) : 0;
-                    const bounded = Math.max(0, Math.min(items.length - 1, targetIdx));
+                    const bounded = Math.max(0, Math.min(getLastScrollableIndex(), targetIdx));
                     smoothScrollTo(scroller, items[bounded].offsetLeft, 450);
                 });
             });
@@ -641,7 +823,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 if (window.matchMedia('(max-width: 767.98px)').matches) {
                     scroller.scrollLeft = 0;
                 }
-                dots.forEach((d, i) => paintDot(d, i === 0));
+                updateDots();
             }
             if (getComputedStyle(scroller).cursor === 'auto') scroller.style.cursor = 'grab';
         }
@@ -811,8 +993,9 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
         
         .product-description {
-            line-height: 1.6;
-            color: #6c757d;
+            color: #625b54;
+            font-family: inherit;
+            line-height: 1.72;
         }
         
         /* ===== PRODUCT CARD STYLES ===== */
@@ -881,15 +1064,16 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         /* ===== STICKY SIDEBAR STYLES ===== */
         .sticky-sidebar {
             position: sticky;
-            top: 20px;
+            top: 88px;
             height: fit-content;
+            align-self: flex-start;
             /* max-height: calc(100vh - 40px);
             overflow-y: auto; */
             z-index: 5;
         }
         
         /* ===== RESPONSIVE ADJUSTMENTS ===== */
-        @media (max-width: 991.98px) {
+        @media (max-width: 767.98px) {
             .sticky-sidebar {
                 position: static;
                 top: auto;
@@ -898,9 +1082,90 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
             
             .product-info {
-                margin-top: 30px;
+                margin-top: 20px;
                 box-shadow: none;
-                border: 1px solid #e9ecef;
+                border: 0;
+            }
+
+            .mobile-product-gallery,
+            #mobileProductCarousel {
+                width: 100%;
+                overflow: hidden;
+                background-color: #F6F4F2;
+            }
+
+            #mobileProductCarousel .mobile-carousel-image-wrapper {
+                width: 100% !important;
+                aspect-ratio: 1 / 1;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: calc(100svh - 96px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #F6F4F2;
+                overflow: hidden;
+            }
+
+            #mobileProductCarousel .mobile-carousel-image-wrapper img {
+                width: auto !important;
+                height: auto !important;
+                max-width: 100%;
+                max-height: calc(100svh - 96px);
+                object-fit: contain !important;
+                cursor: pointer;
+            }
+
+            #mobileProductCarousel .mobile-carousel-scroll-track {
+                align-items: center;
+            }
+
+            #mobileProductCarousel .mobile-carousel-scroll-item {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #mobileProductCarousel .carousel-indicators {
+                bottom: 12px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                width: auto;
+                margin: 0;
+                padding: 0;
+                background: transparent;
+                z-index: 5;
+            }
+
+            #mobileProductCarousel .carousel-indicators button {
+                width: 4px !important;
+                height: 4px !important;
+                min-width: 4px;
+                min-height: 4px;
+                margin: 0 !important;
+                padding: 0;
+                border: 0 !important;
+                border-top: 0 !important;
+                border-bottom: 0 !important;
+                border-radius: 50% !important;
+                background-color: #000 !important;
+                background-clip: initial !important;
+                opacity: .28;
+                transition: opacity .18s ease, width .18s ease;
+            }
+
+            #mobileProductCarousel .carousel-indicators button.active {
+                width: 24px !important;
+                min-width: 24px;
+                height: 4px !important;
+                min-height: 4px;
+                border-radius: 999px !important;
+                opacity: 1;
             }
         }
         
@@ -1249,20 +1514,41 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
         #ymlDesktop .dots-container {
             display: flex;
-            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            max-width: min(100%, 420px);
+            padding: 8px 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
+        #ymlDesktop .dots-container::-webkit-scrollbar { display: none; }
         #ymlDesktop .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
+            flex: 0 0 auto;
+            width: 7px;
+            height: 7px;
+            min-width: 7px;
+            min-height: 7px;
+            padding: 0;
+            border-radius: 999px;
+            background-color: #d8d3cc;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: width 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
             border: none;
             outline: none;
         }
-        #ymlDesktop .dot.active { background-color: #000; }
-        #ymlDesktop .dot:hover { background-color: #666; }
+        #ymlDesktop .dot.active {
+            width: 34px;
+            min-width: 34px;
+            background-color: #17120f;
+            box-shadow: 0 3px 10px rgba(28, 25, 22, 0.2);
+        }
+        #ymlDesktop .dot:hover,
+        #ymlDesktop .dot:focus-visible {
+            background-color: #6f6760;
+            transform: translateY(-1px);
+        }
 
         /* YOU MAY ALSO LIKE – Mobile horizontal scroller */
         #ymlMobile .mobile-product-scroller {
@@ -1310,13 +1596,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
         @media (max-width: 767.98px) {
             .you-may-like-section {
-                padding-top: 2.25rem !important;
+                padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
                 overflow: hidden;
             }
 
             .you-may-like-section .text-center.mb-5 {
-                margin-bottom: 1.25rem !important;
+                margin-bottom: 2rem !important;
             }
 
             .you-may-like-section h3 {
@@ -1469,32 +1755,57 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
 
             #ymlDesktop .scroller-dots {
+                display: flex;
+                justify-content: center;
+                width: 100%;
                 margin-top: 14px !important;
+                padding: 0 12px 4px;
+                box-sizing: border-box;
+                overflow: visible;
             }
 
             #ymlDesktop .dots-container {
-                gap: 8px;
+                display: flex;
+                gap: 4px;
                 align-items: center;
                 justify-content: center;
-                padding: 0;
+                width: max-content;
+                max-width: calc(100vw - 24px);
+                margin: 0 auto;
+                padding: 6px 8px;
+                box-sizing: border-box;
+                overflow-x: auto;
+                overflow-y: visible;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            #ymlDesktop .dots-container::-webkit-scrollbar {
+                display: none;
             }
 
             #ymlDesktop .dot {
-                width: 7px !important;
-                height: 7px !important;
-                min-width: 7px !important;
-                min-height: 7px !important;
+                flex: 0 0 auto;
+                width: 4px !important;
+                height: 4px !important;
+                min-width: 4px !important;
+                min-height: 4px !important;
+                padding: 0 !important;
                 border-radius: 50% !important;
-                background-color: #d8d8d8;
+                background-color: #000 !important;
+                opacity: .28;
+                box-shadow: none !important;
+                transform: none !important;
             }
 
             #ymlDesktop .dot.active {
-                width: 7px !important;
-                height: 7px !important;
-                min-width: 7px !important;
-                min-height: 7px !important;
-                border-radius: 50% !important;
+                width: 24px !important;
+                height: 4px !important;
+                min-width: 24px !important;
+                min-height: 4px !important;
+                border-radius: 999px !important;
                 background-color: #000 !important;
+                opacity: 1;
             }
         }
     </style>
@@ -1746,8 +2057,17 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         function goToSlide(slideIndex) {
             const container = document.getElementById('recommendedProducts');
             if (!container) return;
-            const items = container.querySelectorAll('.product-card-item');
+            const items = container.querySelectorAll('.scroller-item, .product-card-item');
+            const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+            let lastScrollableIndex = 0;
+            items.forEach((item, index) => {
+                if (item.offsetLeft <= maxScroll + 2) {
+                    lastScrollableIndex = index;
+                }
+            });
+            slideIndex = Math.max(0, Math.min(lastScrollableIndex, slideIndex));
             const target = items[slideIndex];
+            if (!target) return;
             const targetRect = target.getBoundingClientRect();
             const contRect = container.getBoundingClientRect();
             const beforeScrollLeft = container.scrollLeft;
@@ -1764,8 +2084,15 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             if (!container) return;
             const section = container.closest('section') || document;
             const dots = section.querySelectorAll('.carousel-dot');
-            const items = container.querySelectorAll('.product-card-item');
+            const items = container.querySelectorAll('.scroller-item, .product-card-item');
             if (!items.length || !dots.length) return;
+            const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+            let lastScrollableIndex = 0;
+            items.forEach((item, index) => {
+                if (item.offsetLeft <= maxScroll + 2) {
+                    lastScrollableIndex = index;
+                }
+            });
             // Find nearest item to current scroll (relative to container)
             const currentLeft = container.scrollLeft;
             let nearestIndex = 0;
@@ -1775,8 +2102,15 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 const dist = Math.abs(itemLeft - currentLeft);
                 if (dist < nearestDist) { nearestDist = dist; nearestIndex = i; }
             });
+            nearestIndex = Math.min(nearestIndex, lastScrollableIndex);
             dots.forEach((dot, index) => {
-                dot.style.background = index === nearestIndex ? '#000' : '#ccc';
+                const isAvailable = index <= lastScrollableIndex;
+                const isActive = isAvailable && index === nearestIndex;
+                dot.hidden = !isAvailable;
+                dot.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
+                dot.classList.toggle('active', isActive);
+                dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                dot.style.background = '';
             });
         }
 
@@ -2598,7 +2932,14 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             })();
 
             function getNearestItemIndex() {
-                const items = slider.querySelectorAll('.product-card-item');
+                const items = slider.querySelectorAll('.scroller-item, .product-card-item');
+                const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
+                let lastScrollableIndex = 0;
+                items.forEach((item, index) => {
+                    if (item.offsetLeft <= maxScroll + 2) {
+                        lastScrollableIndex = index;
+                    }
+                });
                 const currentLeft = slider.scrollLeft;
                 let nearestIndex = 0;
                 let nearestDist = Infinity;
@@ -2607,11 +2948,11 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     const dist = Math.abs(itemLeft - currentLeft);
                     if (dist < nearestDist) { nearestDist = dist; nearestIndex = i; }
                 });
-                return nearestIndex;
+                return Math.min(nearestIndex, lastScrollableIndex);
             }
 
             function snapToNearest() {
-                const items = slider.querySelectorAll('.product-card-item');
+                const items = slider.querySelectorAll('.scroller-item, .product-card-item');
                 if (!items.length) return;
                 const idx = getNearestItemIndex();
                 const target = items[idx];
@@ -2766,20 +3107,23 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             carouselInner.style.minWidth = '100%';
             
             // Remove Bootstrap carousel classes that might interfere
+            carouselInner.classList.add('mobile-carousel-scroll-track');
             carouselInner.classList.remove('carousel-inner');
             carouselItems.forEach(item => {
+                item.classList.add('mobile-carousel-scroll-item');
                 item.classList.remove('carousel-item', 'active');
             });
 
             // Hide scrollbar and add custom smooth scroll
             const scrollbarStyle = document.createElement('style');
             scrollbarStyle.textContent = `
-                #mobileProductCarousel .carousel-inner::-webkit-scrollbar {
+                #mobileProductCarousel .mobile-carousel-scroll-track::-webkit-scrollbar {
                     display: none;
                 }
-                #mobileProductCarousel .carousel-inner {
+                #mobileProductCarousel .mobile-carousel-scroll-track {
                     scroll-behavior: smooth;
-                    transition: scroll-behavior 2s ease-in-out;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
             `;
             document.head.appendChild(scrollbarStyle);
@@ -2866,6 +3210,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             // Update dots based on scroll position
             function updateMobileDots() {
                 const items = mobileScroller.querySelectorAll('.scroller-item');
+                const maxScroll = Math.max(0, mobileScroller.scrollWidth - mobileScroller.clientWidth);
+                let lastScrollableIndex = 0;
+                items.forEach((item, index) => {
+                    if (item.offsetLeft <= maxScroll + 2) {
+                        lastScrollableIndex = index;
+                    }
+                });
                 let currentIndex = 0;
                 let best = Infinity;
                 items.forEach((item, index) => {
@@ -2875,30 +3226,24 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                         currentIndex = index;
                     }
                 });
+                currentIndex = Math.min(currentIndex, lastScrollableIndex);
                 
                 // Update all dots
                 document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
-                    if (index === currentIndex) {
-                        dot.classList.add('active');
-                        dot.style.backgroundColor = '#000';
-                    } else {
-                        dot.classList.remove('active');
-                        dot.style.backgroundColor = '#d8d8d8';
-                    }
+                    const isAvailable = index <= lastScrollableIndex;
+                    const isActive = isAvailable && index === currentIndex;
+                    dot.hidden = !isAvailable;
+                    dot.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
+                    dot.classList.toggle('active', isActive);
+                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                    dot.style.backgroundColor = '';
                 });
                 
                 // Scroll dots container to keep active dot visible
                 const activeDot = document.querySelector('#ymlDesktop .scroller-dots .dot.active');
                 if (activeDot && dotsContainer) {
-                    const dotIndex = Array.from(document.querySelectorAll('#ymlDesktop .scroller-dots .dot')).indexOf(activeDot);
-                    const dotWidth = 16; // 8px dot + 8px gap
-                    const containerWidth = dotsContainer.offsetWidth;
-                    const scrollPosition = (dotIndex * dotWidth) - (containerWidth / 2) + (dotWidth / 2);
-                    
-                    dotsContainer.scrollTo({
-                        left: Math.max(0, scrollPosition),
-                        behavior: 'smooth'
-                    });
+                    const scrollPosition = activeDot.offsetLeft - (dotsContainer.clientWidth / 2) + (activeDot.offsetWidth / 2);
+                    dotsContainer.scrollTo({ left: Math.max(0, scrollPosition), behavior: 'smooth' });
                 }
             }
 
@@ -2908,11 +3253,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             // Initialize first dot as active
             function setInitialDot() {
                 mobileScroller.scrollLeft = 0;
-                document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
-                    const isActive = index === 0;
-                    dot.classList.toggle('active', isActive);
-                    dot.style.backgroundColor = isActive ? '#000' : '#d8d8d8';
-                });
+                updateMobileDots();
             }
 
             setInitialDot();

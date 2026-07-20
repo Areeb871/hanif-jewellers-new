@@ -35,7 +35,7 @@
                     <li>Verification and Valuation of Jewellery for exchange/buyback may take up to 3 working days.</li>
                     <li>Original invoice &amp; certificate must be presented at the time of exchange or return.</li>
                     <li>Delivery of order or advance claim must be made within 90 days of the order and advance date, after 90 days company will not be held liable in any case for any claim.</li>
-                    <li>Orders once placed cannot be cancelled, refunded or exchanged.</li>
+                    <li>Orders once placed cannot be cancelled, refunded or exchanged, except where required by applicable law. If a product is received defective, damaged, or does not conform to the contract of sale, customers may be entitled to a refund, replacement, repair, or other remedy in accordance with applicable consumer protection laws</li>
                     <li>All Govt Taxes will be applicable on the confirmation of the purchase.</li>
                     <li>Any charges incurred by Hanif Jewellery on the Transactions including credit card charges will be deducted in case of buyback. The value for exchange/buyback will be net of VAT/Taxes amount paid earlier. In case the customer has opted for Tourist VAT/Taxes Refund at the time of exiting Pakistan, only the net value will be considered for exchange/buyback.</li>
                     <li>It is the company’s sole discretion to reject or purchase any product after evaluation.</li>
@@ -63,7 +63,7 @@
                     <li>Customized Jewellery, Diamonds, Stones procured on customer order, will not be considered for exchange/return. Company reserves the right to reject purchase of such Jewellery after evaluation.</li>
                     <li>The company’s Exchange/Buyback guidelines do not apply on the purchase of watches &amp; Pearl Jewellery.</li>
                     <li>Delivery of order or advance claim must be made within 90 days of the order date and advance. After 90 days company will not be held liable in any case for any claim.</li>
-                    <li>Orders once placed cannot be cancelled, refunded or exchanged.</li>
+                    <li>Orders once placed cannot be cancelled, refunded or exchanged, except where required by applicable law. If a product is received defective, damaged, or does not conform to the contract of sale, customers may be entitled to a refund, replacement, repair, or other remedy in accordance with applicable consumer protection laws</li>
                     <li>Any charges incurred by Hanif Jewellery on the Transactions including credit card charges will be deducted in case of buyback. The value for exchange/buyback will be net of VAT/Taxes amount paid earlier. In case the customer has opted for Tourist VAT Refund at the time of exiting UAE, only the net value will be considered for exchange/buyback.</li>
                 </ul>
             </div>

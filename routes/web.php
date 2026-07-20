@@ -17,6 +17,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SolitaireProductAdminController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\BankAlfalahPaymentController;
 
 
 use App\Models\Tags;
@@ -140,6 +141,21 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('checkout.process');
+
+Route::get('/payments/alfalah/{order}/start', [BankAlfalahPaymentController::class, 'start'])
+    ->middleware('signed')
+    ->name('bank-alfalah.start');
+Route::get('/payments/alfalah/return/{callbackPath?}', [BankAlfalahPaymentController::class, 'handleReturn'])
+    ->where('callbackPath', '.*')
+    ->name('bank-alfalah.return');
+
+// Keep the bank-provided manual sandbox page available locally only.
+if (app()->environment('local')) {
+    Route::view('/bank-alfalah-payment', 'public.bank-alfalah-payment')
+        ->name('bank-alfalah.payment');
+    Route::post('/bank-alfalah-payment/handshake', [BankAlfalahPaymentController::class, 'handshake'])
+        ->name('bank-alfalah.handshake');
+}
 Route::get('/cart/header', function () {
     return view('public.partials.cart-header');
 })->name('cart.header');

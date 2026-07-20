@@ -641,7 +641,7 @@ public function index()
             ->where('status', 'published')
             ->where('is_featured', 1)
             ->where('category_id', 3)
-            ->whereIn('subcategory_id', [32, 33, 34, 35, 37])
+            // ->whereIn('subcategory_id', [32, 33, 34, 35, 37,28])
             ->inRandomOrder()
             ->take($perCategory)
             ->get();

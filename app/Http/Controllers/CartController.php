@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use App\Models\CheckoutLead;
 use App\Models\SolitaireProduct;
 
@@ -166,9 +168,10 @@ public function processCheckout(Request $request)
             'city'      => 'required|string|max:255',
             'state'     => 'required|string|max:255',
             'zipCode'   => 'required|string|max:20',
-            'deliveryOption' => 'nullable|string',
+            'deliveryOption' => 'required|string|in:ship',
             'orderNotes' => 'nullable|string|max:1000',
-            'paymentMethod' => 'nullable|string|max:100',
+            'paymentMethod' => 'required|string|in:bank_transfer,bank_alfalah',
+            'transactionTypeId' => 'required_if:paymentMethod,bank_alfalah|nullable|string|in:1,2,3',
         ]);
 
         if ($validator->fails()) {
@@ -180,6 +183,8 @@ public function processCheckout(Request $request)
                 'errors' => $validator->errors(),
             ], 422);
         }
+
+        $validated = $validator->validated();
 
         /*
         |--------------------------------------------------------------------------
@@ -194,9 +199,11 @@ public function processCheckout(Request $request)
             'session_id' => $sessionId,
         ]);
 
+        DB::beginTransaction();
+
         /*
         |--------------------------------------------------------------------------
-        | 3. Fetch Cart
+        | 3. Fetch and lock the exact cart being ordered
         |--------------------------------------------------------------------------
         */
         $cartItems = Cart::with(['product', 'solitaireProduct'])
@@ -206,6 +213,7 @@ public function processCheckout(Request $request)
             ->when(!$userId, function ($query) use ($sessionId) {
                 return $query->where('session_id', $sessionId);
             })
+            ->lockForUpdate()
             ->get()
             ->filter(function ($item) {
                 $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire')
@@ -224,13 +232,15 @@ public function processCheckout(Request $request)
         ]);
 
         if ($cartItems->isEmpty()) {
+            DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Your cart is empty.',
             ], 422);
         }
 
-        DB::beginTransaction();
+        $orderedCartIds = $cartItems->pluck('id')->all();
 
         /*
         |--------------------------------------------------------------------------
@@ -303,25 +313,26 @@ public function processCheckout(Request $request)
         |--------------------------------------------------------------------------
         */
         $order = Order::create([
-            'order_number' => 'ORD-' . strtoupper(uniqid()),
+            'order_number' => 'ORD-' . strtoupper((string) Str::ulid()),
             'status' => 'pending',
+            'payment_status' => 'pending',
             'user_id' => $userId,
             'session_id' => $sessionId,
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address1' => $request->address1,
-            'address2' => $request->address2,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip_code' => $request->zipCode,
-            'delivery_option' => $request->deliveryOption ?? 'shipping',
-            'order_notes' => $request->orderNotes,
+            'first_name' => $validated['firstName'],
+            'last_name' => $validated['lastName'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address1' => $validated['address1'],
+            'address2' => $validated['address2'] ?? null,
+            'city' => $validated['city'],
+            'state' => $validated['state'],
+            'zip_code' => $validated['zipCode'],
+            'delivery_option' => $validated['deliveryOption'],
+            'order_notes' => $validated['orderNotes'] ?? null,
             'subtotal' => $subtotal,
             'shipping_cost' => $shipping,
             'total_amount' => $total,
-            'payment_method' => $request->paymentMethod ?? 'bank_transfer',
+            'payment_method' => $validated['paymentMethod'],
         ]);
 
         /*
@@ -422,7 +433,8 @@ public function processCheckout(Request $request)
         | 9. Clear Cart
         |--------------------------------------------------------------------------
         */
-        Cart::when($userId, function ($query) use ($userId) {
+        Cart::whereIn('id', $orderedCartIds)
+            ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
             ->when(!$userId, function ($query) use ($sessionId) {
@@ -430,12 +442,25 @@ public function processCheckout(Request $request)
             })
             ->delete();
 
+        $redirect = route('index');
+
+        if ($validated['paymentMethod'] === 'bank_alfalah') {
+            $redirect = URL::temporarySignedRoute(
+                'bank-alfalah.start',
+                now()->addMinutes(15),
+                [
+                    'order' => $order->id,
+                    'transaction_type' => $validated['transactionTypeId'],
+                ]
+            );
+        }
+
         DB::commit();
 
         return response()->json([
             'success' => true,
             'message' => 'Order placed successfully!',
-            'redirect' => route('index'),
+            'redirect' => $redirect,
             'order_number' => $order->order_number,
             'order_total' => $order->total_amount,
         ]);

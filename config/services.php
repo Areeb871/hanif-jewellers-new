@@ -35,4 +35,36 @@ return [
         ],
     ],
 
+    'bank_alfalah' => [
+        'handshake_url' => env(
+            'BANK_ALFALAH_HANDSHAKE_URL',
+            'https://sandbox.bankalfalah.com/HS/HS/HS'
+        ),
+        'sso_url' => env(
+            'BANK_ALFALAH_SSO_URL',
+            'https://sandbox.bankalfalah.com/SSO/SSO/SSO'
+        ),
+        'order_status_url' => env(
+            'BANK_ALFALAH_ORDER_STATUS_URL',
+            'https://sandbox.bankalfalah.com/HS/api/IPN/OrderStatus'
+        ),
+        'channel_id' => env('BANK_ALFALAH_CHANNEL_ID', '1001'),
+        'is_redirection_request' => env(
+            'BANK_ALFALAH_IS_REDIRECTION_REQUEST',
+            '0'
+        ),
+        'return_url' => env('BANK_ALFALAH_RETURN_URL'),
+        'merchant_id' => env('BANK_ALFALAH_MERCHANT_ID'),
+        'store_id' => env('BANK_ALFALAH_STORE_ID'),
+        'merchant_hash' => env('BANK_ALFALAH_MERCHANT_HASH'),
+        'merchant_username' => env(
+            'BANK_ALFALAH_MERCHANT_USERNAME'
+        ),
+        'merchant_password' => env(
+            'BANK_ALFALAH_MERCHANT_PASSWORD'
+        ),
+        'key_1' => env('BANK_ALFALAH_KEY_1'),
+        'key_2' => env('BANK_ALFALAH_KEY_2'),
+    ],
+
 ];

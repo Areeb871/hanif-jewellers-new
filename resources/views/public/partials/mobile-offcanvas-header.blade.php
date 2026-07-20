@@ -9,7 +9,7 @@
     </div>
     <div class="action-section">
         <a href="/cart" class="mobile-nav-icon position-relative">
-            <i class="fa-solid fa-cart-shopping"></i>
+            {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
             @php
                 $cartCount = 0;
                 if (Auth::check()) {
@@ -19,7 +19,7 @@
                 }
             @endphp
             @if($cartCount > 0)
-                <span class="mobile-cart-badge">{{ $cartCount }}</span>
+                {{-- <span class="mobile-cart-badge">{{ $cartCount }}</span> --}}
             @endif
         </a>
     </div>

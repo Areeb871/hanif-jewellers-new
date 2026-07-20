@@ -413,6 +413,8 @@ section.watch .scroller-container {
     width: max-content;
     padding-inline: 16px;
     gap: 10px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 /* Watch + Bespoke scroller arrows */
@@ -838,7 +840,10 @@ towering peaks</div>
                 <div class="scroller-container">
                     @foreach ($products as $key => $product)
                         <div class="scroller-item">
-                            @include('public.partials.product-card-new', ['product' => $product])
+                            @include('public.partials.product-card-new', [
+                                'product' => $product,
+                                'storeContext' => strtolower(optional($product->category)->slug ?? '') !== 'watches',
+                            ])
                         </div>
                     @endforeach
                 </div>
