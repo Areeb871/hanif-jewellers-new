@@ -445,20 +445,20 @@
                         <div class="cta-buttons">
                             @if($canShowPrice)
                                 {{-- First Row - Add to Cart and Buy Now --}}
-                                <!-- <div class="row g-2 mb-3">
-                                    <div class="col-6">
+                                <div class="row g-2 mb-3">
+                                    <!-- <div class="col-6">
                                         <button type="button" class="btn btn-dark w-100 py-2" onclick="addToCart()" 
                                                 style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
                                             ADD TO CART
                                         </button>
-                                    </div>
-                                    <div class="col-6">
+                                    </div> -->
+                                    <div class="">
                                         <button type="button" class="btn btn-dark w-100 py-2" onclick="buyNow()" 
                                                 style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
                                             BUY NOW
                                         </button>
                                     </div>
-                                </div> -->
+                                </div>
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
                                     <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 
