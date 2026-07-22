@@ -314,9 +314,9 @@
     @endif
 </div>
 @endif
-<div class="d-none d-md-block" style="position: relative; height: 768px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden;">
+<div class="d-none d-md-block" style="position: relative; aspect-ratio: 16 / 9; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden;">
     <video autoplay loop muted playsinline preload="auto" 
-           style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0;">
+           style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; z-index: 0;">
         <source src="{{ asset('assets/f_assets/image/pure-lock/purelock.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -333,28 +333,18 @@
 
 
 <style>
-.m-5 {
-    margin: 1rem !important;
+.pure-lock-shop-spacing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 9.5rem;
 }
 </style>
-<div class="text-center">
-    <a href="javascript:void(0);"
-       class="m-5 btn border btn-outline-dark px-5 py-2"
-       onclick="openWhatsapp()">
-        SHOP NOW
-    </a>
+<div class="pure-lock-shop-spacing">
+    <x-shop-now
+        href="https://www.hanifjewellers.com/products/pure-lock-p233590?store=1"
+        class="btn border btn-outline-dark px-5 py-2"
+    />
 </div>
-<script>
-function openWhatsapp() {
-    const phoneNumber = @json('923070222666');
-
-    const message = `Hi, I’d like to connect with a sales expert about Pure Lock.`;
-
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-
-    window.open(whatsappUrl, '_blank');
-}
-</script>
-
 @include('public.partials.image-gallery-modal')
 @endsection

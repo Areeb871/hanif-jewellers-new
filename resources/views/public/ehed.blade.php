@@ -766,7 +766,7 @@
                                  alt="Promotional Banner 1"
                                  class="img-fluid w-100 h-100">
                             <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <a class="btn discover-btn" href="{{ route('collections.ehed') }}">Shop Now</a>
+                                <x-shop-now :href="route('collections.ehed')" class="btn discover-btn" label="Shop Now" />
                             </div>
                         </div>
 
@@ -775,7 +775,7 @@
                                  alt="Promotional Banner 2"
                                  class="img-fluid w-100 h-100">
                             <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <a class="btn discover-btn" href="{{ route('collections.ehed') }}">Shop Now</a>
+                                <x-shop-now :href="route('collections.ehed')" class="btn discover-btn" label="Shop Now" />
                             </div>
                         </div>
 
@@ -869,12 +869,15 @@
 </div>
 @endif
 <style>
-.m-5 {
-    margin: 1rem !important;
+.ehed-shop-spacing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 9.5rem;
 }
 </style>
-<div class="text-center">
-    <a class="m-5 btn border btn-outline-dark px-5 py-2" href="{{ route('collections.ehed') }}">SHOP NOW</a>
+<div class="ehed-shop-spacing">
+    <x-shop-now :href="route('collections.ehed')" class="btn border btn-outline-dark px-5 py-2" />
 </div>
 
 

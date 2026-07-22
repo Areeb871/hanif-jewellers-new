@@ -245,7 +245,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <!-- <a class="text-white" href="/locator"><i class="fa-solid fa-location-dot"></i></a>
                         <a class="text-white px-4" href="/contact-us"><i class="fa-solid fa-phone-volume"></i></a>
                         <a class="text-white" href="http://"><i class="fa-solid fa-magnifying-glass"></i></a> -->
-                        <a class="text-white" href="/cart"> <i class="fas fa-chevron-left" style="padding-right: 10px; padding-top: 20px;"></i> Shopping Bag</a>
+                        <!-- <a class="text-white" href="/cart"> <i class="fas fa-chevron-left" style="padding-right: 10px; padding-top: 20px;"></i> Shopping Bag</a> -->
                         <a class="text-white px-4" href="#" data-bs-toggle="modal" data-bs-target="#navSearchModal"><i class="fa-solid fa-magnifying-glass"></i></a>
                     </div>
                     <div class="text-center col">

@@ -19,10 +19,10 @@
         </div>
         <div class="row">
             <div class="col-md-6 text-center">
-                <a class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 70px !important" href="{{ route('contact-us')  }}">BOOK AN APPOINTMENT</a>
+                <x-book-appointment class="m-5" />
             </div>
             <div class="col-md-6 text-center">
-                <a class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" href="{{ route('subcategory', ['subcategory' => 'timeless-jewels'])  }}">SHOP NOW</a>
+                <x-shop-now :href="route('subcategory', ['subcategory' => 'timeless-jewels'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
             </div>
         </div>
         <div class="text-center my-5">

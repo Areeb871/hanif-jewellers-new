@@ -1385,8 +1385,15 @@ public function Online_Shopping_Store(Request $request)
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
-        $product = $product = Products::with('images', 'tags', 'category', 'subcategory')->where('slug', $slug)->firstOrFail();
-        return view('public.product-details', compact('categories', 'product', 'watchCategories'));
+        $product = Products::with('images', 'tags', 'category', 'subcategory')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $productDetailsView = strtolower($product->subcategory?->slug ?? '') === 'maurice-lacroix'
+            ? 'public.product-details-new'
+            : 'public.product-details';
+
+        return view($productDetailsView, compact('categories', 'product', 'watchCategories'));
     }
     public function high_end()
     {

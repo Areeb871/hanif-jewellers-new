@@ -296,7 +296,7 @@ A Pure Gold Series in 24k Gold as it was meant to be — raw, regal, alive. Cele
     </div>
 </section>
 
-<div class="row g-3 mb-3" id="pureLockTopGallery" style="margin-top:1rem;">
+<div class="row g-3 mb-0" id="pureLockTopGallery" style="margin-top:1rem;">
    <div class="row g-3">
 
 <!-- 1 -->
@@ -378,11 +378,14 @@ A Pure Gold Series in 24k Gold as it was meant to be — raw, regal, alive. Cele
 
 
 <style>
-.m-5 {
-    margin: 1rem !important;
+.selene-appointment-spacing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 9.5rem;
 }
 </style>
-    <div class="text-center">
-    <a class="m-5 btn border btn-outline-dark px-5 py-2" href="{{ route('contact-us') }}">SHOP NOW</a>
+<div class="selene-appointment-spacing">
+    <x-book-appointment class="btn border btn-outline-dark px-5 py-2" />
 </div>
 @endsection

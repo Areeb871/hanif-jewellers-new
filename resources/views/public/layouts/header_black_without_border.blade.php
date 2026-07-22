@@ -975,9 +975,9 @@ $card = [
 
   <div class="header-static-tools">
     {{-- CART SECTION --}}
-    <span id="cartHeader" class="d-inline-flex align-items-center">
+    <!-- <span id="cartHeader" class="d-inline-flex align-items-center">
       @include('public.partials.cart-header')
-    </span>
+    </span> -->
 
     {{-- SETTINGS DROPDOWN --}}
     <div class="dropdown position-relative">

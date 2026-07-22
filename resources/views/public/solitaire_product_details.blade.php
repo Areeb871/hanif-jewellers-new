@@ -941,18 +941,12 @@ document.addEventListener('DOMContentLoaded', function () {
             in person at your device
         </p>
 
-        <a
-            href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}"
+        <x-book-appointment
+            :href="'https://api.whatsapp.com/send?phone=923070222666&text='.rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.')"
             target="_blank"
             rel="noopener"
             aria-label="Book appointment on WhatsApp"
-        >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
-                <path d="M8 3v4M16 3v4M4 10h16"></path>
-            </svg>
-            BOOK APPOINTMENT
-        </a>
+        />
     </div>
 
 </div>
@@ -1097,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p>Every item we send comes in our signature Hanif packaging. The presentation box also secures your appraisal certificate and diamond grading report.</p>
                 </div>
 
-                <a href="{{ route('solitaire') }}">SHOP NOW</a>
+                <x-shop-now :href="route('solitaire')" />
             </div>
         </div>
     </div>

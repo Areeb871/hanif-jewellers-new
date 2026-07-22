@@ -152,9 +152,7 @@ section{
         in gold, head to toe; which is every bridal's dream attire!
     </p>
 
-    <a class="btn border btn-outline-dark px-4 py-2 mt-3" href="{{ route('contact-us') }}">
-        BOOK AN APPOINTMENT
-    </a>
+    <x-book-appointment class="mt-3" />
 </div>
             </div>
 

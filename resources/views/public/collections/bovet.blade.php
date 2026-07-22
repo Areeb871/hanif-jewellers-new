@@ -662,9 +662,7 @@
 
     <!-- CTA -->
     <div class="hanif-bovet-cta">
-<a href="javascript:void(0);" id="bookAppointmentBtn" class="hanif-bovet-btn">
-    BOOK AN APPOINTMENT
-</a>
+<x-book-appointment href="javascript:void(0);" id="bookAppointmentBtn" />
     </div>
 
   </div>
