@@ -1022,6 +1022,17 @@ public function add(Request $request)
         ], 404);
     }
 
+    if (
+        $product->isWatchProduct()
+        && $product->quantity !== null
+        && (int) $product->quantity === 0
+    ) {
+        return response()->json([
+            'success' => false,
+            'message' => 'This product is currently out of stock.'
+        ], 422);
+    }
+
     $cartItem = Cart::where('cart_type', 'normal')
         ->where('product_id', $productId)
         ->where('size', $size)

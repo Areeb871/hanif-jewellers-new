@@ -475,6 +475,11 @@
     $canShowPrice = $storeContext
         ? ($roundedPrice > 0)
         : (!empty($product->show_price) && $roundedPrice > 0);
+    $isWatchProduct = $product->isWatchProduct();
+    $isOutOfStock = $isWatchProduct
+        && $product->quantity !== null
+        && (int) $product->quantity === 0;
+    $inStock = !$isOutOfStock;
 @endphp
 
     <!-- @if($canShowPrice)
@@ -610,19 +615,20 @@
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
                             @if($canShowPrice)
-                                {{-- First Row - Add to Cart and Buy Now --}}
-                                <div class="row g-2 mb-3">
-                                    <!-- <div class="col-6">
-                                        <button type="button" class="btn btn-dark w-100 py-2 product-action-btn" onclick="addToCart()">
-                                            ADD TO CART
-                                        </button>
-                                    </div> -->
-                                    <div class="">
-                                        <button type="button" class="btn btn-dark w-100 py-2 product-action-btn" onclick="buyNow()">
-                                            BUY NOW
-                                        </button>
+                                @if($inStock)
+                                    <div class="row g-2 mb-3">
+                                        <div>
+                                            <button type="button" class="btn btn-dark w-100 py-2 product-action-btn" onclick="buyNow()">
+                                                BUY NOW
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <p class="text-danger text-center fw-semibold mb-3">
+                                        This is out of stock
+                                    </p>
+                                @endif
+
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
                                     <button type="button" class="btn btn-dark w-100 py-2 product-action-btn product-action-btn-secondary" onclick="talkToExpert()">

@@ -184,7 +184,7 @@ class ProductController extends Controller
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discounted_price = $discounted_price??0;
             $product->discount_percentage = $request->discount_percentage??0;
-            $product->quantity = $request->quantity??0;
+            $product->quantity = $request->filled('quantity') ? $request->quantity : null;  
             $product->status = $request->status;
             $product->meta_title = $request->meta_title;
             $product->meta_description = $request->meta_description;
@@ -370,7 +370,7 @@ class ProductController extends Controller
                 $product->discounted_price = $discounted_price ?? 0;
                 $product->discount_percentage = 0;
             }
-            $product->quantity = $request->quantity ?? 0;
+            $product->quantity = $request->filled('quantity') ? $request->quantity : null;
             $product->status = $request->status;
             $product->meta_title = $request->meta_title;
             $product->meta_description = $request->meta_description;

@@ -292,14 +292,14 @@
     </button>
 </div>
                                     
-                                    <!-- <div class="mb-3">
+                                    <div class="mb-3">
                                         <label><strong>Payment Status:</strong></label>
                                         <select class="form-control" id="paymentStatus" onchange="updatePaymentStatus()">
                                             <option value="pending" {{ $order->payment_status === 'pending' ? 'selected' : '' }}>Pending</option>
                                             <option value="verified" {{ $order->payment_status === 'verified' ? 'selected' : '' }}>Verified</option>
                                             <option value="failed" {{ $order->payment_status === 'failed' ? 'selected' : '' }}>Failed</option>
                                         </select>
-                                    </div> -->
+                                    </div>
 
                                     @if($order->payment_status === 'pending' && $order->payment_receipt)
                                         <button type="button" class="btn btn-success btn-block" onclick="verifyPayment()">
