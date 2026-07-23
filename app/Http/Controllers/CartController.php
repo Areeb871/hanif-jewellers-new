@@ -274,7 +274,7 @@ public function processCheckout(Request $request)
             }
 
             return [
-                'unit_price' => (int) max(0, round($unitPrice)),
+                'unit_price' => (int) max(0, round($unitPrice, -3)),
                 'original_price' => (int) max(0, round($originalPrice)),
                 'discount_amount' => (int) max(0, round($discountAmount)),
                 'discount_type' => $discountType,

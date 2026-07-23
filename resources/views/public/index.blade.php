@@ -724,7 +724,25 @@ section.watch .card:hover {
 }
 
 .watch-brands-section {
-    padding: 0;
+    padding: 0 0 2rem;
+}
+
+/* Keep the total gap between the jewellery section, heading and logos equal. */
+.watch-brands-section > .section-title {
+    margin: 0;
+    padding-top: calc(1.5rem + 0.5rem);
+}
+
+@media (min-width: 768px) {
+    .watch-brands-section > .section-title {
+        padding-top: calc(2rem + 0.5rem);
+    }
+}
+
+@media (min-width: 1366px) {
+    .watch-brands-section > .section-title {
+        padding-top: calc(2.5rem + 0.5rem);
+    }
 }
 
 #carouselExampleRide .carousel-control-prev,

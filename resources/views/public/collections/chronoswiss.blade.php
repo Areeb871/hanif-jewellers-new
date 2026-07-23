@@ -55,7 +55,7 @@ padding:2px 15px 0;
     font-family:"Times New Roman", Georgia, serif;
     font-style:italic;
     font-weight:700;
-    font-size:29px;
+    font-size:32px;
     line-height:1.3;
     color:#1f1f1f;
 }
@@ -64,8 +64,8 @@ padding:2px 15px 0;
     margin:0 auto;
     max-width:900px;
     font-family:Arial, sans-serif;
-    font-size:22px;
-    line-height:1.45;
+    font-size:16px;
+    line-height:1.35;
     color:#4a4a4a;
 }
 
@@ -160,7 +160,65 @@ padding:2px 15px 0;
         font-size:13px;
     }
 }
+
+/* Chronoswiss page vertical rhythm */
+.chronoswiss-page {
+    --chronoswiss-section-space: clamp(2.5rem, 5vw, 5rem);
+    --chronoswiss-content-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.chronoswiss-page .chronoswiss-logo-section {
+    margin:0;
+    /* padding:var(--chronoswiss-section-space) 15px; */
+}
+
+.chronoswiss-page .chronoswiss-intro-section {
+    margin:0;
+    padding:0;
+}
+
+.chronoswiss-page .chronoswiss-intro-content {
+    padding:0 20px var(--chronoswiss-section-space);
+}
+
+.chronoswiss-page .chronoswiss-intro-title {
+    margin:0 0 var(--chronoswiss-content-gap);
+}
+
+.chronoswiss-page .chronoswiss-intro-text {
+    margin:0 auto;
+}
+
+.chronoswiss-page .chronoswiss-intro-button-wrap {
+    padding:var(--chronoswiss-section-space) 15px;
+}
+
+.chronoswiss-page .chronoswiss-products-section {
+    padding-top:0 !important;
+    padding-bottom:var(--chronoswiss-section-space) !important;
+}
+
+.chronoswiss-page .chronoswiss-products-section .onlineStore {
+    padding-top:var(--chronoswiss-content-gap) !important;
+}
+
+.chronoswiss-page .chronoswiss-footer {
+    padding-top:var(--chronoswiss-section-space) !important;
+    padding-bottom:0 !important;
+}
+
+@media (max-width: 767px) {
+    .chronoswiss-page .chronoswiss-intro-content {
+        padding:0 14px var(--chronoswiss-section-space);
+    }
+
+    .chronoswiss-page .chronoswiss-intro-button-wrap {
+        padding:var(--chronoswiss-section-space) 12px;
+    }
+}
 </style>
+
+<main class="chronoswiss-page">
 
 <section class="chronoswiss-hero-media">
     @if(isset($chronoswissSubcategory) && $chronoswissSubcategory && $chronoswissSubcategory->banner_url)
@@ -224,7 +282,7 @@ padding:2px 15px 0;
     </div>
 </section>
 
-    <section class="py-4">
+    <section class="chronoswiss-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -739,4 +797,5 @@ padding:2px 15px 0;
         window.updateCounter();
     });
     </script>
+</main>
 @endsection

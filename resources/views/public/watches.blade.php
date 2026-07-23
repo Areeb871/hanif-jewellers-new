@@ -544,8 +544,87 @@ section{
   width: 60%;
   margin: 10px auto;
 }
+
+/* Watches page vertical rhythm */
+.watches-page {
+  --watch-section-space: clamp(3rem, 5vw, 5rem);
+  --watch-content-gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.watches-page .luxury-watch-section,
+.watches-page .watch-brands-directory {
+  padding-top: var(--watch-section-space) !important;
+  padding-bottom: var(--watch-section-space) !important;
+}
+
+.watches-page .luxury-watch-section {
+  padding-bottom: 0 !important;
+}
+
+.watches-page .watch-brands-directory {
+  padding-top: var(--watch-content-gap) !important;
+}
+
+.watches-page .luxury-watch-intro,
+.watches-page .watch-brands-title {
+  margin: 0 0 var(--watch-content-gap);
+  padding: 0 !important;
+}
+
+.watches-page .luxury-watch-intro {
+  margin-bottom: var(--watch-section-space);
+}
+
+.watches-page .ehed-content-container {
+  padding-top: var(--watch-section-space);
+  padding-bottom: var(--watch-section-space);
+}
+
+.watches-page .ehed-category-label {
+  margin: 0 0 0.75rem;
+}
+
+.watches-page .ehed-main-title {
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+}
+
+.watches-page .ehed-body-text,
+.watches-page .hero__description {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.watches-page .ehed-media-cover {
+  margin-top: 0 !important;
+}
+
+.watches-page .perrelet-intro {
+  padding: var(--watch-section-space) 1rem var(--watch-content-gap);
+}
+
+.watches-page .ehed-main-title-perrelet {
+  line-height: 1.05;
+  margin: 0 0 1.25rem;
+}
+
+.watches-page .perrelet-banner {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .watches-page .ehed-content-container {
+    padding: var(--watch-section-space) 1.25rem;
+  }
+
+  .watches-page .ehed-body-text {
+    margin-top: 0;
+  }
+}
 </style>
 @section('content')
+
+<main class="watches-page">
 
 <section class="sectionOne d-none d-md-block"
     style="position: relative; min-height: 500px; overflow: hidden;">
@@ -569,8 +648,8 @@ section{
 
 </section>
 
-<section class="py-5 luxury-watch-section">
-    <p class="text-center py-3 px-3">
+<section class="luxury-watch-section">
+    <p class="luxury-watch-intro text-center px-3 fs-5 md-fs-6">
         Discover our hand picked selection of luxury Watches from renowned brands.
     </p>
 
@@ -650,8 +729,8 @@ section{
     </div>
 </section>
 
-<section class="pb-5">
-<h2 class="text-center py-5">EXPLORE OUR BRANDS</h2>
+<section class="watch-brands-directory">
+<h2 class="watch-brands-title text-center">EXPLORE OUR BRANDS</h2>
 
 <style>
 
@@ -817,7 +896,7 @@ loading="lazy">
                 Your browser does not support the video tag.
             </video>
         @else
-            <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover"style="margin-top: 28px;">
+            <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover">
         @endif
     </div>
 
@@ -877,7 +956,7 @@ an enduring symbol of power, discipline, and timeless elegance.
                     <source src="{{ asset($desktopBanner) }}" @if($desktopType) type="{{ $desktopType }}" @endif>
                 </video>
             @else
-                <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover"style="margin-top: 23px;">
+                <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover">
             @endif
         </div>
 
@@ -984,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 </style>
-<div class="triangle-text">
+<div class="triangle-text perrelet-intro">
   <h1 class="ehed-main-title-perrelet">Perrelet</h1>
   <p class="ehed-body-text hero__description font-family--serif">
     Discover the Turbine Poker Royal Flush by Perrelet
@@ -994,7 +1073,7 @@ document.addEventListener('DOMContentLoaded', function () {
   </p>
 </div>
 <div class="container-fluid p-0">
-    <section class="bannerWrap" style="margin-top:10px;">
+    <section class="bannerWrap perrelet-banner">
         <video
             class="bannerVideo"
             autoplay
@@ -1303,5 +1382,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 </section>
+
+</main>
 
 @endsection

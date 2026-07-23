@@ -192,7 +192,95 @@ padding:0px;
         display: block;
     }
 }
+
+/* Favre Leuba page vertical rhythm */
+.favre-page {
+    --favre-section-space: clamp(2.5rem, 5vw, 5rem);
+    --favre-content-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.favre-page .fl-since-history-wrapper {
+    padding-top:var(--favre-section-space);
+    padding-bottom:var(--favre-section-space);
+}
+
+.favre-page .para-regular-upper {
+    margin-top:0;
+    margin-bottom:var(--favre-content-gap);
+}
+
+.favre-page .fl-since-heading {
+    margin-top:0;
+    margin-bottom:var(--favre-content-gap);
+}
+
+.favre-page .para-medium:last-child {
+    margin-bottom:0;
+}
+
+.favre-page .favre-products-section {
+    padding-top:0 !important;
+    padding-bottom:var(--favre-section-space) !important;
+}
+
+.favre-page .bovet-filterbar {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    /* gap:clamp(0.5rem, 1vw, 0.75rem); */
+    padding:clamp(0.75rem, 2vw, 1.25rem) 14px;
+}
+
+.favre-page .bovet-filterbar__left {
+    display:none;
+}
+
+.favre-page .bovet-filterbar__center {
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+.favre-page .bovet-brand-logo {
+    margin:0 auto !important;
+}
+
+.favre-page .bovet-filterbar__right {
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.favre-page .bovet-filterbar__btn {
+    transform:none;
+    width:max-content;
+    white-space:nowrap;
+    flex-wrap:nowrap;
+}
+
+.favre-page .favre-products-section .onlineStore {
+    padding-top:var(--favre-content-gap) !important;
+}
+
+.favre-page .favre-footer {
+    padding-top:var(--favre-section-space) !important;
+    padding-bottom:0 !important;
+}
+
+@media (max-width: 767px) {
+    .favre-page .fl-since-history-content {
+        padding:0 18px var(--favre-content-gap);
+    }
+
+    .favre-page .bovet-filterbar {
+        padding-right:12px;
+        padding-left:12px;
+    }
+}
 </style>
+
+<main class="favre-page">
+
     @php
         $bannerUrl = null;
 
@@ -313,7 +401,7 @@ padding:0px;
 </section>
 
 
-    <section class="py-4">
+    <section class="favre-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -531,10 +619,10 @@ padding:0px;
                         data-current="{{ $currentPageProducts }}"
                         data-per-page="{{ $products->perPage() }}"
                         data-current-page="{{ $products->currentPage() }}"
-                        style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+                        style="font-size: 1rem; letter-spacing: 0.2em;">
                         SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
                     </div>
-                @endif
+                @endifSHOWING
 
                 @php
                     $allProductsShown = $totalShown >= $totalFilteredProducts;
@@ -736,4 +824,5 @@ function toggleCategory(targetId, element) {
 })();
 </script>
 
+</main>
 @endsection

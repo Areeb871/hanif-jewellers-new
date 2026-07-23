@@ -161,7 +161,7 @@
         }
 
         .tissot-products {
-            padding: 0 0 48px;
+            padding: 0;
         }
         .tissot-products .container-fluid {
             padding-left: clamp(24px, 4vw, 48px);
@@ -171,8 +171,8 @@
             padding-top: 0;
         }
         .tissot-footer {
-            padding-top: 32px;
-            padding-bottom: 16px;
+            padding-top: clamp(40px, 5vw, 64px);
+            padding-bottom: clamp(40px, 5vw, 64px);
         }
         .tissot-products-counter {
             font-size: 12px;
@@ -387,7 +387,7 @@
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter tissot-products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}">
+             <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif

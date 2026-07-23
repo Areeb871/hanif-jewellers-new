@@ -260,7 +260,86 @@ img{
     display: block;
 }
 
+/* Maurice Lacroix page vertical rhythm */
+.maurice-page {
+    --maurice-section-space:clamp(2.5rem, 5vw, 4.5rem);
+    --maurice-content-gap:clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.maurice-page .chronoswiss-logo-section {
+    margin:0 !important;
+    padding:var(--maurice-section-space) 15px !important;
+}
+
+.maurice-page .chronoswiss-logo-main {
+    transform:none;
+    margin:0 auto !important;
+}
+
+.maurice-page .chronoswiss-intro-section {
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.maurice-page .chronoswiss-intro-content {
+    padding:0 20px var(--maurice-section-space) !important;
+}
+
+.maurice-page .chronoswiss-intro-text {
+    padding:0 !important;
+    font-size:clamp(0.875rem, 1.5vw, 1.125rem);
+    line-height:1.6;
+}
+
+.maurice-page .ml-bottom {
+    padding:var(--maurice-section-space) 20px !important;
+    text-align:center;
+}
+
+.maurice-page .ml-discover {
+    margin:0 0 0.75rem;
+}
+
+.maurice-page .ml-title {
+    margin:0;
+    font-size:clamp(1.5rem, 2.5vw, 2rem);
+    line-height:1.2;
+}
+
+.maurice-page .maurice-products-section {
+    padding:0 0 var(--maurice-section-space) !important;
+}
+
+.maurice-page .maurice-products-section .onlineStore {
+    padding-top:var(--maurice-content-gap) !important;
+}
+
+.maurice-page .maurice-lacroix-footer {
+    padding-top:var(--maurice-section-space) !important;
+    padding-bottom:0 !important;
+}
+
+@media (max-width: 767px) {
+    .maurice-page .chronoswiss-logo-section {
+        padding-right:12px !important;
+        padding-left:12px !important;
+    }
+
+    .maurice-page .chronoswiss-intro-content {
+        padding-right:14px !important;
+        padding-left:14px !important;
+    }
+
+    .maurice-page .ml-bottom {
+        padding-right:14px !important;
+        padding-left:14px !important;
+    }
+}
+
 </style>
+
+<main class="maurice-page">
+
 @if(isset($mauriceLacroixSubcategory) && $mauriceLacroixSubcategory && $mauriceLacroixSubcategory->banner_url)
 
     @php
@@ -333,7 +412,7 @@ img{
         <h2 class="ml-title">THE COLLECTIONS</h2>
     </div>
 </section> 
-    <section class="py-4">
+    <section class="maurice-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -845,8 +924,8 @@ img{
         window.updateCounter();
     });
     </script>
+</main>
 @endsection
-
 
 
 
