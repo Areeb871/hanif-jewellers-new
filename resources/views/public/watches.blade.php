@@ -12,31 +12,29 @@ video {
     display: block;
 }
 
-/* responsive banner wrapper */
-.sectionOne,
-.sectionOneMobile{
+/* Responsive hero banner */
+.sectionOne {
     position: relative;
     width: 100%;
     height: auto;
-    overflow: hidden;
-    /* margin: 0 !important; */
     padding: 0 !important;
-    
+    margin: 0 !important;
+    line-height: 0;
+    background: transparent;
 }
 
-/* responsive video - no crop */
-.sectionOne video,
-.sectionOneMobile video{
+.sectionOne picture,
+.sectionOne img {
     width: 100%;
-    height: auto;
     display: block;
-    object-fit: contain;
-    position: relative;
+}
+
+.sectionOne img {
+    height: auto;
 }
 
 /* remove unwanted top gap */
 .sectionOne,
-.sectionOneMobile,
 section{
     margin-top: 0px !important;
 }
@@ -558,7 +556,9 @@ section{
 }
 
 .watches-page .luxury-watch-section {
+  padding-top: 0 !important;
   padding-bottom: 0 !important;
+  background: #fff;
 }
 
 .watches-page .watch-brands-directory {
@@ -626,26 +626,16 @@ section{
 
 <main class="watches-page">
 
-<section class="sectionOne d-none d-md-block"
-    style="position: relative; min-height: 500px; overflow: hidden;">
-<!-- Desktop Hero Banner -->
-    <img
-        src="{{ asset('assets/f_assets/image/watches/sale-desktop-banner.jpeg') }}"
-        alt="Watches Desktop Banner"
-        class="w-100 h-100 object-fit-cover"
-        style="display:block; object-fit:contain; object-position:center;">
-
-</section>
-<!-- MOBILE HERO -->
-<section class="sectionOneMobile d-block d-md-none"
-    style="position: relative; min-height: 320px; overflow: hidden;">
-
-        <img src="{{ asset('assets/f_assets/image/watches-sale-banner.jpeg') }}"
-            class="w-100 object-fit-cover"
-            alt="Watches Mobile Banner"
-            style="display:block;object-fit:contain;object-position:center;margin-top: 52px;"
-            >
-
+<section class="sectionOne">
+    <picture>
+        <source
+            media="(max-width: 767.98px)"
+            srcset="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}">
+        <img
+            src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
+            alt="Franck Muller"
+            fetchpriority="high">
+    </picture>
 </section>
 
 <section class="luxury-watch-section">
