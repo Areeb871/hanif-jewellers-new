@@ -2,13 +2,11 @@
     $metals = old('metals', $product->metals ?? []);
 
     $diamondCarats = old('diamond_carats', $product->diamond_carats ?? [
-        ['label' => '0.25', 'value' => '0.25'],
-        ['label' => '0.30', 'value' => '0.30'],
-        ['label' => '0.40', 'value' => '0.40'],
-        ['label' => '0.60', 'value' => '0.60'],
-        ['label' => '0.70', 'value' => '0.70'],
+        ['label' => '0.5', 'value' => '0.50'],
+        ['label' => '0.6', 'value' => '0.60'],
+        ['label' => '0.7', 'value' => '0.70'],
         ['label' => '0.75', 'value' => '0.75'],
-        ['label' => '0.90', 'value' => '0.90'],
+        ['label' => '0.9', 'value' => '0.90'],
         ['label' => '1', 'value' => '1.00'],
     ]);
 
@@ -354,7 +352,7 @@
                             name="diamond_carats[{{ $index }}][label]" 
                             class="form-control" 
                             value="{{ $carat['label'] ?? '' }}" 
-                            placeholder="0.25"
+                            placeholder="0.50"
                         >
                     </div>
 
@@ -365,7 +363,7 @@
                             name="diamond_carats[{{ $index }}][value]" 
                             class="form-control carat-value" 
                             value="{{ $carat['value'] ?? '' }}" 
-                            placeholder="0.25"
+                            placeholder="0.50"
                         >
                     </div>
                 </div>
@@ -493,13 +491,11 @@
 
     $formMetals = old('metals', $product->metals ?? []);
     $formCarats = old('diamond_carats', $product->diamond_carats ?? [
-        ['label' => '0.25', 'value' => '0.25'],
-        ['label' => '0.30', 'value' => '0.30'],
-        ['label' => '0.40', 'value' => '0.40'],
-        ['label' => '0.60', 'value' => '0.60'],
-        ['label' => '0.70', 'value' => '0.70'],
+        ['label' => '0.5', 'value' => '0.50'],
+        ['label' => '0.6', 'value' => '0.60'],
+        ['label' => '0.7', 'value' => '0.70'],
         ['label' => '0.75', 'value' => '0.75'],
-        ['label' => '0.90', 'value' => '0.90'],
+        ['label' => '0.9', 'value' => '0.90'],
         ['label' => '1', 'value' => '1.00'],
     ]);
 
@@ -714,7 +710,7 @@
                 name="default_diamond_carat" 
                 class="form-control" 
                 value="{{ old('default_diamond_carat', $product->default_diamond_carat) }}" 
-                placeholder="0.25"
+                placeholder="0.50"
             >
         </div>
     </div>

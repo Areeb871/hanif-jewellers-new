@@ -723,14 +723,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!detailDataScript && caratRange && caratBtn) {
         const caratValues = [
-            "0.25 CARAT",
-            "0.30 CARAT",
-            "0.40 CARAT",
+            "0.50 CARAT",
             "0.60 CARAT",
             "0.70 CARAT",
             "0.75 CARAT",
             "0.90 CARAT",
-            "1.00 CARAT"
+            "1 CARAT"
         ];
 
         caratRange.addEventListener("input", function () {

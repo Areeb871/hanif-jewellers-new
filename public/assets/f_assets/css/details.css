@@ -3882,4 +3882,24 @@ a.hj-lab-product-card {
     box-shadow: 0 0 0 2px #dfc258, 0 0 0 4px #111;
 }
 
+/* Mobile solitaire metal choices: three chips per row. */
+@media (max-width: 767px) {
+    .hj-option-card .hj-metal-track-wrap {
+        overflow: visible;
+        justify-content: flex-start;
+    }
 
+    .hj-option-card .hj-metal-options {
+        display: grid;
+        grid-template-columns: repeat(3, 26px);
+        grid-auto-rows: 26px;
+        gap: 12px;
+        width: max-content;
+        max-width: 100%;
+        margin-inline: 0;
+        padding: 8px 0;
+        justify-content: start;
+        align-items: center;
+        overflow: visible;
+    }
+}

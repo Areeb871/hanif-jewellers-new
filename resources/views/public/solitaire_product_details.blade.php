@@ -353,6 +353,8 @@ document.addEventListener('DOMContentLoaded', function () {
         'selected_metal_code' => $selectedMetalCode,
         'selected_carat_index' => (int) $selectedCaratIndex,
     ];
+
+    $usesHrdCertificate = (float) $selectedCarat >= 1;
 @endphp
 
 <script type="application/json" id="hjDetailProductData">
@@ -393,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
     @foreach($detailImages as $index => $image)
         <div class="hj-gallery-item hj-product-image-item">
             @if($index === 0)
-                <span class="hj-badge">TRADE IN AVAILABLE</span>
+                <span class="hj-badge">Ready for Sale</span>
             @endif
 
             <img 
@@ -472,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="hj-sku-sep" aria-hidden="true">|</span>
         <span>{{ $product->tag_label ?? 'N/A' }}</span>
         <span class="hj-sku-sep" aria-hidden="true">|</span>
-        <span>Gemological certificate included</span>
+        <span class="js-certificate-summary">{{ $usesHrdCertificate ? 'HRD certificate included' : 'Gemological certificate included' }}</span>
     </p>
 
 </div>
@@ -799,12 +801,12 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <img class="hj-certificate-logo"
-                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
-                alt="Hanif Jewellers logo">
+            <img class="hj-certificate-logo js-certificate-logo"
+                src="{{ asset($usesHrdCertificate ? 'assets/f_assets/image/hrd-cert.svg' : 'assets/f_assets/image/gem-cert.png') }}"
+                alt="{{ $usesHrdCertificate ? 'HRD certificate logo' : 'Gemological certificate logo' }}">
             <div>
                 <small>Certification</small>
-                <strong>GEMOLOGICAL CERTIFICATE INCLUDED</strong>
+                <strong class="js-certificate-name">{{ $usesHrdCertificate ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED' }}</strong>
                 <p>Guaranteed authenticity</p>
             </div>
         </div>
@@ -909,12 +911,12 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <img class="hj-certificate-logo"
-                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
-                alt="Hanif Jewellers logo">
+            <img class="hj-certificate-logo js-certificate-logo"
+                src="{{ asset($usesHrdCertificate ? 'assets/f_assets/image/hrd-cert.svg' : 'assets/f_assets/image/gem-cert.png') }}"
+                alt="{{ $usesHrdCertificate ? 'HRD certificate logo' : 'Gemological certificate logo' }}">
             <div>
                 <small>Certification</small>
-                <strong>GEMOLOGICAL CERTIFICATE INCLUDED</strong>
+                <strong class="js-certificate-name">{{ $usesHrdCertificate ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED' }}</strong>
                 <p>Guaranteed authenticity</p>
             </div>
 </div>
@@ -925,8 +927,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="hj-appointment-card">
 
     <div class="hj-avatars">
-        <img src="{{ asset('assets/f_assets/image/avators/one.jpg') }}" alt="Expert">
-        <span></span>
+        <img src="{{ asset('assets/f_assets/image/avators_new.png') }}" alt="Expert">
     </div>
 
     <div class="hj-appointment-top">
@@ -941,12 +942,18 @@ document.addEventListener('DOMContentLoaded', function () {
             in person at your device
         </p>
 
-        <x-book-appointment
-            :href="'https://api.whatsapp.com/send?phone=923070222666&text='.rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.')"
+        <a
+            href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}"
             target="_blank"
             rel="noopener"
             aria-label="Book appointment on WhatsApp"
-        />
+        >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16"></path>
+            </svg>
+            BOOK APPOINTMENT
+        </a>
     </div>
 
 </div>
@@ -1091,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p>Every item we send comes in our signature Hanif packaging. The presentation box also secures your appraisal certificate and diamond grading report.</p>
                 </div>
 
-                <x-shop-now :href="route('solitaire')" />
+                <a href="{{ route('solitaire') }}">SHOP NOW</a>
             </div>
         </div>
     </div>
@@ -1578,6 +1585,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedMetalSpec = document.getElementById('selectedMetalSpec');
     const selectedMetalColorSpec = document.getElementById('selectedMetalColorSpec');
     const selectedCaratSpec = document.getElementById('selectedCaratSpec');
+    const certificateSummaryEls = document.querySelectorAll('.js-certificate-summary');
+    const certificateNameEls = document.querySelectorAll('.js-certificate-name');
+    const certificateLogoEls = document.querySelectorAll('.js-certificate-logo');
+    const gemologicalCertificateLogo = @json(asset('assets/f_assets/image/gem-cert.png'));
+    const hrdCertificateLogo = @json(asset('assets/f_assets/image/hrd-cert.svg'));
 
     const oldPriceEl = document.getElementById('detailOldPrice');
     const newPriceEl = document.getElementById('detailNewPrice');
@@ -1587,6 +1599,27 @@ document.addEventListener('DOMContentLoaded', function () {
     function normalizeCarat(value) {
         const number = Number(value);
         return isNaN(number) ? String(value) : number.toFixed(2);
+    }
+
+    function updateCertificate(carat) {
+        const usesHrd = carat && Number(carat.value) >= 1;
+        const summary = usesHrd ? 'HRD certificate included' : 'Gemological certificate included';
+        const name = usesHrd ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED';
+        const logo = usesHrd ? hrdCertificateLogo : gemologicalCertificateLogo;
+        const logoAlt = usesHrd ? 'HRD certificate logo' : 'Gemological certificate logo';
+
+        certificateSummaryEls.forEach(function (element) {
+            element.textContent = summary;
+        });
+
+        certificateNameEls.forEach(function (element) {
+            element.textContent = name;
+        });
+
+        certificateLogoEls.forEach(function (element) {
+            element.src = logo;
+            element.alt = logoAlt;
+        });
     }
 
     function makeAssetUrl(path) {
@@ -1770,7 +1803,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 html += `
                     <div class="hj-gallery-item hj-product-image-item">
-                        ${index === 0 ? '<span class="hj-badge">TRADE IN AVAILABLE</span>' : ''}
+                        ${index === 0 ? '<span class="hj-badge">Ready for Sale</span>' : ''}
                         <img 
                             src="${imagePath}" 
                             alt="${image.alt_text || data.name || 'Product image'}"
@@ -1886,6 +1919,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedCaratSpec) {
             selectedCaratSpec.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
         }
+
+        updateCertificate(carat);
 
         if (variant) {
             if (oldPriceEl) {

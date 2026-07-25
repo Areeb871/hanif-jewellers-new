@@ -669,8 +669,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
     ->with(['category', 'images'])
     ->inRandomOrder()
     ->take(12)
-    ->get()
-    ->slice(0, -4); // skips last 4
+    ->get();
 
 
 
@@ -678,14 +677,30 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
             <!-- Desktop: homepage-style single-row scroller -->
             <section id="ymlDesktop" class="onlineStore">
-                <div id="recommendedProducts" class="mobile-product-scroller" tabindex="0" aria-label="You may also like products">
-                    <div class="scroller-container">
-                        @foreach($recommendedProducts as $recProduct)
-                            <div class="scroller-item">
-                                @include('public.partials.product-card-new', ['product' => $recProduct])
-                            </div>
-                        @endforeach
+                <div class="yml-slider-viewport">
+                    <button type="button" class="yml-scroller-arrow yml-scroller-arrow--prev" aria-label="Previous products" disabled>
+                        <span aria-hidden="true" class="yml-arrow-left">
+                            <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
+                                <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <div id="recommendedProducts" class="mobile-product-scroller" tabindex="0" aria-label="You may also like products">
+                        <div class="scroller-container">
+                            @foreach($recommendedProducts as $recProduct)
+                                <div class="scroller-item">
+                                    @include('public.partials.product-card-new', ['product' => $recProduct])
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
+                    <button type="button" class="yml-scroller-arrow yml-scroller-arrow--next" aria-label="Next products">
+                        <span aria-hidden="true">
+                            <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
+                                <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+                            </svg>
+                        </span>
+                    </button>
                 </div>
                 <div class="scroller-dots mt-3">
                     <div class="dots-container">
@@ -730,6 +745,8 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             const container = document.querySelector(`${sectionSelector} .scroller-container`);
             const items = document.querySelectorAll(`${sectionSelector} .scroller-item`);
             const dots = document.querySelectorAll(`${sectionSelector} .dot`);
+            const prevButton = document.querySelector(`${sectionSelector} .yml-scroller-arrow--prev`);
+            const nextButton = document.querySelector(`${sectionSelector} .yml-scroller-arrow--next`);
             if (!scroller || !container || !items.length) return;
 
             function getLastScrollableIndex() {
@@ -781,6 +798,18 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     dot.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
                     paintDot(dot, isAvailable && index === idx);
                 });
+
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const noScroll = maxScroll <= 2;
+                if (prevButton) prevButton.disabled = noScroll || scroller.scrollLeft <= 5;
+                if (nextButton) nextButton.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+            }
+
+            function itemTarget(index) {
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                if (index <= 0) return 0;
+                if (index >= getLastScrollableIndex()) return maxScroll;
+                return Math.max(0, Math.min(maxScroll, items[index].offsetLeft));
             }
 
             let isMouseDown = false, startX = 0, startLeft = 0;
@@ -802,8 +831,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 scroller.style.cursor = 'grab';
                 // snap to nearest
                 const idx = nearestIndex();
-                const bounded = Math.max(0, Math.min(items.length - 1, idx));
-                smoothScrollTo(scroller, items[bounded].offsetLeft, 350);
+                smoothScrollTo(scroller, itemTarget(idx), 350);
             }));
 
             dots.forEach((dot) => {
@@ -811,9 +839,22 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     const indexAttr = dot.getAttribute('data-index');
                     const targetIdx = indexAttr ? parseInt(indexAttr, 10) : 0;
                     const bounded = Math.max(0, Math.min(getLastScrollableIndex(), targetIdx));
-                    smoothScrollTo(scroller, items[bounded].offsetLeft, 450);
+                    smoothScrollTo(scroller, itemTarget(bounded), 450);
                 });
             });
+
+            if (prevButton) {
+                prevButton.addEventListener('click', () => {
+                    const targetIndex = Math.max(0, nearestIndex() - 1);
+                    smoothScrollTo(scroller, itemTarget(targetIndex), 450);
+                });
+            }
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    const targetIndex = Math.min(getLastScrollableIndex(), nearestIndex() + 1);
+                    smoothScrollTo(scroller, itemTarget(targetIndex), 450);
+                });
+            }
 
             let rafId = null;
             scroller.addEventListener('scroll', () => {
@@ -828,6 +869,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 }
                 updateDots();
             }
+            window.addEventListener('resize', updateDots);
             if (getComputedStyle(scroller).cursor === 'auto') scroller.style.cursor = 'grab';
         }
 
@@ -1495,6 +1537,45 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             scrollbar-width: none;
         }
         #ymlDesktop .mobile-product-scroller::-webkit-scrollbar { display: none; }
+        #ymlDesktop .yml-slider-viewport {
+            position: relative;
+            width: 100%;
+            overflow: visible;
+        }
+        #ymlDesktop .yml-scroller-arrow {
+            position: absolute;
+            top: 47%;
+            transform: translateY(-50%);
+            z-index: 30;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2a2a2a;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        #ymlDesktop .yml-scroller-arrow--prev { left: 10px; }
+        #ymlDesktop .yml-scroller-arrow--next { right: 10px; }
+        #ymlDesktop .yml-arrow-left svg { transform: rotate(180deg); }
+        #ymlDesktop .yml-scroller-arrow:hover:not(:disabled) {
+            transform: translateY(-50%) scale(1.04);
+            background: #fff;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
+        }
+        #ymlDesktop .yml-scroller-arrow:disabled {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
         #ymlDesktop .scroller-container {
             display: flex;
             gap: 10px;
@@ -1598,6 +1679,10 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         #ymlMobile .dot:hover { background-color: #666; }
 
         @media (max-width: 767.98px) {
+            #ymlDesktop .yml-scroller-arrow {
+                display: none;
+            }
+
             .you-may-like-section {
                 padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
@@ -2071,10 +2156,16 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             slideIndex = Math.max(0, Math.min(lastScrollableIndex, slideIndex));
             const target = items[slideIndex];
             if (!target) return;
-            const targetRect = target.getBoundingClientRect();
-            const contRect = container.getBoundingClientRect();
-            const beforeScrollLeft = container.scrollLeft;
-            const targetLeft = beforeScrollLeft + (targetRect.left - contRect.left);
+            let targetLeft;
+            if (slideIndex === 0) {
+                targetLeft = 0;
+            } else if (slideIndex >= lastScrollableIndex) {
+                targetLeft = maxScroll;
+            } else {
+                const targetRect = target.getBoundingClientRect();
+                const contRect = container.getBoundingClientRect();
+                targetLeft = container.scrollLeft + (targetRect.left - contRect.left);
+            }
             container.scrollTo({ left: targetLeft, behavior: 'smooth' });
             setTimeout(() => { updateRecommendedDots(); }, 60);
         }
@@ -2960,7 +3051,10 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 const idx = getNearestItemIndex();
                 const target = items[idx];
                 if (target) {
-                    const targetLeft = slider.scrollLeft + (target.getBoundingClientRect().left - slider.getBoundingClientRect().left);
+                    const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
+                    const targetLeft = idx === 0
+                        ? 0
+                        : Math.min(maxScroll, slider.scrollLeft + (target.getBoundingClientRect().left - slider.getBoundingClientRect().left));
                     slider.scrollTo({ left: targetLeft, behavior: 'smooth' });
                 }
                 requestAnimationFrame(updateRecommendedDots);

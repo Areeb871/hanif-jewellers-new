@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17511895971"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17511895971');
+</script>
 <link rel="canonical" href="{{ request()->url() }}">
 <!-- Meta Pixel Code -->
 <script>
@@ -852,7 +861,7 @@ $menus = [
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/highend/9.png',
+    'img' => 'assets/f_assets/image/Home Page FM BAnner.jpg',
     'btn' => 'EXPLORE COLLECTION',
     'url' => url('highend-jewellery'),
 ];
