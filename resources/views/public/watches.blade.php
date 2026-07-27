@@ -1,42 +1,33 @@
 @extends('public.layouts.header_black_white_fixed')
-
 <style>
-html,
-body {
-    overflow-x: hidden;
-}
 
-img,
-video {
-    max-width: 100%;
-    display: block;
-}
 
-/* Responsive hero banner */
-.sectionOne {
+/* responsive banner wrapper */
+.sectionOne,
+.sectionMobile{
     position: relative;
     width: 100%;
     height: auto;
-    padding: 0 !important;
+    overflow: hidden;
     margin: 0 !important;
-    line-height: 0;
-    background: transparent;
+    padding: 0 !important;
 }
 
-.sectionOne picture,
-.sectionOne img {
+/* responsive video - no crop */
+.sectionOne video,
+.sectionMobile video{
     width: 100%;
-    display: block;
-}
-
-.sectionOne img {
     height: auto;
+    display: block;
+    object-fit: contain;
+    position: relative;
 }
 
 /* remove unwanted top gap */
 .sectionOne,
+.sectionMobile,
 section{
-    margin-top: 0px !important;
+    margin-top: 0 !important;
 }
 </style>
 <style>
@@ -158,14 +149,14 @@ section{
 
 /* Main wrapper */
 .rolex-carousel .carousel-inner{
-    height: 70vh;              /* adjust */
-    min-height: 520px;
+    height: auto;
+    min-height: 0;
     overflow: hidden;
 }
 
 /* Each slide fills */
 .hero-slide{
-    height: 100%;
+    height: auto;
     width: 100%;
     background-size: cover;
     background-position: center;
@@ -236,18 +227,17 @@ section{
 .hero-slide{
     position: relative;
     width: 100%;
-    height: 100%;
-    min-height: 500px;
+    height: auto;
+    min-height: 0;
     overflow: hidden;
 }
 
 /* 🔥 Image fills slide perfectly */
 .hero-bg-img{
-    position: absolute;
-    inset: 0;                 /* top:0 right:0 bottom:0 left:0 */
+    position: relative;
     width: 100%;
-    height: 100%;
-    object-fit: cover;        /* ✅ no distortion */
+    height: auto;
+    object-fit: contain;
     object-position: center;
     z-index: 0;
     display: block;
@@ -332,22 +322,20 @@ section{
     }
     .ehed-video-container video {
         position: absolute;
-        top: 0;
+        top: 10%;
         left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center;
         display: block;
     }
     .ehed-media-cover {
         position: absolute;
-        top: 0;
+        top: 10px;
         left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center;
         display: block;
     }
     .ehed-content-container {
@@ -543,103 +531,284 @@ section{
   margin: 10px auto;
 }
 
-/* Watches page vertical rhythm */
-.watches-page {
-  --watch-section-space: clamp(3rem, 5vw, 5rem);
-  --watch-content-gap: clamp(1.5rem, 3vw, 2.5rem);
+/* Consistent vertical rhythm for this page */
+.luxury-watch-section {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
 }
-
-.watches-page .luxury-watch-section,
-.watches-page .watch-brands-directory {
-  padding-top: var(--watch-section-space) !important;
-  padding-bottom: var(--watch-section-space) !important;
+.luxury-watch-section > p {
+    margin-top: 0;
+    margin-bottom: 32px;
+    padding-top: 0 !important;
 }
-
-.watches-page .luxury-watch-section {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  background: #fff;
+.explore-brands-section {
+    padding-top: 48px;
+    padding-bottom: 48px !important;
 }
-
-.watches-page .watch-brands-directory {
-  padding-top: var(--watch-content-gap) !important;
+.explore-brands-title {
+    margin: 0 0 40px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
-
-.watches-page .luxury-watch-intro,
-.watches-page .watch-brands-title {
-  margin: 0 0 var(--watch-content-gap);
-  padding: 0 !important;
+.ehed-hero-section {
+    margin-top: 0;
+    margin-bottom: 0;
 }
-
-.watches-page .luxury-watch-intro {
-  margin-bottom: var(--watch-section-space);
+.ehed-media-cover,
+.ehed-video-container video {
+    top: 0;
 }
-
-.watches-page .ehed-content-container {
-  padding-top: var(--watch-section-space);
-  padding-bottom: var(--watch-section-space);
+.ehed-content-container {
+    padding-top: 48px;
+    padding-bottom: 48px;
 }
-
-.watches-page .ehed-category-label {
-  margin: 0 0 0.75rem;
+.ehed-category-label {
+    margin-top: 0;
+    margin-bottom: 16px;
 }
-
-.watches-page .ehed-main-title {
-  line-height: 1.05;
-  margin: 0 0 1.25rem;
+.ehed-main-title,
+.ehed-main-title-perrelet {
+    line-height: 1.1;
 }
-
-.watches-page .ehed-body-text,
-.watches-page .hero__description {
-  margin-top: 0;
-  margin-bottom: 0;
+.ehed-main-title {
+    margin-top: 0;
+    margin-bottom: 16px;
 }
-
-.watches-page .ehed-media-cover {
-  margin-top: 0 !important;
+.ehed-body-text.hero__description {
+    margin-top: 0;
+    margin-bottom: 0;
 }
-
-.watches-page .perrelet-intro {
-  padding: var(--watch-section-space) 1rem var(--watch-content-gap);
+.triangle-text {
+    padding-top: 48px;
+    padding-bottom: 24px;
 }
-
-.watches-page .ehed-main-title-perrelet {
-  line-height: 1.05;
-  margin: 0 0 1.25rem;
-}
-
-.watches-page .perrelet-banner {
-  margin-top: 0 !important;
+.ehed-main-title-perrelet {
+    margin-top: 0;
+    margin-bottom: 16px;
 }
 
 @media (max-width: 767px) {
-  .watches-page .ehed-content-container {
-    padding: var(--watch-section-space) 1.25rem;
-  }
-
-  .watches-page .ehed-body-text {
-    margin-top: 0;
-  }
+    .luxury-watch-section,
+    .explore-brands-section {
+        padding-top: 32px !important;
+        padding-bottom: 32px !important;
+    }
+    .luxury-watch-section > p {
+        margin-bottom: 24px;
+    }
+    .explore-brands-title {
+        margin-bottom: 24px;
+    }
+    .ehed-content-container {
+        padding-top: 32px;
+        padding-bottom: 32px;
+    }
+    .ehed-body-text {
+        margin-top: 0;
+    }
+    .triangle-text {
+        padding-top: 32px;
+        padding-bottom: 20px;
+    }
+    .sectionOneMobile {
+        margin-top: 20px !important;
+        min-height: 0 !important;
+    }
+    .sectionOneMobile .carousel-inner,
+    .sectionOneMobile .carousel-item {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    .sectionOneMobile .carousel-item img {
+        width: 100%;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block;
+        margin-top:35px;
+    }
 }
 </style>
 @section('content')
+<!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none" style="position: relative; min-height: 500px; overflow: hidden;">
+        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+            <source src="{{ asset('assets/f_assets/image/pakistan_watch/desktop_fm.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+     Mobile Video Banner 
+    <section class="d-md-none" style="position: relative; height: 110vh; overflow: hidden;">
+        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+            <source src="{{ asset('assets/f_assets/image/pakistan_watch/mobile_fm.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section> -->
+<section class="watches-desktop-hero d-none d-md-block"
+    style="position: relative; overflow: hidden;">
 
-<main class="watches-page">
+    <div id="rolexCarousel"
+         class="carousel slide rolex-carousel"
+         data-bs-ride="carousel">
 
-<section class="sectionOne">
-    <picture>
-        <source
-            media="(max-width: 767.98px)"
-            srcset="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}">
-        <img
-            src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
-            alt="Franck Muller"
-            fetchpriority="high">
-    </picture>
+        <div class="carousel-inner">
+
+            <!-- SLIDE 1 -->
+            <!--<div class="carousel-item active">-->
+            <!--    <div class="hero-slide">-->
+                    
+            <!--        <img src="{{ asset('assets/f_assets/image/watches/cys_web.jpg') }}"-->
+            <!--            alt="Franck Muller"-->
+            <!--            class="hero-bg-img">-->
+            <!--    </div>-->
+            <!--</div>-->
+              <!-- SLIDE 1 -->
+            <div class="carousel-item active">
+                <div class="hero-slide">
+                    
+                    <!-- FULL COVER IMAGE -->
+                    <img
+                        src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
+                        alt="Franck Muller"
+                        class="hero-bg-img">
+
+                    <div class="hero-content">
+                        <!-- <h2>Carlos</h2>
+                        <h1>This crown is yours</h1> -->
+                        <!-- <a href="#" class="hero-cta">Learn more</a> -->
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SLIDE 2 -->
+            <div class="carousel-item">
+                <div class="hero-slide">
+
+                    <img
+                        src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.png') }}"
+                        alt="Nagar"
+                        class="hero-bg-img">
+
+                    <div class="hero-content">
+                        <!-- <h2>NAGAR</h2>
+                        <h1>Royal rubies, carved in light</h1> -->
+                        <!-- <a href="#" class="hero-cta">Discover</a> -->
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <div class="hero-slide">
+
+                    <img
+                        src="{{ asset('assets/f_assets/image/watches/ML-banner-index.jpeg') }}"
+                        alt="Nagar"
+                        class="hero-bg-img">
+
+
+
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <div class="hero-slide">
+
+                    <img
+                        src="{{ asset('assets/f_assets/image/watches/perrelet_banner_image.jpeg') }}"
+                        alt="Nagar"
+                        class="hero-bg-img">
+
+                    <div class="hero-content">
+                        <!-- <h2>NAGAR</h2>
+                        <h1>Royal rubies, carved in light</h1> -->
+                        <!-- <a href="#" class="hero-cta">Discover</a> -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="0" class="active" style="display:none;"></button>
+            <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="1"  style="display:none;"></button>
+             <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="2"  style="display:none;"></button>
+  <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="3" style="display:none;"></button>
+   <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="4" style="display:none;"></button>
+        </div>
+
+    </div>
 </section>
 
-<section class="luxury-watch-section">
-    <p class="luxury-watch-intro text-center px-3 fs-5 md-fs-6">
+
+
+<!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none"
+    style="position: relative; min-height: 500px; overflow: hidden;">
+
+    <img
+        src="{{ asset('assets/f_assets/image/franck_muller_new.jpg') }}"
+        alt="Banner"
+        style="
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        "
+    >
+</section> -->
+<!-- MOBILE HERO -->
+<section class="sectionOneMobile d-block d-md-none"
+    style="position: relative; overflow: hidden;">
+
+    <div id="rolexCarouselMobile"
+         class="carousel slide"
+         data-bs-ride="carousel">
+
+        <div class="carousel-inner">
+
+         
+            <div class="carousel-item active">
+                <img src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Franck Muller Mobile">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('assets/f_assets/image/watches mobile view/bovet_static.png') }}"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Bovet Mobile">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('assets/f_assets/image/watches/ML-mobile-index.avif') }}"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="ML Mobile">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('assets/f_assets/image/watches mobile view/perrelee_mobile.jpg') }}"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Perrelet Mobile">
+            </div>
+
+        </div>
+
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-5 luxury-watch-section">
+    <p class="text-center py-3 px-3 fs-5">
         Discover our hand picked selection of luxury Watches from renowned brands.
     </p>
 
@@ -719,8 +888,8 @@ section{
     </div>
 </section>
 
-<section class="watch-brands-directory">
-<h2 class="watch-brands-title text-center">EXPLORE OUR BRANDS</h2>
+<section class="pb-5 explore-brands-section">
+<h2 class="text-center py-5 explore-brands-title">EXPLORE OUR BRANDS</h2>
 
 <style>
 
@@ -1053,7 +1222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 </style>
-<div class="triangle-text perrelet-intro">
+<div class="triangle-text">
   <h1 class="ehed-main-title-perrelet">Perrelet</h1>
   <p class="ehed-body-text hero__description font-family--serif">
     Discover the Turbine Poker Royal Flush by Perrelet
@@ -1063,7 +1232,7 @@ document.addEventListener('DOMContentLoaded', function () {
   </p>
 </div>
 <div class="container-fluid p-0">
-    <section class="bannerWrap perrelet-banner">
+    <section class="bannerWrap">
         <video
             class="bannerVideo"
             autoplay
@@ -1076,6 +1245,29 @@ document.addEventListener('DOMContentLoaded', function () {
         </video>
     </section>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const desktopCarousel = document.getElementById('rolexCarousel');
+  if (desktopCarousel) {
+    const desktopInstance = bootstrap.Carousel.getOrCreateInstance(desktopCarousel, {
+      interval: 3000,
+      pause: false,
+      ride: 'carousel',
+      wrap: true
+    });
+    desktopInstance.cycle();
+  }
+
+  const el = document.getElementById('rolexCarouselMobile');
+  if (!el) return;
+
+  new bootstrap.Carousel(el, {
+    interval: 2000,   // change speed
+    pause: false,     // keep moving
+    ride: 'carousel'
+  });
+});
+</script>
 <script>
 document.querySelectorAll('.brand-item img').forEach(img => {
 
@@ -1372,7 +1564,5 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 </section>
-
-</main>
 
 @endsection
