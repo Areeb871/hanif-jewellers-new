@@ -273,6 +273,7 @@ font-family: "Barlow", sans-serif;
         height: 100%;
         object-fit: cover;
         object-position: center;
+        margin-top:20px;
     }
 
     .hj-ring-hero-content {

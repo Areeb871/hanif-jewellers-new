@@ -354,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'selected_carat_index' => (int) $selectedCaratIndex,
     ];
 
-    $usesHrdCertificate = (float) $selectedCarat >= 1;
 @endphp
 
 <script type="application/json" id="hjDetailProductData">
@@ -474,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="hj-sku-sep" aria-hidden="true">|</span>
         <span>{{ $product->tag_label ?? 'N/A' }}</span>
         <span class="hj-sku-sep" aria-hidden="true">|</span>
-        <span class="js-certificate-summary">{{ $usesHrdCertificate ? 'HRD certificate included' : 'Gemological certificate included' }}</span>
+        <span class="js-certificate-summary">Gemological certificate included</span>
     </p>
 
 </div>
@@ -802,11 +801,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-certificate">
             <img class="hj-certificate-logo js-certificate-logo"
-                src="{{ asset($usesHrdCertificate ? 'assets/f_assets/image/hrd-cert.svg' : 'assets/f_assets/image/gem-cert.png') }}"
-                alt="{{ $usesHrdCertificate ? 'HRD certificate logo' : 'Gemological certificate logo' }}">
+                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
+                alt="Gemological certificate logo">
             <div>
                 <small>Certification</small>
-                <strong class="js-certificate-name">{{ $usesHrdCertificate ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED' }}</strong>
+                <strong class="js-certificate-name">GEMOLOGICAL CERTIFICATE INCLUDED</strong>
                 <p>Guaranteed authenticity</p>
             </div>
         </div>
@@ -912,11 +911,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-certificate">
             <img class="hj-certificate-logo js-certificate-logo"
-                src="{{ asset($usesHrdCertificate ? 'assets/f_assets/image/hrd-cert.svg' : 'assets/f_assets/image/gem-cert.png') }}"
-                alt="{{ $usesHrdCertificate ? 'HRD certificate logo' : 'Gemological certificate logo' }}">
+                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
+                alt="Gemological certificate logo">
             <div>
                 <small>Certification</small>
-                <strong class="js-certificate-name">{{ $usesHrdCertificate ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED' }}</strong>
+                <strong class="js-certificate-name">GEMOLOGICAL CERTIFICATE INCLUDED</strong>
                 <p>Guaranteed authenticity</p>
             </div>
 </div>
@@ -1354,7 +1353,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             {{ $review->created_at ? $review->created_at->format('F d, Y') : '' }}
                         </span>
 
-                        <div class="hj-single-review-img">
+                        <!-- <div class="hj-single-review-img">
                             @if(!empty($review->image))
                                 <img 
                                     src="{{ asset($review->image) }}" 
@@ -1370,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     No Image
                                 </div>
                             @endif
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -1589,7 +1588,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const certificateNameEls = document.querySelectorAll('.js-certificate-name');
     const certificateLogoEls = document.querySelectorAll('.js-certificate-logo');
     const gemologicalCertificateLogo = @json(asset('assets/f_assets/image/gem-cert.png'));
-    const hrdCertificateLogo = @json(asset('assets/f_assets/image/hrd-cert.svg'));
 
     const oldPriceEl = document.getElementById('detailOldPrice');
     const newPriceEl = document.getElementById('detailNewPrice');
@@ -1602,11 +1600,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCertificate(carat) {
-        const usesHrd = carat && Number(carat.value) >= 1;
-        const summary = usesHrd ? 'HRD certificate included' : 'Gemological certificate included';
-        const name = usesHrd ? 'HRD CERTIFICATE INCLUDED' : 'GEMOLOGICAL CERTIFICATE INCLUDED';
-        const logo = usesHrd ? hrdCertificateLogo : gemologicalCertificateLogo;
-        const logoAlt = usesHrd ? 'HRD certificate logo' : 'Gemological certificate logo';
+        const summary = 'Gemological certificate included';
+        const name = 'GEMOLOGICAL CERTIFICATE INCLUDED';
+        const logo = gemologicalCertificateLogo;
+        const logoAlt = 'Gemological certificate logo';
 
         certificateSummaryEls.forEach(function (element) {
             element.textContent = summary;

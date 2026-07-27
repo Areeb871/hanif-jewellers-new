@@ -1237,7 +1237,9 @@ body{
     align-items: center;
     gap: 6px;
     white-space: nowrap;
-    margin-right:26px;
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
     text-decoration: none;
 }
 
