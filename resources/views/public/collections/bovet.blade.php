@@ -470,7 +470,7 @@
 .bovet-filterbar__right{ justify-self:end; }
 
 .bovet-brand-logo{
-    margin-top: -35px;
+    /* margin-top: -35px; */
     width:clamp(120px, 32vw, 190px);
     height:auto;
     display:block;
@@ -516,7 +516,7 @@
 
 /* TEXT FULL WIDTH WITH CLEAN PADDING */
 .bovet-text{
-    padding: 25px 40px 15px 10px; /* left & right spacing */
+    padding: 0px 40px 15px 10px; /* left & right spacing */
 }
 
 .bovet-title{
