@@ -599,7 +599,7 @@
     @endif   -->
     @if($canShowPrice)
     <div class="price-display">
-        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+            PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>
 
         @if($product->category->slug != 'watches')
