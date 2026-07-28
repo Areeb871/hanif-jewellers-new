@@ -164,6 +164,7 @@
     $displayDescription = $product->displayDescription($storeContext);
 @endphp
 
+<div class="product-vip-header">
 @if(
     optional($product->subcategory)->slug === 'favre-leuba' ||
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
@@ -189,7 +190,7 @@
 
 @else
 
-    <div class="product-title-wrap">
+    <div class="product-title-wrap product-title-shell">
         <h1 class="product-detail-title">
             {{ $displayName }}
         </h1>
@@ -197,6 +198,12 @@
 
 @endif
 
+    @if(filled($product->sku))
+        <div class="product-vip-reference">REF. {{ strtoupper($product->sku) }}</div>
+    @endif
+
+    <div class="product-vip-divider" aria-hidden="true"></div>
+</div>
 
 
 
@@ -228,10 +235,60 @@
     margin-bottom: 1.35rem;
 }
 
+.product-details-main-section .product-info {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+    padding: clamp(16px, 1.8vw, 28px) 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .product-details-main-section .product-details-layout {
+        align-items: flex-start;
+        overflow: visible;
+    }
+
+    .product-details-main-section .product-details-layout > .col-md-4 {
+        align-self: stretch;
+        overflow: visible;
+    }
+
+    .product-details-main-section .product-info.sticky-sidebar {
+        position: sticky !important;
+        top: 88px !important;
+        align-self: flex-start;
+        height: fit-content;
+        max-height: calc(100vh - 108px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+        z-index: 5;
+    }
+
+    .product-details-main-section .product-info.sticky-sidebar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.product-details-main-section .product-vip-header {
+    margin: 0 0 26px;
+}
+
+.product-details-main-section .product-title-shell {
+    margin: 0 !important;
+}
+
 .product-detail-title,
 .product-detail-full-name {
     color: #17120f;
-    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-family: "Argent CF", Georgia, serif !important;
     font-size: clamp(2rem, 2.7vw, 3rem) !important;
     font-weight: 500;
     letter-spacing: .015em;
@@ -239,28 +296,52 @@
 }
 
 .product-detail-title {
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: "Argent CF", Georgia, serif !important;
+}
+
+.product-details-main-section .product-detail-title,
+.product-details-main-section .product-detail-full-name {
+    margin: 0 0 12px !important;
+    font-weight: 400;
+}
+
+.product-details-main-section .product-vip-reference {
+    color: #7d746d;
+    font-family: "Poppins", sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .14em;
+    line-height: 1.4;
+}
+
+.product-details-main-section .product-vip-divider {
+    width: 100%;
+    height: 1px;
+    margin-top: 22px;
+    background: linear-gradient(90deg, #d8cec4 0%, #d8cec4 72%, transparent 100%);
 }
 
 .product-section-label {
     margin: 0 0 12px;
     color: #17120f;
-    font-family: inherit;
-    font-size: .72rem;
-    font-weight: 600;
-    letter-spacing: .16em;
-    text-transform: uppercase;
+    font-family: "Argent CF", Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: .015em;
+    text-transform: none;
     text-decoration: none;
 }
 
 .product-features-panel {
     margin-bottom: 1.45rem;
-    padding-bottom: 0;
+    padding: 20px 0 22px;
+    border-top: 1px solid #e9e3dd;
+    border-bottom: 1px solid #e9e3dd;
 }
 
 .product-description {
     color: #625b54;
-    font-family: inherit;
+    font-family: "Poppins", sans-serif;
     line-height: 1.72;
     font-size: 14px;
 }
@@ -268,6 +349,7 @@
 /* Paragraph & list base */
 .product-description p,
 .product-description li {
+    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.72;
@@ -323,9 +405,11 @@
     text-decoration-thickness: 1px;
 }
 
-.product-price-note {
+.product-price-note,
+.product-delivery-note {
     margin: .65rem 0 0;
     color: #7a7169;
+    font-family: "Poppins", sans-serif;
     font-size: 12px;
     line-height: 1.55;
 }
@@ -348,7 +432,7 @@
     border-radius: 0 !important;
     background: #17120f !important;
     color: #fff !important;
-    font-family: inherit !important;
+    font-family: "Poppins", sans-serif !important;
     font-size: .72rem !important;
     font-weight: 600 !important;
     letter-spacing: .14em;
@@ -383,7 +467,7 @@
 .section-luxury-heading {
     margin: 0;
     color: #17120f;
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: "Argent CF", Georgia, serif;
     font-size: clamp(2rem, 3vw, 2.75rem);
     font-weight: 500;
     letter-spacing: .06em;
@@ -398,6 +482,15 @@
 @media (max-width: 767.98px) {
     .product-details-main-section {
         padding-top: 62px;
+    }
+
+    .product-details-main-section .product-info {
+        max-width: none;
+        margin-top: 0;
+        padding: 30px 22px 20px;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
     }
 
     #mobileProductCarousel .mobile-carousel-image-wrapper {
@@ -642,7 +735,7 @@
                                 </div>
                             @endif
                         </div>
-                          <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+                          <p class="product-delivery-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
                             Estimated delivery time is 7 to 10 business days.
             </p>
 

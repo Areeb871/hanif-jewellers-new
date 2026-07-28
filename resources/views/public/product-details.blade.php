@@ -4,19 +4,19 @@
     {{-- Success Message Display --}}
     
     {{-- Main Product Details Section --}}
-    <section class="py-5">
+    <section class="product-details-page py-5">
         <div class="">
             {{-- Product Details Layout --}}
-            <div class="row gy-5" style="margin-left: 0px; margin-right: 0px;">
+            <div class="product-details-layout row gy-5" style="margin-left: 0px; margin-right: 0px;">
                 {{-- Left Side - Product Image Gallery (Desktop) --}}
-                <div class="col-lg-8 d-none d-lg-block" style="padding-right: 60px;">
+                <div class="product-gallery-column col-lg-8 d-none d-lg-block" style="padding-right: 60px;">
                     <div class="product-gallery">
                         {{-- Main Product Image - Full Width --}}
                         <div class="mb-2">
                             <div class="position-relative">
                                 <img 
                                     src="{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}" 
-                                    class="img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="{{ $product->name }}"
                                     onclick="openImagePopup('{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}')"
@@ -30,7 +30,7 @@
                                 <div class="col-6">
                                     <img 
                                         src="{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}" 
-                                        class="img-fluid rounded-3 w-100 cursor-pointer"
+                                        class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
                                         style="object-fit: contain; background-color: #F6F4F2;"
                                         alt="Lifestyle view"
                                         onclick="openImagePopup('{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}')"
@@ -40,7 +40,7 @@
                                     <div class="col-6">
                                         <img 
                                             src="{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}" 
-                                            class="img-fluid rounded-3 w-100 cursor-pointer"
+                                            class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
                                             style="object-fit: contain; background-color: #F6F4F2;"
                                             alt="Detail view"
                                             onclick="openImagePopup('{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}')"
@@ -54,7 +54,7 @@
                             <div class="mb-2">
                                 <img 
                                     src="{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}" 
-                                    class="img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="Additional view"
                                     onclick="openImagePopup('{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}')"
@@ -74,7 +74,7 @@
                                         <div class="col-6">
                                             <img 
                                                 src="{{ asset($img->image) }}" 
-                                                class="img-fluid rounded-3 w-100 cursor-pointer"
+                                                class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
                                                 style="object-fit: contain; background-color: #F6F4F2;"
                                                 alt="Additional view {{ $imgIndex + 4 }}"
                                                 onclick="openImagePopup('{{ asset($img->image) }}')"
@@ -155,8 +155,8 @@
                 </div>
 
                 {{-- Right Side - Product Information (Sticky) --}}
-                <div class="col-lg-4 mt-0 mt-lg-5" style="padding-right: 50px; margin: unset;">
-                    <div class="product-info sticky-sidebar">
+                <div class="product-info-column col-lg-4 mt-0 mt-lg-5" style="padding-right: 50px; margin: unset;">
+                    <div class="product-info product-info-panel sticky-sidebar">
 
 @php
     $storeContext = request()->boolean('store');
@@ -164,6 +164,7 @@
     $displayDescription = $product->displayDescription($storeContext);
 @endphp
 
+<div class="product-vip-header">
 @if(
     optional($product->subcategory)->slug === 'favre-leuba' ||
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
@@ -171,7 +172,12 @@
                 optional($product->subcategory)->slug === 'chronoswiss'||
                 optional($product->subcategory)->slug === 'franck-muller'||
                 optional($product->subcategory)->slug === 'mona-lisa'||
-                optional($product->subcategory)->slug === 'breathtaking'
+                optional($product->subcategory)->slug === 'breathtaking'||
+                                optional($product->subcategory)->slug === 'online-jewellery-sales'||
+                                                                optional($product->subcategory)->slug === 'online-shopping'
+
+
+
 
 
 )
@@ -189,14 +195,20 @@
 
 @else
 
-    <div class="mb-4">
-        <h1 class="h2 mb-0" style="font-family: sans-serif; font-size: 1.4rem !important;">
+    <div class="product-title-shell mb-4">
+        <h1 class="h2 mb-0 product-detail-title" style="font-size: 1.4rem !important;">
             {{ $displayName }}
         </h1>
     </div>
 
 @endif
 
+    @if(filled($product->sku))
+        <div class="product-vip-reference">REF. {{ strtoupper($product->sku) }}</div>
+    @endif
+
+    <div class="product-vip-divider" aria-hidden="true"></div>
+</div>
 
 
 
@@ -204,6 +216,7 @@
 
 <style>
 .product-description {
+    font-family: "Poppins", sans-serif;
     line-height: 1.5;
     font-size: 14px;
     color: #666;
@@ -212,6 +225,7 @@
 /* Paragraph & list base */
 .product-description p,
 .product-description li {
+    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.5;
@@ -235,7 +249,7 @@
 }
 
 .product-detail-full-name {
-    font-family: sans-serif;
+    font-family: "Argent CF", Georgia, serif !important;
     font-size: 1.4rem !important;
     line-height: 1.35;
     margin: 33px 0 14px;
@@ -249,6 +263,237 @@
     -webkit-box-orient: unset !important;
 }
 
+.product-detail-title,
+.product-section-label {
+    font-family: "Argent CF", Georgia, serif !important;
+}
+
+.product-delivery-note {
+    font-family: "Poppins", sans-serif !important;
+}
+
+.product-details-page {
+    background: #fff;
+    color: #17120f;
+}
+
+.product-details-page .product-details-layout {
+    width: min(100%, 1800px);
+    margin-inline: auto !important;
+}
+
+.product-details-page .product-gallery-column {
+    padding-left: clamp(20px, 3vw, 54px) !important;
+    padding-right: clamp(18px, 2.5vw, 44px) !important;
+}
+
+.product-details-page .product-gallery-image {
+    display: block;
+    border-radius: 2px !important;
+    background: #f6f4f2;
+    transition: opacity .25s ease;
+}
+
+.product-details-page .product-gallery-image:hover {
+    opacity: .94;
+}
+
+.product-details-page .product-info-column {
+    padding: 0 clamp(24px, 4vw, 72px) 0 clamp(20px, 2.8vw, 48px) !important;
+}
+
+.product-details-page .product-info-panel {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+    padding: clamp(16px, 1.8vw, 28px) 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-family: "Poppins", sans-serif;
+    text-align: left;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .product-details-page .product-details-layout {
+        align-items: flex-start;
+        overflow: visible;
+    }
+
+    .product-details-page .product-info-column {
+        align-self: stretch;
+        overflow: visible;
+    }
+
+    .product-details-page .product-info-panel.sticky-sidebar {
+        position: sticky !important;
+        top: 96px !important;
+        align-self: flex-start;
+        height: fit-content;
+        max-height: calc(100vh - 116px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+        z-index: 5;
+    }
+
+    .product-details-page .product-info-panel.sticky-sidebar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.product-details-page .product-vip-header {
+    margin: 0 0 26px;
+}
+
+.product-details-page .product-title-shell {
+    margin: 0 !important;
+}
+
+.product-details-page .product-detail-title,
+.product-details-page .product-detail-full-name {
+    margin: 0 0 12px !important;
+    color: #17120f;
+    font-family: "Argent CF", Georgia, serif !important;
+    font-size: clamp(2rem, 2.5vw, 2.9rem) !important;
+    font-weight: 400;
+    letter-spacing: .01em;
+    line-height: 1.08;
+    text-align: left;
+}
+
+.product-details-page .product-vip-reference {
+    color: #7d746d;
+    font-family: "Poppins", sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .14em;
+    line-height: 1.4;
+}
+
+.product-details-page .product-vip-divider {
+    width: 100%;
+    height: 1px;
+    margin-top: 22px;
+    background: linear-gradient(90deg, #d8cec4 0%, #d8cec4 72%, transparent 100%);
+}
+
+.product-details-page .product-detail-reference {
+    margin-top: 8px;
+    color: #847a71 !important;
+    font-family: "Poppins", sans-serif;
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .12em;
+}
+
+.product-details-page .product-features-panel {
+    margin: 0 0 24px !important;
+    padding: 20px 0 22px;
+    border-top: 1px solid #e9e3dd;
+    border-bottom: 1px solid #e9e3dd;
+}
+
+.product-details-page .product-section-label {
+    margin: 0 0 12px !important;
+    color: #17120f;
+    font-family: "Argent CF", Georgia, serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 400 !important;
+    letter-spacing: .015em;
+    line-height: 1.2;
+    text-decoration: none !important;
+}
+
+.product-details-page .product-description,
+.product-details-page .product-description p,
+.product-details-page .product-description li {
+    color: #655d56 !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+}
+
+.product-details-page .product-description p + p,
+.product-details-page .product-description ul,
+.product-details-page .product-description ol {
+    margin-top: 10px;
+}
+
+.product-details-page .product-price-panel {
+    margin: 0 0 24px !important;
+    padding: 0 0 24px;
+    border-bottom: 1px solid #e9e3dd;
+}
+
+.product-details-page .price-display {
+    color: #17120f;
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.25rem, 1.5vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: .025em;
+}
+
+.product-details-page .product-price-note,
+.product-details-page .product-delivery-note {
+    color: #80766e !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 11px !important;
+    line-height: 1.65 !important;
+}
+
+.product-details-page .cta-buttons {
+    margin-top: 0;
+}
+
+.product-details-page .product-action-btn {
+    min-height: 50px;
+    border: 1px solid #17120f !important;
+    border-radius: 0 !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: .16em;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.product-details-page .product-action-btn-primary {
+    background: #17120f !important;
+    color: #fff !important;
+}
+
+.product-details-page .product-action-btn-primary:hover,
+.product-details-page .product-action-btn-primary:focus-visible {
+    background: #342b25 !important;
+}
+
+.product-details-page .product-action-btn-secondary {
+    background: #fff !important;
+    color: #17120f !important;
+}
+
+.product-details-page .product-action-btn-secondary:hover,
+.product-details-page .product-action-btn-secondary:focus-visible {
+    background: #17120f !important;
+    color: #fff !important;
+}
+
+.product-details-page .product-delivery-note {
+    margin-top: 14px !important;
+    text-align: center;
+}
+
+.product-recommendations-title {
+    color: #17120f;
+    font-family: "Argent CF", Georgia, serif !important;
+    font-weight: 400 !important;
+    letter-spacing: .025em;
+}
+
 .product-detail-reference {
     font-size: 0.8rem;
     line-height: 1.2;
@@ -260,6 +505,31 @@
 
 
 @media (max-width: 767.98px) {
+    .product-details-page {
+        padding-top: 0 !important;
+    }
+
+    .product-details-page .product-info-column {
+        padding: 0 !important;
+    }
+
+    .product-details-page .product-info-panel {
+        max-width: none;
+        margin-top: 0;
+        padding: 30px 22px 14px;
+        border: 0 !important;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        text-align: left;
+    }
+
+    .product-details-page .product-detail-title,
+    .product-details-page .product-detail-full-name {
+        font-size: clamp(1.8rem, 8vw, 2.35rem) !important;
+        text-align: left !important;
+    }
+
     .product-detail-full-name {
         margin: 18px 0 8px !important;
         font-size: 1.25rem !important;
@@ -291,8 +561,8 @@
 @endif
 
 @if(filled($displayDescription))
-<div class="mb-4">
-    <h3 class="fw-bold" style="text-decoration: underline; font-size:15px;margin-bottom: 4px;">
+<div class="product-features-panel mb-4">
+    <h3 class="fw-bold product-section-label" style="text-decoration: underline; font-size:15px;margin-bottom: 4px;">
         Main Features:
     </h3>
     <div class="product-description" style="line-height: 1.5; font-size: 14px; margin: 1; padding: 0;color:#666">
@@ -309,7 +579,7 @@
                                 </div>
                             @endif
                         </div> -->
-<div class="my-5">
+<div class="product-price-panel my-5">
     @php
         $livePrice    = $product->displayPrice($storeContext);
 
@@ -333,7 +603,7 @@
     </div>
 
         @if($product->category->slug != 'watches')
-            <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+            <p class="product-price-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
             All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
             </p>
         @endif
@@ -455,7 +725,7 @@
                                         </button>
                                     </div> -->
                                     <div class="">
-                                        <button type="button" class="btn btn-dark w-100 py-2" onclick="buyNow()" 
+                                        <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()"
                                                 style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
                                             BUY NOW
                                         </button>
@@ -463,7 +733,7 @@
                                 </div>
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 
+                                    <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()"
                                             style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
                                         TALK TO AN EXPERT
                                     </button>
@@ -471,14 +741,14 @@
                             @else
                                 {{-- Only Talk to Expert when no price --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2" onclick="talkToExpert()" 
+                                    <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="talkToExpert()"
                                             style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @endif
                         </div>
-                         <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 2;"  >
+                         <p class="product-delivery-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 2;"  >
                             Estimated delivery time is 7 to 10 business days.
             </p>
 
@@ -494,7 +764,7 @@
     <section class="py-5 you-may-like-section">
         <div class="">
             <div class="text-center mb-5">
-                <h3 class="fw-bold" style="font-family: serif; font-size: 2rem;">YOU MAY ALSO LIKE</h3>
+                <h3 class="product-recommendations-title fw-bold" style="font-size: 2rem;">YOU MAY ALSO LIKE</h3>
             </div>
 
             @php
