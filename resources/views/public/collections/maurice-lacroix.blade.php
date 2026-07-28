@@ -1,4 +1,4 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 @section('content')
 <style>
     .chronoswiss-hero-media{
@@ -926,6 +926,5 @@ img{
     </script>
 </main>
 @endsection
-
 
 

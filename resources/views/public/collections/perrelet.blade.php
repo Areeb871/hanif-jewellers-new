@@ -1,5 +1,5 @@
 
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 <style>
 /* =======================
    DESKTOP HERO

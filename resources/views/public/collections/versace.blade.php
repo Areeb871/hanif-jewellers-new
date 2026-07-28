@@ -1,4 +1,4 @@
-@extends('public.layouts.header_black_without_border')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
     @if(isset($versaceSubcategory) && $versaceSubcategory && $versaceSubcategory->banner_url)
@@ -57,7 +57,7 @@
         </section>
     @endif
 
-    <section class="pb-4">
+    <section class="">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
