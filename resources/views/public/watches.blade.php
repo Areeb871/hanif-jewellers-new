@@ -1,5 +1,11 @@
 @extends('public.layouts.header_black_white_fixed')
 <style>
+html,
+body{
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
+}
 
 
 /* responsive banner wrapper */
@@ -139,6 +145,18 @@ section{
 @media (max-width: 767px){
   .lux-box{ width: 140px; height: 140px; }
   .lux-card::before, .lux-card::after{ inset: 10px; }
+
+  /* Artya uses a wide, mobile-specific image. */
+  .lux-card--artya .lux-ratio{ padding-top: 47.2727%; }
+  .lux-card--artya .lux-box{
+    inset: 24px;
+    width: auto;
+    height: auto;
+    transform: scale(.9);
+  }
+  .lux-card--artya:hover .lux-box{ transform: scale(1); }
+  .lux-card--artya::before,
+  .lux-card--artya::after{ inset: 6px; }
 }
 
 
@@ -812,9 +830,9 @@ section{
         Discover our hand picked selection of luxury Watches from renowned brands.
     </p>
 
-    <div class="row row-cols-2 row-cols-md-5 justify-content-center g-3 g-md-4 px-3">
+    <div class="row mx-0 justify-content-center g-3 g-md-4 px-3">
 
-        <div class="col">
+        <div class="col-6 col-md">
             <a href="{{ route('subcategory', ['subcategory' => 'bovet']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
@@ -828,7 +846,7 @@ section{
             </a>
         </div>
 
-        <div class="col">
+        <div class="col-6 col-md">
             <a href="{{ route('subcategory', ['subcategory' => 'louis-moinet']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
@@ -842,7 +860,7 @@ section{
             </a>
         </div>
 
-        <div class="col">
+        <div class="col-6 col-md">
             <a href="{{ route('subcategory', ['subcategory' => 'franck-muller']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
@@ -855,7 +873,7 @@ section{
                 </div>
             </a>
         </div>
-         <div class="col">
+         <div class="col-6 col-md">
             <a href="{{ route('subcategory', ['subcategory' => 'corum']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
@@ -869,11 +887,14 @@ section{
             </a>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-md">
             <a href="{{ route('subcategory', ['subcategory' => 'Artya']) }}" class="text-decoration-none d-block">
-                <div class="lux-card">
+                <div class="lux-card lux-card--artya">
                     <span class="lux-ratio"></span>
-                    <img src="{{ asset('assets/f_assets/image/artya.png') }}" alt="Artya" loading="lazy" class="lux-img">
+                    <picture>
+                        <source media="(max-width: 767px)" srcset="{{ asset('assets/f_assets/image/artya-mobile.png') }}">
+                        <img src="{{ asset('assets/f_assets/image/artya.png') }}" alt="Artya" loading="lazy" class="lux-img">
+                    </picture>
                     <div class="lux-hover">
                         <div class="lux-box">
                             <img src="{{ asset('assets/f_assets/image/watch logo/Artya.png') }}" alt="Artya Logo" class="lux-logo">
@@ -1224,7 +1245,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </style>
 <div class="triangle-text">
   <h1 class="ehed-main-title-perrelet">Perrelet</h1>
-  <p class="ehed-body-text hero__description font-family--serif">
+  <p class="ehed-body-text hero__description font-family--serif px-2">
     Discover the Turbine Poker Royal Flush by Perrelet
     a limited edition of just 99 pieces for poker enthusiasts.
     This luxury watch, with its distinctive turbine technology inspired by aviation propulsion,
