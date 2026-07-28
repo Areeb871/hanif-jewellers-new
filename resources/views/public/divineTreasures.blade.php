@@ -72,10 +72,10 @@
 
     <div style="width: 100vw; margin-left: calc(-50vw + 50%); background: #fff; position: relative; overflow: hidden;">
         <!-- Arrows -->
-        <button class="slider-arrow prev" onclick="scrollSlider(-1)">
+        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider', -1)">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <button class="slider-arrow next" onclick="scrollSlider(1)">
+        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider', 1)">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
 
@@ -173,43 +173,11 @@
                      style="width: 25vw; min-width: 350px; max-width: 400px; scroll-snap-align: start;"
                      alt="Tasbeeh Image"
                      data-index="{{ $index }}"
-                     onclick="openImageModalForDevine(parseInt(this.dataset.index))">
+                     onclick="DivineGallery.open('imageSlider', Number(this.dataset.index))">
             @endforeach
         </div>
     </div>
 </section>
-
-<!-- 💎 Cleopatra-Style Modal Viewer -->
-<div id="devineImageModal" class="modal fade" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.9);">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
-        <div class="modal-content" style="background: transparent; border: none;">
-            <div class="modal-body d-flex align-items-center justify-content-center position-relative">
-                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
-                        aria-label="Close" onclick="closeImageModalForDevine()"></button>
-
-                <img id="devineModalImage" src="" class="img-fluid" style="max-height: 90vh; max-width: 90vw; transition: transform 0.3s ease;">
-
-                <!-- Controls -->
-                <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y"
-                        style="opacity: 0.6;" onclick="prevImageDevine()">❮</button>
-                <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y"
-                        style="opacity: 0.6;" onclick="nextImageDevine()">❯</button>
-
-             <!-- Zoom Controls (placed below X icon, right side) -->
-<div class="zoom-panel">
-    <button class="zoom-btn" onclick="zoomInDevine()">+</button>
-    <button class="zoom-btn" onclick="zoomOutDevine()">−</button>
-    <button class="zoom-btn" onclick="toggleFullScreenDevine()">
-        <i class="fa-solid fa-maximize"></i>
-    </button>
-</div>
-
-
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div class="row g-3 justify-content-center"> 
     <div class="col-md-8 col-lg-6 mx-auto"> 
@@ -223,10 +191,10 @@
 <section class="container mt-5">
     <div style="width: 100vw; margin-left: calc(-50vw + 50%); background: #fff; position: relative; overflow: hidden;">
         <!-- Arrows -->
-        <button class="slider-arrow prev" onclick="scrollSlider2(-1)">
+        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider2', -1)">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <button class="slider-arrow next" onclick="scrollSlider2(1)">
+        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider2', 1)">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
 
@@ -254,46 +222,47 @@
                      style="width: 25vw; min-width: 350px; max-width: 400px; scroll-snap-align: start;"
                      alt="Pendant Image {{ $index + 1 }}" 
                      data-index="{{ $index }}"
-                     onclick="openImageModal(parseInt(this.dataset.index))">
+                     onclick="DivineGallery.open('imageSlider2', Number(this.dataset.index))">
             @endforeach
         </div>
     </div>
 </section>
 
 <!-- ✅ Your existing modal -->
-<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="divine-image-modal" id="imageModal" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
         <div class="modal-content bg-transparent border-0">
             <div class="modal-header border-0">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="divine-modal-close" aria-label="Close" onclick="DivineGallery.close()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body text-center p-0 position-relative"
-                 style="overflow: hidden; margin-bottom: 100px; height: auto; display: flex; align-items: flex-start; justify-content: center;">
+                 style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
                 <img id="modalImage" src="" class="img-fluid"
-                     style="max-height: 100vh; max-width: 100vw; cursor: grab; touch-action: none; user-select: none;"
-                     onmousedown="startDrag(event)" onmousemove="drag(event)" onmouseup="endDrag()" onmouseleave="endDrag()"
-                     ontouchstart="startTouch(event)" ontouchmove="touchMove(event)" ontouchend="endTouch()">
+                     style="max-height: 90vh; max-width: 90vw; cursor: grab; touch-action: none; user-select: none;"
+                     draggable="false" alt="">
                 
                 <!-- Navigation Arrows -->
                 <button id="modalPrev" class="btn btn-link position-absolute top-50 start-0 translate-middle-y text-white"
-                        style="left: 20px; z-index: 10;" onclick="navigateModal(-1)">
+                        style="left: 20px; z-index: 10;" onclick="DivineGallery.navigate(-1)">
                     <i class="fas fa-chevron-left fa-1x"></i>
                 </button>
                 <button id="modalNext" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-white"
-                        style="right: 20px; z-index: 10;" onclick="navigateModal(1)">
+                        style="right: 20px; z-index: 10;" onclick="DivineGallery.navigate(1)">
                     <i class="fas fa-chevron-right fa-1x"></i>
                 </button>
 
                 <!-- Zoom Controls -->
-                <div class="position-absolute top-0 end-0 mt-3 me-3">
+                <div class="divine-zoom-controls">
                     <div class="btn-group-vertical" role="group">
-                        <button class="btn btn-dark btn-sm" onclick="zoomIn()" title="Zoom In">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.zoomIn()" title="Zoom In">
                             <i class="fas fa-plus"></i>
                         </button>
-                        <button class="btn btn-dark btn-sm" onclick="zoomOut()" title="Zoom Out">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.zoomOut()" title="Zoom Out">
                             <i class="fas fa-minus"></i>
                         </button>
-                        <button class="btn btn-dark btn-sm" onclick="resetZoom()" title="Reset Zoom">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.resetZoom()" title="Reset Zoom">
                             <i class="fas fa-expand-arrows-alt"></i>
                         </button>
                     </div>
@@ -312,140 +281,111 @@
                     .app-btn {
                         padding: 6px 16px !important;
                     }
-                    .m-1{
-                        margin:2.1rem !important;
+                    .divine-treasures-appointment-spacing {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 9.5rem;
                     }
             </style>
-            <div class="text-center">
-                <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us')  }}">BOOK AN APPOINTMENT</a>
+            <div class="divine-treasures-appointment-spacing">
+                <x-book-appointment />
             </div>
             <!-- <div class="col-md-6 text-center">
-                <a class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" href="{{ route('subcategory', ['subcategory' => 'gohar'])  }}">SHOP NOW</a>
+                <x-shop-now :href="route('subcategory', ['subcategory' => 'gohar'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
             </div> -->
         </div>
 
 <style>
-#imageModal .modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.9) !important;
+.divine-image-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 999999;
 }
-#imageModal.modal {
-    background-color: rgba(0, 0, 0, 0.9) !important;
+
+.divine-image-modal.is-open {
+    display: block;
+}
+
+.divine-image-modal .modal-dialog,
+.divine-image-modal .modal-content {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.divine-image-modal .modal-header {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    margin: 0;
+    padding: 0;
+    z-index: 30;
+}
+
+.divine-modal-close {
+    width: 42px;
+    height: 42px;
+    margin: 0;
+    padding: 0 0 4px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    background: rgba(25, 28, 31, 0.92);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 1;
+}
+
+.divine-modal-close:hover,
+.divine-modal-close:focus {
+    background: #34383c;
+    color: #fff;
+    outline: 2px solid rgba(255, 255, 255, 0.55);
+    outline-offset: 2px;
+}
+
+.divine-zoom-controls {
+    position: absolute;
+    top: 72px;
+    right: 16px;
+    z-index: 25;
+}
+
+.divine-image-modal .modal-body {
+    width: 100%;
+    height: 100%;
+}
+
+body.divine-modal-open {
+    overflow: hidden !important;
+}
+
+@media (max-width: 576px) {
+    .divine-image-modal .modal-header {
+        top: max(12px, env(safe-area-inset-top));
+        right: 12px;
+    }
+
+    .divine-zoom-controls {
+        top: calc(max(12px, env(safe-area-inset-top)) + 54px);
+        right: 12px;
+    }
 }
 </style>
 
-<script>
-let currentIndex = 0;
-let allImages = [];
-let zoomLevel = 1;
-let isDragging = false;
-let startX, startY, translateX = 0, translateY = 0;
 
-document.addEventListener("DOMContentLoaded", () => {
-    allImages = Array.from(document.querySelectorAll("#imageSlider2 img")).map(img => img.src);
-    const modalImage = document.getElementById("modalImage");
-    if (modalImage) {
-        modalImage.addEventListener("wheel", (e) => {
-            e.preventDefault();
-            if (e.deltaY < 0) {
-                zoomIn();
-            } else {
-                zoomOut();
-            }
-        }, { passive: false });
-
-        modalImage.addEventListener("dblclick", () => {
-            if (zoomLevel === 1) {
-                zoomLevel = 2;
-            } else {
-                zoomLevel = 1;
-                translateX = 0;
-                translateY = 0;
-            }
-            applyZoom();
-        });
-    }
-});
-
-function openImageModal(index) {
-    currentIndex = index;
-    updateModalImage();
-    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-    modal.show();
-}
-
-function updateModalImage() {
-    const modalImage = document.getElementById("modalImage");
-    modalImage.src = allImages[currentIndex];
-    document.getElementById("imageCounter").textContent = `${currentIndex + 1} / ${allImages.length}`;
-    resetZoom();
-}
-
-function navigateModal(direction) {
-    currentIndex = (currentIndex + direction + allImages.length) % allImages.length;
-    updateModalImage();
-}
-
-// ---- ZOOM CONTROLS ----
-function zoomIn() {
-    zoomLevel += 0.2;
-    applyZoom();
-}
-function zoomOut() {
-    zoomLevel = Math.max(1, zoomLevel - 0.2);
-    applyZoom();
-}
-function resetZoom() {
-    zoomLevel = 1;
-    translateX = 0;
-    translateY = 0;
-    applyZoom();
-}
-function applyZoom() {
-    const modalImage = document.getElementById("modalImage");
-    modalImage.style.transform = `scale(${zoomLevel}) translate(${translateX / zoomLevel}px, ${translateY / zoomLevel}px)`;
-}
-
-// ---- DRAG FUNCTIONALITY ----
-function startDrag(e) {
-    if (zoomLevel <= 1) return;
-    isDragging = true;
-    startX = e.clientX - translateX;
-    startY = e.clientY - translateY;
-}
-
-function drag(e) {
-    if (!isDragging) return;
-    translateX = e.clientX - startX;
-    translateY = e.clientY - startY;
-    applyZoom();
-}
-
-function endDrag() {
-    isDragging = false;
-}
-
-// Touch support for mobile
-function startTouch(e) {
-    if (zoomLevel <= 1) return;
-    startX = e.touches[0].clientX - translateX;
-    startY = e.touches[0].clientY - translateY;
-}
-
-function touchMove(e) {
-    if (zoomLevel <= 1) return;
-    translateX = e.touches[0].clientX - startX;
-    translateY = e.touches[0].clientY - startY;
-    applyZoom();
-}
-
-function endTouch() {}
-
-// ---- MAIN SLIDER ARROWS ----
-function scrollSlider2(direction) {
-    const slider = document.getElementById("imageSlider2");
-    slider.scrollBy({ left: direction * 400, behavior: "smooth" });
-}
-</script>
 
 <!-- 🧠 JS + CSS -->
 <style>
@@ -526,73 +466,213 @@ function scrollSlider2(direction) {
 
 
 <!-- 💡 JS: Slider + Modal Controls -->
+
+
+
+
+
 <script>
-    let devineCurrentIndex = 0;
-    let devineZoom = 1;
-    const devineSlides = [];
+window.DivineGallery = (() => {
+    const modalElement = document.getElementById('imageModal');
+    const imageElement = document.getElementById('modalImage');
+    const counterElement = document.getElementById('imageCounter');
+    const previousButton = document.getElementById('modalPrev');
+    const nextButton = document.getElementById('modalNext');
 
-    function scrollSlider(direction) {
-        const slider = document.getElementById('imageSlider');
-        const scrollAmount = 400;
-        slider.scrollBy({
-            left: direction * scrollAmount,
-            behavior: 'smooth'
-        });
+    let images = [];
+    let alts = [];
+    let activeIndex = 0;
+    let zoom = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let pinchDistance = 0;
+    let pinchZoom = 1;
+
+    const clampIndex = index => Math.min(Math.max(index, 0), Math.max(images.length - 1, 0));
+
+    function applyTransform() {
+        imageElement.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${zoom})`;
+        imageElement.style.cursor = zoom > 1 ? (dragging ? 'grabbing' : 'grab') : 'default';
     }
 
-    function openImageModalForDevine(index) {
-        // Reuse the shared Cleopatra modal with full zoom/pan/counter
-        const imgs = Array.from(document.querySelectorAll('#imageSlider img'));
-        allImages = imgs.map(img => img.src);
-        currentIndex = index;
-        updateModalImage();
-        const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-        modal.show();
+    function resetZoom() {
+        zoom = 1;
+        offsetX = 0;
+        offsetY = 0;
+        dragging = false;
+        applyTransform();
     }
 
-    function closeImageModalForDevine() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('devineImageModal'));
-        modal.hide();
+    function updateImage() {
+        if (!images.length) return;
+
+        resetZoom();
+        imageElement.src = images[activeIndex];
+        imageElement.alt = alts[activeIndex] || `Divine Treasure image ${activeIndex + 1}`;
+        counterElement.textContent = `${activeIndex + 1} / ${images.length}`;
+
+        const hasMultipleImages = images.length > 1;
+        previousButton.hidden = !hasMultipleImages;
+        nextButton.hidden = !hasMultipleImages;
     }
 
-    function nextImageDevine() {
-        devineCurrentIndex = (devineCurrentIndex + 1) % devineSlides.length;
-        document.getElementById('devineModalImage').src = "{{ asset('') }}" + devineSlides[devineCurrentIndex];
+    function open(sliderId, index = 0) {
+        const slider = document.getElementById(sliderId);
+        if (!slider) return;
+
+        const sliderImages = Array.from(slider.querySelectorAll('img'));
+        if (!sliderImages.length) return;
+
+        images = sliderImages.map(image => image.currentSrc || image.src);
+        alts = sliderImages.map(image => image.alt || '');
+        activeIndex = clampIndex(Number(index) || 0);
+        updateImage();
+
+        modalElement.classList.add('is-open');
+        modalElement.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('divine-modal-open');
+        modalElement.focus();
     }
 
-    function prevImageDevine() {
-        devineCurrentIndex = (devineCurrentIndex - 1 + devineSlides.length) % devineSlides.length;
-        document.getElementById('devineModalImage').src = "{{ asset('') }}" + devineSlides[devineCurrentIndex];
+    function close() {
+        modalElement.classList.remove('is-open');
+        modalElement.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('divine-modal-open');
+        resetZoom();
+        imageElement.removeAttribute('src');
+        images = [];
+        alts = [];
     }
 
-    function zoomInDevine() {
-        devineZoom += 0.2;
-        document.getElementById('devineModalImage').style.transform = `scale(${devineZoom})`;
+    function navigate(direction) {
+        if (images.length < 2) return;
+        activeIndex = (activeIndex + direction + images.length) % images.length;
+        updateImage();
     }
 
-    function zoomOutDevine() {
-        if (devineZoom > 0.4) {
-            devineZoom -= 0.2;
-            document.getElementById('devineModalImage').style.transform = `scale(${devineZoom})`;
+    function zoomIn() {
+        zoom = Math.min(zoom + 0.25, 5);
+        applyTransform();
+    }
+
+    function zoomOut() {
+        zoom = Math.max(zoom - 0.25, 1);
+        if (zoom === 1) {
+            offsetX = 0;
+            offsetY = 0;
         }
+        applyTransform();
     }
 
-    function resetZoomDevine() {
-        devineZoom = 1;
-        document.getElementById('devineModalImage').style.transform = `scale(1)`;
+    function scroll(sliderId, direction) {
+        const slider = document.getElementById(sliderId);
+        if (!slider) return;
+
+        const firstImage = slider.querySelector('img');
+        const gap = parseFloat(getComputedStyle(slider).gap) || 0;
+        const distance = firstImage ? firstImage.getBoundingClientRect().width + gap : 400;
+        slider.scrollBy({ left: direction * distance, behavior: 'smooth' });
     }
 
-    function toggleFullScreenDevine() {
-        const modalImage = document.getElementById('devineModalImage');
-        if (!document.fullscreenElement) {
-            modalImage.requestFullscreen().catch(err => console.log(err));
+    function touchDistance(touches) {
+        const x = touches[0].clientX - touches[1].clientX;
+        const y = touches[0].clientY - touches[1].clientY;
+        return Math.hypot(x, y);
+    }
+
+    imageElement.addEventListener('pointerdown', event => {
+        if (zoom <= 1 || event.pointerType === 'touch') return;
+        dragging = true;
+        dragStartX = event.clientX - offsetX;
+        dragStartY = event.clientY - offsetY;
+        if (imageElement.setPointerCapture) {
+            imageElement.setPointerCapture(event.pointerId);
+        }
+        applyTransform();
+    });
+
+    imageElement.addEventListener('pointermove', event => {
+        if (!dragging || zoom <= 1) return;
+        event.preventDefault();
+        offsetX = event.clientX - dragStartX;
+        offsetY = event.clientY - dragStartY;
+        applyTransform();
+    });
+
+    const stopDragging = () => {
+        dragging = false;
+        applyTransform();
+    };
+
+    imageElement.addEventListener('pointerup', stopDragging);
+    imageElement.addEventListener('pointercancel', stopDragging);
+
+    imageElement.addEventListener('touchstart', event => {
+        if (event.touches.length === 2) {
+            pinchDistance = touchDistance(event.touches);
+            pinchZoom = zoom;
+            dragging = false;
+        } else if (event.touches.length === 1 && zoom > 1) {
+            dragging = true;
+            dragStartX = event.touches[0].clientX - offsetX;
+            dragStartY = event.touches[0].clientY - offsetY;
+        }
+    }, { passive: false });
+
+    imageElement.addEventListener('touchmove', event => {
+        if (event.touches.length === 2 && pinchDistance > 0) {
+            event.preventDefault();
+            zoom = Math.min(Math.max(pinchZoom * (touchDistance(event.touches) / pinchDistance), 1), 5);
+            applyTransform();
+        } else if (event.touches.length === 1 && dragging && zoom > 1) {
+            event.preventDefault();
+            offsetX = event.touches[0].clientX - dragStartX;
+            offsetY = event.touches[0].clientY - dragStartY;
+            applyTransform();
+        }
+    }, { passive: false });
+
+    imageElement.addEventListener('touchend', () => {
+        dragging = false;
+        pinchDistance = 0;
+        applyTransform();
+    });
+
+    imageElement.addEventListener('wheel', event => {
+        if (!modalElement.classList.contains('is-open')) return;
+        event.preventDefault();
+        event.deltaY < 0 ? zoomIn() : zoomOut();
+    }, { passive: false });
+
+    imageElement.addEventListener('dblclick', () => {
+        if (zoom === 1) {
+            zoom = 2;
+            applyTransform();
         } else {
-            document.exitFullscreen();
+            resetZoom();
         }
-    }
+    });
+
+    document.addEventListener('keydown', event => {
+        if (!modalElement.classList.contains('is-open')) return;
+
+        if (event.key === 'ArrowLeft') navigate(-1);
+        if (event.key === 'ArrowRight') navigate(1);
+        if (event.key === '+' || event.key === '=') zoomIn();
+        if (event.key === '-') zoomOut();
+        if (event.key === '0') resetZoom();
+        if (event.key === 'Escape') close();
+    });
+
+    modalElement.addEventListener('click', event => {
+        if (event.target === modalElement) close();
+    });
+
+    return { open, close, navigate, zoomIn, zoomOut, resetZoom, scroll };
+})();
 </script>
-
-
-
 
 @endsection

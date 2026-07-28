@@ -1237,7 +1237,9 @@ body{
     align-items: center;
     gap: 6px;
     white-space: nowrap;
-    margin-right:26px;
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
     text-decoration: none;
 }
 
@@ -2031,7 +2033,7 @@ body{
 }
 
 .hj-handcrafted-copy h3 {
-    margin: 0 0 7px;
+    margin: 20px 20px 10px;
     color: #111;
     font-size: 28px;
     line-height: 1.12;
@@ -2041,7 +2043,7 @@ body{
 }
 
 .hj-handcrafted-copy p {
-    margin: 0;
+    margin: 20px 20px 0;
     color: #555;
     font-size: 22px;
     font-weight: 300;
@@ -2183,7 +2185,8 @@ body{
     }
 
     .hj-handcrafted-copy h3 {
-        max-width: 260px;
+        width: min(280px, 100%);
+        max-width: 280px;
         margin: 0 auto 12px;
         font-size: 20px;
         line-height: 1.2;
@@ -2193,6 +2196,7 @@ body{
     }
 
     .hj-handcrafted-copy p {
+        width: min(280px, 100%);
         max-width: 280px;
         margin: 0 auto;
         font-size: 15px;
@@ -2202,7 +2206,7 @@ body{
     }
 
     .hj-handcrafted-copy a {
-        width: min(220px, calc(100% - 24px));
+        width: min(240px, 100%);
         margin-left: auto;
         margin-right: auto;
         min-height: 42px;
@@ -3882,4 +3886,83 @@ a.hj-lab-product-card {
     box-shadow: 0 0 0 2px #dfc258, 0 0 0 4px #111;
 }
 
+/* Mobile solitaire metal choices: keep every chip on one visible row. */
+@media (max-width: 767px) {
+    .hj-option-card .hj-metal-track-wrap {
+        width: 80%;
+        min-width: 0;
+        margin-inline: auto;
+        overflow: visible;
+        justify-content: flex-start;
+    }
 
+    .hj-option-card .hj-metal-options {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: clamp(4px, 2vw, 12px);
+        width: 100%;
+        max-width: 100%;
+        margin-inline: 0;
+        padding: 8px 0;
+        justify-content: flex-start;
+        align-items: center;
+        overflow: visible;
+    }
+
+    .hj-option-card .metal-chip {
+        flex: 1 1 26px;
+        width: auto;
+        height: auto;
+        min-width: 0;
+        min-height: 0;
+        max-width: 26px;
+        max-height: 26px;
+        aspect-ratio: 1;
+        font-size: clamp(7px, 34cqi, 8px);
+    }
+}
+
+/* iPad / compact desktop: align metal choices with the carat track. */
+@media (min-width: 992px) and (max-width: 1230px) {
+    .hj-option-card .hj-row.hj-metal-row,
+    .hj-option-card .hj-row.hj-carat-row {
+        grid-template-columns: 76px minmax(0, 1fr) 92px;
+    }
+
+    .hj-option-card .hj-metal-track-wrap,
+    .hj-option-card .hj-row.hj-carat-row .hj-middle {
+        width: 100%;
+        min-width: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .hj-option-card .hj-metal-options {
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 100%;
+        gap: clamp(4px, 0.6vw, 8px);
+        padding: 8px 0;
+        overflow: visible;
+    }
+
+    .hj-option-card .hj-slider-text {
+        margin-bottom: 8px;
+        font-size: 9px;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .hj-option-card .metal-chip {
+        flex: 1 1 26px;
+        width: auto;
+        height: auto;
+        min-width: 0;
+        min-height: 0;
+        max-width: 26px;
+        max-height: 26px;
+        aspect-ratio: 1;
+        font-size: clamp(7px, 34cqi, 9px);
+    }
+}

@@ -689,21 +689,7 @@ footer h4 {
                 <span class="hanif-action-label">Email us</span>
             </a>
 
-           <a href="javascript:void(0);" onclick="openWhatsapp()" class="hanif-action-btn">
-    
-    <span class="hanif-action-icon">
-        <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-            <rect x="4" y="6" width="16" height="14" rx="2.5" fill="none" stroke="#fdfdfd" stroke-width="1.8"/>
-            <path d="M8 4.5v3M16 4.5v3M4 9.5h16" fill="none" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M9 14l2 2 4-4" fill="white" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </span>
-
-    <span class="hanif-action-label">
-        Book an appointment
-    </span>
-
-</a>
+            <x-book-appointment href="javascript:void(0);" onclick="openWhatsapp()" />
 
             <a href="/pages/locator" class="hanif-action-btn">
                 <span class="hanif-action-icon">

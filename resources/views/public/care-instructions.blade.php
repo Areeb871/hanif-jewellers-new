@@ -1,11 +1,9 @@
 @extends('public.layouts.header_latest')
 
 @section('content')
-    <section class="careInstructionsSection p-5">
+    <section class="careInstructionsSection" aria-label="Care instructions banner"></section>
 
-    </section>
-
-    <section class="m-3 mx-md-5 my-md-5">
+    <section class="care-content-section">
         <!-- <div class="container py-4">
             <div class="breadcrumb">
                 <a href="/" title="Home" class="a_link">
@@ -16,8 +14,10 @@
             <h2 class="pb-4 mb-3 text-center title text-black text-uppercase border-bottom border-black">Care Instructions
             </h2> -->
 
-            <div class="my-5 mx-5 px-5">
-                <h3 class="text-center mb-5 fw-bold border-bottom border-1 border-black" style="letter-spacing: 1px;">TAKE CARE OF YOUR PRODUCT</h3>
+            <div class="container">
+                <h1 class="care-page-title text-center fw-bold border-bottom border-1 border-black">
+                    FAQS
+                </h1>
                 <div class="accordion faqPageWrapper border-0" id="faqAccordion">
                     <!-- Item 1 -->
                     <div class="accordion-item border-0 border-bottom">
@@ -152,6 +152,5 @@
                 </div>
             </div>
 
-        </div>
     </section>
 @endsection

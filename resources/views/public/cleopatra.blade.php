@@ -189,17 +189,20 @@ section{
                 padding: 6px 16px !important;
             }
 
-            .m-1 {
-                margin: 2.1rem !important;
+            .cleopatra-appointment-spacing {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 3rem 0 3.5rem;
             }
         </style>
 
-        <!-- <div class="text-center">
-            <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us') }}">BOOK AN APPOINTMENT</a>
-        </div> -->
+        {{-- <div class="text-center">
+            <x-book-appointment class="m-1" />
+        </div> --}}
 
         <!-- <div class="col-md-6 text-center">
-            <a class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" href="{{ route('subcategory', ['subcategory' => 'gohar']) }}">SHOP NOW</a>
+            <x-shop-now :href="route('subcategory', ['subcategory' => 'gohar'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
         </div> -->
     </div>
 
@@ -222,18 +225,18 @@ section{
     </div>
 </div>
 </section>
-<section class="py-5 text-center">
+<section class="pt-5 pb-0 text-center">
 
     <div class="container">
         <div class="mx-auto" style="max-width: 520px;">
 
-            <p style="font-size: 15px; line-height: 1.9; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.9; margin-bottom: 0;">
                 An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.
             </p>
 
-            <a href="{{ route('contact-us') }}" class="btn btn-outline-dark px-4 py-2">
-                BOOK AN APPOINTMENT
-            </a>
+            <div class="cleopatra-appointment-spacing">
+                <x-book-appointment />
+            </div>
 
         </div>
     </div>

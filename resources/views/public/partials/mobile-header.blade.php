@@ -529,7 +529,7 @@
                     </a>
 
                     <!-- Cart -->
-                    <a href="/cart" class="mobile-nav-icon position-relative">
+                    <!-- <a href="/cart" class="mobile-nav-icon position-relative">
                         {{-- <i class="fa-solid fa-cart-shopping"></i> --}}
 
                         @php
@@ -544,7 +544,7 @@
                         @if($cartCount > 0)
                             {{-- <span class="mobile-cart-badge">{{ $cartCount }}</span> --}}
                         @endif
-                    </a>
+                    </a> -->
 
                 </div>
             </div>

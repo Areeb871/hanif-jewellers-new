@@ -975,9 +975,9 @@ $card = [
 
   <div class="header-static-tools">
     {{-- CART SECTION --}}
-    <span id="cartHeader" class="d-inline-flex align-items-center">
+    <!-- <span id="cartHeader" class="d-inline-flex align-items-center">
       @include('public.partials.cart-header')
-    </span>
+    </span> -->
 
     {{-- SETTINGS DROPDOWN --}}
     <div class="dropdown position-relative">
@@ -1279,8 +1279,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const matches = searchData
-      .filter(item => (item.searchText || item.label || '').includes(normalized))
-      .slice(0, 10);
+      .filter(item => (item.searchText || item.label || '').includes(normalized));
 
     if (!matches.length) {
       searchEmpty.textContent = 'No results found.';

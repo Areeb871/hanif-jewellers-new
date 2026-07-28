@@ -101,6 +101,15 @@ html, body{
     font-weight: 300;
         font-size: 18px;
             }
+            .qaws-copy {
+                margin-bottom: 0 !important;
+            }
+            .qaws-appointment-spacing {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 9.5rem;
+            }
         </style>
         <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
      
@@ -121,12 +130,12 @@ html, body{
         </div>
         <div class="row g-4 align-items-center">
             <div class="col-md-7">
-                <div class="text-center mb-5" id="qawsAlMatarHero">
+                <div class="text-center" id="qawsAlMatarHero">
                     <img src="{{ asset('assets/f_assets/image/Qaws al matar Web/Qaws al matar Web 005.jpg') }}" class="img-fluid" alt="Ehad Collection" style="margin-top: 8px; cursor: pointer;" onclick="openImageModal('qawsAlMatarHero', 0)">
                 </div>
             </div>
             <div class="col-md-5 m-0">
-                <div class="text-center px-5">
+                <div class="text-center px-5 qaws-copy">
 <p class="m-0">
     Brilliantly Handcrafted Bespoke Pieces, an ensemble of Gold and opulent Gemstones combined with a touch of class. A hallmark of The Art of handcrafted, bespoke jewellery.
 </p>
@@ -134,8 +143,8 @@ html, body{
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-12 text-center my-4">
-                <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us')  }}">BOOK AN APPOINTMENT</a>
+            <div class="col-12 qaws-appointment-spacing">
+                <x-book-appointment />
             </div>
         </div>
     </section>

@@ -245,7 +245,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <!-- <a class="text-white" href="/locator"><i class="fa-solid fa-location-dot"></i></a>
                         <a class="text-white px-4" href="/contact-us"><i class="fa-solid fa-phone-volume"></i></a>
                         <a class="text-white" href="http://"><i class="fa-solid fa-magnifying-glass"></i></a> -->
-                        <a class="text-white" href="/cart"> <i class="fas fa-chevron-left" style="padding-right: 10px; padding-top: 20px;"></i> Shopping Bag</a>
+                        <!-- <a class="text-white" href="/cart"> <i class="fas fa-chevron-left" style="padding-right: 10px; padding-top: 20px;"></i> Shopping Bag</a> -->
                         <a class="text-white px-4" href="#" data-bs-toggle="modal" data-bs-target="#navSearchModal"><i class="fa-solid fa-magnifying-glass"></i></a>
                     </div>
                     <div class="text-center col">
@@ -470,13 +470,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
 
                 const matches = searchData
-                    .filter(item => {
-                        const label = (item.label || '').toLowerCase();
-                        const slug = (item.slug || '').toLowerCase();
-                        // Prefer name; fall back to slug only if name missing
-                        return label ? label.includes(normalized) : slug.includes(normalized);
-                    })
-                    .slice(0, 10);
+                    .filter(item => (item.searchText || item.label || '').includes(normalized));
 
                 if (!matches.length) {
                     searchEmpty.textContent = 'No results found.';
@@ -514,11 +508,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 searchForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const term = searchInput.value.trim().toLowerCase();
-                    const match = searchData.find(item => {
-                        const label = (item.label || '').toLowerCase();
-                        const slug = (item.slug || '').toLowerCase();
-                        return label ? label.includes(term) : slug.includes(term);
-                    });
+                    const match = searchData.find(item => (item.searchText || item.label || '').includes(term));
                     if (match) {
                         window.location.href = match.url;
                     } else {

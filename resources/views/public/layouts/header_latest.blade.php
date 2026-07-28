@@ -1225,8 +1225,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const matches = searchData
-      .filter(item => (item.searchText || item.label || '').includes(normalized))
-      .slice(0, 10);
+      .filter(item => (item.searchText || item.label || '').includes(normalized));
 
     if (!matches.length) {
       searchEmpty.textContent = 'No results found.';

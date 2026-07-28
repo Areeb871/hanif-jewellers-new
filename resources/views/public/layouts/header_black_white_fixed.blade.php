@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17511895971"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17511895971');
+</script>
 <link rel="canonical" href="{{ request()->url() }}">
 <!-- Meta Pixel Code -->
 <script>
@@ -852,7 +861,7 @@ $menus = [
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/highend/9.png',
+    'img' => 'assets/f_assets/image/Home Page FM BAnner.jpg',
     'btn' => 'EXPLORE COLLECTION',
     'url' => url('highend-jewellery'),
 ];
@@ -949,9 +958,9 @@ $card = [
 
   <div class="header-static-tools">
     {{-- CART SECTION --}}
-    <span id="cartHeader" class="d-inline-flex align-items-center">
+    <!-- <span id="cartHeader" class="d-inline-flex align-items-center">
       @include('public.partials.cart-header')
-    </span>
+    </span> -->
 
     {{-- SETTINGS DROPDOWN --}}
     <div class="dropdown position-relative">
@@ -1312,8 +1321,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const matches = searchData
-      .filter(item => (item.searchText || item.label || '').includes(normalized))
-      .slice(0, 10);
+      .filter(item => (item.searchText || item.label || '').includes(normalized));
 
     if (!matches.length) {
       searchEmpty.textContent = 'No results found.';

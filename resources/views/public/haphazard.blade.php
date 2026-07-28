@@ -335,7 +335,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     </video>
 
                     <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
+                        <x-shop-now :href="route('collections.haphazard_new')" class="btn discover-btn" label="Shop Now" />
                     </div>
                 </div>
             </div>
@@ -466,7 +466,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     </video>
 
                     <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
+                        <x-shop-now :href="route('collections.haphazard_new')" class="btn discover-btn" label="Shop Now" />
                     </div>
                 </div>
             </div>
@@ -513,7 +513,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 <div class="text-center">
-    <a class="m-5 btn border btn-outline-dark px-5 py-2" href="{{ route('collections.haphazard_new') }}">SHOP NOW</a>
+    <x-shop-now :href="route('collections.haphazard_new')" class="m-5 btn border btn-outline-dark px-5 py-2" />
 </div>
 
 @include('public.partials.image-gallery-modal')

@@ -156,15 +156,18 @@ html, body{
                     .app-btn {
                         padding: 6px 16px !important;
                     }
-                    .m-1{
-                        margin:2.5rem !important;
+                    .gulposh-appointment-spacing {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 9.5rem;
                     }
             </style>
-            <div class="text-center">
-                <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us')  }}">BOOK AN APPOINTMENT</a>
+            <div class="gulposh-appointment-spacing">
+                <x-book-appointment />
             </div>
             <!-- <div class="col-md-6 text-center">
-                <a class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" href="{{ route('subcategory', ['subcategory' => 'gohar'])  }}">SHOP NOW</a>
+                <x-shop-now :href="route('subcategory', ['subcategory' => 'gohar'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
             </div> -->
         </div>
     </section>

@@ -1,16 +1,144 @@
 @extends('public.layouts.header_black')
 
 @section('content')
+<style>
+    /* Use Argent CF Regular only for product names in the Ehed shop. */
+    .ehedStore .product-name-fixed,
+    .ehedStore .product-name-fixed * {
+        font-family: "Argent CF", Georgia, serif !important;
+        font-weight: 300 !important;
+        font-style: normal !important;
+        letter-spacing: 1px !important;
+    }
+
+    .ehedStore .product-name-fixed {
+        font-size: 1.3rem !important;
+    }
+
+    .ehedStore .discover-more-btn {
+        font-family: "Poppins", sans-serif !important;
+        font-weight: 400 !important;
+        font-style: normal !important;
+        width: 120px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        white-space: nowrap;
+    }
+    .h5{
+        font-size: 1.3rem !important;
+    }
+
+    @media (max-width: 767px) {
+        .ehedStore .discover-more-btn {
+            width: 115px !important;
+        }
+    }
+
+    /* Keep every Ehed product card and image consistently square/aligned. */
+    .ehedStore > [class*="col-"] {
+        display: flex;
+    }
+
+    .ehedStore .addToCartProductDetailsTop {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        border-radius: 0 !important;
+        --bs-card-border-radius: 0;
+        --bs-card-inner-border-radius: 0;
+        overflow: hidden;
+    }
+
+    .ehedStore .card-img,
+    .ehedStore .carousel,
+    .ehedStore .carousel-inner,
+    .ehedStore .carousel-item,
+    .ehedStore .product-image-link,
+    .ehedStore .product-image,
+    .ehedStore .card-body {
+        border-radius: 0 !important;
+    }
+
+    .ehedStore .carousel-inner,
+    .ehedStore .product-image-link {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        background-color: #f6f4f2;
+    }
+
+    .ehedStore .carousel-item,
+    .ehedStore .carousel-item > a {
+        width: 100%;
+        height: 100%;
+    }
+
+    .ehedStore .carousel-item img,
+    .ehedStore .product-image {
+        display: block;
+        width: 100% !important;
+        max-width: none !important;
+        height: 100% !important;
+        margin: 0 !important;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .ehedStore .card-body {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+    }
+
+    .ehedStore .card-body .discover-more-btn {
+        margin-top: auto;
+        align-self: center;
+    }
+
+    @media (min-width: 992px) {
+        .ehedStore > .col-lg-3 {
+            flex: 0 0 25%;
+            width: 25%;
+            max-width: 25%;
+        }
+    }
+
+    .ehed-shop-banner {
+        position: relative;
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .ehed-shop-banner--desktop {
+        aspect-ratio: 16 / 9;
+    }
+
+    .ehed-shop-banner--mobile {
+        aspect-ratio: 215 / 466;
+    }
+
+    .ehed-shop-banner video {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+
  <!-- Desktop Video Banner (match gehnawa.blade structure) -->
- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none" style="position: relative; min-height: 500px; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+ <section class="ehed-shop-banner ehed-shop-banner--desktop d-none d-md-block">
+        <video autoplay loop muted playsinline>
             <source src="{{ asset('assets/f_assets/image/Ehad Banner Video.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>
     <!-- Mobile Video Banner -->
-    <section class="d-md-none" style="position: relative; height: 110vh; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+    <section class="ehed-shop-banner ehed-shop-banner--mobile d-md-none">
+        <video autoplay loop muted playsinline>
             <source src="{{ asset('assets/f_assets/image/Ehad Mob Banner Video.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -284,7 +412,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <form method="GET" action="{{ url('ehedshop') }}" id="filterForm">
+                    <form method="GET" action="{{ route('collections.ehed', [], false) }}" id="filterForm">
                         <input type="hidden" name="tags" id="tagsInput" value="{{ request('tags') }}">
                         <div>
                             <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">
@@ -321,9 +449,9 @@
                         <div class="mt-3">
                             <div class="filter-section-title" onclick="toggleCategory('tagListMetalTexture', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">METAL TEXTURE <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListMetalTexture">
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="white-gold" onclick="event.stopPropagation();"> <span class="subcat-label">White Gold</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="rose-gold" onclick="event.stopPropagation();"> <span class="subcat-label">Rose Gold</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="yellow-gold" onclick="event.stopPropagation();"> <span class="subcat-label">Yellow Gold</span></li>
+                                <li><input id="filter-white-gold" type="checkbox" class="form-check-input filter-tag-checkbox" value="white-gold" onclick="event.stopPropagation();"> <label for="filter-white-gold" class="subcat-label">White Gold</label></li>
+                                <li><input id="filter-rose-gold" type="checkbox" class="form-check-input filter-tag-checkbox" value="rose-gold" onclick="event.stopPropagation();"> <label for="filter-rose-gold" class="subcat-label">Rose Gold</label></li>
+                                <li><input id="filter-yellow-gold" type="checkbox" class="form-check-input filter-tag-checkbox" value="yellow-gold" onclick="event.stopPropagation();"> <label for="filter-yellow-gold" class="subcat-label">Yellow Gold</label></li>
                             </ul>
                         </div>
                         <div class="mt-3">
@@ -423,8 +551,14 @@
                         function fetchAndRenderForSort() {
                             const url = buildUrlForSort();
                             window.history.pushState({}, '', url.toString());
-                            fetch(url.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
-                                .then(resp => resp.text())
+                            fetch(url.toString(), {
+                                cache: 'no-store',
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                            })
+                                .then(resp => {
+                                    if (!resp.ok) throw new Error('Filter request failed');
+                                    return resp.text();
+                                })
                                 .then(html => {
                                     const parser = new DOMParser();
                                     const doc = parser.parseFromString(html, 'text/html');
@@ -447,7 +581,9 @@
                                     // Re-bind Load More on new footer
                                     if (typeof window.bindLoadMore === 'function') { window.bindLoadMore(); }
                                 })
-                                .catch(() => {});
+                                .catch(() => {
+                                    window.location.assign(url.toString());
+                                });
                         }
 
                         sortList.querySelectorAll('li').forEach(li => {
@@ -509,8 +645,14 @@
                             // Update browser URL without reload
                             window.history.pushState({}, '', url.toString());
                             // Fetch HTML and replace grid + footer controls
-                            fetch(url.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
-                                .then(resp => resp.text())
+                            fetch(url.toString(), {
+                                cache: 'no-store',
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                            })
+                                .then(resp => {
+                                    if (!resp.ok) throw new Error('Filter request failed');
+                                    return resp.text();
+                                })
                                 .then(html => {
                                     const parser = new DOMParser();
                                     const doc = parser.parseFromString(html, 'text/html');
@@ -535,7 +677,9 @@
                                     // Re-bind Load More after filter rendering
                                     if (typeof window.bindLoadMore === 'function') { window.bindLoadMore(); }
                                 })
-                                .catch(() => { /* ignore */ });
+                                .catch(() => {
+                                    window.location.assign(url.toString());
+                                });
                         }
 
                         // Restore and bind tag checkboxes
@@ -544,7 +688,7 @@
                             const existingTagsSet = new Set(existingTags);
                             tagCheckboxes.forEach(cb => {
                                 if (existingTagsSet.has(cb.value)) cb.checked = true;
-                                cb.addEventListener('click', function(e) {
+                                cb.addEventListener('change', function(e) {
                                     e.stopPropagation();
                                     writeSelectionsToInputs();
                                     removeFooterNow();
@@ -559,7 +703,7 @@
             {{-- Dynamic Products Grid --}}
             <div class="row ehedStore g-2 pt-3">
                 @forelse($products as $product)
-                    <div class="col-md-3">
+                    <div class="col-6 col-lg-3">
                         @include('public.partials.product-card-new', ['product' => $product])
                     </div>
                 @empty

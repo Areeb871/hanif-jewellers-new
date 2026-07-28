@@ -320,7 +320,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </a>
                 <div class="col d-flex justify-content-end mobileIcon">
                     <a class="text-white mobileIcon" href="#" data-bs-toggle="modal" data-bs-target="#navSearchModal"><i class="fa-solid fa-magnifying-glass"></i></a>
-                    <a class="text-white px-3 mobileIcon" href="http://">{{-- <i class="fa-solid fa-cart-shopping"></i> --}}</a>
+                    <!-- <a class="text-white px-3 mobileIcon" href="http://">{{-- <i class="fa-solid fa-cart-shopping"></i> --}}</a> -->
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -657,12 +657,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
 
                 const matches = searchData
-                    .filter(item => {
-                        const label = (item.label || '').toLowerCase();
-                        const slug = (item.slug || '').toLowerCase();
-                        return label ? label.includes(normalized) : slug.includes(normalized);
-                    })
-                    .slice(0, 10);
+                    .filter(item => (item.searchText || item.label || '').includes(normalized));
 
                 if (!matches.length) {
                     searchEmpty.textContent = 'No results found.';
@@ -700,11 +695,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 searchForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const term = searchInput.value.trim().toLowerCase();
-                    const match = searchData.find(item => {
-                        const label = (item.label || '').toLowerCase();
-                        const slug = (item.slug || '').toLowerCase();
-                        return label ? label.includes(term) : slug.includes(term);
-                    });
+                    const match = searchData.find(item => (item.searchText || item.label || '').includes(term));
                     if (match) {
                         window.location.href = match.url;
                     } else {

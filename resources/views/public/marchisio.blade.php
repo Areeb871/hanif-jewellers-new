@@ -338,7 +338,7 @@ html, body{
         </div>
 
         <div class="col-md-6 d-flex justify-content-center">
-            <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us') }}">BOOK AN APPOINTMENT</a>
+            <x-book-appointment class="m-1" />
         </div>
     </div>
 
@@ -374,7 +374,7 @@ html, body{
         </div>
 
         <div class="mobile-btn-wrap">
-            <a class="m-1 app-btn btn border btn-outline-dark px-2 py-1" href="{{ route('contact-us') }}">BOOK AN APPOINTMENT</a>
+            <x-book-appointment class="m-1" />
         </div>
     </div>
 </section>

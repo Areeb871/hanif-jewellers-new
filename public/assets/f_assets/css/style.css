@@ -1,4 +1,110 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap");
+
+/* Argent CF — used by the Ehed shop. */
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-thinitalic.otf") format("opentype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-lightitalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-regularitalic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-demibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-demibolditalic.otf") format("opentype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-bolditalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-extrabold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-extrabolditalic.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Argent CF";
+  src: url("fonts/Fontspring-DEMO-argentcf-super.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Gotham";
   src: url("fonts/gotham-regular.woff2") format("woff2"),
@@ -803,11 +909,13 @@ a {
 
 /* care Instructions page start */
 .careInstructionsSection {
-  background-image: url("../image/WEB-Banner_Care.jpg");
+  background-image: url("../image/Care Instruction Desktop Banner.jpeg");
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: top;
-  height: 120dvh;
+  background-position: center;
   margin-top: -10rem;
   z-index: -1;
   position: relative;
@@ -816,6 +924,41 @@ a {
 .accordion .accordion-button {
   font-weight: bold;
   padding: 0px 15px 0px 0px;
+}
+
+.care-content-section {
+  padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 4vw, 3rem);
+}
+
+.care-content-section .container {
+  max-width: 1140px;
+}
+
+.care-page-title {
+  margin: 0 0 clamp(2rem, 5vw, 3rem);
+  padding-bottom: 1rem;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  letter-spacing: 1px;
+}
+
+.faqPageWrapper .accordion-button,
+.faqPageWrapper .accordion-button:hover,
+.faqPageWrapper .accordion-button:focus,
+.faqPageWrapper .accordion-button:active,
+.faqPageWrapper .accordion-button:not(.collapsed) {
+  color: #000 !important;
+  background-color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faqPageWrapper .accordion-button::after {
+  filter: grayscale(1) brightness(0);
+}
+
+.faqPageWrapper .accordion-body {
+  padding: 0 0 1.5rem;
 }
 
 .accordion-body {
@@ -833,6 +976,39 @@ a {
   background: #ededed;
   min-width: 70px;
   text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  .careInstructionsSection {
+    background-image: url("../image/Care Instruction Mob Banner.jpeg");
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 9 / 16;
+    margin-top: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .care-content-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .faqPageWrapper .accordion-button {
+    padding-block: 1.25rem !important;
+    font-size: 1rem !important;
+  }
+
+  .faqPageWrapper .accordion-body {
+    padding-left: 0;
+  }
+
+  .faqPageWrapper .accordion-body ul {
+    margin-bottom: 0;
+    padding-left: 1.25rem;
+  }
 }
 
 /* care Instructions end page */

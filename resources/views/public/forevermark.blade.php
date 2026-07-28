@@ -1,4 +1,4 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/f_assets/css/forevermark.css') }}">
@@ -296,10 +296,11 @@
     </div>
 
     <div class="fm-wrap text-center">
-        <a href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hi, I\'d like to connect with a sales expert about Book an Appointment.') }}"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="fm-cta-btn">BOOK AN APPOINTMENT</a>
+        <x-book-appointment
+            :href="'https://api.whatsapp.com/send?phone=923070222666&text='.rawurlencode('Hi, I\'d like to connect with a sales expert about Book an Appointment.')"
+            target="_blank"
+            rel="noopener noreferrer"
+        />
     </div>
 
 </main>
