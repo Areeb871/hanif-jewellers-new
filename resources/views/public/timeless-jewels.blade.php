@@ -4,8 +4,6 @@
     <section class="ehadBannerSection" style="background: url('{{ asset('assets/f_assets/image/Banner-ehad.jpg') }}') center center/cover no-repeat; min-height: 400px;">
     </section>
     <section class="container">
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
         <div class="row g-3 mb-3">
             <div class="col-md-4">
                 <img src="{{ asset('assets/f_assets/image/jwel1.jpg') }}" class="img-fluid" alt="Ehad Collection">

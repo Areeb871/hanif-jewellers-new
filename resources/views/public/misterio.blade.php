@@ -78,7 +78,6 @@ html, body{
          alt="Mobile Banner">
 </div>
     <section class="container">
-        <h4 class="text-center py-5 mt-4 text-uppercase">Discover Our Collection</h4>
          <div class="row g-3 mb-3">
 
             {{-- Slider for images --}}

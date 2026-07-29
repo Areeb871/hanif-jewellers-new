@@ -42,8 +42,7 @@ html, body{
 }
 </style>
 
-    <section class="container">
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
+    <section class="container pt-4 pt-md-5">
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <img src="{{ asset('assets/f_assets/image/colection-design-images/Gohar_Square_img_1.jpg') }}" class="img-fluid" alt="gohar Collection" style="cursor: pointer;" onclick="openImageModalForGohar(0)">

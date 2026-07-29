@@ -861,9 +861,9 @@ $menus = [
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/Home Page FM BAnner.jpg',
+    'img' => 'assets/f_assets/image/mega-menu.png',
     'btn' => 'EXPLORE COLLECTION',
-    'url' => url('highend-jewellery'),
+    'url' => url('collections/franck-muller'),
 ];
 @endphp
 

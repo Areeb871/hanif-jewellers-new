@@ -63,8 +63,7 @@ html, body{
         Your browser does not support the video tag.
     </video>
 </section>
-    <section class="container">
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
+    <section class="container pt-4 pt-md-5">
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 @php

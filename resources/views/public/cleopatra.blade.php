@@ -88,9 +88,7 @@ section{
 }
 </style>
 
-    <section class="container">
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
+    <section class="container pt-4 pt-md-5">
     <div class="row g-2 pb-2">
         <style>
             [id^="cleopatraCarousel"] .carousel-control-prev-icon,

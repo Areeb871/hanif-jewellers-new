@@ -201,9 +201,7 @@ html, body{
     </video>
 </section>
 
-<section class="container">
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
+<section class="container pt-4 pt-md-5">
     <!-- =========================
          DESKTOP FIRST SECTION
     ========================= -->

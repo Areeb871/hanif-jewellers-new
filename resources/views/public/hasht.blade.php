@@ -212,8 +212,7 @@ html, body{
 </section>
 
 
-    <section class="container">
-        <h4 class="text-center py-3 pb-5 mt-4 text-uppercase">Discover Our Collection</h4>
+    <section class="container pt-4 pt-md-5">
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="text-center mb-5">

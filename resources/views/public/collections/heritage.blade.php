@@ -76,7 +76,7 @@
 }
 </style>
 
-   <section class="container">
+   <section class="container pt-4 pt-md-5">
     <style>
         @media (max-width: 767.98px) {
             .container {
@@ -124,8 +124,6 @@
             text-align: center !important;
         }
     </style>
-
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
 
     <!-- TOP GALLERY -->
     <div class="row g-3 mb-3" id="heritageGalleryTop">
