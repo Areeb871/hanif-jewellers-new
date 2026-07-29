@@ -193,6 +193,7 @@ class ProductController extends Controller
             $product->category_id = $request->category_id;
             $product->subcategory_id = $request->subcategory_id;
             $product->is_featured = $request->is_featured? '1': '0';
+            $product->is_pinned = $request->boolean('is_pinned');
             $product->save();
 
             if($request->hasFile('uploaded_files')){
@@ -379,6 +380,7 @@ class ProductController extends Controller
             $product->category_id = $request->category_id;
             $product->subcategory_id = $request->subcategory_id;
             $product->is_featured = $request->is_featured? '1': '0';
+            $product->is_pinned = $request->boolean('is_pinned');
             $product->save();
 
             // --- GALLERY IMAGES LOGIC ---
@@ -895,7 +897,7 @@ class ProductController extends Controller
     public function category($category)
     {
         $category = Categories::where('slug', $category)->firstOrFail();
-        $products = $category->products()->latest()->get(); // assuming relationship
+        $products = $category->products()->pinnedFirst()->latest()->get(); // assuming relationship
          $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
                 $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
         return view('public.category', compact('categories','watchCategories'));
@@ -913,7 +915,7 @@ class ProductController extends Controller
                 // ->where('category_id', $category->id)
                 ->firstOrFail();
                 
-            $products = $subcategory->products()->with('images')->where('status', 'published')->latest()->paginate(20); // assuming relationship
+            $products = $subcategory->products()->with('images')->where('status', 'published')->pinnedFirst()->latest()->paginate(20); // assuming relationship
             // dd($subcategory);
             $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
             $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
@@ -931,7 +933,7 @@ class ProductController extends Controller
             ->first();
         $products = [];
         if($subcategory) {
-            $products = $subcategory->products()->where('status', 'published')->latest()->paginate(20);        
+            $products = $subcategory->products()->where('status', 'published')->pinnedFirst()->latest()->paginate(20);
         }else{
             return view('public.not_available');
         }
