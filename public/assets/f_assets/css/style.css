@@ -85,6 +85,13 @@ span {
   line-height: 1.7;
 }
 
+.mega-menu span {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
 .custom-pagination-wrapper nav {
   display: flex;
   justify-content: center;
@@ -479,8 +486,8 @@ a {
 
 .onlineStore .card h5 {
   font-size: 14px;
-  font-weight: 500;
-  font-family: Lato, HelveticaNeue, Helvetica Neue, sans-serif;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
   text-transform: uppercase;
   color: #222;
 }
@@ -488,8 +495,8 @@ a {
 .onlineStore .card p {
   color: #222;
   font-size: 13px;
-  font-weight: 700;
-  font-family: Lato, HelveticaNeue, Helvetica Neue, sans-serif;
+  font-weight: 300;
+  font-family: "Poppins", sans-serif;
 }
 
 .brandLogo a .img-fluid {

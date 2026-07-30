@@ -415,7 +415,7 @@
     color: #655d56 !important;
     font-family: "Poppins", sans-serif !important;
     font-size: 13px !important;
-    line-height: 1.75 !important;
+    line-height: 1.2 !important;
 }
 
 .product-details-page .product-description p + p,
@@ -490,7 +490,7 @@
 .product-recommendations-title {
     color: #17120f;
     font-family: "Argent CF", Georgia, serif !important;
-    font-weight: 400 !important;
+    font-weight: 200 !important;
     letter-spacing: .025em;
 }
 
@@ -579,16 +579,17 @@
                                 </div>
                             @endif
                         </div> -->
+@php
+    $livePrice    = $product->displayPrice($storeContext);
+
+    $roundedPrice = (int) max(0, $livePrice);
+    $canShowPrice = $storeContext
+        ? ($roundedPrice > 0)
+        : (!empty($product->show_price) && $roundedPrice > 0);
+@endphp
+
+@if($canShowPrice)
 <div class="product-price-panel my-5">
-    @php
-        $livePrice    = $product->displayPrice($storeContext);
-
-        $roundedPrice = (int) max(0, $livePrice);
-        $canShowPrice = $storeContext
-            ? ($roundedPrice > 0)
-            : (!empty($product->show_price) && $roundedPrice > 0);
-    @endphp
-
     <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
@@ -597,7 +598,6 @@
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
     @endif   -->
-    @if($canShowPrice)
     <div class="price-display">
             PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>
@@ -607,8 +607,8 @@
             All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
             </p>
         @endif
-    @endif
 </div>
+@endif
 
                         {{-- Size Selector --}}
                         @php

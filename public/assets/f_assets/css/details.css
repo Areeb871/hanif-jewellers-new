@@ -3918,7 +3918,7 @@ a.hj-lab-product-card {
         max-width: 26px;
         max-height: 26px;
         aspect-ratio: 1;
-        font-size: clamp(7px, 34cqi, 8px);
+        font-size: clamp(7px, 34cqi, 7px);
     }
 }
 
