@@ -715,7 +715,7 @@ public function Online_Shopping_Store(Request $request)
 
     // Default page: featured collections only (backend-only; not tied to filter buttons).
     if ($activeTags === '' && $useDefaults) {
-        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
+        $activeTags = 'Hania Amir,monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
     }
 
     // Featured collections: subcategory slugs (primary) + tag aliases (fallback for ordering/filters).

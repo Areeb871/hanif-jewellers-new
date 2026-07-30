@@ -29,7 +29,7 @@
 
                 <div class="fm-split__media">
                     <div class="fm-media">
-                        <img src="{{ asset('assets/f_assets/image/forevermark/sample.webp') }}" alt="The Icon™ Collection" loading="lazy">
+                        <img src="{{ asset('assets/forevermark/sample.webp') }}" alt="The Icon™ Collection" loading="lazy">
                     </div>
                 </div>
 
