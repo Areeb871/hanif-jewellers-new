@@ -17,7 +17,7 @@
             background: transparent !important;
             box-shadow: none !important;
             color: #111 !important;
-            font-family: Montserrat, sans-serif !important;
+            font-family: "Poppins", sans-serif !important;
             font-size: 12px !important;
             font-weight: 500 !important;
             line-height: normal !important;

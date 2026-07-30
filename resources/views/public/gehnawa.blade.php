@@ -137,7 +137,8 @@ section{
                     ])
                 </div>
                 <div class="col-md-6 d-flex flex-column align-items-center text-center">
-    <p>
+    <p style="width: min(100%, 66ch); margin: 0 auto; font-size: 13px; line-height: 1.6;
+        text-align: justify; text-align-last: center; text-justify: inter-word;">
         Gehnawa fuses modern day bridals with their heritage jewels. Rooting from 'Gehna' (meaning
         jewels) and 'Pehnawa' meaning 'clothes', Gehnawa is the latest essence table to be dressed
         in gold, head to toe; which is every bridal's dream attire!
