@@ -276,6 +276,29 @@
         overflow: hidden;
     }
 
+    .addToCartProductDetailsTop .card-img .carousel-inner,
+    .addToCartProductDetailsTop .card-img > .position-relative {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+    }
+
+    .addToCartProductDetailsTop .card-img .carousel-item,
+    .addToCartProductDetailsTop .card-img .carousel-item > a,
+    .addToCartProductDetailsTop .card-img .product-image-link {
+        width: 100%;
+        height: 100% !important;
+    }
+
+    .addToCartProductDetailsTop .card-img img,
+    .addToCartProductDetailsTop .card-img .product-image {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+    }
+
     .addToCartProductDetailsTop .card-img {
         background-color: #F6F4F2 !important;
         margin-bottom: 0 !important;
@@ -359,15 +382,13 @@
     </div>
     <!-- <div class="card-img-overlay pe-none">New</div> -->
     <div class="card-body text-center" style="background-color: #F6F4F2;">
-       <h5 class="card-title product-name-fixed pb-5 pb-md-0">
-            @php $nameParts = explode('-', $product->name, 2); @endphp
-            @if(count($nameParts) > 1)
-                {{ $nameParts[0] }}<br>
-                <small class="text-muted">{{ $nameParts[1] }}</small>
-            @else
-                {{ $product->name }}
-            @endif
-        </h5>
+          <h5 class="card-title product-name-fixed">
+    @php
+        $nameParts = explode('-', $cardName);
+    @endphp
+
+    {{ trim($nameParts[0]) }}
+</h5>
 
         <!-- @if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
             <p class="card-text">

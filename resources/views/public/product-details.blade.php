@@ -249,7 +249,7 @@
 .product-description strong,
 .product-description b {
     font-size: 14px !important;
-    font-weight: 600;
+    font-weight: 500;
     color: #111;
 }
 
@@ -287,6 +287,7 @@
 .product-details-page {
     background: #fff;
     color: #17120f;
+    padding-bottom: 0 !important;
 }
 
 .product-details-page .product-details-layout {
@@ -371,8 +372,8 @@
     margin: 0 0 12px !important;
     color: #17120f;
     font-family: "Argent CF", Georgia, serif !important;
-    font-size: clamp(2rem, 2.5vw, 2.9rem) !important;
-    font-weight: 400;
+    font-size: clamp(2rem, 0vw, 0rem) !important;
+    font-weight: 200;
     letter-spacing: .01em;
     line-height: 1.08;
     text-align: left;
@@ -415,7 +416,7 @@
     color: #17120f;
     font-family: "Argent CF", Georgia, serif !important;
     font-size: 1.15rem !important;
-    font-weight: 400 !important;
+    font-weight: 100 !important;
     letter-spacing: .015em;
     line-height: 1.2;
     text-decoration: none !important;
@@ -446,7 +447,7 @@
     color: #17120f;
     font-family: "Poppins", sans-serif;
     font-size: clamp(1.25rem, 1.5vw, 1.55rem);
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: .025em;
 }
 
@@ -502,7 +503,7 @@
 .product-recommendations-title {
     color: #17120f;
     font-family: "Argent CF", Georgia, serif !important;
-    font-weight: 400 !important;
+    font-weight: 200 !important;
     letter-spacing: .025em;
 }
 
@@ -511,14 +512,14 @@
     line-height: 1.2;
 }
 .price-display {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 16px;
 }
 
 
 @media (max-width: 767.98px) {
     .product-details-page {
-        padding-top: 0 !important;
+        padding-top: 80px !important;
     }
 
     .product-details-page .product-info-column {
@@ -591,20 +592,18 @@
                                 </div>
                             @endif
                         </div> -->
-<div class="product-price-panel my-5">
-    @php
-        $livePrice    = $product->displayPrice($storeContext);
-
-        $roundedPrice = (int) max(0, $livePrice);
-        $canShowPrice = $storeContext
-            ? ($roundedPrice > 0)
-            : (!empty($product->show_price) && $roundedPrice > 0);
-        $isWatchProduct = $product->isWatchProduct();
-        $isOutOfStock = $isWatchProduct
-            && $product->quantity !== null
-            && (int) $product->quantity === 0;
-        $inStock = !$isOutOfStock;
-    @endphp
+@php
+    $livePrice = $product->displayPrice($storeContext);
+    $roundedPrice = (int) max(0, $livePrice);
+    $canShowPrice = $storeContext
+        ? ($roundedPrice > 0)
+        : (!empty($product->show_price) && $roundedPrice > 0);
+    $isWatchProduct = $product->isWatchProduct();
+    $isOutOfStock = $isWatchProduct
+        && $product->quantity !== null
+        && (int) $product->quantity === 0;
+    $inStock = !$isOutOfStock;
+@endphp
 
     <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
@@ -614,18 +613,19 @@
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
     @endif   -->
-    @if($canShowPrice)
+@if($canShowPrice)
+<div class="product-price-panel my-5">
     <div class="price-display">
-                    PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
+        PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>
 
-        @if($product->category->slug != 'watches')
-            <p class="product-price-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+    @if(optional($product->category)->slug !== 'watches')
+        <p class="product-price-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;">
             All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
-            </p>
-        @endif
+        </p>
     @endif
 </div>
+@endif
 
                         {{-- Size Selector --}}
                         @php
@@ -826,19 +826,8 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     </button>
                 </div>
                 <div class="scroller-dots mt-3">
-                    <div class="dots-container">
-                        @php
-                            $totalProducts = $recommendedProducts->count();
-                        @endphp
-                        @for ($i = 0; $i < $totalProducts; $i++)
-                            <button
-                                type="button"
-                                class="dot carousel-dot {{ $i === 0 ? 'active' : '' }}"
-                                data-index="{{ $i }}"
-                                aria-label="Go to product {{ $i + 1 }}"
-                                aria-current="{{ $i === 0 ? 'true' : 'false' }}"
-                            ></button>
-                        @endfor
+                    <div class="yml-progress-track" aria-hidden="true">
+                        <span class="yml-progress-fill"></span>
                     </div>
                 </div>
             </section>
@@ -868,19 +857,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             const container = document.querySelector(`${sectionSelector} .scroller-container`);
             const items = document.querySelectorAll(`${sectionSelector} .scroller-item`);
             const dots = document.querySelectorAll(`${sectionSelector} .dot`);
+            const progressFill = document.querySelector(`${sectionSelector} .yml-progress-fill`);
             const prevButton = document.querySelector(`${sectionSelector} .yml-scroller-arrow--prev`);
             const nextButton = document.querySelector(`${sectionSelector} .yml-scroller-arrow--next`);
             if (!scroller || !container || !items.length) return;
 
             function getLastScrollableIndex() {
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                let lastIndex = 0;
-                items.forEach((item, index) => {
-                    if (item.offsetLeft <= maxScroll + 2) {
-                        lastIndex = index;
-                    }
-                });
-                return Math.max(0, lastIndex);
+                return Math.max(0, items.length - 1);
             }
 
             function itemTarget(index) {
@@ -925,6 +908,12 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
                 const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
                 const noScroll = maxScroll <= 2;
+                if (progressFill) {
+                    const segment = 100 / items.length;
+                    const progress = noScroll ? 0 : scroller.scrollLeft / maxScroll;
+                    progressFill.style.width = `${segment}%`;
+                    progressFill.style.left = `${progress * (100 - segment)}%`;
+                }
                 if (prevButton) prevButton.disabled = noScroll || scroller.scrollLeft <= 5;
                 if (nextButton) nextButton.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
             }
@@ -986,7 +975,6 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
 
         initializeYmlScroller('#ymlDesktop');
-        initializeYmlScroller('#ymlMobile');
     });
     </script>
 
@@ -1621,7 +1609,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
         /* Desktop dots styling */
         #ymlDesktop .scroller-dots {
-            display: flex;
+            display: none;
             justify-content: center;
             margin-top: 20px;
         }
@@ -1692,7 +1680,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
 
             .you-may-like-section {
-                padding-top: 2.25rem !important;
+                padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
                 overflow: hidden;
             }
@@ -1710,7 +1698,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             #ymlDesktop .mobile-product-scroller {
                 width: 100%;
                 padding: 0;
-                scroll-snap-type: x mandatory;
+                scroll-snap-type: none;
             }
 
             #ymlDesktop .scroller-container {
@@ -1723,7 +1711,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 flex: 0 0 calc(100vw - 24px);
                 min-width: calc(100vw - 24px);
                 max-width: calc(100vw - 24px);
-                scroll-snap-align: start;
+                scroll-snap-align: none;
             }
 
             #ymlDesktop .scroller-item .card {
@@ -1760,7 +1748,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             #ymlDesktop .addToCartProductDetailsTop .carousel-item > a,
             #ymlDesktop .addToCartProductDetailsTop .product-image-link {
                 width: 100%;
-                height: auto;
+                height: 100% !important;
             }
 
             #ymlDesktop .addToCartProductDetailsTop .carousel-item > a,
@@ -1774,8 +1762,8 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             #ymlDesktop .addToCartProductDetailsTop .product-image {
                 width: 100% !important;
                 max-width: 100% !important;
-                max-height: none !important;
-                height: auto !important;
+                max-height: 100% !important;
+                height: 100% !important;
                 object-fit: contain;
                 margin: 0 !important;
                 display: block;
@@ -1851,7 +1839,25 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
 
             #ymlDesktop .scroller-dots {
+                display: block;
                 margin-top: 14px !important;
+            }
+
+            #ymlDesktop .yml-progress-track {
+                position: relative;
+                width: 96px;
+                height: 2px;
+                margin: 0 auto;
+                overflow: hidden;
+                background: #d8d8d8;
+            }
+
+            #ymlDesktop .yml-progress-fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                background: #111;
             }
 
             #ymlDesktop .dots-container {
@@ -1859,22 +1865,40 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 align-items: center;
                 justify-content: center;
                 padding: 0;
+                width: auto;
+                max-width: calc(100vw - 24px);
+                overflow: visible;
             }
 
-            #ymlDesktop .dot {
-                width: 7px !important;
-                height: 7px !important;
-                min-width: 7px !important;
-                min-height: 7px !important;
+            #ymlDesktop button.dot.carousel-dot {
+                display: block !important;
+                flex: 0 0 8px !important;
+                width: 8px !important;
+                height: 8px !important;
+                min-width: 8px !important;
+                min-height: 8px !important;
+                max-width: 8px !important;
+                max-height: 8px !important;
+                aspect-ratio: 1 / 1;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: 0 !important;
                 border-radius: 50% !important;
+                appearance: none;
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                line-height: 0;
                 background-color: #d8d8d8;
             }
 
-            #ymlDesktop .dot.active {
-                width: 7px !important;
-                height: 7px !important;
-                min-width: 7px !important;
-                min-height: 7px !important;
+            #ymlDesktop button.dot.carousel-dot.active {
+                flex-basis: 8px !important;
+                width: 8px !important;
+                height: 8px !important;
+                min-width: 8px !important;
+                min-height: 8px !important;
+                max-width: 8px !important;
+                max-height: 8px !important;
                 border-radius: 50% !important;
                 background-color: #000 !important;
             }
@@ -2130,12 +2154,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             if (!container) return;
             const items = container.querySelectorAll('.scroller-item');
             const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
-            let lastScrollableIndex = 0;
-            items.forEach((item, index) => {
-                if (item.offsetLeft <= maxScroll + 2) {
-                    lastScrollableIndex = index;
-                }
-            });
+            const lastScrollableIndex = Math.max(0, items.length - 1);
             slideIndex = Math.max(0, Math.min(lastScrollableIndex, slideIndex));
             const target = items[slideIndex];
             if (!target) return;
@@ -2164,12 +2183,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             const items = container.querySelectorAll('.scroller-item');
             if (!items.length || !dots.length) return;
             const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
-            let lastScrollableIndex = 0;
-            items.forEach((item, index) => {
-                if (item.offsetLeft <= maxScroll + 2) {
-                    lastScrollableIndex = index;
-                }
-            });
+            const lastScrollableIndex = Math.max(0, items.length - 1);
             // Find nearest item to current scroll (relative to container)
             const currentLeft = container.scrollLeft;
             let nearestIndex = 0;
@@ -3085,8 +3099,6 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             slider.addEventListener('touchend', () => {
                 isDown = false;
                 setTimeout(() => { isDragging = false; }, 50);
-                // Snap to nearest on touch end
-                snapToNearest();
             }, { passive: true });
 
             slider.addEventListener('touchmove', (e) => {
@@ -3271,7 +3283,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
         // Mobile Scroller Functionality for YOU MAY ALSO LIKE
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileScroller = document.querySelector('#ymlDesktop .mobile-product-scroller');
+            const mobileScroller = document.querySelector('.yml-mobile .mobile-product-scroller');
             const dotsContainer = document.querySelector('#ymlDesktop .scroller-dots .dots-container');
             
             if (!mobileScroller) return;
