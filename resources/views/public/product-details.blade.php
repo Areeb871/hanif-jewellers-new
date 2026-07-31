@@ -277,7 +277,7 @@
 
 .product-detail-title,
 .product-section-label {
-    /*font-family: "Argent CF", Georgia, serif !important;*/
+    font-family: "Argent CF", Georgia, serif !important;
 }
 
 .product-delivery-note {
@@ -428,7 +428,7 @@
     color: #655d56 !important;
     font-family: "Poppins", sans-serif !important;
     font-size: 13px !important;
-    line-height: 1.75 !important;
+    line-height: 1.2 !important;
 }
 
 .product-details-page .product-description p + p,
@@ -605,6 +605,8 @@
     $inStock = !$isOutOfStock;
 @endphp
 
+@if($canShowPrice)
+<div class="product-price-panel my-5">
     <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
@@ -613,8 +615,11 @@
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
     @endif   -->
+<<<<<<< HEAD
 @if($canShowPrice)
 <div class="product-price-panel my-5">
+=======
+>>>>>>> 68f41d11a79d117a33ba006b0af0052a16ba1963
     <div class="price-display">
         PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>

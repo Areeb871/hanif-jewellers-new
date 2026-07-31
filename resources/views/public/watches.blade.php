@@ -396,10 +396,10 @@ section{
         color: #000;
         line-height: 1.6;
     }
-    .font-family--serif,
+    /* .font-family--serif,
     .ehed-body-text {
         font-family: Fancy Cut, Almarai, Times, serif;
-    }
+    } */
     .hero__description {
         margin-top: 1em;
         font-size: 100%;
@@ -909,8 +909,8 @@ section{
     </div>
 </section>
 
-<section class="pb-5 explore-brands-section">
-<h2 class="text-center py-5 explore-brands-title">EXPLORE OUR BRANDS</h2>
+<section class="pb-5">
+<h2 class="text-center pt-5 pb-2 mb-0">EXPLORE OUR BRANDS</h2>
 
 <style>
 

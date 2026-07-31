@@ -1295,7 +1295,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const matches = searchData
-      .filter(item => (item.searchText || item.label || '').includes(normalized));
+      .filter(item => normalized.split(/\s+/).every(token =>
+        (item.searchText || item.label || '').includes(token)
+      ));
 
     if (!matches.length) {
       searchEmpty.textContent = 'No results found.';
@@ -1333,7 +1335,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const term = (searchInput.value || '').trim().toLowerCase();
       if (!term) return;
 
-      const match = searchData.find(item => (item.searchText || item.label || '').includes(term));
+      const match = searchData.find(item => term.split(/\s+/).every(token =>
+        (item.searchText || item.label || '').includes(token)
+      ));
 
       if (match) window.location.href = match.url;
       else renderResults(term);

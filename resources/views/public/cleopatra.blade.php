@@ -88,9 +88,7 @@ section{
 }
 </style>
 
-    <section class="container">
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
+    <section class="container pt-4 pt-md-5">
     <div class="row g-2 pb-2">
         <style>
             [id^="cleopatraCarousel"] .carousel-control-prev-icon,
@@ -230,7 +228,8 @@ section{
     <div class="container">
         <div class="mx-auto" style="max-width: 520px;">
 
-            <p style="font-size: 15px; line-height: 1.9; margin-bottom: 0;">
+            <p style="width: min(100%, 65ch); margin: 0 auto; font-size: 13px; line-height: 1.6;
+                text-align: justify; text-align-last: center; text-justify: inter-character;">
                 An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.
             </p>
 

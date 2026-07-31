@@ -104,10 +104,9 @@ margin:auto;
 .triangle-text span:nth-child(7){width:100%;}
 </style>
 <section>
-        <div class="container pt-5 pb-0">
-            <div class="text-center my-4">
-                <h4 class="text-uppercase mb-2">Discover Our Collection</h4>
-                 <p class="triangle-text">
+        <div class="container pb-0">
+            <div class="text-center py-5">
+                <p class="triangle-text m-0">
  <span>A Timeless Tradition of Magnificence with Modern Opulent Vibes An Heirloom Jewels Collection</span> <span>from the House of Hanif Created with the Perfect Blend of Classic and Modern Aesthetics.</span>
 </p>
             </div>
@@ -115,7 +114,7 @@ margin:auto;
 
 
 
-             <div class="row g-3 pt-4 taj-mahal-collection-grid">
+             <div class="row g-3 taj-mahal-collection-grid">
                 <div class="col-md-4">
                 @php
                        $navratanRedImages = [];

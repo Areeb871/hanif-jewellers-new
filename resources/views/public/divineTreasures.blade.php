@@ -68,8 +68,6 @@
 
 
 <section class="container">
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
     <div style="width: 100vw; margin-left: calc(-50vw + 50%); background: #fff; position: relative; overflow: hidden;">
         <!-- Arrows -->
         <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider', -1)">

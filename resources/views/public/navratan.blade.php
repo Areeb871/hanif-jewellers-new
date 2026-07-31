@@ -113,9 +113,9 @@ margin:auto;
 .triangle-text span:nth-child(7){width:100%;}
 </style>
     <section>
-        <div class="container pt-5 pb-0">
-            <div class="text-center my-4">
-                <h4 class="text-uppercase mb-2">Discover Our Collection</h4>   <p class="triangle-text">
+        <div class="container pb-0">
+            <div class="text-center py-5">
+                <p class="triangle-text m-0">
     <span>A Heritage Bridal Jewellery Collection
     as timeless as the art
     of jewel making
@@ -127,7 +127,7 @@ margin:auto;
             </div>
             
 
-            <div class="row g-3 pt-4">
+            <div class="row g-3">
 
 
                 <div class="col-md-4">

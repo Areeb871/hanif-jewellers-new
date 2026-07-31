@@ -177,11 +177,6 @@
 
     </section> --}}
 
-    @if(isset($subcategory) && (strtolower($subcategory->slug ?? '') === 'breathtaking' || strtolower($subcategory->slug ?? '') === 'valentine-jewels' || strtolower($subcategory->slug ?? '') === 'eid-par-sony-ki-choriyan' || strtolower($subcategory->slug ?? '') === 'winter-jewels' || strtolower($subcategory->slug ?? '') === 'heritage' || strtolower($subcategory->slug ?? '') === 'mona-lisa' || strtolower($subcategory->slug ?? '') === 'jewelphabets' || strtolower($subcategory->slug ?? '') === 'selene' || strtolower($subcategory->slug ?? '') === 'haphazard'))
-    <div class="container my-5">
-        <h4 class="text-center text-uppercase m-0">Discover Our Collection</h4>
-    </div>
-    @endif
     <section>
         <div class="py-5 @if(isset($subcategory) && (strtolower($subcategory->slug ?? '') === 'breathtaking' || strtolower($subcategory->slug ?? '') === 'valentine-jewels' || strtolower($subcategory->slug ?? '') === 'eid-par-sony-ki-choriyan' || strtolower($subcategory->slug ?? '') === 'winter-jewels' || strtolower($subcategory->slug ?? '') === 'heritage' || strtolower($subcategory->slug ?? '') === 'mona-lisa' || strtolower($subcategory->slug ?? '') === 'jewelphabets' || strtolower($subcategory->slug ?? '') === 'selene'|| strtolower($subcategory->slug ?? '') === 'haphazard')) pt-0 @endif">
             

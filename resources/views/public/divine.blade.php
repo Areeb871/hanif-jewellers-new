@@ -5,7 +5,6 @@
     </section>
 
     <section class="container">
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <img src="{{ asset('assets/f_assets/image/04_2d7e3a4a-2ce6-4354-8c67-4b41a8251be0_1500X2100.jpg') }}"

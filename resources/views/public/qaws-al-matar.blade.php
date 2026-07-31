@@ -49,7 +49,7 @@ html, body{
         <source src="{{ asset($mobileBanner) }}" type="video/mp4">
     </video>
 </section>
-    <section class="container">
+    <section class="container pt-4 pt-md-5">
         <style>
             /* Mobile-specific spacing adjustments */
             @media (max-width: 767.98px) {
@@ -111,8 +111,6 @@ html, body{
                 height: 9.5rem;
             }
         </style>
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-     
         <div class="row g-3 mb-3" id="qawsAlMatarGallery">
             <div class="col-md-3">
                 <img src="{{ asset('assets/f_assets/image/Qaws al matar Web/Qaws al matar Web 001.jpg') }}" class="img-fluid" alt="Qaws al Matar Collection" style="cursor: pointer;" onclick="openImageModal('qawsAlMatarGallery', 0)">

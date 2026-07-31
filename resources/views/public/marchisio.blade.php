@@ -63,10 +63,16 @@ html, body{
    CONTENT
 ========================= */
 .collection-text p{
+    width: min(100%, 67ch);
     padding: 40px;
-    margin: 0;
-    line-height: 1.8;
+    margin: 0 auto;
+    box-sizing: border-box;
+    font-size: 13px;
+    line-height: 1.6;
     color: #222;
+    text-align: justify;
+    text-align-last: center;
+    text-justify: inter-word;
 }
 
 .app-btn{
@@ -137,8 +143,8 @@ html, body{
 
     .collection-text p{
         padding: 18px 8px 10px;
-        font-size: 15px;
-        line-height: 1.75;
+        font-size: 13px;
+        line-height: 1.6;
     }
 
     .mobile-space{
@@ -201,13 +207,11 @@ html, body{
     </video>
 </section>
 
-<section class="container">
-    <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
-
+<section class="container pt-4 pt-md-5">
     <!-- =========================
          DESKTOP FIRST SECTION
     ========================= -->
-    <div class="row g-3 mb-3 d-none d-md-flex">
+    <div class="row g-3 mb-3 mb-md-5 d-none d-md-flex">
         <div class="col-md-6 justify-content-center d-flex align-items-center">
             <div class="text-center my-5 collection-text">
                 <p>

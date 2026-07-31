@@ -111,9 +111,8 @@
                 transform: scale(1.3);
             }
         </style>
-        <h4 class="text-center py-3 mt-4 text-uppercase">Discover Our Collection</h4>
         <div class="container-fluid px-3">
-            <div class="row onlineStore g-2 pt-3" id="breathtakingGrid">
+            <div class="row onlineStore g-2" id="breathtakingGrid">
                 @if(isset($products) && $products->count())
                     @foreach($products as $prod)
                         <div class="col-6 col-sm-4 col-md-3 col-lg-3">
