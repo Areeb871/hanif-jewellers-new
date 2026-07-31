@@ -239,6 +239,7 @@ public function forevermark()
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -439,6 +440,7 @@ $products = Products::with(['category', 'subcategory', 'images', 'tags'])
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -713,7 +715,7 @@ public function Online_Shopping_Store(Request $request)
 
     // Default page: featured collections only (backend-only; not tied to filter buttons).
     if ($activeTags === '' && $useDefaults) {
-        $activeTags = 'monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
+        $activeTags = 'Hania Amir,monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
     }
 
     // Featured collections: subcategory slugs (primary) + tag aliases (fallback for ordering/filters).
@@ -1134,6 +1136,8 @@ public function Online_Shopping_Store(Request $request)
     $sort = $request->input('sort');
 
     $applySorting = function ($query) use ($sort) {
+        $query->pinnedFirst();
+
         if ($sort === 'price_low_high' || $sort === 'price_high_low') {
             return $query;
         }
@@ -2054,6 +2058,8 @@ public function ehedCollection(Request $request)
 
     $sort = $request->input('sort');
 
+    $productsQuery->pinnedFirst();
+
     switch ($sort) {
         case 'az':
             $productsQuery->orderBy('name', 'asc');
@@ -2396,6 +2402,7 @@ public function ehedCollection(Request $request)
     /* ===============================
        SORTING
     =============================== */
+    $productsQuery->pinnedFirst();
     match ($request->get('sort')) {
         'az'              => $productsQuery->orderBy('name', 'asc'),
         'za'              => $productsQuery->orderBy('name', 'desc'),
@@ -2548,6 +2555,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -2710,6 +2718,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -2923,6 +2932,7 @@ public function ehedCollection(Request $request)
     /* ===============================
        SORTING
     =============================== */
+    $productsQuery->pinnedFirst();
     match ($request->get('sort')) {
         'az'              => $productsQuery->orderBy('name', 'asc'),
         'za'              => $productsQuery->orderBy('name', 'desc'),
@@ -3070,6 +3080,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = request()->input('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -3221,6 +3232,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -3371,6 +3383,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -3511,6 +3524,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -3658,6 +3672,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -3858,6 +3873,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4007,6 +4023,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4179,6 +4196,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4322,6 +4340,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4474,6 +4493,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4628,6 +4648,7 @@ public function ehedCollection(Request $request)
 
         // Optional sorting
         $sort = request('sort');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4796,6 +4817,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -4972,6 +4994,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -5110,6 +5133,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -5222,6 +5246,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');
@@ -5336,6 +5361,7 @@ public function ehedCollection(Request $request)
 
         // Apply sorting
         $sort = $request->get('sort', '');
+        $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
                 $productsQuery->orderBy('name', 'asc');

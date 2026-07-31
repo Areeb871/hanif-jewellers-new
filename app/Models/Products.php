@@ -9,7 +9,10 @@ use App\Services\DiamondPriceCalculator;
 class Products extends Model
 {
     protected $table = 'products';
-    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'gold_weight', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_latest', 'show_price'];
+    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'gold_weight', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_pinned', 'is_latest', 'show_price'];
+    protected $casts = [
+        'is_pinned' => 'boolean',
+    ];
     protected $hidden = ['created_at', 'updated_at'];
     // public function getPriceAttribute($value)
     // {
@@ -50,6 +53,11 @@ class Products extends Model
     public function subcategory()
     {
         return $this->belongsTo(Subcategory::class, 'subcategory_id');
+    }
+
+    public function scopePinnedFirst($query)
+    {
+        return $query->orderByDesc('is_pinned');
     }
 
     /**

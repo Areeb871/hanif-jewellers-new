@@ -1,6 +1,64 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+
+<style>
+.armand-page {
+    --armand-section-space:clamp(2.5rem, 5vw, 4.5rem);
+    --armand-content-gap:clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.armand-page .armand-products-section {
+    padding:0 !important;
+}
+
+.armand-page .armand-filter-header {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(0.25rem, 0.75vw, 0.5rem);
+    padding:clamp(0.35rem, 1vw, 0.75rem) 14px;
+}
+
+.armand-page .armand-filter-header .brand-logo-wrapper {
+    width:100% !important;
+    margin:0 !important;
+}
+
+.armand-page .armand-filter-header .brand-logo {
+    width:clamp(120px, 28vw, 190px);
+    height:auto;
+    margin:0 auto !important;
+}
+
+.armand-page .armand-filter-header .navbar-toggler {
+    position:static !important;
+    align-self:flex-end;
+    margin:0 !important;
+    width:max-content;
+    white-space:nowrap;
+    flex-wrap:nowrap;
+}
+
+.armand-page .onlineStore {
+    padding-top:var(--armand-content-gap) !important;
+}
+
+.armand-page .armand-nicolet-footer {
+    padding-top:var(--armand-section-space) !important;
+    padding-bottom:var(--armand-section-space) !important;
+}
+
+@media (max-width: 767px) {
+    .armand-page .armand-filter-header {
+        padding-right:12px;
+        padding-left:12px;
+    }
+}
+</style>
+
+<main class="armand-page">
+
     @if(isset($armandNicoletSubcategory) && $armandNicoletSubcategory && $armandNicoletSubcategory->banner_url)
         <section class="gehnawaSection p-0 position-relative">
             {{-- Desktop Video --}}
@@ -57,7 +115,7 @@
         </section>
     @endif
 
-    <section class="py-4">
+    <section class="armand-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -202,7 +260,7 @@
   z-index: 19999 !important;
 }
         </style>
-         <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
+         <div class="armand-filter-header navbar navbar-white filter">
             <div class="brand-logo-wrapper w-70 my-3 text-center">
                 <img src="{{ asset('assets/f_assets/image/watch logo/AMN.png') }}" alt="Armand Nicolet logo" class="brand-logo">
             </div>
@@ -560,5 +618,5 @@
         window.updateCounter();
     });
     </script>
+</main>
 @endsection
-

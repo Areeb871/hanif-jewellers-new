@@ -1,6 +1,51 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+
+<style>
+.graham-page {
+    --graham-space:clamp(2.5rem, 5vw, 4.5rem);
+    --graham-gap:clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.graham-page .graham-products-section { padding:0 !important; }
+
+.graham-page .graham-filter-header {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(0.25rem, 0.75vw, 0.5rem);
+    padding:clamp(0.35rem, 1vw, 0.75rem) 14px;
+}
+
+.graham-page .brand-logo-wrapper {
+    width:100% !important;
+    margin:0 !important;
+}
+
+.graham-page .graham-filter-header .brand-logo {
+    width:clamp(120px, 28vw, 190px);
+    margin:0 auto !important;
+}
+
+.graham-page .graham-filter-header .navbar-toggler {
+    position:static !important;
+    align-self:flex-end;
+    margin:0 !important;
+    width:max-content;
+    white-space:nowrap;
+}
+
+.graham-page .onlineStore { padding-top:var(--graham-gap) !important; }
+
+.graham-page .graham-footer {
+    padding-top:var(--graham-space) !important;
+    padding-bottom:var(--graham-space) !important;
+}
+</style>
+
+<main class="graham-page">
+
     @if(isset($grahamSubcategory) && $grahamSubcategory && $grahamSubcategory->banner_url)
         <section class="gehnawaSection p-0 position-relative">
             {{-- Desktop Video --}}
@@ -56,7 +101,7 @@
         </section>
     @endif
 
-    <section class="py-4">
+    <section class="graham-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -201,7 +246,7 @@
   z-index: 19999 !important;
 }
         </style>
-      <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
+      <div class="graham-filter-header navbar navbar-white filter">
             <div class="brand-logo-wrapper w-70 my-3 text-center">
                 <img src="{{ asset('assets/f_assets/image/watch logo/Garaham.png') }}" alt="Graham logo" class="brand-logo">
             </div>
@@ -560,6 +605,5 @@
         window.updateCounter();
     });
     </script>
+</main>
 @endsection
-
-

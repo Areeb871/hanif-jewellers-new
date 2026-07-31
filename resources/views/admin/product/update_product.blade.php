@@ -220,6 +220,10 @@
                                                     <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured_toggle" value="1" {{ $product->is_featured ? 'checked' : '' }}/>
                                                     <label class="form-check-label" for="is_featured_toggle">Featured Product</label>
                                                 </div>
+                                                <div class="form-check form-switch form-check-custom form-check-solid mb-0">
+                                                    <input class="form-check-input" type="checkbox" name="is_pinned" id="is_pinned_toggle" value="1" {{ $product->is_pinned ? 'checked' : '' }}/>
+                                                    <label class="form-check-label" for="is_pinned_toggle">Pin to Top</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-body pt-0">

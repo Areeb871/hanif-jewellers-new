@@ -1,5 +1,90 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 @section('content')
+
+<style>
+.cys-page {
+  --cys-section-space: clamp(2.5rem, 5vw, 5rem);
+  --cys-content-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.cys-page .cys-logo-section {
+  margin: 0;
+  padding: var(--cys-section-space) 15px;
+}
+
+.cys-page .cys-logo-section .brand-logo-wrapper {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.cys-page .cys-logo-section .brand-logo {
+  display: block;
+  width: min(210px, 52vw);
+  max-width: 210px;
+  height: auto;
+  margin: 0 auto !important;
+}
+
+.cys-page .cys-story {
+  margin-top: 0 !important;
+  padding: 0 0 var(--cys-section-space);
+}
+
+.cys-page .cys-head {
+  margin-bottom: var(--cys-content-gap);
+}
+
+.cys-page .cys-products-section {
+  padding-top: 0 !important;
+  padding-bottom: var(--cys-section-space) !important;
+}
+
+.cys-page .cys-cta {
+  margin: 0;
+  padding: var(--cys-section-space) 15px;
+}
+
+.cys-page .cys-btn {
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.cys-page .cys-products-section .onlineStore {
+  padding-top: var(--cys-content-gap) !important;
+}
+
+.cys-page .cys-footer {
+  padding-top: var(--cys-section-space) !important;
+  padding-bottom: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .cys-page .cys-logo-section {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .cys-page .cys-logo-section .brand-logo {
+    width: min(150px, 48vw);
+  }
+
+  .cys-page .cys-cta {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .cys-page .cys-btn {
+    width: auto !important;
+    font-size: 13px;
+  }
+}
+</style>
+
+<main class="cys-page">
+
 @if(!empty($cysSubcategory) && !empty($cysSubcategory->banner_url))
 @php
     // Desktop banner (from DB)
@@ -77,13 +162,13 @@
   $heritageImg1 = 'assets/f_assets/image/cys/1.jpg'; // <-- change to your file
   $heritageImg2 = 'assets/f_assets/image/cys/2.jpg'; // <-- change to your file
 @endphp
-<div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
+<div class="cys-logo-section navbar navbar-white align-items-center filter position-relative justify-content-center">
  <div class="brand-logo-wrapper w-70 my-3 text-center">
     <img src="{{ asset('assets/f_assets/image/watch logo/CYS.png') }}" alt="CYS logo" class="brand-logo">
   </div>
 </div>
 
-<section class="cys-story"style="margin-top: -79px;">
+<section class="cys-story">
   <div class="cys-wrap">
 
     <div class="cys-head">
@@ -134,7 +219,7 @@
 
 
 
-    <section class="py-4">
+    <section class="cys-products-section">
         <style>
          .cys-full-banner img{
     width: 100%;
@@ -711,5 +796,5 @@ document.addEventListener('DOMContentLoaded', function () {
   updateCounter();
 });
 </script>
+</main>
 @endsection
-

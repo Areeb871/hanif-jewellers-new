@@ -1,4 +1,4 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 <style>
@@ -119,7 +119,7 @@
     {{-- =======================
         PAGE STYLES
     ======================== --}}
-    <section class="py-4">
+    <section class="pt-4">
         <style>
             /* =========================
                GLOBAL / BASE
@@ -421,6 +421,19 @@
     }
 }
 
+@media (max-width: 767px){
+    .bovet-hero{
+        background:#000;
+    }
+
+    .bovet-hero .bovet-hero__media{
+        position:absolute;
+        top:52px;
+        left:0;
+        height:calc(100% - 52px);
+    }
+}
+
 /* Very small phones */
 @media (max-width: 360px){
     .bovet-hero{ height: 62vh; }
@@ -470,7 +483,7 @@
 .bovet-filterbar__right{ justify-self:end; }
 
 .bovet-brand-logo{
-    margin-top: -35px;
+    /* margin-top: -35px; */
     width:clamp(120px, 32vw, 190px);
     height:auto;
     display:block;
@@ -516,7 +529,7 @@
 
 /* TEXT FULL WIDTH WITH CLEAN PADDING */
 .bovet-text{
-    padding: 25px 40px 15px 10px; /* left & right spacing */
+    padding: 0px 40px 15px 10px; /* left & right spacing */
 }
 
 .bovet-title{
@@ -634,23 +647,24 @@
 
           <!-- FIRST PARAGRAPH (Always Visible) -->
           <p>
-           The Récital 30 focuses on the innovative roller system from the award winning Récital 28, allowing world travelers to accurately display 25 global time zones across the four periods of the year. The Récital 30 is one of only two world timepieces, both from BOVET, that are able to adapt to Daylight Saving Time. The Récital 30 emphasizes the essentials needed for keeping track of world time. The world time rollers cover nearly the entire dial, making it the clear focus of this timepiece for tracking world time. As a result, the Récital 30 is the perfect companion for world travelers. This special edition of the Récital 30 holds particular significance for the House of HANIF.
+	           The Récital 30 focuses on the innovative roller system from the award winning Récital 28, allowing world travelers to accurately display 25 global time zones across the four periods of the year. The Récital 30 is one of only two world timepieces, both from BOVET, that are able to adapt to Daylight Saving Time. The Récital 30 emphasizes the essentials needed for keeping track of world time. The world time rollers cover nearly the entire dial, making it the clear focus of this timepiece for tracking world time. As a result, the Récital 30 is the perfect companion for world travelers. This special edition of the Récital 30 holds particular significance for the House of HANIF.
+               <button type="button"
+                       class="mobile-toggle-btn"
+                       aria-expanded="false"
+                       aria-controls="bovetMoreText">See More</button>
+	          </p>
 
-
-
-          </p>
-
-          <!-- SECOND PARAGRAPH (Hidden on Mobile Initially) -->
-          <div class="mobile-extra-text">
+	          <!-- SECOND PARAGRAPH (Hidden on Mobile Initially) -->
+	          <div class="mobile-extra-text" id="bovetMoreText">
             <p>
              The roller representing the country’s time zone is specifically labeled "Karachi”. The two green arrows accompany the designation, subtly highlighting the region while reflecting the colors closely associated with Pakistan. With its vertically integrated manufacturing capabilities, BOVET possesses the rare ability to create highly personalized timepieces for distinguished collectors and partners around the world.
+             <button type="button"
+                     class="mobile-toggle-btn mobile-toggle-less"
+                     aria-expanded="true"
+                     aria-controls="bovetMoreText">See Less</button>
             </p>
           </div>
-
-          <!-- MOBILE BUTTON -->
-          <span class="mobile-toggle-btn">See More</span>
-
-        </div>
+	        </div>
       </div>
 
     </div>
@@ -686,7 +700,7 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 <style>
 .hanif-bovet-wrap{
   background:#fff;
-  padding:18px 0 22px;
+  padding:18px 0 16px;
 }
 
 .hanif-bovet-container{
@@ -731,7 +745,8 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 
 .hanif-bovet-cta{
   text-align:center;
-  margin-top:14px;
+  margin-top:32px;
+  line-height:0;
 }
 
 .hanif-bovet-btn{
@@ -769,14 +784,32 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
     display:block;
   }
 
-  .mobile-toggle-btn{
-    display:inline-block;
-    font-size:14px;
-    font-weight:600;
-    margin-top:5px;
-    cursor:pointer;
-    text-decoration:underline;
-  }
+	  .mobile-toggle-btn{
+	    display:inline-block;
+        border:0;
+        background:none;
+        color:inherit;
+        padding:0;
+        margin:0 0 0 4px;
+        font:inherit;
+	    font-weight:400;
+	    cursor:pointer;
+	    text-decoration:underline;
+        text-underline-offset:3px;
+        vertical-align:baseline;
+	  }
+
+      .mobile-toggle-less{
+        display:none;
+      }
+
+      .mobile-extra-text.active .mobile-toggle-less{
+        display:inline-block;
+      }
+
+      .mobile-toggle-btn.is-hidden{
+        display:none;
+      }
 }
 </style>
 
@@ -784,20 +817,21 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  const toggleBtn = document.querySelector(".mobile-toggle-btn");
+  const moreBtn = document.querySelector(".mobile-toggle-btn:not(.mobile-toggle-less)");
+  const lessBtn = document.querySelector(".mobile-toggle-less");
   const extraText = document.querySelector(".mobile-extra-text");
 
-  if(toggleBtn){
-    toggleBtn.addEventListener("click", function(){
+  if(moreBtn && lessBtn && extraText){
+    moreBtn.addEventListener("click", function(){
+      extraText.classList.add("active");
+      moreBtn.classList.add("is-hidden");
+      moreBtn.setAttribute("aria-expanded", "true");
+    });
 
-      extraText.classList.toggle("active");
-
-      if(extraText.classList.contains("active")){
-        toggleBtn.textContent = "See Less";
-      } else {
-        toggleBtn.textContent = "See More";
-      }
-
+    lessBtn.addEventListener("click", function(){
+      extraText.classList.remove("active");
+      moreBtn.classList.remove("is-hidden");
+      moreBtn.setAttribute("aria-expanded", "false");
     });
   }
 

@@ -173,8 +173,20 @@
                 optional($product->subcategory)->slug === 'franck-muller'||
                 optional($product->subcategory)->slug === 'mona-lisa'||
                 optional($product->subcategory)->slug === 'breathtaking'||
-                                optional($product->subcategory)->slug === 'online-jewellery-sales'||
-                                                                optional($product->subcategory)->slug === 'online-shopping'
+                 optional($product->subcategory)->slug === 'online-jewellery-sales'||
+              optional($product->subcategory)->slug === 'online-shopping'||
+            optional($product->subcategory)->slug === 'haphazard'||
+            optional($product->subcategory)->slug === 'heritage'||
+                        optional($product->subcategory)->slug === 'love-engagement'||
+                                                optional($product->subcategory)->slug === 'pure-lock'||
+                                                                          optional($product->subcategory)->slug === 'jewelphabets'
+                      
+
+
+                                                                                                      
+
+                                                   
+                             
 
 
 
@@ -579,14 +591,20 @@
                                 </div>
                             @endif
                         </div> -->
-@php
-    $livePrice    = $product->displayPrice($storeContext);
+<div class="product-price-panel my-5">
+    @php
+        $livePrice    = $product->displayPrice($storeContext);
 
-    $roundedPrice = (int) max(0, $livePrice);
-    $canShowPrice = $storeContext
-        ? ($roundedPrice > 0)
-        : (!empty($product->show_price) && $roundedPrice > 0);
-@endphp
+        $roundedPrice = (int) max(0, $livePrice);
+        $canShowPrice = $storeContext
+            ? ($roundedPrice > 0)
+            : (!empty($product->show_price) && $roundedPrice > 0);
+        $isWatchProduct = $product->isWatchProduct();
+        $isOutOfStock = $isWatchProduct
+            && $product->quantity !== null
+            && (int) $product->quantity === 0;
+        $inStock = !$isOutOfStock;
+    @endphp
 
 @if($canShowPrice)
 <div class="product-price-panel my-5">
@@ -599,7 +617,7 @@
       </p>
     @endif   -->
     <div class="price-display">
-            PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
+                    PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>
 
         @if($product->category->slug != 'watches')
@@ -716,21 +734,21 @@
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
                             @if($canShowPrice)
-                                {{-- First Row - Add to Cart and Buy Now --}}
-                                <div class="row g-2 mb-3">
-                                    <!-- <div class="col-6">
-                                        <button type="button" class="btn btn-dark w-100 py-2" onclick="addToCart()" 
-                                                style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
-                                            ADD TO CART
-                                        </button>
-                                    </div> -->
-                                    <div class="">
-                                        <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()"
-                                                style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
-                                            BUY NOW
-                                        </button>
+                                @if($inStock)
+                                    <div class="row g-2 mb-3">
+                                        <div>
+                                            <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()"
+                                                    style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
+                                                BUY NOW
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <p class="text-danger text-center fw-semibold mb-3">
+                                        This is out of stock
+                                    </p>
+                                @endif
+
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
                                     <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()"

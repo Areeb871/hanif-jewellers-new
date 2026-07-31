@@ -1,5 +1,5 @@
 
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 <style>
 /* =======================
    DESKTOP HERO
@@ -50,8 +50,99 @@
   display: block;
   object-fit: cover;
 }
+
+/* Simple, consistent Perrelet spacing */
+.perrelet-page {
+  --perrelet-section-space: clamp(2.5rem, 5vw, 4.5rem);
+  --perrelet-content-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.perrelet-page .perrelet-products-section {
+  padding: 0 0 var(--perrelet-section-space) !important;
+}
+
+.perrelet-page .perrelet-intro {
+  padding: var(--perrelet-section-space) 20px clamp(1rem, 2vw, 1.5rem);
+}
+
+.perrelet-page .perrelet-intro h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.2;
+}
+
+.perrelet-page .perrelet-subtitle {
+  margin: 0.5rem 0 0;
+  font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+}
+
+.perrelet-page .perrelet-intro p {
+  margin: var(--perrelet-content-gap) auto 0;
+  font-size: clamp(0.875rem, 1.25vw, 1rem);
+  line-height: 1.65;
+}
+
+.perrelet-page .bovet-filterbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  padding: 0 14px clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.perrelet-page .bovet-filterbar__left {
+  display: none;
+}
+
+.perrelet-page .bovet-filterbar__center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.perrelet-page .bovet-filterbar__right {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.perrelet-page .bovet-brand-logo {
+  width: clamp(120px, 28vw, 190px);
+  margin: 0 auto !important;
+}
+
+.perrelet-page .bovet-filterbar__btn {
+  transform: none;
+  width: max-content;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.perrelet-page .onlineStore {
+  padding-top: var(--perrelet-content-gap) !important;
+}
+
+.perrelet-page .perrelet-footer {
+  padding-top: var(--perrelet-section-space) !important;
+  padding-bottom: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .perrelet-page .perrelet-intro {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .perrelet-page .bovet-filterbar {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
 </style>
 @section('content')
+
+<main class="perrelet-page">
+
 @if(isset($subcategory) && $subcategory && $subcategory->banner_url)
 
     @php
@@ -137,7 +228,7 @@
 
 
 
-    <section class="py-4">
+    <section class="perrelet-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -404,7 +495,7 @@
 
     <div class="bovet-filterbar__center">
         <img src="{{ asset('assets/f_assets/image/watch logo/Perrelet.png') }}"
-             class="bovet-brand-logo" alt="Bovet">
+             class="bovet-brand-logo" alt="Perrelet">
     </div>
 
     <div class="bovet-filterbar__right">
@@ -437,7 +528,7 @@
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if(isset($totalFilteredProducts) && $totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $totalShown }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $totalShown }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em;">
                 SHOWING {{ $totalShown }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -745,4 +836,5 @@
         window.updateCounter();
     });
     </script>
+</main>
 @endsection

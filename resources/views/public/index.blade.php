@@ -724,7 +724,25 @@ section.watch .card:hover {
 }
 
 .watch-brands-section {
-    padding: 0;
+    padding: 0 0 2rem;
+}
+
+/* Keep the total gap between the jewellery section, heading and logos equal. */
+.watch-brands-section > .section-title {
+    margin: 0;
+    padding-top: calc(1.5rem + 0.5rem);
+}
+
+@media (min-width: 768px) {
+    .watch-brands-section > .section-title {
+        padding-top: calc(2rem + 0.5rem);
+    }
+}
+
+@media (min-width: 1366px) {
+    .watch-brands-section > .section-title {
+        padding-top: calc(2.5rem + 0.5rem);
+    }
 }
 
 #carouselExampleRide .carousel-control-prev,
@@ -762,10 +780,12 @@ culminating in a true resemblance of experience pure art.</div>
 </section> -->
 
 <section class="custom-banner d-none d-md-block position-relative">
-    <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{  asset('assets/f_assets/image/Annual Gold Sale Banner Desktop.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <img
+        src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
+        alt="Franck Muller"
+        class="custom-banner-video"
+        fetchpriority="high"
+    >
             <!--<a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>-->
 </section>
 
@@ -813,9 +833,12 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
-    <source src="{{ asset('assets/f_assets/image/Annual Gold Sale MOB View.mp4') }}" type="video/mp4">
-  </video>
+  <img
+    class="mobileStackVideo"
+    src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"
+    alt="Franck Muller"
+    fetchpriority="high"
+  >
  <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"

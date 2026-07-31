@@ -1,4 +1,4 @@
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 
@@ -489,7 +489,73 @@ padding:2px 15px 0;
 
 
 }
+
+/* Louis Erard page vertical rhythm */
+.louis-page-wrap {
+    --louis-section-space:clamp(2.5rem, 5vw, 4.5rem);
+    --louis-content-gap:clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.louis-page-wrap .chronoswiss-logo-section {
+    margin:0 !important;
+    padding:var(--louis-section-space) 15px !important;
+}
+
+.louis-page-wrap .chronoswiss-logo-main {
+    transform:none;
+    margin:0 auto !important;
+}
+
+.louis-page-wrap .louis-erard-page {
+    padding:0;
+}
+
+.louis-page-wrap .le-intro,
+.louis-page-wrap .le-collections {
+    padding:0 16px var(--louis-section-space);
+}
+
+.louis-page-wrap .le-title {
+    margin:0 0 var(--louis-content-gap);
+    font-size:clamp(1.5rem, 2.5vw, 2.25rem);
+    line-height:1.2;
+}
+
+.louis-page-wrap .le-copy,
+.louis-page-wrap .le-collections-copy {
+    font-size:clamp(0.875rem, 1.25vw, 1rem);
+    line-height:1.7;
+}
+
+.louis-page-wrap .louis-products-section {
+    padding:0 0 var(--louis-section-space) !important;
+}
+
+.louis-page-wrap .louis-products-section .onlineStore {
+    padding-top:var(--louis-content-gap) !important;
+}
+
+.louis-page-wrap .louis-erard-footer {
+    padding-top:var(--louis-section-space) !important;
+    padding-bottom:0 !important;
+}
+
+@media (max-width: 767px) {
+    .louis-page-wrap .chronoswiss-logo-section {
+        padding-right:12px !important;
+        padding-left:12px !important;
+    }
+
+    .louis-page-wrap .le-intro,
+    .louis-page-wrap .le-collections {
+        padding-right:14px;
+        padding-left:14px;
+    }
+}
 </style>
+
+<main class="louis-page-wrap">
+
 @if(isset($louisErardSubcategory) && $louisErardSubcategory->banner_url)
 
     @php
@@ -565,7 +631,7 @@ padding:2px 15px 0;
 
 {{-- KEEP YOUR EXISTING OFFCANVAS CODE AND JS BELOW THIS --}}
 
-    <section class="py-4">
+    <section class="louis-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -740,7 +806,7 @@ padding:2px 15px 0;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -1067,4 +1133,5 @@ padding:2px 15px 0;
         window.updateCounter();
     });
     </script>
+</main>
 @endsection

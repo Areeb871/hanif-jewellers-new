@@ -274,7 +274,7 @@ public function processCheckout(Request $request)
             }
 
             return [
-                'unit_price' => (int) max(0, round($unitPrice)),
+                'unit_price' => (int) max(0, round($unitPrice, -3)),
                 'original_price' => (int) max(0, round($originalPrice)),
                 'discount_amount' => (int) max(0, round($discountAmount)),
                 'discount_type' => $discountType,
@@ -1020,6 +1020,17 @@ public function add(Request $request)
             'success' => false,
             'message' => 'Product not found.'
         ], 404);
+    }
+
+    if (
+        $product->isWatchProduct()
+        && $product->quantity !== null
+        && (int) $product->quantity === 0
+    ) {
+        return response()->json([
+            'success' => false,
+            'message' => 'This product is currently out of stock.'
+        ], 422);
     }
 
     $cartItem = Cart::where('cart_type', 'normal')
