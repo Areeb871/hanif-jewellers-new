@@ -304,51 +304,51 @@
 
     @if(isset($tissotSubcategory) && $tissotSubcategory && $tissotSubcategory->banner_url)
         <section class="tissot-video-hero p-0 position-relative">
-            {{-- Desktop Video --}}
+            {{-- Use the same banner video on desktop and mobile. The hero's
+                 object-fit: cover styling crops the sides on narrow screens. --}}
             @if(Str::endsWith($tissotSubcategory->banner_url, ['.mp4', '.webm', '.ogg']))
                 <video
                     autoplay
                     loop
                     muted
                     playsinline
-                    class="video-desktop d-none d-md-block"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    class="tissot-banner-video">
                     <source src="{{ asset($tissotSubcategory->banner_url) }}" type="video/{{ pathinfo($tissotSubcategory->banner_url, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
             @else
-                {{-- Static image for desktop --}}
-                <div class="d-none d-md-block tissot-video-fallback" style="background-image:url('{{ asset($tissotSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
+                <div class="tissot-video-fallback" style="background-image:url('{{ asset($tissotSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
             @endif
 
-            {{-- Mobile Video (Dynamic based on subcategory) --}}
-            @php
-                $mobileVideo = null;
-                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/tissot_mobile.mp4';
-                if ($tissotSubcategory->slug === 'tissot') {
-                    $mobileVideo = $mobileVideoPath;
-                } else {
-                    $mobileVideo = $tissotSubcategory->banner_url;
-                }
-            @endphp
+            {{--
+                Previous separate mobile-video implementation (kept for future use):
 
-            @if(Str::endsWith($mobileVideo, ['.mp4', '.webm', '.ogg']))
-                <video
-                    autoplay
-                    loop
-                    muted
-                    playsinline
-                    class="video-mobile d-block d-md-none"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
-                    Your browser does not support the video tag.
-                </video>
-                {{-- Fallback image for mobile --}}
-                 <!-- <div class="video-fallback-mobile d-block d-md-none tissot-video-fallback" style="display:none; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div> -->
-            @else
-                {{-- Static image for mobile --}}
-                <div class="d-block d-md-none tissot-video-fallback" style="background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
-            @endif
+                @php
+                    $mobileVideo = null;
+                    $mobileVideoPath = 'assets/f_assets/image/watches mobile view/tissot_mobile.mp4';
+                    if ($tissotSubcategory->slug === 'tissot') {
+                        $mobileVideo = $mobileVideoPath;
+                    } else {
+                        $mobileVideo = $tissotSubcategory->banner_url;
+                    }
+                @endphp
+
+                @if(Str::endsWith($mobileVideo, ['.mp4', '.webm', '.ogg']))
+                    <video
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        class="video-mobile d-block d-md-none"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-fallback-mobile d-block d-md-none tissot-video-fallback" style="display:none; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                @else
+                    <div class="d-block d-md-none tissot-video-fallback" style="background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                @endif
+            --}}
         </section>
     @endif
 
