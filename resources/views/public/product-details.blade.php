@@ -165,55 +165,15 @@
 @endphp
 
 <div class="product-vip-header">
-@if(
-    optional($product->subcategory)->slug === 'favre-leuba' ||
-    optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
-        optional($product->subcategory)->slug === 'maurice-lacroix'||
-                optional($product->subcategory)->slug === 'chronoswiss'||
-                optional($product->subcategory)->slug === 'franck-muller'||
-                optional($product->subcategory)->slug === 'mona-lisa'||
-                optional($product->subcategory)->slug === 'breathtaking'||
-                 optional($product->subcategory)->slug === 'online-jewellery-sales'||
-              optional($product->subcategory)->slug === 'online-shopping'||
-            optional($product->subcategory)->slug === 'haphazard'||
-            optional($product->subcategory)->slug === 'heritage'||
-                        optional($product->subcategory)->slug === 'love-engagement'||
-                                                optional($product->subcategory)->slug === 'pure-lock'||
-                                                                          optional($product->subcategory)->slug === 'jewelphabets'
-                      
-
-
-                                                                                                      
-
-                                                   
-                             
-
-
-
-
-
-)
-        <h5 class="card-title product-detail-full-name">
-            @php
-                $nameParts = explode('-', $displayName, 2);
-            @endphp
-            @if(count($nameParts) > 1)
-                {{ strtoupper($nameParts[0]) }}<br>
-                <div class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</div>
-            @else
-                {{ strtoupper($displayName) }}
-            @endif
-        </h5>
-
-@else
-
-    <div class="product-title-shell mb-4">
-        <h1 class="h2 mb-0 product-detail-title" style="font-size: 1.4rem !important;">
-            {{ $displayName }}
-        </h1>
-    </div>
-
-@endif
+    @php
+        $nameParts = array_map('trim', explode('-', $displayName, 2));
+    @endphp
+    <h1 class="product-detail-full-name">
+        {{ strtoupper($nameParts[0]) }}
+        @if(count($nameParts) > 1 && filled($nameParts[1]))
+            <span class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</span>
+        @endif
+    </h1>
 
     @if(filled($product->sku))
         <div class="product-vip-reference">REF. {{ strtoupper($product->sku) }}</div>
@@ -277,7 +237,7 @@
 
 .product-detail-title,
 .product-section-label {
-    font-family: "Argent CF", Georgia, serif !important;
+    /*font-family: "Argent CF", Georgia, serif !important;*/
 }
 
 .product-delivery-note {
@@ -508,6 +468,7 @@
 }
 
 .product-detail-reference {
+    display: block;
     font-size: 0.8rem;
     line-height: 1.2;
 }
@@ -605,8 +566,6 @@
     $inStock = !$isOutOfStock;
 @endphp
 
-@if($canShowPrice)
-<div class="product-price-panel my-5">
     <!-- @if($canShowPrice)
         <div class="price-display" style="font-size: 1.3rem; font-weight: 600;">
             PKR {{ number_format($roundedPrice, 0, '.', ',') }}
@@ -615,11 +574,8 @@
         All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
       </p>
     @endif   -->
-<<<<<<< HEAD
 @if($canShowPrice)
 <div class="product-price-panel my-5">
-=======
->>>>>>> 68f41d11a79d117a33ba006b0af0052a16ba1963
     <div class="price-display">
         PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
     </div>

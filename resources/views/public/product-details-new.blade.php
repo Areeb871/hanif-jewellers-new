@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Success Message Display --}}
-    
+
     {{-- Main Product Details Section --}}
     <section class="product-details-main-section">
         <div class="">
@@ -164,7 +164,6 @@
     $displayDescription = $product->displayDescription($storeContext);
 @endphp
 
-<div class="product-vip-header">
 @if(
     optional($product->subcategory)->slug === 'favre-leuba' ||
     optional($product->subcategory)->slug === 'cuervo-y-sobrinos'||
@@ -190,7 +189,7 @@
 
 @else
 
-    <div class="product-title-wrap product-title-shell">
+    <div class="product-title-wrap">
         <h1 class="product-detail-title">
             {{ $displayName }}
         </h1>
@@ -198,12 +197,6 @@
 
 @endif
 
-    @if(filled($product->sku))
-        <div class="product-vip-reference">REF. {{ strtoupper($product->sku) }}</div>
-    @endif
-
-    <div class="product-vip-divider" aria-hidden="true"></div>
-</div>
 
 
 
@@ -235,125 +228,50 @@
     margin-bottom: 1.35rem;
 }
 
-.product-details-main-section .product-info {
-    position: relative;
-    width: 100%;
-    max-width: 520px;
-    margin-inline: auto;
-    padding: clamp(16px, 1.8vw, 28px) 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    font-family: "Poppins", sans-serif;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .product-details-main-section .product-details-layout {
-        align-items: flex-start;
-        overflow: visible;
-    }
-
-    .product-details-main-section .product-details-layout > .col-md-4 {
-        align-self: stretch;
-        overflow: visible;
-    }
-
-    .product-details-main-section .product-info.sticky-sidebar {
-        position: sticky !important;
-        top: 88px !important;
-        align-self: flex-start;
-        height: fit-content;
-        max-height: calc(100vh - 108px);
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        scrollbar-width: none;
-        z-index: 5;
-    }
-
-    .product-details-main-section .product-info.sticky-sidebar::-webkit-scrollbar {
-        display: none;
-    }
-}
-
-.product-details-main-section .product-vip-header {
-    margin: 0 0 26px;
-}
-
-.product-details-main-section .product-title-shell {
-    margin: 0 !important;
-}
-
 .product-detail-title,
 .product-detail-full-name {
     color: #17120f;
-    font-family: "Argent CF", Georgia, serif !important;
-    font-size: clamp(2rem, 2.7vw, 3rem) !important;
-    font-weight: 500;
+    font-family: 'Argent CF', Georgia, serif !important;
+    font-size: clamp(1.5rem, 2.7vw, 3rem) !important;
+    font-weight: 200;
     letter-spacing: .015em;
     line-height: 1.06;
 }
 
 .product-detail-title {
-    font-family: "Argent CF", Georgia, serif !important;
-}
-
-.product-details-main-section .product-detail-title,
-.product-details-main-section .product-detail-full-name {
-    margin: 0 0 12px !important;
-    font-weight: 400;
-}
-
-.product-details-main-section .product-vip-reference {
-    color: #7d746d;
-    font-family: "Poppins", sans-serif;
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: .14em;
-    line-height: 1.4;
-}
-
-.product-details-main-section .product-vip-divider {
-    width: 100%;
-    height: 1px;
-    margin-top: 22px;
-    background: linear-gradient(90deg, #d8cec4 0%, #d8cec4 72%, transparent 100%);
+    font-family: 'Argent CF', Georgia, serif !important;
 }
 
 .product-section-label {
     margin: 0 0 12px;
     color: #17120f;
-    font-family: "Argent CF", Georgia, serif;
+    font-family: "Argent CF", Georgia, serif !important;
     font-size: 1.15rem;
-    font-weight: 400;
+    font-weight: 100;
     letter-spacing: .015em;
-    text-transform: none;
+    /* text-transform: uppercase; */
     text-decoration: none;
 }
 
 .product-features-panel {
     margin-bottom: 1.45rem;
-    padding: 20px 0 22px;
-    border-top: 1px solid #e9e3dd;
-    border-bottom: 1px solid #e9e3dd;
+    padding-bottom: 0;
 }
 
 .product-description {
     color: #625b54;
-    font-family: "Poppins", sans-serif;
+    font-family: inherit;
     line-height: 1.72;
-    font-size: 14px;
+    /* font-size: 14px; */
 }
 
 /* Paragraph & list base */
 .product-description p,
 .product-description li {
-    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 1.72;
-    font-size: 14px !important;
+    /* line-height: 1.2; */
+    font-size: 13px !important;
     font-weight: 400;
 }
 
@@ -361,14 +279,14 @@
 .product-description strong,
 .product-description b {
     font-size: 14px !important;
-    font-weight: 600;
+    font-weight: 500;
     color: #201b17;
 }
 
 /* RIGHT side values (more bold & clearer) */
 .product-description strong + span,
 .product-description b + span {
-    font-weight: 700;
+    /* font-weight: 700; */
     color: #17120f;
 }
 
@@ -389,10 +307,11 @@
     line-height: 1.2;
 }
 .price-display {
-    font-weight: 700;
-    font-size: 1.08rem;
+    font-weight: 500;
+    font-size: clamp(1.25rem)
     color: #17120f;
-    letter-spacing: .03em;
+    font-family: 'Poppins';
+    letter-spacing: 0.25em;
 }
 
 .product-old-price {
@@ -405,19 +324,17 @@
     text-decoration-thickness: 1px;
 }
 
-.product-price-note,
-.product-delivery-note {
+.product-price-note {
     margin: .65rem 0 0;
     color: #7a7169;
-    font-family: "Poppins", sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.55;
 }
 
 .product-price-panel {
-    margin: 1.35rem 0 !important;
-    padding-top: 1.35rem;
-    padding-bottom: 1.35rem;
+    margin: 1rem 0 !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     border-top: 1px solid #e6ded6;
     border-bottom: 1px solid #e6ded6;
 }
@@ -427,27 +344,28 @@
 }
 
 .product-action-btn {
-    min-height: 46px;
+    min-height: 50px;
     border: 1px solid #17120f !important;
     border-radius: 0 !important;
-    background: #17120f !important;
-    color: #fff !important;
     font-family: "Poppins", sans-serif !important;
-    font-size: .72rem !important;
-    font-weight: 600 !important;
-    letter-spacing: .14em;
-    transition: background-color .24s ease, color .24s ease, border-color .24s ease;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    letter-spacing: .16em;
+    transition: background-color .2s ease, color .2s ease;
 }
 
-.product-action-btn:hover,
-.product-action-btn:focus-visible {
-    background: #fff !important;
-    color: #17120f !important;
-    box-shadow: none !important;
+.product-action-btn-primary {
+    background: #17120f !important;
+    color: #fff !important;
+}
+
+.product-action-btn-primary:hover,
+.product-action-btn-primary:focus-visible {
+    background: #342b25 !important;
 }
 
 .product-action-btn-secondary {
-    background: transparent !important;
+    background: #fff !important;
     color: #17120f !important;
 }
 
@@ -467,8 +385,8 @@
 .section-luxury-heading {
     margin: 0;
     color: #17120f;
-    font-family: "Argent CF", Georgia, serif;
-    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-family: 'Arjent CF', Georgia, serif;
+    font-size: clamp(1.5rem, 3.5vw, 1.75rem);
     font-weight: 500;
     letter-spacing: .06em;
     line-height: 1.1;
@@ -482,15 +400,6 @@
 @media (max-width: 767.98px) {
     .product-details-main-section {
         padding-top: 62px;
-    }
-
-    .product-details-main-section .product-info {
-        max-width: none;
-        margin-top: 0;
-        padding: 30px 22px 20px;
-        border: 0;
-        background: transparent;
-        box-shadow: none;
     }
 
     #mobileProductCarousel .mobile-carousel-image-wrapper {
@@ -507,6 +416,7 @@
     }
 
     .product-info > .mb-4 {
+        /* padding: 0 !important; */
         margin-top: 0 !important;
         margin-bottom: 1rem !important;
     }
@@ -566,7 +476,6 @@
     $livePrice    = $product->displayPrice($storeContext);
     $roundedPrice = round($livePrice, -3);
     $isJewelleryProduct = optional($product->category)->slug !== 'watches';
-    $oldPrice = $isJewelleryProduct ? round($roundedPrice * 1.3, -3) : null;
     $canShowPrice = $storeContext
         ? ($roundedPrice > 0)
         : (!empty($product->show_price) && $roundedPrice > 0);
@@ -582,11 +491,7 @@
     @endif   -->
 @if($canShowPrice)
 <div class="product-price-panel">
-    @if($isJewelleryProduct && $oldPrice > $roundedPrice)
-        <div class="product-old-price">
-            PKR {{ number_format($oldPrice, 0, '.', ',') }}
-        </div>
-    @endif
+
 
     <div class="price-display">
         PKR {{ number_format($roundedPrice, 0, '.', ',') }}
@@ -608,100 +513,6 @@
                             $pricePositive = ($product->price ?? 0) > 0;
                         @endphp
 
-                        <!-- @if($hasGoldRingsTag || $hasDiamondRingsTag && $pricePositive)
-                        <div class="my-5">
-                            <div class="size-selector-section">
-                                <label class="size-label" style="display: block; color: #333; font-size: 0.9rem; font-weight: 400; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif;">
-                                    FIND YOUR SIZE
-                                </label>
-                                <select id="product-size" class="form-select" style="border: 1px solid #333; border-radius: 0; padding: 10px 15px; font-size: 0.9rem; text-transform: uppercase; color: #333; background-color: white; font-family: sans-serif; width: 100%;">
-                                    <option value="" selected disabled>SELECT SIZE</option>
-                                    <option value="44.2">44.2 mm</option>
-                                    <option value="44.8">44.8 mm</option>
-                                    <option value="45.5">45.5 mm</option>
-                                    <option value="46.1">46.1 mm</option>
-                                    <option value="46.8">46.8 mm</option>
-                                    <option value="47.4">47.4 mm</option>
-                                    <option value="48.0">48.0 mm</option>
-                                    <option value="48.7">48.7 mm</option>
-                                    <option value="49.3">49.3 mm</option>
-                                    <option value="50.0">50.0 mm</option>
-                                    <option value="50.6">50.6 mm</option>
-                                    <option value="51.2">51.2 mm</option>
-                                    <option value="51.9">51.9 mm</option>
-                                    <option value="52.5">52.5 mm</option>
-                                    <option value="53.1">53.1 mm</option>
-                                    <option value="53.8">53.8 mm</option>
-                                    <option value="54.4">54.4 mm</option>
-                                    <option value="55.1">55.1 mm</option>
-                                    <option value="55.7">55.7 mm</option>
-                                    <option value="56.3">56.3 mm</option>
-                                    <option value="57.0">57.0 mm</option>
-                                    <option value="57.6">57.6 mm</option>
-                                    <option value="58.3">58.3 mm</option>
-                                    <option value="58.9">58.9 mm</option>
-                                    <option value="59.5">59.5 mm</option>
-                                    <option value="60.2">60.2 mm</option>
-                                    <option value="60.8">60.8 mm</option>
-                                    <option value="61.4">61.4 mm</option>
-                                    <option value="62.1">62.1 mm</option>
-                                    <option value="62.7">62.7 mm</option>
-                                    <option value="63.4">63.4 mm</option>
-                                    <option value="64.0">64.0 mm</option>
-                                    <option value="64.6">64.6 mm</option>
-                                    <option value="65.3">65.3 mm</option>
-                                    <option value="65.9">65.9 mm</option>
-                                    <option value="66.6">66.6 mm</option>
-                                    <option value="67.2">67.2 mm</option>
-                                    <option value="67.8">67.8 mm</option>
-                                    <option value="68.5">68.5 mm</option>
-                                    <option value="69.1">69.1 mm</option>
-                                    <option value="69.7">69.7 mm</option>
-                                    <option value="70.4">70.4 mm</option>
-                                    <option value="71.0">71.0 mm</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        @elseif($hasGoldBraceletsTag && $pricePositive)
-                        <div class="my-5">
-                            <div class="size-selector-section">
-                                <label class="size-label" style="display: block; color: #333; font-size: 0.9rem; font-weight: 400; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif;">
-                                    FIND YOUR SIZE
-                                </label>
-                                <select id="product-size" class="form-select" style="border: 1px solid #333; border-radius: 0; padding: 10px 15px; font-size: 0.9rem; text-transform: uppercase; color: #333; background-color: white; font-family: sans-serif; width: 100%;">
-                                    <option value="" selected disabled>SELECT SIZE</option>
-                                    <option value="14">14 cm</option>
-                                    <option value="15">15 cm</option>
-                                    <option value="16">16 cm</option>
-                                    <option value="17">17 cm</option>
-                                    <option value="18">18 cm</option>
-                                    <option value="19">19 cm</option>
-                                    <option value="20">20 cm</option>
-                                    <option value="21">21 cm</option>
-                                    <option value="22">22 cm</option>
-                                    <option value="23">23 cm</option>
-                                </select>
-                            </div>
-                        </div>
-                        @endif -->
-
-                        <!-- {{-- Debug Output - Always visible for troubleshooting --}}
-                        <div style="font-size: 14px; color: #000; background:#ffffcc; padding:15px; margin-top:15px; border: 2px solid #ff0000;">
-                            <div><strong>🔍 DEBUG SIZE SELECTOR CONDITION</strong></div>
-                            <div style="margin-top: 10px;">
-                                <strong>Subcategory:</strong> {{ $product->subcategory ? ($product->subcategory->slug ?? 'no slug') : 'NULL' }}<br>
-                                <strong>Subcategory ID:</strong> {{ $product->subcategory_id ?? 'NULL' }}<br>
-                                <strong>Tag Slugs:</strong> {{ $product->tags && $product->tags->count() > 0 ? $product->tags->pluck('slug')->join(', ') : 'NO TAGS' }}<br>
-                                <strong>Tag Count:</strong> {{ $product->tags ? $product->tags->count() : 0 }}<br>
-                                <strong>hasGoldRingsTag:</strong> {{ $hasGoldRingsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>hasDiamondRingsTag:</strong> {{ $hasDiamondRingsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>hasGoldBraceletsTag:</strong> {{ $hasGoldBraceletsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>pricePositive:</strong> {{ $pricePositive ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>Final Condition Result:</strong> {{ ( $hasGoldRingsTag || $hasDiamondRingsTag || ($hasGoldBraceletsTag && $pricePositive)) ? '✅ SHOW SIZE SELECTOR' : '❌ HIDE SIZE SELECTOR' }}
-                            </div>
-                        </div> -->
-
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
                             @if($canShowPrice)
@@ -714,28 +525,27 @@
                                         </button>
                                     </div> -->
                                     <div class="">
-                                        <button type="button" class="btn btn-dark w-100 py-2" onclick="buyNow()" 
-                                                style="font-weight: 400; font-size: 1.3rem; border-radius: 4px;">
+                                        <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()">
                                             BUY NOW
                                         </button>
                                     </div>
                                 </div>
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2 product-action-btn product-action-btn-secondary" onclick="talkToExpert()">
+                                    <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @else
                                 {{-- Only Talk to Expert when no price --}}
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-dark w-100 py-2 product-action-btn" onclick="talkToExpert()">
+                                    <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @endif
                         </div>
-                          <p class="product-delivery-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
+                          <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
                             Estimated delivery time is 7 to 10 business days.
             </p>
 
@@ -1677,41 +1487,20 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
         #ymlDesktop .dots-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            max-width: min(100%, 420px);
-            padding: 8px 10px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
+            gap: 8px;
         }
-        #ymlDesktop .dots-container::-webkit-scrollbar { display: none; }
         #ymlDesktop .dot {
-            flex: 0 0 auto;
-            width: 7px;
-            height: 7px;
-            min-width: 7px;
-            min-height: 7px;
-            padding: 0;
-            border-radius: 999px;
-            background-color: #d8d3cc;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
             cursor: pointer;
-            transition: width 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+            transition: background-color 0.3s ease;
             border: none;
             outline: none;
         }
-        #ymlDesktop .dot.active {
-            width: 34px;
-            min-width: 34px;
-            background-color: #17120f;
-            box-shadow: 0 3px 10px rgba(28, 25, 22, 0.2);
-        }
-        #ymlDesktop .dot:hover,
-        #ymlDesktop .dot:focus-visible {
-            background-color: #6f6760;
-            transform: translateY(-1px);
-        }
+        #ymlDesktop .dot.active { background-color: #000; }
+        #ymlDesktop .dot:hover { background-color: #666; }
 
         /* YOU MAY ALSO LIKE – Mobile horizontal scroller */
         #ymlMobile .mobile-product-scroller {
@@ -1769,7 +1558,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
 
             .you-may-like-section .text-center.mb-5 {
-                margin-bottom: 2rem !important;
+                margin-bottom: 1.25rem !important;
             }
 
             .you-may-like-section h3 {
@@ -1923,12 +1712,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
 
             #ymlDesktop .scroller-dots {
                 display: block;
-                justify-content: center;
-                width: 100%;
                 margin-top: 14px !important;
-                padding: 0 12px 4px;
-                box-sizing: border-box;
-                overflow: visible;
             }
 
             #ymlDesktop .yml-progress-track {
@@ -1949,23 +1733,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
 
             #ymlDesktop .dots-container {
-                display: flex;
-                gap: 4px;
+                gap: 8px;
                 align-items: center;
                 justify-content: center;
-                width: max-content;
+                padding: 0;
+                width: auto;
                 max-width: calc(100vw - 24px);
-                margin: 0 auto;
-                padding: 6px 8px;
-                box-sizing: border-box;
-                overflow-x: auto;
-                overflow-y: visible;
-                scrollbar-width: none;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            #ymlDesktop .dots-container::-webkit-scrollbar {
-                display: none;
+                overflow: visible;
             }
 
             #ymlDesktop button.dot.carousel-dot {
@@ -1986,10 +1760,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 -webkit-appearance: none;
                 box-sizing: border-box;
                 line-height: 0;
-                background-color: #000 !important;
-                opacity: .28;
-                box-shadow: none !important;
-                transform: none !important;
+                background-color: #d8d8d8;
             }
 
             #ymlDesktop button.dot.carousel-dot.active {
@@ -2002,7 +1773,6 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 max-height: 8px !important;
                 border-radius: 50% !important;
                 background-color: #000 !important;
-                opacity: 1;
             }
         }
     </style>

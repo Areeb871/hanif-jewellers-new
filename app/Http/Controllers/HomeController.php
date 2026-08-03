@@ -1393,11 +1393,7 @@ public function Online_Shopping_Store(Request $request)
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $productDetailsView = strtolower($product->subcategory?->slug ?? '') === 'maurice-lacroix'
-            ? 'public.product-details-new'
-            : 'public.product-details';
-
-        return view($productDetailsView, compact('categories', 'product', 'watchCategories'));
+        return view('public.product-details', compact('categories', 'product', 'watchCategories'));
     }
     public function high_end()
     {
