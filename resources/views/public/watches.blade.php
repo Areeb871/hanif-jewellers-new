@@ -391,7 +391,7 @@ section{
         margin-top:41px
     }
     .ehed-body-text {
-        font-size: 16px;
+        font-size: 13px;
         font-weight: 400;
         color: #000;
         line-height: 1.6;
@@ -402,7 +402,7 @@ section{
     } */
     .hero__description {
         margin-top: 1em;
-        font-size: 100%;
+        font-size: 13px;
     }
     .text-large {
         font-family: Walbaum, sans-serif;
@@ -423,7 +423,7 @@ section{
     @media (min-width: 48rem) {
         .hero__description {
             max-width: 40rem;
-            font-size: 110%;
+            font-size: 13px;
         }
         .text-align--center .hero__description {
             margin-left: auto;
@@ -462,7 +462,7 @@ section{
             font-size: 12px;
         }
         .ehed-body-text {
-            font-size: 14px;
+            font-size: 13px;
         }
     }
     @media (max-width: 576px) {
@@ -826,7 +826,7 @@ section{
 </section>
 
 <section class="py-5 luxury-watch-section">
-    <p class="text-center py-3 px-3 fs-5">
+    <p class="text-center py-3 px-3 fs-6">
         Discover our hand picked selection of luxury Watches from renowned brands.
     </p>
 
