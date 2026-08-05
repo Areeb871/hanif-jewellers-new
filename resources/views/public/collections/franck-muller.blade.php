@@ -20,7 +20,7 @@
 
 .watchland-text-top p{
     margin: 0;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.8;
     color: #222;
 }

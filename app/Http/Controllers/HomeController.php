@@ -1393,11 +1393,44 @@ public function Online_Shopping_Store(Request $request)
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $productDetailsView = strtolower($product->subcategory?->slug ?? '') === 'maurice-lacroix'
-            ? 'public.product-details-new'
-            : 'public.product-details';
+        $storeContext = request()->boolean('store');
+        $isJewelleryProduct = strtolower(trim((string) $product->category?->name)) === 'jewellery';
 
-        return view($productDetailsView, compact('categories', 'product', 'watchCategories'));
+        $recommendedProducts = Products::where('category_id', $product->category_id)
+            ->where('subcategory_id', $product->subcategory_id)
+            ->where('id', '!=', $product->id)
+            ->where('status', 'published')
+            ->with(['category', 'images'])
+            ->inRandomOrder()
+            ->take(12)
+            ->get();
+
+        if ($storeContext && $isJewelleryProduct && $recommendedProducts->isEmpty()) {
+            $recommendedProducts = Products::where('id', '!=', $product->id)
+                ->where('status', 'published')
+                ->whereHas('category', function ($query) {
+                    $query->whereRaw('LOWER(name) = ?', ['jewellery']);
+                })
+                ->whereHas('subcategory', function ($query) {
+                    $query->where(function ($subcategoryQuery) {
+                        $subcategoryQuery
+                            ->whereRaw('LOWER(name) = ?', ['breathtaking'])
+                            ->orWhereRaw('LOWER(slug) = ?', ['breathtaking']);
+                    });
+                })
+                ->with(['category', 'images'])
+                ->inRandomOrder()
+                ->take(12)
+                ->get();
+        }
+
+        return view('public.product-details', compact(
+            'categories',
+            'product',
+            'watchCategories',
+            'recommendedProducts',
+            'storeContext'
+        ));
     }
     public function high_end()
     {

@@ -275,6 +275,34 @@
                 .promo-tile img { height: 100%; width: 100%; object-fit: cover; display: block; }
 
                 /* Online store: equal product card image height */
+                .onlineStore .addToCartProductDetailsTop,
+                .onlineStore .addToCartProductDetailsTop .card-img,
+                .onlineStore .addToCartProductDetailsTop .carousel,
+                .onlineStore .addToCartProductDetailsTop .carousel-inner,
+                .onlineStore .addToCartProductDetailsTop .carousel-item,
+                .onlineStore .addToCartProductDetailsTop .product-image-link,
+                .onlineStore .addToCartProductDetailsTop img {
+                    border-radius: 0 !important;
+                }
+
+                /* Equal spacing around every product card and at every grid edge. */
+                .onlineStore.os-products-grid {
+                    --bs-gutter-x: 0;
+                    --bs-gutter-y: 0;
+                    margin: 0 !important;
+                    padding: 4px !important;
+                }
+
+                .onlineStore.os-products-grid > [class*="col-"] {
+                    display: flex;
+                    margin-top: 0 !important;
+                    padding: 4px !important;
+                }
+
+                .onlineStore.os-products-grid > [class*="col-"] > .addToCartProductDetailsTop {
+                    width: 100%;
+                }
+
                 .onlineStore .addToCartProductDetailsTop .card-img {
                     width: 100%;
                     aspect-ratio: 1 / 1;
@@ -1246,7 +1274,7 @@
                 });
             </script>
       {{-- Dynamic Products Grid --}}
-<div class="row onlineStore g-2 pt-3">
+<div class="row onlineStore os-products-grid">
 
     @php
         $absoluteStart = ($products->perPage() * ($products->currentPage() - 1)) + 1;

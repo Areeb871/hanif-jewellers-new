@@ -25,7 +25,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -114,9 +114,13 @@
    ======================= */
 @media (min-width: 992px){
   .heroBanner{
-    aspect-ratio: 1750 / 992;
+    aspect-ratio: 16 / 9;
     height: auto;
-    max-height: 1100px;
+    max-height: none;
+  }
+
+  .nagarImageBanner{
+    margin-top: 0;
   }
 }
 
@@ -285,7 +289,7 @@ towering peaks</div>
 {{-- =======================
    DESKTOP HERO 1
    ======================= --}}
-<section class="heroBanner d-none d-lg-block"style="margin:-15px;">
+<section class="heroBanner nagarImageBanner d-none d-lg-block">
   <img
     src="{{ asset('assets/f_assets/image/ayeza/1.jpg') }}"
     alt="Hanif Banner"
@@ -309,7 +313,7 @@ towering peaks</div>
 {{-- =======================
    DESKTOP HERO 2
    ======================= --}}
-<section class="heroBanner d-none d-lg-block" style="margin:-15px;">
+<section class="heroBanner nagarImageBanner d-none d-lg-block">
   <img
     src="{{ asset('assets/f_assets/image/ayeza/ayeza2.jpg') }}"
     alt="Hanif Banner"
@@ -329,7 +333,7 @@ towering peaks</div>
 @endif
   </div>
 </section>
-<section class="heroBanner d-none d-lg-block" style="margin:-15px;">
+<section class="heroBanner nagarImageBanner d-none d-lg-block">
   <img
     src="{{ asset('assets/f_assets/image/ayeza/3.jpg') }}"
     alt="Hanif Banner"
@@ -349,7 +353,7 @@ towering peaks</div>
 @endif
   </div>
 </section>
-<section class="heroBanner d-none d-lg-block" style="margin:-10px;">
+<section class="heroBanner nagarImageBanner d-none d-lg-block">
   <img
     src="{{ asset('assets/f_assets/image/ayeza/4.jpg') }}"
     alt="Hanif Banner"
@@ -525,6 +529,9 @@ towering peaks.
         {{-- Navigation arrows --}}
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
+
+        {{-- Mobile swipe indicator --}}
+        <div class="swiper-pagination"></div>
     </div>
 </section>
 
@@ -532,17 +539,27 @@ towering peaks.
 /* FIX: you missed the dot before .onlineStore */
 .onlineStore{
     position: relative;
-    overflow: visible !important;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .productSwiper{
     position: relative;
     padding: 40px 0 40px;
-    overflow: visible !important;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden !important;
+    touch-action: pan-y;
 }
 
 .productSwiper .swiper-slide{
     height: auto;
+    min-width: 0;
+}
+
+.productSwiper > .swiper-pagination{
+    display: none;
 }
 
 /* =========================
@@ -621,6 +638,31 @@ towering peaks.
     .productSwiper{
         padding-left: 8px;
         padding-right: 8px;
+        padding-bottom: 34px;
+    }
+
+    .productSwiper > .swiper-pagination{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        bottom: 10px;
+    }
+
+    .productSwiper > .swiper-pagination .swiper-pagination-bullet{
+        width: 6px;
+        height: 6px;
+        margin: 0 !important;
+        background: #9a9a9a;
+        opacity: .5;
+        transition: width .2s ease, border-radius .2s ease, opacity .2s ease;
+    }
+
+    .productSwiper > .swiper-pagination .swiper-pagination-bullet-active{
+        width: 24px;
+        border-radius: 999px;
+        background: #111;
+        opacity: 1;
     }
 }
 </style>
@@ -631,6 +673,8 @@ document.querySelectorAll(".productSwiper").forEach((swiperEl) => {
         loop: false,
         grabCursor: true,
         watchOverflow: true,
+        observer: true,
+        observeParents: true,
 
         // ✅ IMPORTANT: use breakpoints (your code was missing "breakpoints:")
         breakpoints: {
@@ -663,6 +707,11 @@ document.querySelectorAll(".productSwiper").forEach((swiperEl) => {
         navigation: {
             nextEl: swiperEl.querySelector(".swiper-button-next"),
             prevEl: swiperEl.querySelector(".swiper-button-prev"),
+        },
+
+        pagination: {
+            el: swiperEl.querySelector(".swiper-pagination"),
+            clickable: true,
         },
     });
 });
