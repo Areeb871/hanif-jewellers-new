@@ -254,7 +254,7 @@
         <!-- RIGHT TEXT -->
         <div class="col-md-5 d-flex justify-content-center align-items-center">
             <div class="text-center">
-                <p class="mb-4" style="font-size: 20px;">
+                <p class="mb-4">
                     An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.
                 </p>
 

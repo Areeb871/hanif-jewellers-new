@@ -180,7 +180,7 @@
 <div class="row g-3 justify-content-center"> 
     <div class="col-md-8 col-lg-6 mx-auto"> 
         <div class="text-center"> 
-            <p class="m-0 px-3" style="padding-top: 1.5rem !important;font-size: 1.5rem;"> Jewels with a deeply spiritual meaning, Divine Treasures by Hanif is a collection for the believers and collectors alike, exquisitely crafted to perfection.
+            <p class="m-0 px-3" style="padding-top: 1.5rem !important;"> Jewels with a deeply spiritual meaning, Divine Treasures by Hanif is a collection for the believers and collectors alike, exquisitely crafted to perfection.
     </p> 
     </div> 
         </div> 

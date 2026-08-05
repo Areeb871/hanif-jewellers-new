@@ -1,5 +1,5 @@
 {{-- resources/views/public/haphazard.blade.php --}}
-@extends('public.layouts.header_new')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 @php
@@ -151,6 +151,64 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   display: block;
 }
 
+/* Equal 8px visible spacing between cards and around every product grid edge. */
+.haphazard-product-grid{
+  --bs-gutter-x:0;
+  --bs-gutter-y:0;
+  margin:0 !important;
+  padding:0 !important;
+}
+#haphazardGalleryTop{
+  padding-top:4px !important;
+}
+.haphazard-product-grid > [class*="col-"]{
+  display:flex;
+  margin-top:0 !important;
+  padding:4px !important;
+}
+.haphazard-product-grid > [class*="col-"]:first-child{
+  padding-left:0 !important;
+}
+.haphazard-product-grid > [class*="col-"]:last-child{
+  padding-right:0 !important;
+}
+.haphazard-product-grid > [class*="col-"] > .product-card{
+  width:100%;
+}
+
+/* Promo rows use the same 4px-per-side card spacing as product rows. */
+.haphazard-promo-grid{
+  --bs-gutter-x:0;
+  --bs-gutter-y:0;
+  margin:0 !important;
+  padding:0 !important;
+}
+.haphazard-promo-grid > .haphazard-promo-shell{
+  margin:0 !important;
+  padding:0 !important;
+}
+.haphazard-promo-row{
+  --bs-gutter-x:0;
+  --bs-gutter-y:0;
+  margin:0 !important;
+}
+.haphazard-promo-row > .promo-col{
+  margin-top:0 !important;
+  padding:4px !important;
+}
+.haphazard-promo-row > .promo-col:first-child{
+  padding-left:0 !important;
+}
+.haphazard-promo-row > .promo-col:last-child{
+  padding-right:0 !important;
+}
+@media (max-width:1024px){
+  .haphazard-promo-row > .promo-col{
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+}
+
 .product-card .discover-overlay{
   position:absolute;
   left:0;
@@ -290,7 +348,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 
 {{-- ===== TOP 4 PRODUCTS (WITH DISCOVER) ===== --}}
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
-<div class="row g-2 mb-3" id="haphazardGalleryTop" style="margin-top:1rem;">
+<div class="row haphazard-product-grid" id="haphazardGalleryTop">
     @foreach($featuredProducts as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
@@ -322,9 +380,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 {{-- ===== PROMO VIDEO (LEFT) + 2 PRODUCTS (RIGHT) ===== --}}
-<div class="row onlineStore g-2 promo-section">
-    <div class="col-12 h-100">
-        <div class="row g-2 align-items-stretch promo-row h-100">
+<div class="row onlineStore haphazard-promo-grid promo-section">
+    <div class="col-12 h-100 haphazard-promo-shell">
+        <div class="row align-items-stretch promo-row haphazard-promo-row h-100">
 
             {{-- LEFT: VIDEO --}}
             <div class="col-12 col-md-6 promo-col d-flex position-relative">
@@ -335,7 +393,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     </video>
 
                     <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <x-shop-now :href="route('collections.haphazard_new')" class="btn discover-btn" label="Shop Now" />
+                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -372,7 +430,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 
 {{-- ===== BOTTOM ROW 1 (WITH DISCOVER + MODAL) ===== --}}
 @if(isset($bottomProducts) && $bottomProducts->count() > 0)
-<div class="row g-2 mb-3 mt-3" id="bottomGallery">
+<div class="row haphazard-product-grid" id="bottomGallery">
     @foreach($bottomProducts as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
@@ -401,7 +459,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 
 {{-- ===== BOTTOM ROW 2 (WITH DISCOVER + MODAL) ===== --}}
 @if(isset($bottomProductsRow2) && $bottomProductsRow2->count() > 0)
-<div class="row g-2 mb-3 mt-3" id="bottomGalleryRow2">
+<div class="row haphazard-product-grid" id="bottomGalleryRow2">
     @foreach($bottomProductsRow2 as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
@@ -429,9 +487,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 {{-- ===== PROMO VIDEO (RIGHT) + 2 PRODUCTS (LEFT) from bottomProductsRow3 ===== --}}
-<div class="row onlineStore g-2 promo-section">
-    <div class="col-12 h-100">
-        <div class="row g-2 align-items-stretch promo-row h-100">
+<div class="row onlineStore haphazard-promo-grid promo-section">
+    <div class="col-12 h-100 haphazard-promo-shell">
+        <div class="row align-items-stretch promo-row haphazard-promo-row h-100">
 
             {{-- LEFT: 2 PRODUCTS (Desktop LEFT, Mobile SECOND) --}}
             <div class="col-12 col-md-6 promo-col d-flex order-2 order-md-1">
@@ -466,7 +524,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     </video>
 
                     <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <x-shop-now :href="route('collections.haphazard_new')" class="btn discover-btn" label="Shop Now" />
+                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -478,7 +536,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 {{-- ===== DYNAMIC ROWS (AFTER bottomProductsRow3) - 4 PER ROW, KEEP MODAL + DISCOVER LINK ===== --}}
 @if(isset($dynamicBottomRows) && $dynamicBottomRows->count() > 0)
     @foreach($dynamicBottomRows as $rowIndex => $row)
-        <div class="row g-2 mb-3 mt-3" id="dynamicRow_{{ $rowIndex }}">
+        <div class="row haphazard-product-grid" id="dynamicRow_{{ $rowIndex }}">
             @foreach($row as $index => $product)
                 @php
                     $img = $getImg($product);
@@ -512,9 +570,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
     @endforeach
 @endif
 
-<div class="text-center">
-    <x-shop-now :href="route('collections.haphazard_new')" class="m-5 btn border btn-outline-dark px-5 py-2" />
-</div>
+<!--<div class="text-center">-->
+<!--    <a class="m-5 btn border btn-outline-dark px-5 py-2" href="{{ route('collections.haphazard_new') }}">SHOP NOW</a>-->
+<!--</div>-->
 
 @include('public.partials.image-gallery-modal')
 @endsection

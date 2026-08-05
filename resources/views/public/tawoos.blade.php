@@ -135,13 +135,11 @@
 .triangleText{
   text-align: center;
   line-height: 1.7;    /* extra safety */
-  font-size:18px;
 }
 
 .triangleText span{
   display: block;
   margin: 0 auto;
-  font-size:18px;
 }
 
 
