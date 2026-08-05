@@ -4,19 +4,19 @@
     {{-- Success Message Display --}}
     
     {{-- Main Product Details Section --}}
-    <section class="product-details-page py-5">
+    <section class="product-details-main-section">
         <div class="">
             {{-- Product Details Layout --}}
-            <div class="product-details-layout row gy-5" style="margin-left: 0px; margin-right: 0px;">
+            <div class="row gy-4 product-details-layout">
                 {{-- Left Side - Product Image Gallery (Desktop) --}}
-                <div class="product-gallery-column col-lg-8 d-none d-lg-block" style="padding-right: 60px;">
+                <div class="col-md-8 col-lg-8 d-none d-md-block" style="padding-right: 30px; padding-left:40px;">
                     <div class="product-gallery">
                         {{-- Main Product Image - Full Width --}}
                         <div class="mb-2">
                             <div class="position-relative">
                                 <img 
                                     src="{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}" 
-                                    class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="img-fluid w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="{{ $product->name }}"
                                     onclick="openImagePopup('{{ $product->images->first() ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg')) }}')"
@@ -30,7 +30,7 @@
                                 <div class="col-6">
                                     <img 
                                         src="{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}" 
-                                        class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
+                                        class="img-fluid w-100 cursor-pointer"
                                         style="object-fit: contain; background-color: #F6F4F2;"
                                         alt="Lifestyle view"
                                         onclick="openImagePopup('{{ $product->images->get(1) ? asset($product->images->get(1)->image) : asset('default.jpg') }}')"
@@ -40,7 +40,7 @@
                                     <div class="col-6">
                                         <img 
                                             src="{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}" 
-                                            class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
+                                            class="img-fluid w-100 cursor-pointer"
                                             style="object-fit: contain; background-color: #F6F4F2;"
                                             alt="Detail view"
                                             onclick="openImagePopup('{{ $product->images->get(2) ? asset($product->images->get(2)->image) : asset('default.jpg') }}')"
@@ -54,7 +54,7 @@
                             <div class="mb-2">
                                 <img 
                                     src="{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}" 
-                                    class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
+                                    class="img-fluid w-100 cursor-pointer"
                                     style="object-fit: contain; background-color: #F6F4F2;"
                                     alt="Additional view"
                                     onclick="openImagePopup('{{ $product->images->get(3) ? asset($product->images->get(3)->image) : asset('default.jpg') }}')"
@@ -74,7 +74,7 @@
                                         <div class="col-6">
                                             <img 
                                                 src="{{ asset($img->image) }}" 
-                                                class="product-gallery-image img-fluid rounded-3 w-100 cursor-pointer"
+                                                class="img-fluid w-100 cursor-pointer"
                                                 style="object-fit: contain; background-color: #F6F4F2;"
                                                 alt="Additional view {{ $imgIndex + 4 }}"
                                                 onclick="openImagePopup('{{ asset($img->image) }}')"
@@ -88,7 +88,7 @@
                             </div>
 
                 {{-- Mobile Product Image Gallery --}}
-                <div class="col-12 d-lg-none" style="padding: unset; margin: unset;">
+                <div class="col-12 d-md-none" style="padding: unset; margin: unset;">
                     <div class="mobile-product-gallery">
                         <div id="mobileProductCarousel" class="carousel slide">
                             @php
@@ -130,7 +130,7 @@
                                             <div class="mobile-carousel-image-wrapper">
                                                 <img 
                                                     src="{{ asset($img->image) }}" 
-                                                    class="d-block w-100"
+                                                    class="d-block"
                                                     alt="{{ $product->name }} image {{ $imgIndex + 1 }}"
                                                     onclick="openImagePopup('{{ asset($img->image) }}')"
                                                 />
@@ -142,7 +142,7 @@
                                         <div class="mobile-carousel-image-wrapper">
                                             <img 
                                                 src="{{ $mainImage }}" 
-                                                class="d-block w-100"
+                                                class="d-block"
                                                 alt="{{ $product->name }}"
                                                 onclick="openImagePopup('{{ $mainImage }}')"
                                             />
@@ -155,8 +155,8 @@
                 </div>
 
                 {{-- Right Side - Product Information (Sticky) --}}
-                <div class="product-info-column col-lg-4 mt-0 mt-lg-5" style="padding-right: 50px; margin: unset;">
-                    <div class="product-info product-info-panel sticky-sidebar">
+                <div class="col-md-4 col-lg-4 mt-0" style="padding-right: 40px; margin: unset;">
+                    <div class="product-info sticky-sidebar">
 
 @php
     $storeContext = request()->boolean('store');
@@ -164,44 +164,93 @@
     $displayDescription = $product->displayDescription($storeContext);
 @endphp
 
-<div class="product-vip-header">
+<h5 class="card-title product-detail-full-name">
     @php
-        $nameParts = array_map('trim', explode('-', $displayName, 2));
+        $nameParts = explode('-', $displayName, 2);
     @endphp
-    <h1 class="product-detail-full-name">
-        {{ strtoupper($nameParts[0]) }}
-        @if(count($nameParts) > 1 && filled($nameParts[1]))
-            <span class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</span>
-        @endif
-    </h1>
-
-    @if(filled($product->sku))
-        <div class="product-vip-reference">REF. {{ strtoupper($product->sku) }}</div>
+    @if(count($nameParts) > 1)
+        {{ strtoupper($nameParts[0]) }}<br>
+        <div class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</div>
+    @else
+        {{ strtoupper($displayName) }}
     @endif
+</h5>
 
-    <div class="product-vip-divider" aria-hidden="true"></div>
-</div>
 
 
 
 
 
 <style>
+.product-details-main-section {
+    padding: 1.25rem 0 0;
+    background: #fff;
+}
+
+@media (min-width: 992px) {
+    .product-details-main-section {
+        padding-top: 1.15rem;
+    }
+}
+
+.product-details-layout {
+    margin-left: 0;
+    margin-right: 0;
+    --bs-gutter-x: 0;
+}
+
+.product-gallery {
+    width: 100%;
+}
+
+.product-title-wrap {
+    margin-bottom: 1.35rem;
+}
+
+.product-detail-title,
+.product-detail-full-name {
+    color: #17120f;
+    font-family: 'Argent CF', Georgia, serif !important;
+    font-size: clamp(1.5rem, 2.7vw, 3rem) !important;
+    font-weight: 200;
+    letter-spacing: .015em;
+    line-height: 1.06;
+}
+
+.product-detail-title {
+    font-family: 'Argent CF', Georgia, serif !important;
+}
+
+.product-section-label {
+    margin: 0 0 12px;
+    color: #17120f;
+    font-family: "Argent CF", Georgia, serif !important;
+    font-size: 1.15rem;
+    font-weight: 100;
+    letter-spacing: .015em;
+    /* text-transform: uppercase; */
+    text-decoration: none;
+}
+
+.product-features-panel {
+    margin-bottom: 1.45rem;
+    padding-bottom: 0;
+}
+
 .product-description {
-    font-family: "Poppins", sans-serif;
-    line-height: 1.5;
-    font-size: 14px;
-    color: #666;
+    color: #625b54;
+    font-family: inherit;
+    line-height: 1.72;
+    /* font-size: 14px; */
 }
 
 /* Paragraph & list base */
 .product-description p,
 .product-description li {
-    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 1.5;
-    font-size: 14px !important;
+    /* line-height: 1.2; */
+    font-size: 13px !important;
     font-weight: 400;
 }
 
@@ -210,21 +259,18 @@
 .product-description b {
     font-size: 14px !important;
     font-weight: 500;
-    color: #111;
+    color: #201b17;
 }
 
 /* RIGHT side values (more bold & clearer) */
 .product-description strong + span,
 .product-description b + span {
-    font-weight: 700;
-    color: #000;
+    /* font-weight: 700; */
+    color: #17120f;
 }
 
 .product-detail-full-name {
-    font-family: "Argent CF", Georgia, serif !important;
-    font-size: 1.4rem !important;
-    line-height: 1.35;
-    margin: 33px 0 14px;
+    margin: 0 0 1.35rem;
     overflow: visible !important;
     text-overflow: clip !important;
     white-space: normal !important;
@@ -235,195 +281,48 @@
     -webkit-box-orient: unset !important;
 }
 
-.product-detail-title,
-.product-section-label {
-    /*font-family: "Argent CF", Georgia, serif !important;*/
-}
-
-.product-delivery-note {
-    font-family: "Poppins", sans-serif !important;
-}
-
-.product-details-page {
-    background: #fff;
-    color: #17120f;
-    padding-bottom: 0 !important;
-}
-
-.product-details-page .product-details-layout {
-    width: min(100%, 1800px);
-    margin-inline: auto !important;
-}
-
-.product-details-page .product-gallery-column {
-    padding-left: clamp(20px, 3vw, 54px) !important;
-    padding-right: clamp(18px, 2.5vw, 44px) !important;
-}
-
-.product-details-page .product-gallery-image {
-    display: block;
-    border-radius: 2px !important;
-    background: #f6f4f2;
-    transition: opacity .25s ease;
-}
-
-.product-details-page .product-gallery-image:hover {
-    opacity: .94;
-}
-
-.product-details-page .product-info-column {
-    padding: 0 clamp(24px, 4vw, 72px) 0 clamp(20px, 2.8vw, 48px) !important;
-}
-
-.product-details-page .product-info-panel {
-    position: relative;
-    width: 100%;
-    max-width: 520px;
-    margin-inline: auto;
-    padding: clamp(16px, 1.8vw, 28px) 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    font-family: "Poppins", sans-serif;
-    text-align: left;
-    overflow: hidden;
-}
-
-@media (min-width: 992px) {
-    .product-details-page .product-details-layout {
-        align-items: flex-start;
-        overflow: visible;
-    }
-
-    .product-details-page .product-info-column {
-        align-self: stretch;
-        overflow: visible;
-    }
-
-    .product-details-page .product-info-panel.sticky-sidebar {
-        position: sticky !important;
-        top: 96px !important;
-        align-self: flex-start;
-        height: fit-content;
-        max-height: calc(100vh - 116px);
-        overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        scrollbar-width: none;
-        z-index: 5;
-    }
-
-    .product-details-page .product-info-panel.sticky-sidebar::-webkit-scrollbar {
-        display: none;
-    }
-}
-
-.product-details-page .product-vip-header {
-    margin: 0 0 26px;
-}
-
-.product-details-page .product-title-shell {
-    margin: 0 !important;
-}
-
-.product-details-page .product-detail-title,
-.product-details-page .product-detail-full-name {
-    margin: 0 0 12px !important;
-    color: #17120f;
-    font-family: "Argent CF", Georgia, serif !important;
-    font-size: clamp(2rem, 0vw, 0rem) !important;
-    font-weight: 200;
-    letter-spacing: .01em;
-    line-height: 1.08;
-    text-align: left;
-}
-
-.product-details-page .product-vip-reference {
-    color: #7d746d;
-    font-family: "Poppins", sans-serif;
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: .14em;
-    line-height: 1.4;
-}
-
-.product-details-page .product-vip-divider {
-    width: 100%;
-    height: 1px;
-    margin-top: 22px;
-    background: linear-gradient(90deg, #d8cec4 0%, #d8cec4 72%, transparent 100%);
-}
-
-.product-details-page .product-detail-reference {
-    margin-top: 8px;
-    color: #847a71 !important;
-    font-family: "Poppins", sans-serif;
-    font-size: .7rem;
-    font-weight: 500;
-    letter-spacing: .12em;
-}
-
-.product-details-page .product-features-panel {
-    margin: 0 0 24px !important;
-    padding: 20px 0 22px;
-    border-top: 1px solid #e9e3dd;
-    border-bottom: 1px solid #e9e3dd;
-}
-
-.product-details-page .product-section-label {
-    margin: 0 0 12px !important;
-    color: #17120f;
-    font-family: "Argent CF", Georgia, serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 100 !important;
-    letter-spacing: .015em;
+.product-detail-reference {
+    font-size: 0.8rem;
     line-height: 1.2;
-    text-decoration: none !important;
 }
-
-.product-details-page .product-description,
-.product-details-page .product-description p,
-.product-details-page .product-description li {
-    color: #655d56 !important;
-    font-family: "Poppins", sans-serif !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-}
-
-.product-details-page .product-description p + p,
-.product-details-page .product-description ul,
-.product-details-page .product-description ol {
-    margin-top: 10px;
-}
-
-.product-details-page .product-price-panel {
-    margin: 0 0 24px !important;
-    padding: 0 0 24px;
-    border-bottom: 1px solid #e9e3dd;
-}
-
-.product-details-page .price-display {
-    color: #17120f;
-    font-family: "Poppins", sans-serif;
-    font-size: clamp(1.25rem, 1.5vw, 1.55rem);
+.price-display {
     font-weight: 500;
-    letter-spacing: .025em;
+    font-size: clamp(1.25rem)
+    color: #17120f;
+    font-family: 'Poppins';
+    letter-spacing: 0.25em;
 }
 
-.product-details-page .product-price-note,
-.product-details-page .product-delivery-note {
-    color: #80766e !important;
-    font-family: "Poppins", sans-serif !important;
-    font-size: 11px !important;
-    line-height: 1.65 !important;
+.product-old-price {
+    /* margin-bottom: 1.35rem; */
+    color: #8f867d;
+    font-size: .9rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
 }
 
-.product-details-page .cta-buttons {
-    margin-top: 0;
+.product-price-note {
+    margin: .65rem 0 0;
+    color: #7a7169;
+    font-size: 11px;
+    line-height: 1.55;
 }
 
-.product-details-page .product-action-btn {
+.product-price-panel {
+    margin: 1rem 0 !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid #e6ded6;
+    border-bottom: 1px solid #e6ded6;
+}
+
+.cta-buttons {
+    margin-top: 1.4rem;
+}
+
+.product-action-btn {
     min-height: 50px;
     border: 1px solid #17120f !important;
     border-radius: 0 !important;
@@ -434,74 +333,59 @@
     transition: background-color .2s ease, color .2s ease;
 }
 
-.product-details-page .product-action-btn-primary {
+.product-action-btn-primary {
     background: #17120f !important;
     color: #fff !important;
 }
 
-.product-details-page .product-action-btn-primary:hover,
-.product-details-page .product-action-btn-primary:focus-visible {
+.product-action-btn-primary:hover,
+.product-action-btn-primary:focus-visible {
     background: #342b25 !important;
 }
 
-.product-details-page .product-action-btn-secondary {
+.product-action-btn-secondary {
     background: #fff !important;
     color: #17120f !important;
 }
 
-.product-details-page .product-action-btn-secondary:hover,
-.product-details-page .product-action-btn-secondary:focus-visible {
+.product-action-btn-secondary:hover,
+.product-action-btn-secondary:focus-visible {
     background: #17120f !important;
     color: #fff !important;
 }
 
-.product-details-page .product-delivery-note {
-    margin-top: 14px !important;
-    text-align: center;
+.you-may-like-section {
+    margin-top: 0;
+    border-top: 0;
+    background: linear-gradient(180deg, #fff 0%, #fbfaf8 100%);
+    padding-top: 3rem !important;
 }
 
-.product-recommendations-title {
+.section-luxury-heading {
+    margin: 0;
     color: #17120f;
-    font-family: "Argent CF", Georgia, serif !important;
-    font-weight: 200 !important;
-    letter-spacing: .025em;
+    font-family: 'Arjent CF', Georgia, serif;
+    font-size: clamp(1.5rem, 3.5vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: .06em;
+    line-height: 1.1;
 }
 
-.product-detail-reference {
-    display: block;
-    font-size: 0.8rem;
-    line-height: 1.2;
-}
-.price-display {
-    font-weight: 500;
-    font-size: 16px;
+.you-may-like-section .text-center.mb-5 {
+    margin-bottom: 3rem !important;
 }
 
 
 @media (max-width: 767.98px) {
-    .product-details-page {
-        padding-top: 80px !important;
+    .product-details-main-section {
+        padding-top: 62px;
     }
 
-    .product-details-page .product-info-column {
-        padding: 0 !important;
-    }
-
-    .product-details-page .product-info-panel {
-        max-width: none;
-        margin-top: 0;
-        padding: 30px 22px 14px;
-        border: 0 !important;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        text-align: left;
-    }
-
-    .product-details-page .product-detail-title,
-    .product-details-page .product-detail-full-name {
-        font-size: clamp(1.8rem, 8vw, 2.35rem) !important;
-        text-align: left !important;
+    #mobileProductCarousel .mobile-carousel-image-wrapper {
+        aspect-ratio: 1 / 1;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: calc(100svh - 96px);
     }
 
     .product-detail-full-name {
@@ -511,11 +395,25 @@
     }
 
     .product-info > .mb-4 {
+        /* padding: 0 !important; */
         margin-top: 0 !important;
         margin-bottom: 1rem !important;
     }
 }
 
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .product-details-main-section {
+        padding-top: 72px;
+    }
+
+    .product-details-layout > .col-lg-8 {
+        padding-right: 28px !important;
+    }
+
+    .product-details-layout > .col-lg-4 {
+        padding: 0 24px 0 0 !important;
+    }
+}
 
 
 </style>
@@ -535,11 +433,11 @@
 @endif
 
 @if(filled($displayDescription))
-<div class="product-features-panel mb-4">
-    <h3 class="fw-bold product-section-label" style="text-decoration: underline; font-size:15px;margin-bottom: 4px;">
+<div class="product-features-panel">
+    <h3 class="product-section-label">
         Main Features:
     </h3>
-    <div class="product-description" style="line-height: 1.5; font-size: 14px; margin: 1; padding: 0;color:#666">
+    <div class="product-description">
         {!! $displayDescription !!}
     </div>
 </div>
@@ -554,16 +452,13 @@
                             @endif
                         </div> -->
 @php
-    $livePrice = $product->displayPrice($storeContext);
-    $roundedPrice = (int) max(0, $livePrice);
+    $livePrice    = $product->displayPrice($storeContext);
+    $roundedPrice = round($livePrice, -3);
+    $isJewelleryProduct = optional($product->category)->slug !== 'watches';
     $canShowPrice = $storeContext
         ? ($roundedPrice > 0)
         : (!empty($product->show_price) && $roundedPrice > 0);
-    $isWatchProduct = $product->isWatchProduct();
-    $isOutOfStock = $isWatchProduct
-        && $product->quantity !== null
-        && (int) $product->quantity === 0;
-    $inStock = !$isOutOfStock;
+    $isOutOfStock = $product->quantity !== null && (int) $product->quantity === 0;
 @endphp
 
     <!-- @if($canShowPrice)
@@ -575,19 +470,20 @@
       </p>
     @endif   -->
 @if($canShowPrice)
-<div class="product-price-panel my-5">
+<div class="product-price-panel">
+    
+
     <div class="price-display">
-        PKR {{ number_format(round($roundedPrice, -3), 0, '.', ',') }}
+        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
-    @if(optional($product->category)->slug !== 'watches')
-        <p class="product-price-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;">
+    @if($isJewelleryProduct)
+        <p class="product-price-note">
             All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
         </p>
     @endif
 </div>
 @endif
-
                         {{-- Size Selector --}}
                         @php
                             $tagSlugs = $product->tags ? $product->tags->pluck('slug')->map(function($s){ return strtolower($s); }) : collect();
@@ -597,136 +493,43 @@
                             $pricePositive = ($product->price ?? 0) > 0;
                         @endphp
 
-                        <!-- @if($hasGoldRingsTag || $hasDiamondRingsTag && $pricePositive)
-                        <div class="my-5">
-                            <div class="size-selector-section">
-                                <label class="size-label" style="display: block; color: #333; font-size: 0.9rem; font-weight: 400; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif;">
-                                    FIND YOUR SIZE
-                                </label>
-                                <select id="product-size" class="form-select" style="border: 1px solid #333; border-radius: 0; padding: 10px 15px; font-size: 0.9rem; text-transform: uppercase; color: #333; background-color: white; font-family: sans-serif; width: 100%;">
-                                    <option value="" selected disabled>SELECT SIZE</option>
-                                    <option value="44.2">44.2 mm</option>
-                                    <option value="44.8">44.8 mm</option>
-                                    <option value="45.5">45.5 mm</option>
-                                    <option value="46.1">46.1 mm</option>
-                                    <option value="46.8">46.8 mm</option>
-                                    <option value="47.4">47.4 mm</option>
-                                    <option value="48.0">48.0 mm</option>
-                                    <option value="48.7">48.7 mm</option>
-                                    <option value="49.3">49.3 mm</option>
-                                    <option value="50.0">50.0 mm</option>
-                                    <option value="50.6">50.6 mm</option>
-                                    <option value="51.2">51.2 mm</option>
-                                    <option value="51.9">51.9 mm</option>
-                                    <option value="52.5">52.5 mm</option>
-                                    <option value="53.1">53.1 mm</option>
-                                    <option value="53.8">53.8 mm</option>
-                                    <option value="54.4">54.4 mm</option>
-                                    <option value="55.1">55.1 mm</option>
-                                    <option value="55.7">55.7 mm</option>
-                                    <option value="56.3">56.3 mm</option>
-                                    <option value="57.0">57.0 mm</option>
-                                    <option value="57.6">57.6 mm</option>
-                                    <option value="58.3">58.3 mm</option>
-                                    <option value="58.9">58.9 mm</option>
-                                    <option value="59.5">59.5 mm</option>
-                                    <option value="60.2">60.2 mm</option>
-                                    <option value="60.8">60.8 mm</option>
-                                    <option value="61.4">61.4 mm</option>
-                                    <option value="62.1">62.1 mm</option>
-                                    <option value="62.7">62.7 mm</option>
-                                    <option value="63.4">63.4 mm</option>
-                                    <option value="64.0">64.0 mm</option>
-                                    <option value="64.6">64.6 mm</option>
-                                    <option value="65.3">65.3 mm</option>
-                                    <option value="65.9">65.9 mm</option>
-                                    <option value="66.6">66.6 mm</option>
-                                    <option value="67.2">67.2 mm</option>
-                                    <option value="67.8">67.8 mm</option>
-                                    <option value="68.5">68.5 mm</option>
-                                    <option value="69.1">69.1 mm</option>
-                                    <option value="69.7">69.7 mm</option>
-                                    <option value="70.4">70.4 mm</option>
-                                    <option value="71.0">71.0 mm</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        @elseif($hasGoldBraceletsTag && $pricePositive)
-                        <div class="my-5">
-                            <div class="size-selector-section">
-                                <label class="size-label" style="display: block; color: #333; font-size: 0.9rem; font-weight: 400; text-transform: uppercase; margin-bottom: 8px; font-family: sans-serif;">
-                                    FIND YOUR SIZE
-                                </label>
-                                <select id="product-size" class="form-select" style="border: 1px solid #333; border-radius: 0; padding: 10px 15px; font-size: 0.9rem; text-transform: uppercase; color: #333; background-color: white; font-family: sans-serif; width: 100%;">
-                                    <option value="" selected disabled>SELECT SIZE</option>
-                                    <option value="14">14 cm</option>
-                                    <option value="15">15 cm</option>
-                                    <option value="16">16 cm</option>
-                                    <option value="17">17 cm</option>
-                                    <option value="18">18 cm</option>
-                                    <option value="19">19 cm</option>
-                                    <option value="20">20 cm</option>
-                                    <option value="21">21 cm</option>
-                                    <option value="22">22 cm</option>
-                                    <option value="23">23 cm</option>
-                                </select>
-                            </div>
-                        </div>
-                        @endif -->
-
-                        <!-- {{-- Debug Output - Always visible for troubleshooting --}}
-                        <div style="font-size: 14px; color: #000; background:#ffffcc; padding:15px; margin-top:15px; border: 2px solid #ff0000;">
-                            <div><strong>🔍 DEBUG SIZE SELECTOR CONDITION</strong></div>
-                            <div style="margin-top: 10px;">
-                                <strong>Subcategory:</strong> {{ $product->subcategory ? ($product->subcategory->slug ?? 'no slug') : 'NULL' }}<br>
-                                <strong>Subcategory ID:</strong> {{ $product->subcategory_id ?? 'NULL' }}<br>
-                                <strong>Tag Slugs:</strong> {{ $product->tags && $product->tags->count() > 0 ? $product->tags->pluck('slug')->join(', ') : 'NO TAGS' }}<br>
-                                <strong>Tag Count:</strong> {{ $product->tags ? $product->tags->count() : 0 }}<br>
-                                <strong>hasGoldRingsTag:</strong> {{ $hasGoldRingsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>hasDiamondRingsTag:</strong> {{ $hasDiamondRingsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>hasGoldBraceletsTag:</strong> {{ $hasGoldBraceletsTag ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>pricePositive:</strong> {{ $pricePositive ? '✅ TRUE' : '❌ FALSE' }}<br>
-                                <strong>Final Condition Result:</strong> {{ ( $hasGoldRingsTag || $hasDiamondRingsTag || ($hasGoldBraceletsTag && $pricePositive)) ? '✅ SHOW SIZE SELECTOR' : '❌ HIDE SIZE SELECTOR' }}
-                            </div>
-                        </div> -->
-
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
                             @if($canShowPrice)
-                                @if($inStock)
+                                @if($isOutOfStock)
+                                    <p class="text-danger text-center fw-semibold mb-3">This is out of stock</p>
+                                @else
+                                    {{-- First Row - Add to Cart and Buy Now --}}
                                     <div class="row g-2 mb-3">
-                                        <div>
-                                            <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()"
+                                        <!-- <div class="col-6">
+                                            <button type="button" class="btn btn-dark w-100 py-2" onclick="addToCart()" 
                                                     style="font-weight: 400; font-size: 0.8rem; border-radius: 4px;">
+                                                ADD TO CART
+                                            </button>
+                                        </div> -->
+                                        <div class="">
+                                            <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()">
                                                 BUY NOW
                                             </button>
                                         </div>
                                     </div>
-                                @else
-                                    <p class="text-danger text-center fw-semibold mb-3">
-                                        This is out of stock
-                                    </p>
                                 @endif
-
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
-                                    <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()"
-                                            style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
+                                    <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @else
                                 {{-- Only Talk to Expert when no price --}}
                                 <div class="text-center">
-                                    <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="talkToExpert()"
-                                            style="font-weight: 400; font-size: 0.9rem; border-radius: 4px;">
+                                    <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="talkToExpert()">
                                         TALK TO AN EXPERT
                                     </button>
                                 </div>
                             @endif
                         </div>
-                         <p class="product-delivery-note mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 2;"  >
+                          <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
                             Estimated delivery time is 7 to 10 business days.
             </p>
 
@@ -742,7 +545,7 @@
     <section class="py-5 you-may-like-section">
         <div class="">
             <div class="text-center mb-5">
-                <h3 class="product-recommendations-title fw-bold" style="font-size: 2rem;">YOU MAY ALSO LIKE</h3>
+                <h3 class="section-luxury-heading">YOU MAY ALSO LIKE</h3>
             </div>
 
             @php
@@ -827,15 +630,14 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 return Math.max(0, items.length - 1);
             }
 
-            function itemTarget(index) {
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                if (index <= 0) {
-                    return 0;
+            function getStep() {
+                if (items.length < 2) return items[0].getBoundingClientRect().width;
+                const base = items[0].offsetLeft;
+                for (let i = 1; i < items.length; i++) {
+                    const d = items[i].offsetLeft - base;
+                    if (d > 0) return d;
                 }
-                if (index >= getLastScrollableIndex()) {
-                    return maxScroll;
-                }
-                return Math.max(0, Math.min(maxScroll, items[index].offsetLeft));
+                return items[0].getBoundingClientRect().width;
             }
 
             function nearestIndex() {
@@ -857,7 +659,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 dot.style.backgroundColor = '';
             }
 
-            function updateControls() {
+            function updateDots() {
                 const idx = nearestIndex();
                 const lastScrollableIndex = getLastScrollableIndex();
                 dots.forEach((dot, index) => {
@@ -877,6 +679,13 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                 }
                 if (prevButton) prevButton.disabled = noScroll || scroller.scrollLeft <= 5;
                 if (nextButton) nextButton.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+            }
+
+            function itemTarget(index) {
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                if (index <= 0) return 0;
+                if (index >= getLastScrollableIndex()) return maxScroll;
+                return Math.max(0, Math.min(maxScroll, items[index].offsetLeft));
             }
 
             let isMouseDown = false, startX = 0, startLeft = 0;
@@ -926,12 +735,15 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             let rafId = null;
             scroller.addEventListener('scroll', () => {
                 if (rafId) cancelAnimationFrame(rafId);
-                rafId = requestAnimationFrame(() => { updateControls(); rafId = null; });
+                rafId = requestAnimationFrame(() => { updateDots(); rafId = null; });
             });
 
-            scroller.scrollLeft = 0;
-            updateControls();
-            window.addEventListener('resize', updateControls);
+            // initial state
+            if (window.matchMedia('(max-width: 767.98px)').matches) {
+                scroller.scrollLeft = 0;
+            }
+            updateDots();
+            window.addEventListener('resize', updateDots);
             if (getComputedStyle(scroller).cursor === 'auto') scroller.style.cursor = 'grab';
         }
 
@@ -1099,8 +911,9 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         }
         
         .product-description {
-            line-height: 1.6;
-            color: #6c757d;
+            color: #625b54;
+            font-family: inherit;
+            line-height: 1.72;
         }
         
         /* ===== PRODUCT CARD STYLES ===== */
@@ -1169,15 +982,16 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         /* ===== STICKY SIDEBAR STYLES ===== */
         .sticky-sidebar {
             position: sticky;
-            top: 20px;
+            top: 88px;
             height: fit-content;
+            align-self: flex-start;
             /* max-height: calc(100vh - 40px);
             overflow-y: auto; */
             z-index: 5;
         }
         
         /* ===== RESPONSIVE ADJUSTMENTS ===== */
-        @media (max-width: 991.98px) {
+        @media (max-width: 767.98px) {
             .sticky-sidebar {
                 position: static;
                 top: auto;
@@ -1186,9 +1000,90 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             }
             
             .product-info {
-                margin-top: 30px;
+                margin-top: 20px;
                 box-shadow: none;
-                border: 1px solid #e9ecef;
+                border: 0;
+            }
+
+            .mobile-product-gallery,
+            #mobileProductCarousel {
+                width: 100%;
+                overflow: hidden;
+                background-color: #F6F4F2;
+            }
+
+            #mobileProductCarousel .mobile-carousel-image-wrapper {
+                width: 100% !important;
+                aspect-ratio: 1 / 1;
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: calc(100svh - 96px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #F6F4F2;
+                overflow: hidden;
+            }
+
+            #mobileProductCarousel .mobile-carousel-image-wrapper img {
+                width: auto !important;
+                height: auto !important;
+                max-width: 100%;
+                max-height: calc(100svh - 96px);
+                object-fit: contain !important;
+                cursor: pointer;
+            }
+
+            #mobileProductCarousel .mobile-carousel-scroll-track {
+                align-items: center;
+            }
+
+            #mobileProductCarousel .mobile-carousel-scroll-item {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #mobileProductCarousel .carousel-indicators {
+                bottom: 12px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                width: auto;
+                margin: 0;
+                padding: 0;
+                background: transparent;
+                z-index: 5;
+            }
+
+            #mobileProductCarousel .carousel-indicators button {
+                width: 4px !important;
+                height: 4px !important;
+                min-width: 4px;
+                min-height: 4px;
+                margin: 0 !important;
+                padding: 0;
+                border: 0 !important;
+                border-top: 0 !important;
+                border-bottom: 0 !important;
+                border-radius: 50% !important;
+                background-color: #000 !important;
+                background-clip: initial !important;
+                opacity: .28;
+                transition: opacity .18s ease, width .18s ease;
+            }
+
+            #mobileProductCarousel .carousel-indicators button.active {
+                width: 24px !important;
+                min-width: 24px;
+                height: 4px !important;
+                min-height: 4px;
+                border-radius: 999px !important;
+                opacity: 1;
             }
         }
         
@@ -2113,7 +2008,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
         function goToSlide(slideIndex) {
             const container = document.getElementById('recommendedProducts');
             if (!container) return;
-            const items = container.querySelectorAll('.scroller-item');
+            const items = container.querySelectorAll('.scroller-item, .product-card-item');
             const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
             const lastScrollableIndex = Math.max(0, items.length - 1);
             slideIndex = Math.max(0, Math.min(lastScrollableIndex, slideIndex));
@@ -2141,7 +2036,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             if (!container) return;
             const section = container.closest('section') || document;
             const dots = section.querySelectorAll('.carousel-dot');
-            const items = container.querySelectorAll('.scroller-item');
+            const items = container.querySelectorAll('.scroller-item, .product-card-item');
             if (!items.length || !dots.length) return;
             const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
             const lastScrollableIndex = Math.max(0, items.length - 1);
@@ -2171,9 +2066,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             const item = document.querySelector(`#ymlDesktop .scroller-item:nth-child(${slideIndex + 1})`);
             if (!scroller || !item) return;
 
-            const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-            const targetLeft = slideIndex === 0 ? 0 : Math.min(maxScroll, item.offsetLeft);
-            scroller.scrollTo({ left: targetLeft, behavior: 'smooth' });
+            scroller.scrollTo({ left: item.offsetLeft, behavior: 'smooth' });
 
             // Update dots
             document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot) => {
@@ -2986,7 +2879,9 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             })();
 
             function getNearestItemIndex() {
-                const items = slider.querySelectorAll('.scroller-item');
+                const items = slider.querySelectorAll('.scroller-item, .product-card-item');
+                const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
+                const lastScrollableIndex = Math.max(0, items.length - 1);
                 const currentLeft = slider.scrollLeft;
                 let nearestIndex = 0;
                 let nearestDist = Infinity;
@@ -2995,11 +2890,11 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                     const dist = Math.abs(itemLeft - currentLeft);
                     if (dist < nearestDist) { nearestDist = dist; nearestIndex = i; }
                 });
-                return nearestIndex;
+                return Math.min(nearestIndex, lastScrollableIndex);
             }
 
             function snapToNearest() {
-                const items = slider.querySelectorAll('.scroller-item');
+                const items = slider.querySelectorAll('.scroller-item, .product-card-item');
                 if (!items.length) return;
                 const idx = getNearestItemIndex();
                 const target = items[idx];
@@ -3155,20 +3050,23 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             carouselInner.style.minWidth = '100%';
             
             // Remove Bootstrap carousel classes that might interfere
+            carouselInner.classList.add('mobile-carousel-scroll-track');
             carouselInner.classList.remove('carousel-inner');
             carouselItems.forEach(item => {
+                item.classList.add('mobile-carousel-scroll-item');
                 item.classList.remove('carousel-item', 'active');
             });
 
             // Hide scrollbar and add custom smooth scroll
             const scrollbarStyle = document.createElement('style');
             scrollbarStyle.textContent = `
-                #mobileProductCarousel .carousel-inner::-webkit-scrollbar {
+                #mobileProductCarousel .mobile-carousel-scroll-track::-webkit-scrollbar {
                     display: none;
                 }
-                #mobileProductCarousel .carousel-inner {
+                #mobileProductCarousel .mobile-carousel-scroll-track {
                     scroll-behavior: smooth;
-                    transition: scroll-behavior 2s ease-in-out;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
             `;
             document.head.appendChild(scrollbarStyle);
@@ -3255,6 +3153,8 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             // Update dots based on scroll position
             function updateMobileDots() {
                 const items = mobileScroller.querySelectorAll('.scroller-item');
+                const maxScroll = Math.max(0, mobileScroller.scrollWidth - mobileScroller.clientWidth);
+                const lastScrollableIndex = Math.max(0, items.length - 1);
                 let currentIndex = 0;
                 let best = Infinity;
                 items.forEach((item, index) => {
@@ -3264,30 +3164,24 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
                         currentIndex = index;
                     }
                 });
+                currentIndex = Math.min(currentIndex, lastScrollableIndex);
                 
                 // Update all dots
                 document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
-                    if (index === currentIndex) {
-                        dot.classList.add('active');
-                        dot.style.backgroundColor = '#000';
-                    } else {
-                        dot.classList.remove('active');
-                        dot.style.backgroundColor = '#d8d8d8';
-                    }
+                    const isAvailable = index <= lastScrollableIndex;
+                    const isActive = isAvailable && index === currentIndex;
+                    dot.hidden = !isAvailable;
+                    dot.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
+                    dot.classList.toggle('active', isActive);
+                    dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                    dot.style.backgroundColor = '';
                 });
                 
                 // Scroll dots container to keep active dot visible
                 const activeDot = document.querySelector('#ymlDesktop .scroller-dots .dot.active');
                 if (activeDot && dotsContainer) {
-                    const dotIndex = Array.from(document.querySelectorAll('#ymlDesktop .scroller-dots .dot')).indexOf(activeDot);
-                    const dotWidth = 16; // 8px dot + 8px gap
-                    const containerWidth = dotsContainer.offsetWidth;
-                    const scrollPosition = (dotIndex * dotWidth) - (containerWidth / 2) + (dotWidth / 2);
-                    
-                    dotsContainer.scrollTo({
-                        left: Math.max(0, scrollPosition),
-                        behavior: 'smooth'
-                    });
+                    const scrollPosition = activeDot.offsetLeft - (dotsContainer.clientWidth / 2) + (activeDot.offsetWidth / 2);
+                    dotsContainer.scrollTo({ left: Math.max(0, scrollPosition), behavior: 'smooth' });
                 }
             }
 
@@ -3297,11 +3191,7 @@ $recommendedProducts = \App\Models\Products::where('category_id', $product->cate
             // Initialize first dot as active
             function setInitialDot() {
                 mobileScroller.scrollLeft = 0;
-                document.querySelectorAll('#ymlDesktop .scroller-dots .dot').forEach((dot, index) => {
-                    const isActive = index === 0;
-                    dot.classList.toggle('active', isActive);
-                    dot.style.backgroundColor = isActive ? '#000' : '#d8d8d8';
-                });
+                updateMobileDots();
             }
 
             setInitialDot();
