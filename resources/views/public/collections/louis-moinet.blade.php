@@ -103,7 +103,7 @@ img{
 
 @endif
     
-       <section class="py-4">
+       <section >
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -239,13 +239,13 @@ img{
     text-align: center;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 10px 20px 20px;   /* less top padding */
     position: relative;
     z-index: 2;
 }
 
 .louis-moinet-logo{
     text-align: center;
+    margin: 30px 0px;
 }
 
 .louis-moinet-logo img{
@@ -258,23 +258,34 @@ img{
 }
 
 .louis-moinet-text p{
-    font-size:14px;
-    line-height:1.9;
+    max-width: 800px;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.59;
     color:#111;
-    margin-bottom:12px;
+    margin:0 auto;
+    text-align:center;
+}
+
+.louis-moinet-text strong{
+    font-weight:600;
 }
 
 .louis-moinet-text h3{
-    font-size:16px;
+    font-family:"Argent CF", Georgia, serif;
+    font-size:24px;
     font-weight:700;
-    margin-top:20px;
+    line-height:normal;
+    letter-spacing:.04em;
+    /* margin:50px 0 0; */
+    margin: 70px 0 25px;
     text-transform:uppercase;
 }
 /* Tablet */
 @media (max-width: 992px){
 
 .louis-moinet-header{
-    padding:30px 20px;
+    padding:34px 20px;
 }
 
 .louis-moinet-logo img{
@@ -284,12 +295,12 @@ img{
 
 .louis-moinet-text p{
     font-size:13px;
-    line-height:1.8;
+    line-height:1.59;
 }
 
 .louis-moinet-text h3{
-    font-size:15px;
-    margin-top:18px;
+    font-size:24px;
+    margin-top:34px;
 }
 
 }
@@ -299,7 +310,7 @@ img{
 @media (max-width: 768px){
 
 .louis-moinet-header{
-    padding:25px 16px;
+    padding:34px 20px;
 }
 
 .louis-moinet-logo img{
@@ -308,14 +319,14 @@ img{
 }
 
 .louis-moinet-text p{
-    font-size:12px;
-    line-height:1.8;
-    margin-bottom:10px;
+    font-size:13px;
+    line-height:1.59;
+    margin-bottom:14px;
 }
 
 .louis-moinet-text h3{
-    font-size:14px;
-    margin-top:15px;
+    font-size:18px;
+    margin-top:34px;
 }
 
 }
@@ -329,14 +340,47 @@ img{
 }
 
 .louis-moinet-text p{
-    font-size:11.5px;
-    line-height:1.7;
+    font-size:13px;
+    line-height:1.59;
 }
 
 .louis-moinet-text h3{
-    font-size:13px;
+    font-size:18px;
 }
 
+}
+
+/* Match Bovet collection typography and spacing. */
+
+.louis-moinet-logo img{
+    transform:none;
+    margin-bottom:24px;
+}
+
+.filter{
+    justify-content:flex-end !important;
+    padding:14px 14px !important;
+    background:#fff;
+}
+
+.filter .navbar-toggler{
+    position:static !important;
+    margin:0 !important;
+    padding:6px 8px !important;
+    font-family:"Poppins", sans-serif;
+    font-size:12px !important;
+    line-height:1 !important;
+}
+
+.louis-moinet-footer .products-counter,
+.louis-moinet-footer #loadMoreBtn{
+    font-family:"Poppins", sans-serif !important;
+}
+
+.louis-moinet-footer .products-counter{
+    font-size:.8rem !important;
+    letter-spacing:.2em;
+    margin-bottom: 1.5rem;
 }
      .offcanvas.offcanvas-modern{
   z-index: 20000 !important;
@@ -360,7 +404,7 @@ img{
     </div>
 
     <!-- Text -->
-    <div class="louis-moinet-text"style="transform:translateY(-30px)">
+    <div class="louis-moinet-text">
         <p>
             Louis Moinet today is an independent watch brand located in Saint-Blaise, Switzerland,
             specialising in the creation of high-end timepieces, often featuring exotic materials
@@ -372,8 +416,8 @@ img{
         </p>
 
         <p>
-            Uniqueness, Creative Horology, Exclusivity and Art & Design are at the heart of
-            Louis Moinet creations.
+            <strong>Uniqueness, Creative Horology, Exclusivity and Art & Design are at the heart of
+            Louis Moinet creations.</strong>
         </p>
 
         <h3>DISCOVER THE CREATIONS</h3>
@@ -391,7 +435,7 @@ img{
             </button>
         </div>
   <div class="container-fluid px-3">
-    <div class="row onlineStore g-2 pt-3" id="louisMoinetGrid"style="margin-top:-50px;">
+    <div class="row onlineStore g-2" id="louisMoinetGrid">
         @if(isset($products) && $products->count())
             @foreach($products as $prod)
                 <div class="col-6 col-lg-3">
@@ -405,14 +449,14 @@ img{
         @endif
     </div>
 </div>
-        <div class="text-center py-4 louis-moinet-footer">
+        <div class="text-center py-5 louis-moinet-footer">
         @if($products->count() > 0)
             @php
                 $totalShown = $currentPageProducts;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -422,7 +466,7 @@ img{
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"
@@ -755,4 +799,3 @@ img{
     });
     </script>
 @endsection
-
