@@ -541,6 +541,14 @@
         </div>
     </section>
 
+    @php
+        $productSubcategorySlug = strtolower(trim((string) optional($product->subcategory)->slug));
+        $productSubcategoryName = strtolower(trim((string) optional($product->subcategory)->name));
+        $isTawoosSubcategory = $productSubcategorySlug === 'tawoos'
+            || $productSubcategoryName === 'tawoos';
+    @endphp
+
+    @unless($isTawoosSubcategory)
             {{-- YOU MAY ALSO LIKE Section --}}
     <section class="py-5 you-may-like-section">
         <div class="">
@@ -586,6 +594,7 @@
             </section>
         </div>
     </section>
+    @endunless
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {

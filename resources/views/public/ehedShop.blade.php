@@ -6,7 +6,7 @@
     .ehedStore .product-name-fixed,
     .ehedStore .product-name-fixed * {
         font-family: "Argent CF", Georgia, serif !important;
-        font-weight: 300 !important;
+        font-weight: 200 !important;
         font-style: normal !important;
         letter-spacing: 1px !important;
     }
@@ -181,7 +181,7 @@
 
             <style>
                 .offcanvas-modern {
-                    font-family: 'Inter', Arial, sans-serif;
+                    font-family: "Poppins", sans-serif;
                     background: rgb(255, 255, 255) !important;
                     color: #222;
                     min-width: 320px;
@@ -235,6 +235,9 @@
                     border-bottom: 1px solid #ecebe7;
                     padding-bottom: 0.5rem;
                     cursor: pointer;
+                }
+                .filter-option-section {
+                    margin: 0;
                 }
                 .sort-list, .category-list, .subcategory-list {
                     list-style: none;
@@ -414,7 +417,7 @@
                 <div class="offcanvas-body">
                     <form method="GET" action="{{ route('collections.ehed', [], false) }}" id="filterForm">
                         <input type="hidden" name="tags" id="tagsInput" value="{{ request('tags') }}">
-                        <div>
+                        <div class="filter-option-section">
                             <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">
                                 Sort By
                                 <span class="category-toggle">+</span>
@@ -444,9 +447,7 @@
                             </ul>
                             <input type="hidden" name="sort" id="sortInput" value="{{ request('sort') }}">
                         </div>
-                        <hr>
-                        <hr>
-                        <div class="mt-3">
+                        <div class="filter-option-section">
                             <div class="filter-section-title" onclick="toggleCategory('tagListMetalTexture', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">METAL TEXTURE <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListMetalTexture">
                                 <li><input id="filter-white-gold" type="checkbox" class="form-check-input filter-tag-checkbox" value="white-gold" onclick="event.stopPropagation();"> <label for="filter-white-gold" class="subcat-label">White Gold</label></li>
@@ -454,7 +455,7 @@
                                 <li><input id="filter-yellow-gold" type="checkbox" class="form-check-input filter-tag-checkbox" value="yellow-gold" onclick="event.stopPropagation();"> <label for="filter-yellow-gold" class="subcat-label">Yellow Gold</label></li>
                             </ul>
                         </div>
-                        <div class="mt-3">
+                        <div class="filter-option-section">
                             <div class="filter-section-title" onclick="toggleCategory('tagListBand', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">BAND <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListBand">
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="2mm" onclick="event.stopPropagation();"> <span class="subcat-label">2mm</span></li>
@@ -464,7 +465,7 @@
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="6mm" onclick="event.stopPropagation();"> <span class="subcat-label">6mm</span></li>
                             </ul>
                         </div>
-                        <div class="mt-3">
+                        <div class="filter-option-section">
                             <div class="filter-section-title" onclick="toggleCategory('tagListTexture', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">TEXTURE <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListTexture">
                                 <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="sand" onclick="event.stopPropagation();"> <span class="subcat-label">Sand</span></li>

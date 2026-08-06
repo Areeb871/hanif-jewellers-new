@@ -151,36 +151,49 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   display: block;
 }
 
-/* Equal 8px visible spacing between cards and around every product grid edge. */
+/* Keep a single, exact 8px gap without Bootstrap's split/negative gutters. */
 .haphazard-product-grid{
   --bs-gutter-x:0;
   --bs-gutter-y:0;
-  margin:0 !important;
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  column-gap:8px;
+  row-gap:8px;
+  margin:8px 0 0 !important;
   padding:0 !important;
-}
-#haphazardGalleryTop{
-  padding-top:4px !important;
 }
 .haphazard-product-grid > [class*="col-"]{
   display:flex;
+  width:auto;
+  max-width:none;
   margin-top:0 !important;
-  padding:4px !important;
-}
-.haphazard-product-grid > [class*="col-"]:first-child{
-  padding-left:0 !important;
-}
-.haphazard-product-grid > [class*="col-"]:last-child{
-  padding-right:0 !important;
+  padding:0 !important;
 }
 .haphazard-product-grid > [class*="col-"] > .product-card{
   width:100%;
 }
+/* A real sibling spacer cannot be covered by the full-height promo media. */
+.haphazard-section-gap{
+  display:block;
+  width:100%;
+  height:8px;
+  clear:both;
+  background:#fff;
+}
+.haphazard-section-gap + .haphazard-product-grid{
+  margin-top:0 !important;
+}
+@media (max-width:767.98px){
+  .haphazard-product-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+}
 
-/* Promo rows use the same 4px-per-side card spacing as product rows. */
+/* Promo rows follow the same one-sided 8px spacing model. */
 .haphazard-promo-grid{
   --bs-gutter-x:0;
   --bs-gutter-y:0;
-  margin:0 !important;
+  margin:8px 0 0 !important;
   padding:0 !important;
 }
 .haphazard-promo-grid > .haphazard-promo-shell{
@@ -190,22 +203,20 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 .haphazard-promo-row{
   --bs-gutter-x:0;
   --bs-gutter-y:0;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:8px;
   margin:0 !important;
 }
 .haphazard-promo-row > .promo-col{
+  width:auto;
+  max-width:none;
   margin-top:0 !important;
-  padding:4px !important;
-}
-.haphazard-promo-row > .promo-col:first-child{
-  padding-left:0 !important;
-}
-.haphazard-promo-row > .promo-col:last-child{
-  padding-right:0 !important;
+  padding:0 !important;
 }
 @media (max-width:1024px){
-  .haphazard-promo-row > .promo-col{
-    padding-left:0 !important;
-    padding-right:0 !important;
+  .haphazard-promo-row{
+    grid-template-columns:1fr;
   }
 }
 
@@ -427,6 +438,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
         </div>
     </div>
 </div>
+<div class="haphazard-section-gap" aria-hidden="true"></div>
 
 {{-- ===== BOTTOM ROW 1 (WITH DISCOVER + MODAL) ===== --}}
 @if(isset($bottomProducts) && $bottomProducts->count() > 0)
@@ -532,6 +544,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
         </div>
     </div>
 </div>
+<div class="haphazard-section-gap" aria-hidden="true"></div>
 
 {{-- ===== DYNAMIC ROWS (AFTER bottomProductsRow3) - 4 PER ROW, KEEP MODAL + DISCOVER LINK ===== --}}
 @if(isset($dynamicBottomRows) && $dynamicBottomRows->count() > 0)

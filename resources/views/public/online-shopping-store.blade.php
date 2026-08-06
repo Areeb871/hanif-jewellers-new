@@ -384,7 +384,7 @@
                     padding-top: 0.5rem;
                 }
                 .offcanvas-modern {
-                    font-family: 'Inter', Arial, sans-serif;
+                    font-family:"poppins", sans-serif;
                     background: rgb(255, 255, 255) !important;
                     color: #222;
                     min-width: 320px;
