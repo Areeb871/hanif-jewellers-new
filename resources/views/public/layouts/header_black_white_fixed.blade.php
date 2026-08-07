@@ -1390,13 +1390,15 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const header = document.querySelector(".luxury-header");
+  const desktopHeader = document.querySelector(".luxury-header");
+  const mobileHeader = document.querySelector("header.mobile-header-main");
   const spacer = document.querySelector(".header-spacer");
 
-  if (!header || !spacer) return;
+  if (!spacer) return;
 
   function setSpacerHeight() {
-    spacer.style.height = header.offsetHeight + "px";
+    const activeHeader = window.innerWidth < 992 ? mobileHeader : desktopHeader;
+    spacer.style.height = (activeHeader ? activeHeader.offsetHeight : 0) + "px";
   }
 
   // initial spacer
