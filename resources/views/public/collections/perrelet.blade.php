@@ -147,7 +147,7 @@
 
     @php
         // Default mobile fallback (image or video)
-        $mobileFallback = 'assets/f_assets/image/watches mobile view/perrelee_mobile.jpg';
+        $mobileFallback = 'assets/f_assets/image/watches mobile view/PRL-Mob-Banner.mp4';
 
         // If Perrelet slug, force mobile fallback
         if (!empty($subcategory->slug) && $subcategory->slug === 'perrelet') {
@@ -204,7 +204,7 @@
                     muted
                     playsinline
                     preload="metadata"
-                    poster="{{ asset('assets/f_assets/image/ayeza/ayeza_all_mobile_poster.jpg') }}"
+                    poster="{{ asset('assets/f_assets/image/watches mobile view/PRL-Mob-Banner.mp4') }}"
                 >
                     <source src="{{ asset($mobileMedia) }}" type="video/{{ $mobileExt }}">
                     Your browser does not support the video tag.
