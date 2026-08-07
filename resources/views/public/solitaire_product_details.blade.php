@@ -977,6 +977,12 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="hj-acc-content">
             <p>
                 Our lab created engagement rings offer exceptional brilliance, elegant craftsmanship, and excellent value while keeping the same luxury appearance.
+                <a
+                    class="hj-acc-guide-link"
+                    href="https://www.hanifjewellers.com/assets/f_assets/pdf/ring-size-guide.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >View ring size guide</a>
             </p>
         </div>
     </div>

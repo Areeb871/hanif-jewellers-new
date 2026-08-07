@@ -839,7 +839,6 @@ $menus = [
         ['label' => 'TAJ MAHAL',    'url' => route('taj-mahal')],
         ['label' => 'HERITAGE',       'url' => url('collections/heritage')], // ✅ FIXED
         ['label' => 'CLEOPATRA',    'url' => route('cleopatra')],
-        ['label' => 'MISTERIO',         'url' => route('misterio')],
 
     ],
 
@@ -923,9 +922,9 @@ $card = [
             <img src="{{ asset($card['img']) }}" alt="Promo" class="hanif-mega-card-img">
         </a>
         <br>
-        <div class="hanif-mega-title">
+        <!-- <div class="hanif-mega-title">
               HIGH END JEWELLERY
-        </div>
+        </div> -->
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
             {{ $card['btn'] }}

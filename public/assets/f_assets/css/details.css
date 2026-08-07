@@ -1304,6 +1304,18 @@ body{
     color: #555;
 }
 
+.hj-acc-guide-link {
+    color: #17120f;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.hj-acc-guide-link:hover,
+.hj-acc-guide-link:focus-visible {
+    color: #a98750;
+}
+
 .hj-acc-item.active .hj-acc-content {
     display: block;
 }
