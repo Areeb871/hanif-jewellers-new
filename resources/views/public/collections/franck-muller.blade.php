@@ -537,7 +537,7 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
     display:flex;
     justify-content:center;
     /* padding:12px 14px; */
-    padding-bottom:35px;
+    padding-bottom:40px;
     background:#fff;
 }
 
