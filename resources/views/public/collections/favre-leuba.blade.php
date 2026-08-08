@@ -285,7 +285,7 @@ padding:0px;
         $bannerUrl = null;
 
         // Change this to Favre-Leuba mobile video if you have one
-        $mobileVideoPath = 'assets/f_assets/image/watches mobile view/favre-leuba-mobile.jpeg';
+        $mobileVideoPath = 'assets/f_assets/image/watches mobile view/FL-Mob-View.jpeg';
 
         if (isset($favreSubcategory) && $favreSubcategory && $favreSubcategory->banner_url) {
             $bannerUrl = $favreSubcategory->banner_url;
@@ -622,7 +622,7 @@ padding:0px;
                         style="font-size: 1rem; letter-spacing: 0.2em;">
                         SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
                     </div>
-                @endifSHOWING
+                @endif
 
                 @php
                     $allProductsShown = $totalShown >= $totalFilteredProducts;
@@ -826,3 +826,4 @@ function toggleCategory(targetId, element) {
 
 </main>
 @endsection
+    

@@ -9,7 +9,7 @@
     overflow:hidden;
     position:relative;
     line-height:0;
-    background:#000;
+    background:#fff;
 }
 
 .chronoswiss-hero-video{
@@ -112,8 +112,15 @@ padding:2px 15px 0;
 @media (max-width: 767px){
 
     .chronoswiss-hero-media{
-        height:72vh;
-        min-height:320px;
+        height:auto;
+        min-height:0;
+        background:#fff;
+    }
+
+    .chronoswiss-hero-video{
+        height:auto;
+        object-fit:contain;
+        object-position:center top;
     }
 
     .chronoswiss-logo-section{
@@ -221,6 +228,7 @@ padding:2px 15px 0;
 <main class="chronoswiss-page">
 
 <section class="chronoswiss-hero-media">
+    <div class="d-none d-md-block" style="width:100%; height:100%;">
     @if(isset($chronoswissSubcategory) && $chronoswissSubcategory && $chronoswissSubcategory->banner_url)
 
         @if(Str::endsWith($chronoswissSubcategory->banner_url, ['.mp4', '.webm', '.ogg']))
@@ -245,6 +253,14 @@ padding:2px 15px 0;
              alt="Chronoswiss Banner"
              class="chronoswiss-hero-video">
     @endif
+    </div>
+
+    <video autoplay loop muted playsinline preload="metadata"
+           class="chronoswiss-hero-video d-block d-md-none"
+           poster="{{ asset('assets/f_assets/image/cys/chrono.jpeg') }}">
+        <source src="{{ asset('assets/f_assets/image/watches mobile view/CHR-MOB-Banner.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </section>
 
 <section class="chronoswiss-logo-section">
