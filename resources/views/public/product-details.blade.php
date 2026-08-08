@@ -415,6 +415,167 @@
     }
 }
 
+.ring-size-panel {
+    margin: 1.5rem 0;
+}
+.ring-size-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+}
+.ring-size-heading label {
+    margin: 0;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.ring-size-chart-link {
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    background: transparent;
+    color: #222;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+.ring-size-toggle {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #111;
+    border-radius: 0;
+    background-color: #fff;
+    color: #222;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+}
+.ring-size-toggle:focus {
+    border-color: #111;
+    outline: none;
+    box-shadow: none;
+}
+.ring-size-arrow {
+    display: inline-flex;
+    transition: transform 0.2s ease;
+}
+.ring-size-panel.is-open .ring-size-arrow {
+    transform: rotate(180deg);
+}
+.ring-size-dropdown {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    border: 0 solid #111;
+    border-top: 0;
+    background: #fff;
+    transition: max-height 0.2s ease, opacity 0.15s ease, visibility 0.15s ease;
+}
+.ring-size-panel.is-open .ring-size-toggle {
+    border-bottom-color: #111;
+}
+.ring-size-panel.is-open .ring-size-dropdown {
+    max-height: 246px;
+    overflow-y: auto;
+    visibility: visible;
+    opacity: 1;
+    border-width: 1px;
+    border-top-width: 0;
+}
+.ring-size-option {
+    display: block;
+    width: 100%;
+    min-height: 41px;
+    padding: 0.55rem 0.85rem;
+    border: 0;
+    border-bottom: 1px solid #eeeeee;
+    background: #fff;
+    color: #222;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 0.9rem;
+    text-align: left;
+    cursor: pointer;
+}
+.ring-size-option:last-child {
+    border-bottom: 0;
+}
+.ring-size-option:hover,
+.ring-size-option.is-selected,
+.ring-size-option:focus-visible {
+    background: #f5f5f5;
+    outline: none;
+}
+.asian-size-note {
+    padding-right: 3.5rem;
+    color: #666;
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+#asianRingSizeChart {
+    z-index: 20000 !important;
+}
+@media (min-width: 768px) {
+    #asianRingSizeChart .modal-dialog {
+        left: -28px;
+    }
+}
+#asianRingSizeChart .modal-content {
+    position: relative;
+    max-height: calc(100vh - 2rem);
+}
+.ring-size-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    background: rgba(17, 17, 17, 0.92);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.28);
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.ring-size-modal-close:hover,
+.ring-size-modal-close:focus-visible {
+    background: #a98750;
+    box-shadow: 0 7px 22px rgba(0, 0, 0, 0.34);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    transform: rotate(90deg);
+}
+.asian-size-chart-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+@media (max-width: 767.98px) {
+    .asian-size-chart-scroll {
+        overflow-x: auto;
+    }
+    .asian-size-chart-image {
+        min-width: 720px;
+    }
+}
 
 </style>
 @if(
@@ -486,12 +647,59 @@
 @endif
                         {{-- Size Selector --}}
                         @php
-                            $tagSlugs = $product->tags ? $product->tags->pluck('slug')->map(function($s){ return strtolower($s); }) : collect();
-                            $hasGoldRingsTag = $tagSlugs->contains(function($s){ return in_array($s, ['gold_rings','gold-rings','gold-ring']); });
-                            $hasDiamondRingsTag = $tagSlugs->contains(function($s){ return in_array($s, ['diamond_rings','diamond-rings','diamond-ring']); });
-                            $hasGoldBraceletsTag = $tagSlugs->contains(function($s){ return in_array($s, ['gold_bracelets','gold-bracelets','gold-bracelet','gold-bracelets-1']); });
+                            $isRingSizeProduct = $product->requiresAsianRingSize();
+                            $asianRingSizes = range(4, 27);
                             $pricePositive = ($product->price ?? 0) > 0;
                         @endphp
+
+                        @if($isRingSizeProduct)
+                            <div class="ring-size-panel" id="productSizePanel">
+                                <div class="ring-size-heading">
+                                    <label for="productSizeToggle">Select Asian Ring Size</label>
+                                    <button type="button" class="ring-size-chart-link" data-bs-toggle="modal" data-bs-target="#asianRingSizeChart">
+                                        View Size Chart
+                                    </button>
+                                </div>
+                                <button type="button" class="ring-size-toggle" id="productSizeToggle" aria-expanded="false" aria-haspopup="listbox" aria-controls="productSizeDropdown">
+                                    <span id="productSizeSelected">Choose a size</span>
+                                    <span class="ring-size-arrow" aria-hidden="true">
+                                        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.08 1.04l-4.25 4.25a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="ring-size-dropdown" id="productSizeDropdown" role="listbox" aria-label="Asian ring sizes">
+                                    @foreach($asianRingSizes as $ringSize)
+                                        <button type="button" class="ring-size-option" data-size="{{ $ringSize }}" role="option" aria-selected="false">
+                                            {{ $ringSize }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                                <input type="hidden" id="product-size" name="size" value="">
+                            </div>
+
+                            <div class="modal fade" id="asianRingSizeChart" tabindex="-1" aria-label="Asian ring size chart" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content rounded-0">
+                                        <button type="button" class="ring-size-modal-close" data-bs-dismiss="modal" aria-label="Close size chart">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <div class="modal-body">
+                                            <p class="asian-size-note mb-3">
+                                                Measure the inside diameter of a ring that fits comfortably, then select the closest Asian size.
+                                            </p>
+                                            <div class="asian-size-chart-scroll">
+                                                <img
+                                                    src="{{ asset('assets/media/size-chart.jpeg') }}"
+                                                    class="asian-size-chart-image"
+                                                    alt="International ring size conversion chart with circumference, diameter, USA and Canada, UK and Australia, Asia, and Switzerland sizes"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         {{-- Call-to-Action Buttons --}}
                         <div class="cta-buttons">
@@ -1783,17 +1991,66 @@
         }
 
         // ===== CART FUNCTIONALITY =====
-        // Check if product requires size selection (for gold bracelets, gold rings, and diamond rings)
-        const requiresSizeSelection = @json($hasGoldRingsTag || $hasGoldBraceletsTag || $hasDiamondRingsTag);
+        // Ring and supported gold-colour tags require an Asian ring size.
+        const requiresSizeSelection = @json($isRingSizeProduct);
+
+        const productSizePanel = document.getElementById('productSizePanel');
+        const productSizeToggle = document.getElementById('productSizeToggle');
+        const productSizeSelected = document.getElementById('productSizeSelected');
+        const productSizeInput = document.getElementById('product-size');
+        const productSizeOptions = document.querySelectorAll('.ring-size-option');
+        const asianRingSizeModal = document.getElementById('asianRingSizeChart');
+
+        // The product panel is sticky and creates a low stacking context. Moving
+        // the modal to <body> lets it sit above the site's high-z-index backdrop.
+        if (asianRingSizeModal && asianRingSizeModal.parentElement !== document.body) {
+            document.body.appendChild(asianRingSizeModal);
+        }
+
+        function setProductSizeOpen(isOpen) {
+            if (!productSizePanel || !productSizeToggle) return;
+
+            productSizePanel.classList.toggle('is-open', isOpen);
+            productSizeToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+
+        if (productSizeToggle) {
+            productSizeToggle.addEventListener('click', function () {
+                setProductSizeOpen(!productSizePanel.classList.contains('is-open'));
+            });
+        }
+
+        productSizeOptions.forEach(function (option) {
+            option.addEventListener('click', function () {
+                const selectedSize = option.dataset.size;
+
+                productSizeInput.value = selectedSize;
+                productSizeSelected.textContent = selectedSize;
+                productSizeOptions.forEach(function (item) {
+                    const isSelected = item === option;
+                    item.classList.toggle('is-selected', isSelected);
+                    item.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+                });
+                setProductSizeOpen(false);
+            });
+        });
+
+        document.addEventListener('click', function (event) {
+            if (productSizePanel && !productSizePanel.contains(event.target)) {
+                setProductSizeOpen(false);
+            }
+        });
         
         function addToCart() {
             const quantity = document.getElementById('quantity') ? document.getElementById('quantity').value : 1;
             const sizeSelect = document.getElementById('product-size');
             const selectedSize = sizeSelect ? sizeSelect.value : '';
             
-            // Only validate size for gold bracelets, gold rings, and diamond rings
+            // Validate only products that render the Asian ring-size selector.
             if (requiresSizeSelection && !selectedSize) {
                 showToast('error', 'Please select a size before adding to cart.');
+                setProductSizeOpen(true);
+                productSizeToggle?.focus();
                 return;
             }
             
@@ -1834,9 +2091,11 @@
             const sizeSelect = document.getElementById('product-size');
             const selectedSize = sizeSelect ? sizeSelect.value : '';
             
-            // Only validate size for gold bracelets, gold rings, and diamond rings
+            // Validate only products that render the Asian ring-size selector.
             if (requiresSizeSelection && !selectedSize) {
                 showToast('error', 'Please select a size before proceeding to checkout.');
+                setProductSizeOpen(true);
+                productSizeToggle?.focus();
                 return;
             }
             

@@ -234,7 +234,7 @@
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
 
-        $cartItems = \App\Models\Cart::with(['product', 'solitaireProduct'])
+        $cartItems = \App\Models\Cart::with(['product.tags', 'solitaireProduct'])
             ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -301,6 +301,7 @@
 
         $shipping = 0;
         $total = $subtotal + $shipping;
+        $asianRingSizes = range(4, 27);
     @endphp
 
     <div class="order-summary" id="checkoutOrderSummary" data-cart-count="{{ $cartItems->count() }}">
@@ -320,6 +321,10 @@
                     $product = $isSolitaire
                         ? $item->solitaireProduct
                         : $item->product;
+
+                    $requiresAsianRingSize = !$isSolitaire
+                        && $product
+                        && $product->requiresAsianRingSize();
 
                     $forStore = false;
                     if (!$isSolitaire && $item->product_id) {
@@ -410,7 +415,7 @@
                     $itemSubtotal = $price * (int) $item->quantity;
                 @endphp
 
-                <div class="order-item mb-4">
+                <div class="order-item mb-4" data-checkout-cart-item="{{ $item->id }}">
                     <div class="row align-items-center">
                         <div class="col-3">
                             <img src="{{ $imageUrl }}"
@@ -446,7 +451,27 @@
                                     </div>
                                 @endif
                             @else
-                                @if($item->size)
+                                @if($requiresAsianRingSize)
+                                    <div class="checkout-ring-size mb-2">
+                                        <label for="checkout-ring-size-{{ $item->id }}" class="checkout-ring-size-label">
+                                            Asian Ring Size
+                                        </label>
+                                        <select id="checkout-ring-size-{{ $item->id }}"
+                                                class="checkout-ring-size-select"
+                                                data-cart-item-id="{{ $item->id }}"
+                                                data-original-size="{{ $item->size }}"
+                                                aria-label="Asian ring size for {{ $productName }}"
+                                                required>
+                                            <option value="" disabled @selected(!$item->size)>Select size</option>
+                                            @foreach($asianRingSizes as $ringSize)
+                                                <option value="{{ $ringSize }}" @selected((string) $item->size === (string) $ringSize)>
+                                                    {{ $ringSize }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <small class="checkout-ring-size-status" aria-live="polite"></small>
+                                    </div>
+                                @elseif($item->size)
                                     <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
                                         Size: {{ $item->size ?? 'N/A' }}
                                     </div>
@@ -472,11 +497,37 @@
                                 @endif
                             </div>
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Qty: {{ $item->quantity }}</span>
-                                <span class="fw-bold">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Quantity</span>
+                                <span class="fw-bold checkout-item-subtotal">
                                     PKR {{ number_format(round($itemSubtotal, -3), 0, '.', ',') }}
                                 </span>
+                            </div>
+
+                            <div class="checkout-item-actions"
+                                data-cart-item-id="{{ $item->id }}"
+                                data-unit-price="{{ $price }}">
+                                <div class="checkout-quantity-control" role="group" aria-label="Quantity for {{ $productName }}">
+                                    <button type="button"
+                                            class="checkout-quantity-button"
+                                            data-quantity-change="-1"
+                                            aria-label="Decrease quantity"
+                                            @disabled((int) $item->quantity <= 1)>
+                                        &minus;
+                                    </button>
+                                    <span class="checkout-quantity-value" aria-live="polite">{{ $item->quantity }}</span>
+                                    <button type="button"
+                                        class="checkout-quantity-button"
+                                        data-quantity-change="1"
+                                        aria-label="Increase quantity">
+                                        &plus;
+                                    </button>
+                                </div>
+                                <button type="button" class="checkout-remove-item" aria-label="Remove {{ $productName }} from order">
+                                    <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                    <span>Remove</span>
+                                </button>
+                                <small class="checkout-item-action-status" aria-live="polite"></small>
                             </div>
                         </div>
                     </div>
@@ -491,19 +542,20 @@
         @endif
 
         @if($cartItems->count() > 0)
+            <div id="checkoutTotalsSection">
             <hr class="my-4">
 
             <div class="order-totals">
                 <div class="d-flex justify-content-between mb-2">
                     <span>Subtotal:</span>
-                    <span class="fw-bold">
+                    <span class="fw-bold" id="checkoutSubtotalValue">
                         PKR {{ number_format(round($subtotal, -3), 0, '.', ',') }}
                     </span>
                 </div>
 
                 <div class="d-flex justify-content-between mb-2">
                     <span>Express Delivery with Signature:</span>
-                    <span class="fw-bold">
+                    <span class="fw-bold" id="checkoutShippingValue" data-shipping="{{ $shipping }}">
                         PKR {{ number_format($shipping, 0, '.', ',') }}
                     </span>
                 </div>
@@ -512,10 +564,11 @@
 
                 <div class="d-flex justify-content-between">
                     <span class="fw-bold">Total Amount:</span>
-                    <span class="fw-bold fs-5">
+                    <span class="fw-bold fs-5" id="checkoutTotalValue">
                         PKR {{ number_format(round($total, -3), 0, '.', ',') }}
                     </span>
                 </div>
+            </div>
             </div>
         @endif
     </div>
@@ -599,6 +652,43 @@ body {
     background-color: #ffffff;
     min-height: 100vh;
     padding: 40px 0;
+}
+
+.checkout-ring-size-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #666;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.checkout-ring-size-select {
+    width: 100%;
+    max-width: 190px;
+    padding: 0.4rem 0.55rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 0;
+    background: #fff;
+    color: #222;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 0.85rem;
+}
+
+.checkout-ring-size-select:focus {
+    border-color: #222;
+    outline: none;
+    box-shadow: none;
+}
+
+.checkout-ring-size-status {
+    display: block;
+    min-height: 1rem;
+    margin-top: 0.2rem;
+    color: #666;
+    font-size: 0.72rem;
 }
 
 /* Shipping Section Styling */
@@ -929,6 +1019,23 @@ body {
     border-radius: 4px;
     /* background: #fafafa; */
     margin-bottom: 15px;
+    max-height: 700px;
+    overflow: hidden;
+    transition: opacity 0.22s ease, transform 0.22s ease, max-height 0.28s ease, margin 0.28s ease, padding 0.28s ease;
+}
+
+.order-item.is-updating {
+    opacity: 0.65;
+}
+
+.order-item.is-removing {
+    max-height: 0;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateX(-16px);
 }
 
 .product-image {
@@ -943,6 +1050,97 @@ body {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 8px;
+}
+
+.checkout-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkout-quantity-control {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    border: 1px solid #d8d8d8;
+    background: #fff;
+}
+
+.checkout-quantity-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: #fff;
+    color: #17120f;
+    font-size: 18px;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.checkout-quantity-button:hover:not(:disabled),
+.checkout-quantity-button:focus-visible {
+    background: #17120f;
+    color: #fff;
+    outline: none;
+}
+
+.checkout-quantity-button:disabled {
+    color: #b9b9b9;
+    cursor: not-allowed;
+}
+
+.checkout-item-actions.is-busy {
+    pointer-events: none;
+}
+
+.checkout-quantity-value {
+    min-width: 34px;
+    color: #17120f;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.checkout-remove-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 4px;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: #777;
+    font-size: 12px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.checkout-remove-item:hover,
+.checkout-remove-item:focus-visible {
+    border-bottom-color: #a12020;
+    color: #a12020;
+    outline: none;
+}
+
+.checkout-item-action-status {
+    flex-basis: 100%;
+    min-height: 18px;
+    color: #666;
+    font-size: 11px;
+}
+
+.checkout-total-flash {
+    animation: checkout-total-flash 0.45s ease;
+}
+
+@keyframes checkout-total-flash {
+    0% { color: #a98750; transform: translateY(-2px); }
+    100% { color: inherit; transform: translateY(0); }
 }
 
 .order-totals {
@@ -1453,9 +1651,243 @@ function validateShippingForm() {
 }
 
 let checkoutSubmissionInProgress = false;
+let checkoutSizeUpdatesPending = 0;
+let checkoutItemUpdatesPending = 0;
+
+document.querySelectorAll('.checkout-ring-size-select').forEach(select => {
+    select.addEventListener('change', async function () {
+        const previousSize = this.dataset.originalSize || '';
+        const status = this.parentElement.querySelector('.checkout-ring-size-status');
+
+        this.disabled = true;
+        checkoutSizeUpdatesPending += 1;
+        if (status) status.textContent = 'Saving size...';
+
+        try {
+            const response = await fetch("{{ route('cart.update') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: this.dataset.cartItemId,
+                    size: this.value
+                })
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Could not save the selected size.');
+            }
+
+            this.dataset.originalSize = data.size;
+            if (status) status.textContent = 'Size saved';
+        } catch (error) {
+            this.value = previousSize;
+            if (status) status.textContent = error.message || 'Could not save size';
+        } finally {
+            this.disabled = false;
+            checkoutSizeUpdatesPending = Math.max(0, checkoutSizeUpdatesPending - 1);
+        }
+    });
+});
+
+function setCheckoutItemControlsDisabled(actions, disabled) {
+    const currentQuantity = Number(actions.querySelector('.checkout-quantity-value')?.textContent || 1);
+
+    actions.classList.toggle('is-busy', disabled);
+    actions.querySelectorAll('button').forEach(button => {
+        const isDecreaseButton = button.dataset.quantityChange === '-1';
+        button.disabled = disabled || (isDecreaseButton && currentQuantity <= 1);
+    });
+}
+
+function formatCheckoutMoney(amount) {
+    const roundedAmount = Math.round(Number(amount || 0) / 1000) * 1000;
+    return `PKR ${roundedAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+}
+
+function flashCheckoutValue(element) {
+    if (!element) return;
+
+    element.classList.remove('checkout-total-flash');
+    void element.offsetWidth;
+    element.classList.add('checkout-total-flash');
+}
+
+function refreshCheckoutTotals() {
+    let subtotal = 0;
+
+    document.querySelectorAll('.checkout-item-actions').forEach(actions => {
+        const unitPrice = Number(actions.dataset.unitPrice || 0);
+        const quantity = Number(actions.querySelector('.checkout-quantity-value')?.textContent || 0);
+        subtotal += unitPrice * quantity;
+    });
+
+    const subtotalElement = document.getElementById('checkoutSubtotalValue');
+    const shippingElement = document.getElementById('checkoutShippingValue');
+    const totalElement = document.getElementById('checkoutTotalValue');
+    const shipping = Number(shippingElement?.dataset.shipping || 0);
+
+    if (subtotalElement) subtotalElement.textContent = formatCheckoutMoney(subtotal);
+    if (totalElement) totalElement.textContent = formatCheckoutMoney(subtotal + shipping);
+
+    flashCheckoutValue(subtotalElement);
+    flashCheckoutValue(totalElement);
+}
+
+function showCheckoutEmptyState() {
+    const orderSummary = document.getElementById('checkoutOrderSummary');
+    const totalsSection = document.getElementById('checkoutTotalsSection');
+    const completeOrderButton = document.getElementById('completeOrderButton');
+
+    totalsSection?.remove();
+    if (orderSummary && !orderSummary.querySelector('.checkout-empty-state')) {
+        orderSummary.insertAdjacentHTML('beforeend', `
+            <div class="checkout-empty-state text-center py-4">
+                <p class="text-muted">Your cart is empty</p>
+                <a href="{{ route('cart') }}" class="btn btn-outline-dark">Continue Shopping</a>
+            </div>
+        `);
+        orderSummary.dataset.cartCount = '0';
+    }
+    if (completeOrderButton) completeOrderButton.disabled = true;
+}
+
+document.querySelectorAll('.checkout-quantity-button').forEach(button => {
+    button.addEventListener('click', async function () {
+        const actions = this.closest('.checkout-item-actions');
+        const quantityValue = actions?.querySelector('.checkout-quantity-value');
+        const status = actions?.querySelector('.checkout-item-action-status');
+        const cartItemId = actions?.dataset.cartItemId;
+        const currentQuantity = Number(quantityValue?.textContent || 1);
+        const quantityChange = Number(this.dataset.quantityChange || 0);
+        const newQuantity = Math.max(1, currentQuantity + quantityChange);
+
+        if (!actions || !cartItemId || newQuantity === currentQuantity) return;
+
+        const orderItem = actions.closest('.order-item');
+        setCheckoutItemControlsDisabled(actions, true);
+        orderItem?.classList.add('is-updating');
+        checkoutItemUpdatesPending += 1;
+        if (status) status.textContent = 'Updating quantity...';
+
+        try {
+            const response = await fetch("{{ route('cart.update') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: cartItemId,
+                    quantity: newQuantity
+                })
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Could not update the quantity.');
+            }
+
+            const savedQuantity = Number(data.quantity || newQuantity);
+            if (quantityValue) quantityValue.textContent = savedQuantity;
+
+            const itemSubtotal = orderItem?.querySelector('.checkout-item-subtotal');
+            if (itemSubtotal) {
+                itemSubtotal.textContent = formatCheckoutMoney(Number(actions.dataset.unitPrice || 0) * savedQuantity);
+                flashCheckoutValue(itemSubtotal);
+            }
+
+            setCheckoutItemControlsDisabled(actions, false);
+            refreshCheckoutTotals();
+            if (status) status.textContent = 'Quantity updated';
+            window.setTimeout(() => {
+                if (status?.isConnected) status.textContent = '';
+            }, 1200);
+        } catch (error) {
+            if (status) status.textContent = error.message || 'Could not update quantity';
+            setCheckoutItemControlsDisabled(actions, false);
+        } finally {
+            orderItem?.classList.remove('is-updating');
+            checkoutItemUpdatesPending = Math.max(0, checkoutItemUpdatesPending - 1);
+        }
+    });
+});
+
+document.querySelectorAll('.checkout-remove-item').forEach(button => {
+    button.addEventListener('click', async function () {
+        const actions = this.closest('.checkout-item-actions');
+        const status = actions?.querySelector('.checkout-item-action-status');
+        const cartItemId = actions?.dataset.cartItemId;
+
+        if (!actions || !cartItemId || !window.confirm('Remove this item from your order?')) return;
+
+        const orderItem = actions.closest('.order-item');
+        setCheckoutItemControlsDisabled(actions, true);
+        orderItem?.classList.add('is-updating');
+        checkoutItemUpdatesPending += 1;
+        if (status) status.textContent = 'Removing item...';
+
+        try {
+            const response = await fetch(`{{ url('/cart/remove') }}/${encodeURIComponent(cartItemId)}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Could not remove the item.');
+            }
+
+            if (status) status.textContent = 'Item removed';
+            orderItem?.classList.remove('is-updating');
+            orderItem?.classList.add('is-removing');
+
+            window.setTimeout(() => {
+                orderItem?.remove();
+
+                const orderSummary = document.getElementById('checkoutOrderSummary');
+                const remainingItems = document.querySelectorAll('.order-item').length;
+                if (orderSummary) orderSummary.dataset.cartCount = String(remainingItems);
+
+                if (remainingItems === 0) {
+                    showCheckoutEmptyState();
+                } else {
+                    refreshCheckoutTotals();
+                }
+            }, 280);
+        } catch (error) {
+            if (status) status.textContent = error.message || 'Could not remove item';
+            setCheckoutItemControlsDisabled(actions, false);
+            orderItem?.classList.remove('is-updating');
+        } finally {
+            checkoutItemUpdatesPending = Math.max(0, checkoutItemUpdatesPending - 1);
+        }
+    });
+});
 
 function processCheckout() {
     if (checkoutSubmissionInProgress) {
+        return;
+    }
+
+    if (checkoutSizeUpdatesPending > 0 || checkoutItemUpdatesPending > 0) {
+        alert('Please wait while your order summary is updated.');
+        return;
+    }
+
+    const missingRingSize = Array.from(document.querySelectorAll('.checkout-ring-size-select'))
+        .find(select => !select.value);
+    if (missingRingSize) {
+        missingRingSize.focus();
+        alert('Please select an Asian ring size before completing your order.');
         return;
     }
 

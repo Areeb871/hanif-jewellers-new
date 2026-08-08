@@ -406,7 +406,7 @@
                 }
                 .offcanvas-modern .offcanvas-title {
                     font-size: 1.1rem;
-                    font-weight: 400;
+                    font-weight: 600;
                     letter-spacing: 0.02em;
                     text-transform: uppercase;
                     color: #222;
@@ -478,8 +478,8 @@
                 .offcanvas-modern .category-list.collapsible > li {
                     padding: 0.3rem 0;
                     margin: 0;
-                    font-size: 0.97rem;
-                    line-height: 1.35;
+                    font-size:13px;
+                    line-height: 1.7;
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
@@ -592,6 +592,7 @@
                 .offcanvas-modern .offcanvas-body {
                     background: rgb(255, 255, 255);
                     padding: 1rem;
+                    margin-top:20px;
                 }
                 .my-3 {
                     margin-top: 1.5rem !important;
