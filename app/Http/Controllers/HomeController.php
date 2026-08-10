@@ -1393,7 +1393,6 @@ public function Online_Shopping_Store(Request $request)
             ->where('slug', $slug)
             ->firstOrFail();
 
-<<<<<<< HEAD
         $storeContext = request()->boolean('store');
         $isJewelleryProduct = strtolower(trim((string) $product->category?->name)) === 'jewellery';
 
@@ -1432,9 +1431,6 @@ public function Online_Shopping_Store(Request $request)
             'recommendedProducts',
             'storeContext'
         ));
-=======
-        return view('public.product-details', compact('categories', 'product', 'watchCategories'));
->>>>>>> main
     }
     public function high_end()
     {
