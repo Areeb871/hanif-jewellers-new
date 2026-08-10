@@ -9,7 +9,7 @@
     overflow:hidden;
     position:relative;
     line-height:0;
-    background:#000;
+    background:#fff;
 }
 
 .chronoswiss-hero-video{
@@ -27,7 +27,7 @@
     text-align:center;
     margin-top:-8px;        /* pull upward */
     line-height:0;
-padding:2px 15px 0;
+padding:15px 15px 0;
     margin:0;
 }
 
@@ -52,10 +52,9 @@ padding:2px 15px 0;
 
 .chronoswiss-intro-title{
     margin:0 0 14px;
-    font-family:"Times New Roman", Georgia, serif;
-    font-style:italic;
-    font-weight:700;
-    font-size:32px;
+    font-family:"Argent CF", Georgia, serif;
+    font-weight:600;
+    font-size:36px;
     line-height:1.3;
     color:#1f1f1f;
 }
@@ -63,9 +62,9 @@ padding:2px 15px 0;
 .chronoswiss-intro-text{
     margin:0 auto;
     max-width:900px;
-    font-family:Arial, sans-serif;
-    font-size:16px;
-    line-height:1.35;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.7;
     color:#4a4a4a;
 }
 
@@ -90,14 +89,14 @@ padding:2px 15px 0;
 
 .chronoswiss-intro-button-wrap{
     background:#ffffff;
-    padding:18px 15px 6px;
+    padding:80px 15px 20px;
 }
 
 .chronoswiss-intro-button{
     display:inline-block;
-    font-family:Arial, sans-serif;
-    font-size:21px;
-    font-weight:700;
+    font-family:"Argent CF", Georgia, serif;
+    font-size:24px;
+    font-weight:600;
     letter-spacing:0;
     color:#000;
     text-decoration:none;
@@ -112,8 +111,15 @@ padding:2px 15px 0;
 @media (max-width: 767px){
 
     .chronoswiss-hero-media{
-        height:72vh;
-        min-height:320px;
+        height:auto;
+        min-height:0;
+        background:#fff;
+    }
+
+    .chronoswiss-hero-video{
+        height:auto;
+        object-fit:contain;
+        object-position:center top;
     }
 
     .chronoswiss-logo-section{
@@ -138,14 +144,14 @@ padding:2px 15px 0;
     }
 
     .chronoswiss-intro-title{
-        font-size:30px;
+        font-size:24px;
         line-height:1.35;
         margin-bottom:10px;
     }
 
     .chronoswiss-intro-text{
-        font-size:14px;
-        line-height:1.5;
+        font-size:13px;
+        line-height:1.7;
     }
 
     .chronoswiss-intro-image-wrap{
@@ -153,7 +159,7 @@ padding:2px 15px 0;
     }
 
     .chronoswiss-intro-button-wrap{
-        padding:16px 12px 6px;
+        padding:48px 12px 36px;
     }
 
     .chronoswiss-intro-button{
@@ -161,15 +167,8 @@ padding:2px 15px 0;
     }
 }
 
-/* Chronoswiss page vertical rhythm */
-.chronoswiss-page {
-    --chronoswiss-section-space: clamp(2.5rem, 5vw, 5rem);
-    --chronoswiss-content-gap: clamp(1.25rem, 2.5vw, 2rem);
-}
-
 .chronoswiss-page .chronoswiss-logo-section {
     margin:0;
-    /* padding:var(--chronoswiss-section-space) 15px; */
 }
 
 .chronoswiss-page .chronoswiss-intro-section {
@@ -178,42 +177,32 @@ padding:2px 15px 0;
 }
 
 .chronoswiss-page .chronoswiss-intro-content {
-    padding:0 20px var(--chronoswiss-section-space);
+    padding:0 20px 48px;
 }
 
 .chronoswiss-page .chronoswiss-intro-title {
-    margin:0 0 var(--chronoswiss-content-gap);
+    margin:0 0 24px;
 }
 
 .chronoswiss-page .chronoswiss-intro-text {
     margin:0 auto;
 }
 
-.chronoswiss-page .chronoswiss-intro-button-wrap {
-    padding:var(--chronoswiss-section-space) 15px;
-}
-
 .chronoswiss-page .chronoswiss-products-section {
     padding-top:0 !important;
-    padding-bottom:var(--chronoswiss-section-space) !important;
+    padding-bottom:48px !important;
 }
 
-.chronoswiss-page .chronoswiss-products-section .onlineStore {
-    padding-top:var(--chronoswiss-content-gap) !important;
-}
+
 
 .chronoswiss-page .chronoswiss-footer {
-    padding-top:var(--chronoswiss-section-space) !important;
+    padding-top:48px !important;
     padding-bottom:0 !important;
 }
 
 @media (max-width: 767px) {
     .chronoswiss-page .chronoswiss-intro-content {
-        padding:0 14px var(--chronoswiss-section-space);
-    }
-
-    .chronoswiss-page .chronoswiss-intro-button-wrap {
-        padding:var(--chronoswiss-section-space) 12px;
+        padding:0 14px 48px;
     }
 }
 </style>
@@ -221,6 +210,7 @@ padding:2px 15px 0;
 <main class="chronoswiss-page">
 
 <section class="chronoswiss-hero-media">
+    <div class="d-none d-md-block" style="width:100%; height:100%;">
     @if(isset($chronoswissSubcategory) && $chronoswissSubcategory && $chronoswissSubcategory->banner_url)
 
         @if(Str::endsWith($chronoswissSubcategory->banner_url, ['.mp4', '.webm', '.ogg']))
@@ -245,6 +235,14 @@ padding:2px 15px 0;
              alt="Chronoswiss Banner"
              class="chronoswiss-hero-video">
     @endif
+    </div>
+
+    <video autoplay loop muted playsinline preload="metadata"
+           class="chronoswiss-hero-video d-block d-md-none"
+           poster="{{ asset('assets/f_assets/image/cys/chrono.jpeg') }}">
+        <source src="{{ asset('assets/f_assets/image/watches mobile view/CHR-MOB-Banner.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 </section>
 
 <section class="chronoswiss-logo-section">
@@ -290,7 +288,7 @@ padding:2px 15px 0;
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
             /* Simple SORT & FILTER button - no borders on any state */
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -394,7 +392,7 @@ padding:2px 15px 0;
                 .filter .navbar-toggler {
                     margin-top: -12px !important;
                     margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -429,7 +427,9 @@ padding:2px 15px 0;
             <div class="brand-logo-wrapper w-70 my-3 text-center" style="display:none;">
                 <img src="{{ asset('assets/f_assets/image/watch logo/Chronoswiss.png') }}" alt="Chronoswiss logo" class="brand-logo">
             </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasChronoswiss" aria-controls="offcanvasChronoswiss" aria-label="Toggle navigation">
+        </div>
+        <div class="filter d-flex justify-content-end px-3">
+            <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasChronoswiss" aria-controls="offcanvasChronoswiss" aria-label="Toggle navigation" style="position:static!important; margin:0!important;">
                 <span class="navbar-toggler-icon"></span> SORT & FILTER
             </button>
         </div> 
@@ -455,7 +455,7 @@ padding:2px 15px 0;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -465,7 +465,7 @@ padding:2px 15px 0;
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"

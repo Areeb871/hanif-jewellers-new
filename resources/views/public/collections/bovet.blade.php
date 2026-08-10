@@ -387,9 +387,13 @@
 }
             /* Counter look */
             .products-counter{
-                font-size:1rem;
+                font-family:"Poppins", sans-serif;
+                font-size:0.8rem;
                 letter-spacing:0.2em;
                 margin-bottom:1.5rem;
+            }
+            .bovet-footer #loadMoreBtn{
+                font-family:"Poppins", sans-serif !important;
             }
             /* ===============================
    HERO (Fix white blank space)
@@ -478,6 +482,10 @@
     background:#fff;
 }
 
+.bovet-filterbar__btn {
+    font-family: "Poppins", sans-serif;
+}
+
 .bovet-filterbar__left{ justify-self:start; }
 .bovet-filterbar__center{ justify-self:center; }
 .bovet-filterbar__right{ justify-self:end; }
@@ -529,24 +537,30 @@
 
 /* TEXT FULL WIDTH WITH CLEAN PADDING */
 .bovet-text{
-    padding: 0px 40px 15px 10px; /* left & right spacing */
+    text-align:center;
+    padding-bottom:34px;
 }
 
 .bovet-title{
-    font-family: "Georgia", serif;
+    font-family: "Argent CF", Georgia, serif;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .04em;
     font-size: 24px;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
     color:#111;
+    text-align:center;
 }
 
 .bovet-desc{
-    font-size: 15px;
-    line-height: 1.89;
+    font-size: 13px;
+    line-height: 1.59;
     max-width: 1100px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:0;
     color:#111;
+    text-align:center;
 }
 
 /* EDGE TO EDGE IMAGE */
@@ -567,7 +581,7 @@
 /* Responsive */
 @media (max-width:768px){
     .bovet-text{
-        padding:20px;
+        padding:20px 20px 34px;
     }
 
     .bovet-title{
@@ -647,7 +661,7 @@
 
           <!-- FIRST PARAGRAPH (Always Visible) -->
           <p>
-	           The Récital 30 focuses on the innovative roller system from the award winning Récital 28, allowing world travelers to accurately display 25 global time zones across the four periods of the year. The Récital 30 is one of only two world timepieces, both from BOVET, that are able to adapt to Daylight Saving Time. The Récital 30 emphasizes the essentials needed for keeping track of world time. The world time rollers cover nearly the entire dial, making it the clear focus of this timepiece for tracking world time. As a result, the Récital 30 is the perfect companion for world travelers. This special edition of the Récital 30 holds particular significance for the House of HANIF.
+	           The Récital 30 focuses on the innovative roller system from the award winning Récital 28, allowing world travelers to accurately display 25 global time zones across the four periods of the year. The Récital 30 is one of only two world timepieces, both from BOVET, that are able to adapt to Daylight Saving Time.<br/><br/> The Récital 30 emphasizes the essentials needed for keeping track of world time. The world time rollers cover nearly the entire dial, making it the clear focus of this timepiece for tracking world time. As a result, the Récital 30 is the perfect companion for world travelers. This special edition of the Récital 30 holds particular significance for the House of HANIF.
                <button type="button"
                        class="mobile-toggle-btn"
                        aria-expanded="false"
@@ -670,9 +684,9 @@
     </div>
 
     <!-- BOTTOM LINE -->
-    <div class="hanif-bovet-bottom">
+    <p class="hanif-bovet-bottom">
      The Récital 30 "Karachi” stands as a refined expression of this craftsmanship, demonstrating the Maison’s commitment to precision engineering, bespoke watchmaking, and the creation of exceptional horological masterpieces.
-    </div>
+    </p>
 
     <!-- CTA -->
     <div class="hanif-bovet-cta">
@@ -700,7 +714,7 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 <style>
 .hanif-bovet-wrap{
   background:#fff;
-  padding:18px 0 16px;
+  padding:18px 0 0;
 }
 
 .hanif-bovet-container{
@@ -708,13 +722,16 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 }
 
 .hanif-bovet-top{
+  font-family:"Arjent CF", serif !important;
   text-align:center;
-  font-size:15px;
+  /* font-size:18px; */
+   font-size: clamp(1rem, 2vw, 1.125rem);
   letter-spacing:.08em;
   text-transform:uppercase;
   font-weight:600;
   color:#111;
-  margin-bottom:14px;
+  margin-top:20px;
+  margin-bottom:34px;
 }
 
 .hanif-bovet-img-frame{
@@ -726,26 +743,31 @@ document.getElementById('bookAppointmentBtn').addEventListener('click', function
 
 .hanif-bovet-text{
   font-size:15px;
-  line-height:1.89;
+  line-height:1.59;
   color:#111;
   padding-left:10px;
+  padding-right:12px;
 }
 
 .hanif-bovet-text p{
   margin-bottom:14px;
+  text-align:justify;
 }
 
 .hanif-bovet-bottom{
-  font-size:15px;
-  line-height:1.89;
+  /* font-family:"poppins,Georgia", serif; */
+  font-size:13px;
+  line-height:1.59;
   color:#111;
-  margin-top:14px;
+  margin:28px 0 0;
   padding:0 6px;
+  text-align:justify;
 }
 
 .hanif-bovet-cta{
   text-align:center;
-  margin-top:32px;
+  /* The Sort & Filter row below supplies the remaining visual space. */
+  padding:72px 0 44px;
   line-height:0;
 }
 
@@ -869,7 +891,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {{-- =======================
             FOOTER: COUNTER + LOAD MORE
         ======================== --}}
-        <div class="text-center py-4 bovet-footer">
+        <div class="text-center py-5 bovet-footer">
             @if(isset($products) && $products->count() > 0)
                 @php
                     $totalShown = $currentPageProducts;
@@ -893,7 +915,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 @if($shouldShowLoadMore)
                     <button id="loadMoreBtn"
-                            style="background:#e3e4e5;border:none;color:#222;font-size:0.8rem;letter-spacing:0.15em;padding:0.8rem 2rem;border-radius:8px;font-family:inherit;font-weight:400;box-shadow:none;transition:background 0.2s;"
+                            style="background:#e3e4e5;border:none;color:#222;font-size:0.7rem;letter-spacing:0.15em;padding:0.8rem 2rem;border-radius:8px;font-family:inherit;font-weight:400;box-shadow:none;transition:background 0.2s;"
                             data-page="{{ $products->currentPage() + 1 }}"
                             data-last-page="{{ $products->lastPage() }}"
                             data-per-page="{{ $products->perPage() }}"

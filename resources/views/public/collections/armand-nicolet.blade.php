@@ -17,12 +17,12 @@
     flex-direction:column;
     align-items:center;
     gap:clamp(0.25rem, 0.75vw, 0.5rem);
-    padding:clamp(0.35rem, 1vw, 0.75rem) 14px;
+    /* padding:clamp(0.35rem, 1vw, 0.75rem) 14px; */
 }
 
 .armand-page .armand-filter-header .brand-logo-wrapper {
     width:100% !important;
-    margin:0 !important;
+    margin-top:40px !important;
 }
 
 .armand-page .armand-filter-header .brand-logo {
@@ -41,7 +41,7 @@
 }
 
 .armand-page .onlineStore {
-    padding-top:var(--armand-content-gap) !important;
+    padding-top:16px !important;
 }
 
 .armand-page .armand-nicolet-footer {
@@ -123,7 +123,7 @@
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
             /* Simple SORT & FILTER button - no borders on any state */
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -229,7 +229,7 @@
                 .filter .navbar-toggler {
                     margin-top: 100px !important;
                     margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -264,7 +264,9 @@
             <div class="brand-logo-wrapper w-70 my-3 text-center">
                 <img src="{{ asset('assets/f_assets/image/watch logo/AMN.png') }}" alt="Armand Nicolet logo" class="brand-logo">
             </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasArmandNicolet" aria-controls="offcanvasArmandNicolet" aria-label="Toggle navigation">
+        </div>
+        <div class="filter d-flex justify-content-end px-3">
+            <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasArmandNicolet" aria-controls="offcanvasArmandNicolet" aria-label="Toggle navigation" style="position:static!important; margin:0!important;">
                 <span class="navbar-toggler-icon"></span> SORT & FILTER
             </button>
         </div>
@@ -290,7 +292,7 @@
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -300,7 +302,7 @@
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"

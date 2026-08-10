@@ -286,10 +286,11 @@
     line-height: 1.2;
 }
 .price-display {
-    font-weight: 600;
+    font-weight: 500;
     font-size: clamp(1.25rem)
     color: #17120f;
     font-family: 'Poppins';
+    letter-spacing: 0.25em;
 }
 
 .product-old-price {
@@ -404,6 +405,18 @@
     .product-details-main-section {
         padding-top: 72px;
     }
+<<<<<<< HEAD
+=======
+
+    .product-details-layout > .col-lg-8 {
+        padding-right: 28px !important;
+    }
+
+    .product-details-layout > .col-lg-4 {
+        padding: 0 24px 0 0 !important;
+    }
+}
+>>>>>>> main
 
     .product-details-layout > .col-lg-8 {
         padding-right: 28px !important;

@@ -82,7 +82,7 @@
     </section>
 @endif
 
-    <section class="py-4">
+    <section >
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -219,7 +219,6 @@
 .watchland-text-top{
     width: 100%;
     margin: 0 auto;
-    padding: 30px 20px 25px;
     text-align: center;
 }
 
@@ -228,6 +227,75 @@
     font-size: 14px;
     line-height: 1.8;
     color: #222;
+}
+
+/* ArtyA typography and visually balanced spacing. */
+.watchland-text-top{
+    padding-bottom:44px;
+}
+
+.watchland-text-top p{
+    max-width:700px;
+    margin:0 auto;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.59;
+    text-align:center;
+}
+
+.artya-logo-row{
+    display:flex;
+    justify-content:center;
+    padding:12px 14px;
+    background:#fff;
+}
+
+.artya-logo{
+    display:block;
+    width:clamp(120px, 32vw, 190px);
+    height:auto;
+}
+
+.artya-filter-row{
+    display:flex;
+    justify-content:flex-end;
+    padding:12px 14px;
+    background:#fff;
+}
+
+.artya-filter-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 8px;
+    border:0 !important;
+    outline:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    color:#111;
+    font-family:"Poppins", sans-serif;
+    font-size:12px;
+    line-height:1;
+    white-space:nowrap;
+}
+
+.artya-filter-btn .navbar-toggler-icon{
+    width:18px;
+    height:14px;
+    background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+}
+
+.artya-footer .products-counter,
+.artya-footer #loadMoreBtn{
+    font-family:"Poppins", sans-serif !important;
+}
+
+.artya-footer .products-counter{
+    font-size:.8rem !important;
+    letter-spacing:.2em;
+    /* margin-bottom:1.5rem; */
 }
               .offcanvas.offcanvas-modern{
   z-index: 20000 !important;
@@ -243,22 +311,24 @@
   z-index: 19999 !important;
 }
         </style>
-          <div class="watchland-text-top">
+        <div class="artya-logo-row">
+            <img src="{{ asset('assets/f_assets/image/watch logo/Artya.png') }}" alt="Artya logo" class="artya-logo">
+        </div>
+
+        <div class="watchland-text-top">
         <p>
 Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based independent brand renowned for offering the most diverse range of timepieces globally.
 </p>
 </div>
-        <div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
-            <div class="brand-logo-wrapper w-70 my-3 text-center">
-                <img src="{{ asset('assets/f_assets/image/watch logo/Artya.png') }}" alt="Artya logo" class="brand-logo">
-            </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasArtya" aria-controls="offcanvasArtya" aria-label="Toggle navigation">
+
+        <div class="artya-filter-row">
+            <button class="navbar-toggler artya-filter-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasArtya" aria-controls="offcanvasArtya" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span> SORT & FILTER
             </button>
         </div>
 
         <div class="container-fluid px-3">
-        <div class="row onlineStore g-2 pt-3" id="artyaGrid">
+        <div class="row onlineStore g-2" id="artyaGrid">
             @if(isset($products) && $products->count())
                 @foreach($products as $prod)
                     <div class="col-6 col-sm-4 col-md-3 col-lg-3">
@@ -271,14 +341,14 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
         </div>
         </div>
         
-        <div class="text-center py-4 artya-footer">
+        <div class="text-center py-5 artya-footer">
         @if($products->count() > 0)
             @php
                 $totalShown = $currentPageProducts;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -288,7 +358,7 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"

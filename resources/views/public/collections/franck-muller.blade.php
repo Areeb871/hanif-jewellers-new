@@ -238,6 +238,42 @@
         height:100px;
     }
 }
+
+/* Franck Muller typography and balanced content spacing. */
+.watchland-title{
+    font-family:"Argent CF", Georgia, serif;
+}
+
+.watchland-text-top{
+    padding:70px;
+}
+
+.watchland-text-top p{
+    max-width:1100px;
+    margin:0 auto;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.59;
+    text-align:center;
+}
+
+.watchland-text-top h2,
+.watchland-text-top h3{
+    margin:0 0 36px;
+    font-family:"Argent CF", Georgia, serif;
+    font-size:24px;
+    font-weight:700;
+    line-height:normal;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+
+@media (max-width:768px){
+    .watchland-text-top h2,
+    .watchland-text-top h3{
+        font-size:18px;
+    }
+}
 .offcanvas.offcanvas-modern{
   z-index: 20000 !important;
 }
@@ -277,7 +313,7 @@
         >
     </div>
     <div class="watchland-text-top">
-        <h2 style="letter-spacing: 8px;font-weight: 300;">NEW MODELS</h2>
+        <h2>NEW MODELS</h2>
          <p>
             All the mechanical watchmaking complications invented by Franck Muller are designed and developed at the heart of our own workshops. From the simple sketch of a world premiere mechanism to the execution of the plans, every stage of manufacturing a timepiece is followed to its successful completion.
         </p>
@@ -359,14 +395,14 @@
         @endif
     @endif
      <div class="watchland-text-top">
-        <h3 style="letter-spacing: 8px;font-weight: 300;">FEATURED TIMEPIECES</h3>
+        <h3>FEATURED TIMEPIECES</h3>
         <p>
 Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and timeless elegance.The Vanguard Yachting Anchor features an open-worked design with blue anodised bridges, showcasing exceptional mechanical depth and artisanal craftsmanship. Powered by an in-house movement with a seven-day power reserve, it represents strength, precision, and enduring performance.        </p>
     </div>
 </section>
 
 
-    <section class="py-4">
+    <section >
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
             @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
@@ -497,26 +533,26 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
                     margin-right: 23px !important;
                 }
             }
- /* ===============================
-   FILTER BAR (no absolute hacks)
-================================ */
-.bovet-filterbar{
-    display:grid;
-    grid-template-columns: 1fr auto 1fr;   /* left space | logo | button */
-    align-items:center;
-    padding:12px 14px;
+.franck-muller-logo-row{
+    display:flex;
+    justify-content:center;
+    /* padding:12px 14px; */
+    padding-bottom:40px;
     background:#fff;
 }
 
-.bovet-filterbar__left{ justify-self:start; }
-.bovet-filterbar__center{ justify-self:center; }
-.bovet-filterbar__right{ justify-self:end; }
+.franck-muller-filter-row{
+    display:flex;
+    justify-content:flex-end;
+    padding:12px 14px;
+    background:#fff;
+}
 
 .bovet-brand-logo{
   width: clamp(120px, 32vw, 190px);
   height: auto;
   display: block;
-  margin-top:-68px;
+  margin:0;
 }
 
 .bovet-filterbar__btn{
@@ -525,12 +561,23 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
     box-shadow: none !important;
     background: transparent !important;
     padding: 6px 8px;
+    font-family:"Poppins", sans-serif;
     font-size: 12px;
     display: flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
-    transform: translateY(30px); /* move down */
+}
+
+.franck-muller-footer .products-counter,
+.franck-muller-footer #loadMoreBtn{
+    font-family:"Poppins", sans-serif !important;
+}
+
+.franck-muller-footer .products-counter{
+    font-size:.8rem !important;
+    letter-spacing:.2em;
+    margin-bottom:1.5rem;
 }
 
 
@@ -555,24 +602,20 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
 }
 
         </style>
-         <div class="navbar navbar-white bovet-filterbar">
-    <div class="bovet-filterbar__left"></div>
+<div class="franck-muller-logo-row">
+    <img src="{{ asset('assets/f_assets/image/watch logo/fm.png') }}"
+         class="bovet-brand-logo" alt="Franck Muller">
+</div>
 
-    <div class="bovet-filterbar__center">
-        <img src="{{ asset('assets/f_assets/image/watch logo/fm.png') }}"
-             class="bovet-brand-logo" alt="Bovet">
-    </div>
-
-    <div class="bovet-filterbar__right">
-        <button class="navbar-toggler bovet-filterbar__btn" type="button"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasFranckMuller">
-            <span class="navbar-toggler-icon"></span> SORT & FILTER
-        </button>
-    </div>
+<div class="franck-muller-filter-row">
+    <button class="navbar-toggler bovet-filterbar__btn" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasFranckMuller">
+        <span class="navbar-toggler-icon"></span> SORT & FILTER
+    </button>
 </div>
        
          <div class="container-fluid px-3">
-    <div class="row onlineStore g-2 pt-3" id="franckMullerGrid">
+    <div class="row onlineStore g-2" id="franckMullerGrid">
         @if(isset($products) && $products->count())
             @foreach($products as $prod)
                 <div class="col-6 col-lg-3">
@@ -589,14 +632,14 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
 
         
         
-        <div class="text-center py-4 franck-muller-footer">
+        <div class="text-center py-5 franck-muller-footer">
         @if($products->count() > 0)
             @php
                 $totalShown = $currentPageProducts;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -606,7 +649,7 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"
