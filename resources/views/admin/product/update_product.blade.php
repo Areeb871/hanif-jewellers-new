@@ -288,6 +288,17 @@
                                                             <input type="number" name="gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('gold_weight', $product->gold_weight) }}" min="0" step="0.001" />
                                                             <div class="text-muted fs-7">Weight in grams. Used in auto price calculation (gold &amp; diamond).</div>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Jewellery Service</label>
+                                                            <select name="gold_service_id" class="form-select">
+                                                                @foreach($goldServices as $service)
+                                                                    <option value="{{ $service->id }}" @selected((string) old('gold_service_id', $product->gold_service_id ?? $goldServices->firstWhere('slug', 'fine')?->id) === (string) $service->id)>
+                                                                        {{ $service->name }}{{ $service->is_active ? '' : ' (Inactive)' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="text-muted fs-7">Controls the weight threshold and OC Final pricing rule.</div>
+                                                        </div>
                                                         <!-- <div class="col-md-6">
                                                             <label class="form-label required">AED</label>
                                                             <div class="input-group mb-2">

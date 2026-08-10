@@ -341,6 +341,16 @@
                         ? ($product->name ?? $product->title ?? 'Product')
                         : ($product ? $product->displayName($forStore) : 'Product');
 
+                    if (preg_match('/^(.*?)\s*-\s*([\p{L}\p{N}-]+)$/u', $productName, $nameParts)) {
+                        $productName = \Illuminate\Support\Str::title(
+                            \Illuminate\Support\Str::lower(trim($nameParts[1]))
+                        ) . ' - ' . $nameParts[2];
+                    } else {
+                        $productName = \Illuminate\Support\Str::title(
+                            \Illuminate\Support\Str::lower($productName)
+                        );
+                    }
+
                     /*
                     |--------------------------------------------------------------------------
                     | Image
@@ -662,7 +672,6 @@ body {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
 }
 
 .checkout-ring-size-select {
@@ -1824,7 +1833,7 @@ document.querySelectorAll('.checkout-remove-item').forEach(button => {
         const status = actions?.querySelector('.checkout-item-action-status');
         const cartItemId = actions?.dataset.cartItemId;
 
-        if (!actions || !cartItemId || !window.confirm('Remove this item from your order?')) return;
+        if (!actions || !cartItemId) return;
 
         const orderItem = actions.closest('.order-item');
         setCheckoutItemControlsDisabled(actions, true);

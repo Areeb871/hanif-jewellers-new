@@ -10,6 +10,7 @@ use App\Models\Subcategory;
 use App\Models\ProductTags;
 use App\Models\SubcatImages;
 use App\Models\Tags;
+use App\Models\GoldServiceSetting;
 use Str;
 use App\Services\GoldPriceCalculator;
 use App\Services\DiamondPriceCalculator;
@@ -49,7 +50,11 @@ class ProductController extends Controller
             );
         }
 
-        return GoldPriceCalculator::calculateFromDescription($description, $goldWeight);
+        $goldServiceId = $request->filled('gold_service_id')
+            ? (int) $request->gold_service_id
+            : ($product?->gold_service_id ? (int) $product->gold_service_id : null);
+
+        return GoldPriceCalculator::calculateFromDescription($description, $goldWeight, $goldServiceId);
     }
 
     public function allProducts(){
@@ -109,7 +114,8 @@ class ProductController extends Controller
         try {
             $categories = Categories::all();
             $subcategories = Subcategory::all();
-            return view('admin.product.add_product', compact('categories', 'subcategories'));
+            $goldServices = GoldServiceSetting::orderBy('sort_order')->get();
+            return view('admin.product.add_product', compact('categories', 'subcategories', 'goldServices'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -118,8 +124,9 @@ class ProductController extends Controller
         try {
             $categories = Categories::all();
             $subcategories = Subcategory::all();
+            $goldServices = GoldServiceSetting::orderBy('sort_order')->get();
             $product = Products::with('images', 'tags','category')->findOrFail($id); // get product with images and tags
-            return view('admin.product.update_product', compact('categories', 'product', 'subcategories'));
+            return view('admin.product.update_product', compact('categories', 'product', 'subcategories', 'goldServices'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -136,6 +143,7 @@ class ProductController extends Controller
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
+                'gold_service_id' => 'nullable|exists:gold_service_settings,id',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
             ]);
@@ -180,6 +188,7 @@ class ProductController extends Controller
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
+            $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discounted_price = $discounted_price??0;
@@ -247,6 +256,7 @@ class ProductController extends Controller
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
+                'gold_service_id' => 'nullable|exists:gold_service_settings,id',
                 // AED price is optional / nullable
                 'price_aed' => 'nullable|numeric|min:0',
                 'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/avif',
@@ -358,6 +368,7 @@ class ProductController extends Controller
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
+            $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
             // If AED price not provided, keep it null
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
             $product->discount_type = $request->discount_option ?? 1;

@@ -60,7 +60,6 @@ class CartController extends Controller
         $userId = \Auth::check() ? \Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
         $id = $request->input('id');
-        $qty = $request->input('quantity');
 
         $cartItem = \App\Models\Cart::where('id', $id)
             ->where(function($query) use ($userId, $sessionId) {
@@ -73,9 +72,54 @@ class CartController extends Controller
             ->first();
 
         if ($cartItem) {
-            $cartItem->quantity = max(1, (int)$qty);
+            if (!$request->has('quantity') && !$request->has('size')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No cart changes were provided.',
+                ], 422);
+            }
+
+            if ($request->has('quantity')) {
+                $validatedQuantity = $request->validate([
+                    'quantity' => 'required|integer|min:1',
+                ]);
+                $cartItem->quantity = $validatedQuantity['quantity'];
+            }
+
+            if ($request->has('size')) {
+                $validatedSize = $request->validate([
+                    'size' => 'required|integer|between:4,27',
+                ]);
+
+                $cartItem->loadMissing('product.tags');
+                if (!$cartItem->product || !$cartItem->product->requiresAsianRingSize()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'A ring size cannot be applied to this product.',
+                    ], 422);
+                }
+
+                $oldSize = $cartItem->size;
+                $newSize = (string) $validatedSize['size'];
+                $oldContextKey = $this->cartContextKey((int) $cartItem->product_id, $oldSize);
+                $newContextKey = $this->cartContextKey((int) $cartItem->product_id, $newSize);
+                $contexts = session('cart_store_context', []);
+
+                if ($oldContextKey !== $newContextKey && array_key_exists($oldContextKey, $contexts)) {
+                    $contexts[$newContextKey] = $contexts[$oldContextKey];
+                    unset($contexts[$oldContextKey]);
+                    session(['cart_store_context' => $contexts]);
+                }
+
+                $cartItem->size = $newSize;
+            }
+
             $cartItem->save();
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'size' => $cartItem->size,
+                'quantity' => $cartItem->quantity,
+            ]);
         }
 
         return response()->json(['success' => false]);
@@ -206,7 +250,7 @@ public function processCheckout(Request $request)
         | 3. Fetch and lock the exact cart being ordered
         |--------------------------------------------------------------------------
         */
-        $cartItems = Cart::with(['product', 'solitaireProduct'])
+        $cartItems = Cart::with(['product.tags', 'solitaireProduct'])
             ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -237,6 +281,26 @@ public function processCheckout(Request $request)
             return response()->json([
                 'success' => false,
                 'message' => 'Your cart is empty.',
+            ], 422);
+        }
+
+        $cartItemMissingSize = $cartItems->first(function ($item) {
+            $isSolitaire = (($item->cart_type ?? 'normal') === 'solitaire')
+                || !empty($item->solitaire_product_id);
+
+            if ($isSolitaire || !$item->product || !$item->product->requiresAsianRingSize()) {
+                return false;
+            }
+
+            return !in_array((string) $item->size, array_map('strval', range(4, 27)), true);
+        });
+
+        if ($cartItemMissingSize) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select an Asian ring size for every eligible product.',
             ], 422);
         }
 

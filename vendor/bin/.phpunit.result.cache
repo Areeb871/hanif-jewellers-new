@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"Tests\\Unit\\ProductsRingSizeTest::test_ring_tag_requires_an_asian_size":0.029,"Tests\\Unit\\ProductsRingSizeTest::test_ring_name_requires_an_asian_size":0,"Tests\\Unit\\ProductsRingSizeTest::test_ring_category_requires_an_asian_size":0,"Tests\\Unit\\ProductsRingSizeTest::test_earrings_do_not_match_ring_detection":0}}

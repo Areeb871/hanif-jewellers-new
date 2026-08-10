@@ -11,9 +11,7 @@ class GoldRateSetting extends Model
     protected $fillable = [
         'karat',
         'gold_rate_per_gram',
-        'making_charges_per_gram',
         'vat_percent',
         'is_active',
     ];
 }
-

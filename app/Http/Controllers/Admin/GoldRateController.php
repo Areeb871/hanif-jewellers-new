@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\GoldRateSetting;
+use App\Models\GoldServiceSetting;
 
 class GoldRateController extends Controller
 {
@@ -25,7 +26,6 @@ class GoldRateController extends Controller
                 $settings[$karat] = new GoldRateSetting([
                     'karat' => $karat,
                     'gold_rate_per_gram' => 0,
-                    'making_charges_per_gram' => 0,
                     'vat_percent' => 4,
                     'is_active' => true,
                 ]);
@@ -35,6 +35,7 @@ class GoldRateController extends Controller
         return view('admin.gold_rates.index', [
             'settings' => $settings,
             'karats' => $karats,
+            'services' => GoldServiceSetting::orderBy('sort_order')->get(),
         ]);
     }
 
@@ -45,32 +46,48 @@ class GoldRateController extends Controller
     {
         $karats = [18, 21, 22, 24];
 
+        $rules = [];
         foreach ($karats as $karat) {
-            $request->validate([
-                "gold_rate.$karat" => 'nullable|numeric|min:0',
-                "making_charges.$karat" => 'nullable|numeric|min:0',
-                "vat_percent.$karat" => 'nullable|numeric|min:0',
-            ]);
+            $rules["gold_rate.$karat"] = 'nullable|numeric|min:0';
+            $rules["vat_percent.$karat"] = 'nullable|numeric|min:0';
+        }
 
+        foreach (GoldServiceSetting::pluck('id') as $serviceId) {
+            $rules["services.$serviceId.weight_threshold"] = 'required|numeric|min:0.001';
+            $rules["services.$serviceId.above_weight_threshold"] = "required|numeric|min:0.001|same:services.$serviceId.weight_threshold";
+            $rules["services.$serviceId.light_oc_final_per_article"] = 'required|numeric|min:0';
+            $rules["services.$serviceId.heavy_oc_final_per_gram"] = 'required|numeric|min:0';
+        }
+
+        $validated = $request->validate($rules);
+
+        foreach ($karats as $karat) {
             $goldRate = $request->input("gold_rate.$karat", 0);
-            $making = $request->input("making_charges.$karat", 0);
             $vat = $request->input("vat_percent.$karat", 4);
-            $active = $request->boolean("is_active.$karat", true);
+            $active = $request->boolean("is_active.$karat");
 
             GoldRateSetting::updateOrCreate(
                 ['karat' => $karat],
                 [
                     'gold_rate_per_gram' => $goldRate,
-                    'making_charges_per_gram' => $making,
                     'vat_percent' => $vat,
                     'is_active' => $active,
                 ]
             );
         }
 
+        foreach (GoldServiceSetting::all() as $service) {
+            $serviceValues = $validated['services'][$service->id];
+            unset($serviceValues['above_weight_threshold']);
+
+            $service->update([
+                ...$serviceValues,
+                'is_active' => $request->boolean("service_active.{$service->id}"),
+            ]);
+        }
+
         return redirect()
             ->route('admin.gold-rates.index')
-            ->with('success', 'Gold rates updated successfully.');
+            ->with('success', 'Gold rates and jewellery services updated successfully.');
     }
 }
-

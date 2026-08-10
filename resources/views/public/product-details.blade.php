@@ -286,11 +286,10 @@
     line-height: 1.2;
 }
 .price-display {
-    font-weight: 500;
+    font-weight: 600;
     font-size: clamp(1.25rem)
     color: #17120f;
     font-family: 'Poppins';
-    letter-spacing: 0.25em;
 }
 
 .product-old-price {
@@ -655,7 +654,7 @@
                         @if($isRingSizeProduct)
                             <div class="ring-size-panel" id="productSizePanel">
                                 <div class="ring-size-heading">
-                                    <label for="productSizeToggle">Select Asian Ring Size</label>
+                                    <label for="productSizeToggle">Select - Asian Ring Size</label>
                                     <button type="button" class="ring-size-chart-link" data-bs-toggle="modal" data-bs-target="#asianRingSizeChart">
                                         View Size Chart
                                     </button>
