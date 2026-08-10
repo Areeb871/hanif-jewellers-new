@@ -67,19 +67,24 @@
 
 .perrelet-page .perrelet-intro h2 {
   margin: 0;
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-family:"Argent CF", Georgia, serif;
+  font-size:36px;
+  font-weight:400;
   line-height: 1.2;
 }
 
 .perrelet-page .perrelet-subtitle {
   margin: 0.5rem 0 0;
-  font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+  font-family:"Poppins", sans-serif;
+  font-size:13px;
+  line-height:1.7;
 }
 
 .perrelet-page .perrelet-intro p {
   margin: var(--perrelet-content-gap) auto 0;
-  font-size: clamp(0.875rem, 1.25vw, 1rem);
-  line-height: 1.65;
+  font-family:"Poppins", sans-serif;
+  font-size:13px;
+  line-height:1.7;
 }
 
 .perrelet-page .bovet-filterbar {
@@ -87,7 +92,7 @@
   flex-direction: column;
   align-items: center;
   gap: clamp(0.75rem, 1.5vw, 1.25rem);
-  padding: 0 14px clamp(1.5rem, 3vw, 2.5rem);
+  /* padding: 0 14px clamp(1.5rem, 3vw, 2.5rem); */
 }
 
 .perrelet-page .bovet-filterbar__left {
@@ -119,7 +124,7 @@
 }
 
 .perrelet-page .onlineStore {
-  padding-top: var(--perrelet-content-gap) !important;
+  padding-top:16px !important;
 }
 
 .perrelet-page .perrelet-footer {
@@ -235,7 +240,7 @@
             .offcanvas-modern .offcanvas-header { border-bottom:1px solid #fff; padding-bottom:0.5rem; background:#fff; }
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -335,7 +340,7 @@
                 .filter .navbar-toggler {
                     margin-top: 100px !important;
                     margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -381,6 +386,7 @@
     box-shadow: none !important;
     background: transparent !important;
     padding: 6px 8px;
+    font-family:"Poppins", sans-serif;
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -423,25 +429,26 @@
 .perrelet-intro h2{
     margin: 0;
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 400;
     color: #000;
-    font-family: Arial, sans-serif;
+    font-family:"Argent CF", Georgia, serif;
 }
 
 .perrelet-subtitle{
     margin-top: 6px;
-    font-size: 15px;
+    font-size:13px;
+    line-height:1.7;
     color: #222;
-    font-family: Arial, sans-serif;
+    font-family:"Poppins", sans-serif;
 }
 
 .perrelet-intro p{
     max-width: 760px;
     margin: 20px auto 0;
-    font-size: 15px;
-    line-height: 1.65;
+    font-size:13px;
+    line-height:1.7;
     color: #111;
-    font-family: Arial, sans-serif;
+    font-family:"Poppins", sans-serif;
 }
 
 /* Mobile */
@@ -451,16 +458,16 @@
     }
 
     .perrelet-intro h2{
-        font-size: 20px;
+        font-size:24px;
     }
 
     .perrelet-subtitle{
-        font-size: 13px;
+        font-size:13px;
     }
 
     .perrelet-intro p{
-        font-size: 14px;
-        line-height: 1.7;
+        font-size:13px;
+        line-height:1.7;
     }
 }
               .offcanvas.offcanvas-modern{
@@ -498,12 +505,14 @@
              class="bovet-brand-logo" alt="Perrelet">
     </div>
 
-    <div class="bovet-filterbar__right">
+    <div class="bovet-filterbar__right" style="display:none;">
+    </div>
+</div>
+<div class="d-flex justify-content-end px-3">
         <button class="navbar-toggler bovet-filterbar__btn" type="button"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasPerrelet">
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasPerrelet" style="position:static!important; margin:0!important; transform:none;">
             <span class="navbar-toggler-icon"></span> SORT & FILTER
         </button>
-    </div>
 </div>
   <div class="container-fluid px-3">
     <div class="row onlineStore g-2 pt-3" id="perreletGrid">
@@ -528,7 +537,7 @@
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if(isset($totalFilteredProducts) && $totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $totalShown }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $totalShown }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
                 SHOWING {{ $totalShown }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -539,7 +548,7 @@
             @if($shouldShowLoadMore)
                 <div class="d-flex justify-content-center">
                     <button id="loadMoreBtn"
-                            style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s; display: inline-block; margin: 0 auto;"
+                            style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s; display: inline-block; margin: 0 auto;"
                             data-page="{{ $products->currentPage() + 1 }}"
                             data-last-page="{{ $products->lastPage() }}"
                             data-per-page="{{ $products->perPage() }}"

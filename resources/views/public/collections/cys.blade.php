@@ -41,19 +41,19 @@
 
 .cys-page .cys-cta {
   margin: 0;
-  padding: var(--cys-section-space) 15px;
+  padding: 70px 0 27px 0;
 }
 
 .cys-page .cys-btn {
   padding: 0;
-  font-family: Arial, sans-serif;
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: 0;
+  font-family:"Argent CF", Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  /* letter-spacing: 0; */
 }
 
 .cys-page .cys-products-section .onlineStore {
-  padding-top: var(--cys-content-gap) !important;
+  padding-top:16px !important;
 }
 
 .cys-page .cys-footer {
@@ -231,7 +231,7 @@
             .offcanvas-modern .offcanvas-header { border-bottom:1px solid #fff; padding-bottom:0.5rem; background:#fff; }
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -338,7 +338,7 @@
                 .filter .navbar-toggler {
                     margin-top: -59px !important;
                     margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -372,13 +372,15 @@
   }
   .cys-kicker{
     margin:0;
-    font-size: 18px;
-    letter-spacing: .3px;
+    font-family:"Argent CF", Georgia, serif;
+    font-size:36px;
+    font-weight:600;
   }
   .cys-sub{
     margin:6px 0 0;
-    font-size: 18px;
-    line-height: 1.5;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.59;
   }
 
 /* 3 column layout */
@@ -432,8 +434,9 @@
   align-items: center;      /* vertical center */
   justify-content: center;  /* horizontal center */
   text-align: center;
-  font-size: 18px;
-  line-height: 1.75;
+  font-family:"Poppins", sans-serif;
+  font-size:13px;
+  line-height:1.7;
   height: 100%;
 }
 
@@ -454,6 +457,12 @@
 
   /* Responsive */
   @media (max-width: 900px){
+    .cys-kicker{
+      max-width:100%;
+      font-size:24px;
+      line-height:1.3;
+      overflow-wrap:break-word;
+    }
     .cys-grid{
       grid-template-columns: 1fr;
       gap: 16px;
@@ -486,14 +495,15 @@
 {{-- =========================
    PAGE HEADER + GRID + FOOTER
 ========================= --}}
-<div class="navbar navbar-white align-items-center filter position-relative justify-content-center">
+<div class="filter d-flex justify-content-end px-3">
 
-  <button class="navbar-toggler border-0 text-black position-absolute end-0"
+  <button class="navbar-toggler border-0 text-black"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasCys"
           aria-controls="offcanvasCys"
-          aria-label="Toggle navigation">
+          aria-label="Toggle navigation"
+          style="position:static!important; margin:0!important;">
     <span class="navbar-toggler-icon"></span> SORT & FILTER
   </button>
 </div>
@@ -527,7 +537,7 @@
            data-current="{{ $currentPageProducts }}"
            data-per-page="{{ $products->perPage() }}"
            data-current-page="{{ $products->currentPage() }}"
-           style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+           style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
         SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
       </div>
     @endif
@@ -539,7 +549,7 @@
 
     @if($shouldShowLoadMore)
       <button id="loadMoreBtn"
-              style="background:#e3e4e5;border:none;color:#222;font-size:0.8rem;letter-spacing:0.15em;padding:0.8rem 2rem;border-radius:8px;font-family:inherit;font-weight:400;box-shadow:none;transition:background 0.2s;"
+              style="background:#e3e4e5;border:none;color:#222;font-family:'Poppins',sans-serif;font-size:0.7rem;letter-spacing:0.15em;padding:0.8rem 2rem;border-radius:8px;font-weight:400;box-shadow:none;transition:background 0.2s;"
               data-page="{{ $products->currentPage() + 1 }}"
               data-last-page="{{ $products->lastPage() }}"
               data-per-page="{{ $products->perPage() }}"

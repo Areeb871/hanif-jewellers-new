@@ -891,7 +891,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {{-- =======================
             FOOTER: COUNTER + LOAD MORE
         ======================== --}}
-        <div class="text-center py-4 bovet-footer">
+        <div class="text-center py-5 bovet-footer">
             @if(isset($products) && $products->count() > 0)
                 @php
                     $totalShown = $currentPageProducts;

@@ -66,9 +66,9 @@ padding:2px 15px 0;
 .chronoswiss-intro-text{
     margin:0 auto;
     max-width:900px;
-    font-family:Arial, sans-serif;
-    font-size:18px;
-    line-height:1.45;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.7;
     color:#4a4a4a;
     padding: 25px;
 }
@@ -149,8 +149,8 @@ padding:2px 15px 0;
     }
 
     .chronoswiss-intro-text{
-        font-size:14px;
-        line-height:1.5;
+        font-size:13px;
+        line-height:1.7;
         padding:25px;
     
     }
@@ -287,8 +287,9 @@ img{
 
 .maurice-page .chronoswiss-intro-text {
     padding:0 !important;
-    font-size:clamp(0.875rem, 1.5vw, 1.125rem);
-    line-height:1.6;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.7;
 }
 
 .maurice-page .ml-bottom {
@@ -302,7 +303,9 @@ img{
 
 .maurice-page .ml-title {
     margin:0;
-    font-size:clamp(1.5rem, 2.5vw, 2rem);
+    font-family:"Argent CF", Georgia, serif;
+    font-size:24px;
+    font-weight:400;
     line-height:1.2;
 }
 
@@ -311,7 +314,7 @@ img{
 }
 
 .maurice-page .maurice-products-section .onlineStore {
-    padding-top:var(--maurice-content-gap) !important;
+    padding-top:16px !important;
 }
 
 .maurice-page .maurice-lacroix-footer {
@@ -420,7 +423,7 @@ img{
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
             /* Simple SORT & FILTER button - no borders on any state */
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -525,7 +528,7 @@ img{
                 .filter .navbar-toggler {
 
                 margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -560,7 +563,9 @@ img{
             <div class="brand-logo-wrapper w-70 my-3 text-center"style="display:none;">
                 <img src="{{ asset('assets/f_assets/image/watch logo/Maurice Lacroix.png') }}" alt="Maurice Lacroix logo" class="brand-logo">
             </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMauriceLacroix" aria-controls="offcanvasMauriceLacroix" aria-label="Toggle navigation">
+        </div>
+        <div class="filter d-flex justify-content-end px-3">
+            <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMauriceLacroix" aria-controls="offcanvasMauriceLacroix" aria-label="Toggle navigation" style="position:static!important; margin:0!important;">
                 <span class="navbar-toggler-icon"></span> SORT & FILTER
             </button>
         </div>
@@ -586,7 +591,7 @@ img{
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -596,7 +601,7 @@ img{
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"
@@ -926,5 +931,3 @@ img{
     </script>
 </main>
 @endsection
-
-

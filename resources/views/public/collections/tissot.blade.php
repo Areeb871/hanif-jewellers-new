@@ -83,16 +83,18 @@
         }
         .tissot-home-content__eyebrow {
             margin: 0 0 16px;
-            font-size: 12px;
+            font-family:"Poppins", sans-serif;
+            font-size:13px;
             font-weight: 600;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            line-height: 1.5;
+            line-height:1.59;
             color: #5c5c5c;
         }
         .tissot-home-content__heading {
             margin: 0;
-            font-size: clamp(36px, 5vw, 52px);
+            font-family:"Argent CF", Georgia, serif;
+            font-size:36px;
             font-weight: 400;
             letter-spacing: -0.01em;
             line-height: 1.12;
@@ -100,10 +102,11 @@
         }
         .tissot-home-content__text {
             margin: 0;
-            font-size: 20px;
+            font-family:"Poppins", sans-serif;
+            font-size:13px;
             font-weight: 400;
-            line-height: 1.7;
-            font-style: italic;
+            line-height: 1.59;
+            font-style:normal;
             color: #4a4a4a;
         }
         .tissot-home-content__cta {
@@ -122,7 +125,8 @@
 
         .tissot-brand-bar-wrap {
             --tissot-bar-space: clamp(32px, 4vw, 40px);
-            padding: var(--tissot-bar-space) clamp(24px, 4vw, 48px);
+            padding: 15vh 0 8vh 0;
+
         }
         .tissot-brand-bar {
             display: flex;
@@ -158,6 +162,8 @@
             margin: 0 !important;
             padding: 0 !important;
             line-height: 1.5;
+            font-family:"Poppins", sans-serif;
+            font-size:12px;
         }
 
         .tissot-products {
@@ -168,7 +174,7 @@
             padding-right: clamp(24px, 4vw, 48px);
         }
         .tissot-products .onlineStore {
-            padding-top: 0;
+            padding-top:16px;
         }
         .tissot-footer {
             padding-top: clamp(40px, 5vw, 64px);
@@ -185,15 +191,14 @@
         .tissot-load-more-btn {
             background: #e3e4e5;
             border: none;
-            color: #1a1a1a;
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 14px 32px;
+            color: #222;
+            font-family:"Poppins", sans-serif;
+            font-size:0.7rem;
+            font-weight:400;
+            letter-spacing:0.15em;
+            padding:0.8rem 2rem;
             border-radius: 8px;
-            transition: background 0.2s, opacity 0.2s;
+            transition:background 0.2s;
         }
         .tissot-load-more-btn:hover {
             background: #d8d9da;
@@ -225,10 +230,10 @@
                 padding-bottom: 40px;
             }
             .tissot-home-content__heading {
-                font-size: clamp(28px, 8vw, 36px);
+                font-size:24px;
             }
             .tissot-home-content__text {
-                font-size: 15px;
+                font-size:13px;
             }
             .tissot-brand-bar-wrap {
                 --tissot-bar-space: 28px;
@@ -246,7 +251,7 @@
         .offcanvas-modern .offcanvas-header { border-bottom:1px solid #ecebe7; padding-bottom:0.75rem; background:#fff; }
         .offcanvas-modern .offcanvas-title { font-size:12px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:#1a1a1a; }
         .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
-        .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:12px; font-weight:500; letter-spacing:0.12em; line-height:1.5; display:flex; align-items:center; gap:6px; z-index:10; font-family:inherit; }
+        .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:12px; font-weight:500; letter-spacing:0.12em; line-height:1.5; display:flex; align-items:center; gap:6px; z-index:10; font-family:"Poppins", sans-serif; }
         .filter .navbar-toggler:focus,
         .filter .navbar-toggler:hover,
         .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -358,12 +363,12 @@
             <div class="brand-logo-wrapper text-center">
                 <img src="{{ asset('assets/f_assets/image/watch logo/Tissot-logo.png') }}" alt="Tissot logo" class="brand-logo">
             </div>
-            <div class="tissot-brand-bar__filter-row">
-                <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTissot" aria-controls="offcanvasTissot" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span> SORT & FILTER
-                </button>
-            </div>
         </div>
+        </div>
+        <div class="filter d-flex justify-content-end px-3">
+            <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTissot" aria-controls="offcanvasTissot" aria-label="Toggle navigation" style="position:static!important; margin:0!important;">
+                <span class="navbar-toggler-icon"></span> SORT & FILTER
+            </button>
         </div>
 
         <div class="container-fluid">
@@ -380,14 +385,14 @@
         </div>
         </div>
         
-        <div class="text-center py-4 tissot-footer">
+        <div class="text-center py-5 tissot-footer">
         @if($products->count() > 0)
             @php
                 $totalShown = $currentPageProducts;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-             <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
+             <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif

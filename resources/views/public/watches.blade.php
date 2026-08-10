@@ -566,6 +566,7 @@ section{
 }
 .explore-brands-title {
     font-family: "Argent CF", Georgia, serif !important;
+    font-weight: 600;
     letter-spacing: .04em;
     margin: 40px 0;
     padding-top: 0 !important;
@@ -1183,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <style>
 .bannerWrap{
     width: 100%;
-    height: clamp(180px, 28vw, 410px);
+    aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
 }
@@ -1191,55 +1192,16 @@ document.addEventListener('DOMContentLoaded', function () {
 .bannerVideo{
     width: 100%;
     height: 100%;
-    object-fit: cover;   /* IMPORTANT: cinematic banner look */
+    object-fit: cover;
     object-position: center;
     display: block;
 }
 
-/* Base – Mobile (default) */
-.bannerWrap{
-    width: 100%;
-    height: 180px;      /* phones */
-    position: relative;
-    overflow: hidden;
-}
-
-/* Small tablets */
-@media (min-width: 576px){
-    .bannerWrap{
-        height: 350px;
-    }
-}
-
-/* Tablets */
-@media (min-width: 768px){
-    .bannerWrap{
-        height: 600px;
-    }
-}
-
-/* Laptops */
-@media (min-width: 992px){
-    .bannerWrap{
-        height: 700px;
-    }
-}
-
-/* Large desktops */
-@media (min-width: 1200px){
-    .bannerWrap{
-        height: 900px;
-    }
-}
-
 </style>
 <div class="triangle-text">
-  <h1 class="ehed-main-title-perrelet">Perrelet</h1>
+  <h1 class="ehed-main-title-perrelet">ARTYA</h1>
   <p class="ehed-body-text hero__description font-family--serif px-2">
-    Discover the Turbine Poker Royal Flush by Perrelet
-    a limited edition of just 99 pieces for poker enthusiasts.
-    This luxury watch, with its distinctive turbine technology inspired by aviation propulsion,
-    reveals a royal flush with every movement.
+    Experience the Purity collection by ArtyA:  new revolutionary movements where each layer of the architecture is taken to the extreme. Complexity that only appears to be simple, the essence minimalism – extreme, pure simplicity.
   </p>
 </div>
 <div class="container-fluid p-0">
@@ -1251,7 +1213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             muted
             playsinline
         >
-            <source src="{{ asset('assets/f_assets/image/watches/Perrelet.mp4') }}" type="video/mp4">
+            <source src="{{ asset('assets/f_assets/image/watches/artya-14-aug.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>

@@ -70,8 +70,8 @@
 
 .fl-since-heading {
     margin: 0 0 28px;
-    font-family: "Times New Roman", Georgia, serif;
-    font-size: 58px;
+    font-family:"Argent CF", Georgia, serif;
+    font-size:36px;
     font-weight: 400;
     line-height: 1.08;
     color: #111;
@@ -83,8 +83,9 @@
 }
 
 .para-medium {
-    font-size: 18px;
-    line-height: 1.75;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.7;
     color: #1a1a1a;
     margin-bottom: 24px;
     max-width: 94%;
@@ -112,11 +113,11 @@
 @media (max-width: 1199px) {
 
     .fl-since-heading {
-        font-size: 48px;
+        font-size:36px;
     }
 
     .para-medium {
-        font-size: 16px;
+        font-size:13px;
         line-height: 1.7;
         max-width: 100%;
     }
@@ -142,7 +143,7 @@
     }
 
     .fl-since-heading {
-        font-size: 42px;
+        font-size:24px;
     }
 }
 
@@ -169,13 +170,13 @@ padding:0px;
     }
 
     .fl-since-heading {
-        font-size: 34px;
+        font-size:24px;
         line-height: 1.15;
         margin-bottom: 18px;
     }
 
     .para-medium {
-        font-size: 15px;
+        font-size:13px;
         line-height: 1.7;
         margin-bottom: 18px;
     }
@@ -259,7 +260,7 @@ padding:0px;
 }
 
 .favre-page .favre-products-section .onlineStore {
-    padding-top:var(--favre-content-gap) !important;
+    padding-top:16px !important;
 }
 
 .favre-page .favre-footer {
@@ -409,7 +410,7 @@ padding:0px;
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
 
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -500,7 +501,7 @@ padding:0px;
                 .filter .navbar-toggler { margin-top: 80px !important; margin-right: 10px !important; font-size: 12px !important; padding: 4px 8px !important; }
             }
             @media (min-width: 576px) and (max-width: 767px) {
-                .filter .navbar-toggler { margin-top: 100px !important; margin-right: 15px !important; font-size: 13px !important; }
+                .filter .navbar-toggler { margin-top: 100px !important; margin-right: 15px !important; font-size: 12px !important; }
             }
             @media (min-width: 768px) and (max-width: 991px) {
                 .filter .navbar-toggler { margin-top: 120px !important; margin-right: 20px !important; }
@@ -535,6 +536,7 @@ padding:0px;
     box-shadow: none !important;
     background: transparent !important;
     padding: 6px 8px;
+    font-family:"Poppins", sans-serif;
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -585,12 +587,14 @@ padding:0px;
              class="bovet-brand-logo" alt="Bovet">
     </div>
 
-    <div class="bovet-filterbar__right">
+    <div class="bovet-filterbar__right" style="display:none;">
+    </div>
+</div>
+<div class="d-flex justify-content-end px-3">
         <button class="navbar-toggler bovet-filterbar__btn" type="button"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasFavre">
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasFavre" style="position:static!important; margin:0!important; transform:none;">
             <span class="navbar-toggler-icon"></span> SORT & FILTER
         </button>
-    </div>
 </div>
         <div class="container-fluid px-3">
             <div class="row onlineStore g-2 pt-3" id="favreGrid">
@@ -619,7 +623,7 @@ padding:0px;
                         data-current="{{ $currentPageProducts }}"
                         data-per-page="{{ $products->perPage() }}"
                         data-current-page="{{ $products->currentPage() }}"
-                        style="font-size: 1rem; letter-spacing: 0.2em;">
+                        style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em;">
                         SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
                     </div>
                 @endif
@@ -631,7 +635,7 @@ padding:0px;
 
                 @if($shouldShowLoadMore)
                     <button id="loadMoreFavreBtn"
-                            style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                            style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                             data-page="{{ $products->currentPage() + 1 }}"
                             data-last-page="{{ $products->lastPage() }}"
                             data-per-page="{{ $products->perPage() }}"
@@ -826,4 +830,3 @@ function toggleCategory(targetId, element) {
 
 </main>
 @endsection
-    

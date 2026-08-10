@@ -258,7 +258,7 @@ img{
 }
 
 .louis-moinet-text p{
-    max-width: 800px;
+    max-width: 780px;
     font-family:"Poppins", sans-serif;
     font-size:13px;
     line-height:1.59;
@@ -410,6 +410,7 @@ img{
             specialising in the creation of high-end timepieces, often featuring exotic materials
             and innovative technology, underpinned by the philosophy of limited edition mechanical art.
         </p>
+        <br/>
 
         <p>
             All of Louis Moinet’s timepieces are either exclusive limited editions or unique pieces.
