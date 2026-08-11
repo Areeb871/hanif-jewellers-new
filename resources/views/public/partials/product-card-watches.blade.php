@@ -568,7 +568,7 @@
                 </div>
 
                 {{-- ✅ UNIQUE INDICATORS --}}
-                <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
+                <!-- <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
                     id="{{ $indicatorId }}">
 
                     @foreach ($product->images as $imgIndex => $img)
@@ -581,7 +581,7 @@
                             </button>
                         </li>
                     @endforeach
-                </ul>
+                </ul> -->
 
                 {{-- ✅ controls (REMOVE pe-none so clicks work) --}}
                 <button class="carousel-control-prev" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="prev">

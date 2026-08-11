@@ -602,7 +602,7 @@ section{
 }
 .triangle-text {
     padding-top: 48px;
-    padding-bottom: 24px;
+    padding-bottom: 48px;
 }
 .ehed-main-title-perrelet {
     margin-top: 0;
