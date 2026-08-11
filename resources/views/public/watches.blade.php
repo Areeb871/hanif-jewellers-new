@@ -1094,8 +1094,8 @@ The Récital 30 focuses on the innovative roller system from the award winning R
 </section>
 <section class="ehed-hero-section reverse reveal reveal-right">
 @php
-    $desktopBanner = 'assets/f_assets/image/watches/fm.jpg';
-    $mobileBanner  = 'assets/f_assets/image/watches/fm.jpg';
+    $desktopBanner = 'assets/f_assets/image/watches/Yatch-Banner.png';
+    $mobileBanner  = 'assets/f_assets/image/watches/Yatch-Banner.png';
 
     $desktopIsVideo = Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
     $mobileIsVideo  = Str::endsWith(strtolower($mobileBanner),  ['.mp4', '.webm', '.ogg']);
@@ -1112,9 +1112,7 @@ The Récital 30 focuses on the innovative roller system from the award winning R
         <div class="ehed-category-label">Featuring Wasim Akram</div>
         <h1 class="ehed-main-title">Franck Muller</h1>
         <p class="ehed-body-text hero__description font-family--serif">
-           Time respects only the extraordinary.
-Wasim Akram for Franck Muller —
-an enduring symbol of power, discipline, and timeless elegance.
+          Against the breathtaking view of Lake Geneva and the iconic Franck Muller geneve Watchland Manufacture, the legendary Wasim Akram embraced the spirit of the Vanguard Yachting Mariner. Inspired by life at sea, its bold architecture and presence embody the freedom to explore and the artistry of Swiss Haute Horlogerie.
         </p>
     </div>
 

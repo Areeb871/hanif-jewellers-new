@@ -408,6 +408,13 @@ section.watch .scroller-item {
     scroll-snap-align: none;
 }
 
+/*section.watch .scroller-container {*/
+/*    display: flex;*/
+/*    width: max-content;*/
+/*    padding-inline: 16px;*/
+/*    gap: 10px;*/
+/*}*/
+
 section.watch .scroller-container {
     display: flex;
     width: max-content;
@@ -723,6 +730,11 @@ section.watch .card:hover {
     }
 }
 
+/*.watch-brands-section {*/
+/*    padding: 0;*/
+/*}*/
+
+
 .watch-brands-section {
     padding: 0 0 2rem;
 }
@@ -744,6 +756,11 @@ section.watch .card:hover {
         padding-top: calc(2.5rem + 0.5rem);
     }
 }
+
+
+
+
+
 
 #carouselExampleRide .carousel-control-prev,
 #carouselExampleRide .carousel-control-next {
@@ -780,13 +797,19 @@ culminating in a true resemblance of experience pure art.</div>
 </section> -->
 
 <section class="custom-banner d-none d-md-block position-relative">
-    <img
-        src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
-        alt="Franck Muller"
-        class="custom-banner-video"
-        fetchpriority="high"
-    >
-            <!--<a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>-->
+    <video class="custom-banner-video" autoplay muted loop playsinline>
+        <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <!--  <img-->
+    <!--    src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"-->
+    <!--    alt="Franck Muller"-->
+    <!--    class="custom-banner-video"-->
+    <!--    fetchpriority="high"-->
+    <!-->
+    
+            <a href="/collections/franck-muller" class="custom-banner-btn">DISCOVER MORE</a>
 </section>
 
 
@@ -833,12 +856,18 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-  <img
-    class="mobileStackVideo"
-    src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"
-    alt="Franck Muller"
-    fetchpriority="high"
-  >
+  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
+    <source src="{{ asset('assets/f_assets/image/watches/FMPK-Mob-Banner.mp4') }}" type="video/mp4">
+  </video>
+  
+  
+  
+  <!-- <img-->
+  <!--  class="mobileStackVideo"-->
+  <!--  src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"-->
+  <!--  alt="Franck Muller"-->
+  <!--  fetchpriority="high"-->
+  <!-->-->
  <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"
@@ -847,7 +876,7 @@ towering peaks</div>
 /> -->
 
   </div>
-<!--<a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>-->
+<a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
@@ -863,7 +892,7 @@ towering peaks</div>
                 <div class="scroller-container">
                     @foreach ($products as $key => $product)
                         <div class="scroller-item">
-                            @include('public.partials.product-card-new', [
+                                @include('public.partials.product-card-new', [
                                 'product' => $product,
                                 'storeContext' => strtolower(optional($product->category)->slug ?? '') !== 'watches',
                             ])
@@ -1144,7 +1173,7 @@ FARAH KHAN
 </section>
 <section class="home-brands watch-brands-section">
   <h4 class="section-title text-center">
-    INTERNATIONAL WATCH BRAND
+    INTERNATIONAL WATCH BRANDS
   </h4>
 
 <style>
