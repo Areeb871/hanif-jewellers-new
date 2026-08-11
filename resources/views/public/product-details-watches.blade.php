@@ -211,7 +211,7 @@
 .product-detail-full-name {
     color: #17120f;
     font-family: 'Argent CF', Georgia, serif !important;
-    font-size: clamp(1.5rem, 2.7vw, 3rem) !important;
+    font-size: clamp(1.5rem, 2vw, 3rem) !important;
     font-weight: 600;
     letter-spacing: .015em;
     line-height: 1.06;
