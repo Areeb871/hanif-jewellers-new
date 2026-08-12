@@ -66,8 +66,8 @@ img{
         $desktopBanner = $louisMoinetSubcategory->banner_url;
         $desktopIsVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
 
-        /* mobile banner dynamic */
-        $mobileBanner = $desktopBanner;
+        /* Dedicated mobile banner */
+        $mobileBanner = 'assets/f_assets/image/watches mobile view/LM-mobile-view.mp4';
 
 
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);

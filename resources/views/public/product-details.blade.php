@@ -908,9 +908,6 @@
                 if (!isMouseDown) return;
                 isMouseDown = false;
                 scroller.style.cursor = 'grab';
-                // snap to nearest
-                const idx = nearestIndex();
-                smoothScrollTo(scroller, itemTarget(idx), 350);
             }));
 
             dots.forEach((dot) => {
@@ -3146,21 +3143,6 @@
                 return Math.min(nearestIndex, lastScrollableIndex);
             }
 
-            function snapToNearest() {
-                const items = slider.querySelectorAll('.scroller-item, .product-card-item');
-                if (!items.length) return;
-                const idx = getNearestItemIndex();
-                const target = items[idx];
-                if (target) {
-                    const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
-                    const targetLeft = idx === 0
-                        ? 0
-                        : Math.min(maxScroll, slider.scrollLeft + (target.getBoundingClientRect().left - slider.getBoundingClientRect().left));
-                    slider.scrollTo({ left: targetLeft, behavior: 'smooth' });
-                }
-                requestAnimationFrame(updateRecommendedDots);
-            }
-
             // Mouse events
             slider.addEventListener('mousedown', (e) => {
                 isDown = true;
@@ -3173,16 +3155,12 @@
             slider.addEventListener('mouseleave', () => {
                 isDown = false;
                 slider.classList.remove('is-grabbing');
-                // Snap to nearest on leave
-                snapToNearest();
             });
 
             slider.addEventListener('mouseup', () => {
                 isDown = false;
                 slider.classList.remove('is-grabbing');
                 setTimeout(() => { isDragging = false; }, 50);
-                // Snap to nearest on mouse up
-                snapToNearest();
             });
 
             slider.addEventListener('mousemove', (e) => {

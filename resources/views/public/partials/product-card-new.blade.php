@@ -345,7 +345,7 @@
                         </div>
                     @endforeach
                 </div>
-                <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal" data-next-slide-resource="Go to slide" id="indicator-container-{{ $carouselId }}">
+                <!-- <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal" data-next-slide-resource="Go to slide" id="indicator-container-{{ $carouselId }}">
                     @foreach ($product->images as $imgIndex => $img)
                         <li class="swiper-pagination-bullet {{ $imgIndex === 0 ? 'swiper-pagination-bullet-active' : '' }}" 
                             data-position="{{ $imgIndex + 1 }}"
@@ -357,7 +357,7 @@
                             </button>
                         </li>
                     @endforeach
-                </ul>
+                </ul> -->
                 <button class="carousel-control-prev pe-none" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
