@@ -364,6 +364,7 @@ footer h4 {
         <ul class="hj-links">
           <li><a href="{{ url('locator') }}">Find a Boutique ↗</a></li>
           <li><a href="{{ url('about-us') }}">About Us</a></li>
+          <li><a href="{{ route('friends-of-the-brand') }}">Friends of the Brand</a></li>
           <li><a href="{{ url('assurance') }}">Assurance</a></li>
         </ul>
       </div>

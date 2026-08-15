@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Blog extends Model
 {
@@ -10,12 +11,14 @@ class Blog extends Model
         'title',
         'slug',
         'description',
+        'sections',
         'image',
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'sections' => 'array',
     ];
 
     protected static function boot()

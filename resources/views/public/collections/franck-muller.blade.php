@@ -664,6 +664,11 @@ Wasim Akram for Franck Muller — an enduring symbol of power, discipline, and t
                             'master-square' => 'Master Square',
                             'round' => 'Round',
                             'vanguard' => 'Vanguard',
+                            'Crazy Hours' => 'Crazy Hours',
+                            'Black Croco' => 'Black Croco',
+                            'Mariner'=>'Mariner',
+                            'Secret Hours'=>'Secret Hours',
+                            'Master Banker'=>'Master Banker'
                         ];
                     @endphp
                     @foreach($series as $s => $label)

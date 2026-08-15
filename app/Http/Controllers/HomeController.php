@@ -1330,6 +1330,13 @@ public function Online_Shopping_Store(Request $request)
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
         return view('public.about-us', compact('categories', 'watchCategories'));
     }
+    public function friendsOfTheBrand()
+    {
+        $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
+        $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
+
+        return view('public.friends-of-the-brand', compact('categories', 'watchCategories'));
+    }
     public function after_sale_services()
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();

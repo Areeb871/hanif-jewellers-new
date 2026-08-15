@@ -832,7 +832,7 @@
                     <div class="os-sub-filters-wrap">
                         <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
                         <div id="osSubFilters" class="os-sub-filters">
-                        <button type="button" class="filter-tag-btn" data-tags="ehed,gold_rings,diamond_rings">Rings</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings,ehed">Rings</button>
 
                 
                         <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>

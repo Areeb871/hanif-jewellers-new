@@ -563,12 +563,12 @@
                     </span>
                 </div>
 
-                <div class="d-flex justify-content-between mb-2">
+                <!-- <div class="d-flex justify-content-between mb-2">
                     <span>Express Delivery with Signature:</span>
                     <span class="fw-bold" id="checkoutShippingValue" data-shipping="{{ $shipping }}">
                         PKR {{ number_format($shipping, 0, '.', ',') }}
                     </span>
-                </div>
+                </div> -->
 
                 <hr class="my-3">
 

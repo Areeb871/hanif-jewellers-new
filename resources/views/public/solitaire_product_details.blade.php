@@ -662,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <button type="submit" class="hj-cart-btn" id="hjCartSubmitBtn">
-            ADD TO CART
+            BUY NOW
         </button>
     </div>
 </form>
@@ -783,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button class="hj-help-btn" type="button">?</button>
                     <div class="hj-help-dropdown">Shape refers to the diamond outline.</div>
                 </div>
-                <strong>OVAL</strong>
+                <strong>{{ strtoupper($product->shape ?: 'N/A') }}</strong>
                 <span>Preferred style</span>
             </div>
 
@@ -2328,11 +2328,11 @@ document.addEventListener('DOMContentLoaded', function () {
         clearRingSizeError();
 
         const formData = new FormData(form);
-        const defaultCartLabel = cartSubmitBtn ? cartSubmitBtn.textContent : 'ADD TO CART';
+        const defaultCartLabel = cartSubmitBtn ? cartSubmitBtn.textContent : 'BUY NOW';
 
         if (cartSubmitBtn) {
             cartSubmitBtn.disabled = true;
-            cartSubmitBtn.textContent = 'ADDING...';
+            cartSubmitBtn.textContent = 'PROCESSING...';
             cartSubmitBtn.setAttribute('aria-busy', 'true');
         }
 
@@ -2358,7 +2358,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (data.success) {
                 setTimeout(() => {
-                    window.location.href = "{{ url('/cart') }}";
+                    window.location.href = "{{ route('checkout') }}";
                 }, 800);
             }
         })
