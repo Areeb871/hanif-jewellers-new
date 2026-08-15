@@ -142,6 +142,12 @@
         aspect-ratio: 1 / 1;
     }
 
+    .friends-feature__image-wrap--wasim {
+        background: #050608;
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
     .friends-feature__image {
         display: block;
         width: 100%;
@@ -150,7 +156,13 @@
     }
 
     .friends-feature__image--portrait {
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    .friends-feature__image--portrait {
         object-position: center 24%;
+        transform: scale(1.006);
     }
 
     .friends-feature__content {
@@ -173,7 +185,14 @@
     }
 
     .friends-feature__copy {
-        max-width: 430px;
+        max-width: 530px;
+        font-size: 13px;
+        letter-spacing: .01em;
+        text-wrap: pretty;
+    }
+
+    .friends-feature__copy--hania {
+        max-width: 525px;
         font-size: 13px;
     }
 
@@ -343,6 +362,11 @@
             letter-spacing: .08em;
         }
 
+        .friends-feature__copy--hania {
+            max-width: 100%;
+            font-size: 4.5px;
+        }
+
         .friends-feature__content {
             padding-bottom: 3px;
         }
@@ -392,15 +416,13 @@
 
         <section class="friends-story" aria-labelledby="friend-wasim">
             <div class="friends-feature">
-                <div class="friends-feature__image-wrap">
+                <div class="friends-feature__image-wrap friends-feature__image-wrap--wasim">
                     <img class="friends-feature__image friends-feature__image--portrait" src="{{ asset('assets/f_assets/image/friend of the brands/1wasim.png') }}" alt="Wasim Akram wearing a luxury timepiece">
                 </div>
                 <div class="friends-feature__content">
                     <h2 class="friends-feature__name" id="friend-wasim">Wasim Akram</h2>
                     <span class="friends-feature__line" aria-hidden="true"></span>
-                    <p class="friends-feature__copy">A legend of the game and a name recognised far beyond cricket, Wasim Akram carries an enduring global presence.
-His connection with HANIF goes beyond titles and partnerships, built on respect, trust and shared moments.
-An icon to the world, and a cherished friend of HANIF.</p>
+                    <p class="friends-feature__copy">A legend of the game and a name recognised far beyond cricket, Wasim Akram carries an enduring global presence. His connection with HANIF goes beyond titles and partnerships, built on respect, trust, and shared moments. An icon to the world, and a cherished friend of HANIF.</p>
                 </div>
             </div>
             <div class="friends-gallery" aria-label="Wasim Akram gallery">
@@ -418,9 +440,7 @@ An icon to the world, and a cherished friend of HANIF.</p>
                 <div class="friends-feature__content">
                     <h2 class="friends-feature__name" id="friend-ayeza">Ayeza Khan</h2>
                     <span class="friends-feature__line" aria-hidden="true"></span>
-                    <p class="friends-feature__copy">Celebrated across screens and admired far beyond them, Ayeza Khan is a name that carries its own presence.
-With HANIF, that connection goes beyond celebrity into a bond built over beautiful moments.
-A celebrated star, a cherished friend, and a familiar part of the HANIF story.</p>
+                    <p class="friends-feature__copy">Celebrated across screens and admired far beyond them, Ayeza Khan is a name that carries its own presence. With HANIF, that connection goes beyond celebrity into a bond built over beautiful moments. A celebrated star, a cherished friend, and a familiar part of the HANIF story.</p>
                 </div>
             </div>
             <div class="friends-gallery" aria-label="Ayeza Khan gallery">
@@ -438,9 +458,7 @@ A celebrated star, a cherished friend, and a familiar part of the HANIF story.</
                 <div class="friends-feature__content">
                     <h2 class="friends-feature__name" id="friend-hania">Hania Aamir</h2>
                     <span class="friends-feature__line" aria-hidden="true"></span>
-                    <p class="friends-feature__copy">Hania Aamir and HANIF share a bond that goes beyond the spotlight.
-A familiar face, a cherished friend, and part of some of our most memorable moments.
-Hania with HANIF, a connection that simply feels natural.</p>
+                    <p class="friends-feature__copy friends-feature__copy--hania">Hania Aamir and HANIF share a bond that goes beyond the spotlight. A familiar face, a cherished friend, and part of some of our most memorable moments. Hania with HANIF, a connection that simply feels natural.</p>
                 </div>
             </div>
             <div class="friends-gallery" aria-label="Hania Aamir gallery">
@@ -449,27 +467,6 @@ Hania with HANIF, a connection that simply feels natural.</p>
                 <div class="friends-gallery__item"><img class="friends-gallery__image" src="{{ asset('assets/f_assets/image/friend of the brands/haniamir4.png') }}" alt="Hania Aamir wearing a luxury watch"></div>
             </div>
         </section>
-
-        {{-- Legacy placeholder kept out of the rendered sequence.
-        <section class="friends-story" aria-labelledby="friend-farah">
-            <div class="friends-feature">
-                <div class="friends-feature__image-wrap">
-                    <img class="friends-feature__image" src="{{ asset('assets/f_assets/image/4.jpg') }}" alt="Farah Khan Fine Jewellery campaign portrait">
-                </div>
-                <div class="friends-feature__content">
-                    <h2 class="friends-feature__name" id="friend-farah">Farah Khan</h2>
-                    <span class="friends-feature__line" aria-hidden="true"></span>
-                    <p class="friends-feature__copy">A celebrated alchemist of colour and imagination, Farah shares our belief that jewellery is more than an object—it is a memory, an emotion and a work of wearable art.</p>
-                </div>
-            </div>
-            <div class="friends-gallery" aria-label="Farah Khan Fine Jewellery gallery">
-                <div class="friends-gallery__item"><img class="friends-gallery__image" src="{{ asset('assets/f_assets/image/2.jpg') }}" alt="Farah Khan emerald jewellery"></div>
-                <div class="friends-gallery__item"><img class="friends-gallery__image" src="{{ asset('assets/f_assets/image/farah-khan-banners/Amaira_2.webp') }}" alt="Farah Khan Amaira jewellery"></div>
-                <div class="friends-gallery__item"><img class="friends-gallery__image" src="{{ asset('assets/f_assets/image/farah-khan-banners/Becharmed.webp') }}" alt="Farah Khan Becharmed jewellery"></div>
-            </div>
-        </section>
-
-        --}}
 
         <section class="friends-directory" aria-label="More friends of the brand">
             <figure class="friends-directory__card">

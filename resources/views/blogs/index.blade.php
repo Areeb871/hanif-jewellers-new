@@ -23,8 +23,7 @@
     }
 
     .blog-entry__image {
-        height: clamp(260px, 34vw, 420px);
-        object-fit: cover;
+    object-fit: cover;
     }
 
     .blog-entry__toolbar {
@@ -79,7 +78,6 @@
 
     .blog-entry__date,
     .blog-entry__excerpt {
-        font-family: "Argent CF", Georgia, serif;
         color: #111;
     }
 

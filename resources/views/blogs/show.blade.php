@@ -10,7 +10,6 @@
 
 <style>
     .article-hero {
-        min-height: clamp(390px, 46vw, 610px);
         position: relative;
         display: grid;
         place-items: center;
