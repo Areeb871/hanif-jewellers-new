@@ -2186,8 +2186,15 @@ public function ehedCollection(Request $request)
   public function hasht()
 {
     $subcategory = \App\Models\Subcategory::where('slug', 'hasht')->first();
+    $products = Products::with(['category', 'subcategory', 'images', 'tags'])
+        ->where('status', 'published')
+        ->whereHas('subcategory', function ($query) {
+            $query->whereRaw('LOWER(slug) = ?', ['hasht']);
+        })
+        ->orderBy('id')
+        ->get();
 
-    return view('public.hasht', compact('subcategory'));
+    return view('public.hasht', compact('subcategory', 'products'));
 }
     public function misterio()
     {

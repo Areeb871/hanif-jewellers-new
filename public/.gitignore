@@ -1,5 +1,9 @@
-# Ignore frontend image folder
-/assets/f_assets/image/
+# Ignore frontend image folder, except page-specific assets maintained in Git.
+/assets/f_assets/image/*
+!/assets/f_assets/image/Hasht Web/
+/assets/f_assets/image/Hasht Web/*
+!/assets/f_assets/image/Hasht Web/Banners/
+!/assets/f_assets/image/Hasht Web/Banners/*.webp
 /node_modules
 /public/build
 # Ignore uploaded files

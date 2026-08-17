@@ -1,314 +1,101 @@
 @extends('public.layouts.header_new')
 
 @section('content')
-<style>
-/* =========================
-   Banner Container
-========================= */
-.custom-banner {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Full width video */
-.custom-banner-video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Full width image fallback */
-.custom-banner img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Optional image background */
-.custom-banner-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-}
-
-/* =========================
-   Overlay Content
-========================= */
-.banner-content {
-    position: absolute;
-    right: 5%;
-    top: 63%;
-    transform: translateY(-50%);
-    z-index: 5;
-    max-width: 420px;
-    color: #fff;
-    text-align: left;
-}
-
-.banner-location {
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-top: 15px;
-    margin-bottom: 21px;
-    line-height: 1.6;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.banner-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 31px;
-    font-weight: 400;
-    letter-spacing: 6px;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-}
-
-.custom-banner-btn {
-    display: inline-block;
-    padding: 12px 32px;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    background: transparent;
-    color: #ffffff;
-    text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 0;
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-
-.custom-banner-btn:hover {
-    background-color: #1d1c1c;
-    border-color: #1d1c1c;
-    color: #ffffff;
-}
-
-/* =======================
-   MOBILE STACK
-======================= */
-.mobileStackHero {
-    width: 100%;
-    background: #fff;
-}
-
-.mobileStackImgWrap {
-    width: 100%;
-    overflow: hidden;
-    background: #000;
-}
-
-.mobileStackImg,
-.mobileStackVideo {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* =========================
-   Responsive
-========================= */
-@media (max-width: 991px) {
-    .banner-content {
-        right: 4%;
-        top: 60%;
-        max-width: 320px;
-    }
-
-    .banner-title {
-        font-size: 24px;
-        letter-spacing: 4px;
-        white-space: normal;
-    }
-
-    .banner-location {
-        font-size: 11px;
-        letter-spacing: 1.5px;
-    }
-
-    .custom-banner-btn {
-        padding: 10px 24px;
-        font-size: 11px;
-    }
-}
-</style>
-
 @php
-    $desktopBanner = $subcategory->banner_url ?? '';
-
-    // static mobile banner
+    $desktopBanner = $subcategory->banner_url ?? 'assets/f_assets/image/Hasht Web/hasht_new_banner.mp4';
     $mobileBanner = 'assets/f_assets/image/Hasht Web/hasht_mobile_new.mp4';
-
-    // detect if backend banner is video
-    $isDesktopVideo = $desktopBanner
-        ? \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg'])
-        : false;
-
-    // use full URL as-is, otherwise asset()
-    $desktopBannerSrc = $desktopBanner
-        ? (filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner))
-        : '';
-
-    $mobileBannerSrc = filter_var($mobileBanner, FILTER_VALIDATE_URL) ? $mobileBanner : asset($mobileBanner);
+    $isDesktopVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
+    $desktopBannerSrc = filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner);
+    $stories = [
+        ['name' => 'SAPPHIRE', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Saphire Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Saphire Mob.jpg', 'copy' => [
+            "A piece crafted by House of Hanif to signify Man's connection with the Creator.",
+            'Embellished with the finest of His creations, the purest of precious metals and the rarest of stones to create an expression and an experience of pure art.',
+        ], 'side' => 'left'],
+        ['name' => 'EMERALD', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Emerald Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Emerald Mob.jpg', 'copy' => 'BESPOKE COLLECTION FROM THE HOUSE OF HANIF.', 'side' => 'left'],
+        ['name' => 'RUBY', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Ruby Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hast Ruby Mob.jpg', 'copy' => 'HASHT ہشت, literally meaning "Eight", an inspiration taken from the emerald cut and its 8 sides, the 8 doors of heaven, ultimate success and the fulfilment of dreams.', 'side' => 'right'],
+    ];
 @endphp
 
 <style>
-html, body{
-    margin: 0;
-    padding: 0;
-}
-
-.fullBanner{
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    overflow: hidden;
-    line-height: 0;
-}
-
-.fullBannerMedia,
-.fullBannerImage{
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-}
+.hasht-full-bleed{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);overflow:hidden}
+.hasht-intro-media{width:100%;height:auto;display:block}
+.hasht-story{position:relative;aspect-ratio:16/9;background:#eee}
+.hasht-story__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hasht-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(10px,.85vw,16px);width:clamp(300px,27.6vw,500px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;font-family:'Poppins',sans-serif;text-align:left}
+.hasht-story__panel--right{right:clamp(20px,3.65vw,70px);left:auto}
+.hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Atelier',serif;font-size:clamp(25px,1.45vw,22px);font-weight:500;letter-spacing:clamp(2px,.24vw,4px);line-height:1.15}
+.hasht-story__title{font-family:'Poppins',sans-serif}
+.hasht-story__copy-wrap{display:flex;flex-direction:column;gap:.7em;width:100%;max-width:340px}
+.hasht-story__copy{margin:0;color:#111;font-size:clamp(14px,.66vw,12px);line-height:1.65}
+.hasht-story__button,.hasht-mobile__button{display:inline-block;margin-top:1px;padding:clamp(8px,.6vw,11px) clamp(14px,1.15vw,22px);background:#111;color:#fff;font-size:clamp(12px,.52vw,10px);letter-spacing:clamp(1px,.1vw,2px);line-height:1.4;text-decoration:none;text-transform:uppercase}
+.hasht-story__button:hover,.hasht-mobile__button:hover{background:#2b2b2b;color:#fff}
+.hasht-manifesto{padding:48px 20px;text-align:center;font-size:15px;line-height:1.8}
+.hasht-manifesto span{display:block}
+.hasht-mobile{background:#fff;text-align:center}
+.hasht-mobile__image{width:100%;height:auto;display:block}
+.hasht-mobile__content{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:27px 20px 31px;font-family:'Poppins',sans-serif;text-align:center}
+.hasht-mobile__title{display:block;width:100%;margin:0 0 14px;font-family:'Poppins',sans-serif;font-size:24px;letter-spacing:4px;text-align:center}
+.hasht-mobile__copy-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:520px;margin:0 auto 22px;text-align:center}
+.hasht-mobile__copy{display:block;width:100%;margin:0;color:#333;font-family:'Poppins',sans-serif;font-size:13px;line-height:1.75;text-align:center}
+.hasht-mobile__button{display:inline-block;width:auto;margin:0 auto;font-family:'Poppins',sans-serif;text-align:center}
+.hasht-products{position:relative;width:100%;overflow:hidden}
+.hasht-products .productSwiper{width:100%;padding:40px 0;overflow:hidden;touch-action:pan-y}
+.hasht-products .swiper-slide{height:auto;min-width:0}
+.hasht-products .swiper-button-next,.hasht-products .swiper-button-prev{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.12);color:#000}
+.hasht-products .swiper-button-next::after,.hasht-products .swiper-button-prev::after{font-size:16px;font-weight:700}
+.hasht-products .swiper-pagination{display:none}
+@media(max-width:575px){.hasht-products .productSwiper{padding:32px 8px 42px}.hasht-products .swiper-button-next,.hasht-products .swiper-button-prev{display:none}.hasht-products .swiper-pagination{display:flex;bottom:10px;justify-content:center}}
 </style>
 
-{{-- DESKTOP --}}
-<section class="fullBanner d-none d-md-block">
-    @if(!empty($desktopBannerSrc))
-        @if($isDesktopVideo)
-            <video autoplay loop muted playsinline class="fullBannerMedia">
-                <source src="{{ $desktopBannerSrc }}" type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
-                Your browser does not support the video tag.
-            </video>
-        @else
-            <img src="{{ $desktopBannerSrc }}" alt="{{ $subcategory->name ?? 'Banner' }}" class="fullBannerImage">
-        @endif
+<section class="hasht-full-bleed d-none d-md-block">
+    @if($isDesktopVideo)
+        <video class="hasht-intro-media" autoplay loop muted playsinline preload="metadata">
+            <source src="{{ $desktopBannerSrc }}" type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
+        </video>
     @else
-        <div style="padding:40px; text-align:center;">Desktop banner not found</div>
+        <img class="hasht-intro-media" src="{{ $desktopBannerSrc }}" alt="Hasht collection">
     @endif
 </section>
 
-{{-- MOBILE --}}
-<section class="fullBanner d-md-none">
-    <video autoplay loop muted playsinline class="fullBannerMedia">
-        <source src="{{ $mobileBannerSrc }}" type="video/mp4">
-        Your browser does not support the video tag.
+<section class="hasht-full-bleed d-md-none">
+    <video class="hasht-intro-media" autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset($mobileBanner) }}" type="video/mp4">
     </video>
 </section>
 
-
-    <section class="container pt-4 pt-md-5">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="text-center mb-5">
-                    <img src="{{ asset('assets/f_assets/image/Hasht_Rubies_Rose_Gold_Pendant_1500X2100.jpg') }}"
-                        class="img-fluid" alt="Hasht Collection">
-                </div>
-                <div class="text-center my-5">
-                    <p class="p-5">A piece crafted by House of Hanif to signify Man's connection with the Creator, embellished with the finest of His creations, the purest of precious metals and the rarest of stones to create an expression and an experience of pure art.</p>
-                </div>
-                <div class="text-center py-5">
-                    <img src="{{ asset('assets/f_assets/image/Hasht_Emerald_Yellow_Gold_Pendant_1500X2100.jpg') }}"
-                        class="img-fluid emerald-img" alt="Hasht Collection" style="margin-top: 84px;">
-                </div>
+@foreach($stories as $index => $story)
+    <section class="hasht-full-bleed hasht-story d-none d-lg-block">
+        <img class="hasht-story__image" src="{{ asset($story['image']) }}" alt="Hasht {{ ucfirst(strtolower($story['name'])) }} pendant" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+        <div class="hasht-story__panel {{ $story['side'] === 'right' ? 'hasht-story__panel--right' : '' }}">
+            <h2 class="hasht-story__title">HASHT {{ $story['name'] }}</h2>
+            <div class="hasht-story__copy-wrap">
+                @foreach((array) $story['copy'] as $paragraph)
+                    <p class="hasht-story__copy">{{ $paragraph }}</p>
+                @endforeach
             </div>
-            <div class="col-md-6">
-                <div class="text-center my-5">
-                    <p class="p-5">HASHT ہشت, literally meaning "Eight", an inspiration taken from the emerald cut and its 8 sides, the 8 doors of heaven, ultimate success and the fulfilment of dreams.</p>
-                </div>
-                <div class="text-center my-5">
-                    <img src="{{ asset('assets/f_assets/image/Hasht_Sapphire_White_Gold_Pendant_3_1500X2100.png') }}"
-                        class="img-fluid custom-img" alt="Hasht Collection" style="margin-top: 155px;"
-                        >
-                    <div class="mt-3 d-md-none text-center py-5">
-                        <p class="p-5 fs-6">BESPOKE COLLECTION FROM THE HOUSE OF HANIF</p>
-                    </div>
-                    <div class="text-center my-5 d-none d-md-block">
-                    <p class="p-5" style="font-size: 1.5em;">BESPOKE COLLECTION FROM THE HOUSE OF HANIF</p>
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="row pb-5">
-            <style>
-                    .app-btn {
-                        padding: 6px 16px !important;
-                    }
-                    /* Desktop positioning for the second image */
-                    .col-md-6 img[src*="Hasht_Emerald_Yellow_Gold_Pendant"] {
-                        margin-top: 80px;
-                    }
-                    
-                    /* Desktop text positioning - move down and center */
-                    @media (min-width: 768px) {
-                        .col-md-6 .my-5 p {
-                            margin-top: 181px !important;
-                            text-align: center !important;
-                        }
-
-                    }
-                    
-                    /* Mobile-specific spacing */
-                    @media (max-width: 767.98px) {
-                        .my-5 {
-                            margin-top: 2rem !important;
-                            margin-bottom: 1rem !important;
-                        }
-                        .mb-5 {
-                            margin-bottom: 1rem !important;
-                        }
-                        .py-5 {
-                            padding-top: 1rem !important;
-                            padding-bottom: 1rem !important;
-                        }
-                        .p-5 {
-                            padding: 1rem !important;
-                        }
-                        
-                        /* Move image up on mobile only */
-                        .col-md-6 img[src*="Hasht_Emerald_Yellow_Gold_Pendant"] {
-                            margin-top: 2px !important;
-                        }
-                        .col-md-6 img[src*="Hasht_Sapphire_White_Gold_Pendant_3"] {
-                            margin-top: 40px !important;
-                        }
-                        
-                        /* Center text on mobile */
-                        .col-md-6 p {
-                            text-align: center !important;
-                        }
-
-                    }
-                    @media (min-width: 1400px) and (max-width: 2000px) {
-        .custom-img {
-            margin-top: 230px !important;
-        }
-        .emerald-img{
-            margin-top: 150px !important;
-        }
-}
-            </style>
-            <div class="text-center" >
-                <x-book-appointment class="m-1" />
-            </div>
-            <!-- <div class="col-md-6 text-center">
-                <x-shop-now :href="route('subcategory', ['subcategory' => 'gohar'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
-            </div> -->
+            <a class="hasht-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
         </div>
     </section>
+@endforeach
+
+@foreach($stories as $index => $story)
+    <section class="hasht-full-bleed hasht-mobile d-lg-none">
+        <img class="hasht-mobile__image" src="{{ asset($story['mobile_image']) }}" alt="Hasht {{ ucfirst(strtolower($story['name'])) }} pendant" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+        <div class="hasht-mobile__content">
+            <h2 class="hasht-mobile__title">HASHT {{ $story['name'] }}</h2>
+            <div class="hasht-mobile__copy-wrap">
+                @foreach((array) $story['copy'] as $paragraph)
+                    <p class="hasht-mobile__copy">{{ $paragraph }}</p>
+                @endforeach
+            </div>
+            <a class="hasht-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+        </div>
+    </section>
+@endforeach
+
+@if($products->isNotEmpty())
+<script>
+document.querySelectorAll('.hasht-products .productSwiper').forEach((swiperEl)=>{new Swiper(swiperEl,{loop:false,grabCursor:true,watchOverflow:true,observer:true,observeParents:true,breakpoints:{0:{slidesPerView:1,spaceBetween:8},576:{slidesPerView:2,spaceBetween:10},768:{slidesPerView:3,spaceBetween:12},1200:{slidesPerView:4,spaceBetween:12}},navigation:{nextEl:swiperEl.querySelector('.swiper-button-next'),prevEl:swiperEl.querySelector('.swiper-button-prev')},pagination:{el:swiperEl.querySelector('.swiper-pagination'),clickable:true}})});
+</script>
+@endif
 @endsection
