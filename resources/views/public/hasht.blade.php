@@ -21,22 +21,21 @@
 .hasht-intro-media{width:100%;height:auto;display:block}
 .hasht-story{position:relative;aspect-ratio:16/9;background:#eee}
 .hasht-story__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.hasht-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(10px,.85vw,16px);width:clamp(300px,27.6vw,500px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;font-family:'Poppins',sans-serif;text-align:left}
+.hasht-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;font-family:'Poppins',sans-serif;text-align:left}
 .hasht-story__panel--right{right:clamp(20px,3.65vw,70px);left:auto}
-.hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Atelier',serif;font-size:clamp(25px,1.45vw,22px);font-weight:500;letter-spacing:clamp(2px,.24vw,4px);line-height:0.5}
-.hasht-story__title{font-family:'Poppins',sans-serif}
-.hasht-story__copy-wrap{display:flex;flex-direction:column;gap:.7em;width:100%;max-width:340px}
-.hasht-story__copy{margin:0;color:#111;font-size:clamp(14px,.66vw,12px)}
-.hasht-story__button,.hasht-mobile__button{display:inline-block;margin-top:1px;padding:clamp(8px,.6vw,11px) clamp(14px,1.15vw,22px);background:#111;color:#fff;font-size:clamp(12px,.52vw,10px);letter-spacing:clamp(1px,.1vw,2px);line-height:1.4;text-decoration:none;text-transform:uppercase}
+.hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2;text-wrap:balance}
+.hasht-story__copy-wrap{display:flex;flex-direction:column;gap:10px;width:100%;max-width:28em;margin:10px 0 18px}
+.hasht-story__copy{margin:0;color:#111;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.hasht-story__button,.hasht-mobile__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#111;color:#fff;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-transform:uppercase}
 .hasht-story__button:hover,.hasht-mobile__button:hover{background:#2b2b2b;color:#fff}
 .hasht-manifesto{padding:48px 20px;text-align:center;font-size:15px;line-height:1.8}
 .hasht-manifesto span{display:block}
 .hasht-mobile{background:#fff;text-align:center}
 .hasht-mobile__image{width:100%;height:auto;display:block}
-.hasht-mobile__content{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:27px 20px 31px;font-family:'Poppins',sans-serif;text-align:center}
-.hasht-mobile__title{display:block;width:100%;margin:0 0 14px;font-family:'Poppins',sans-serif;font-size:24px;letter-spacing:4px;text-align:center}
-.hasht-mobile__copy-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:520px;margin:0 auto 22px;text-align:center}
-.hasht-mobile__copy{display:block;width:100%;margin:0;color:#333;font-family:'Poppins',sans-serif;font-size:13px;line-height:1.75;text-align:center}
+.hasht-mobile__content{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:32px 24px 36px;font-family:'Poppins',sans-serif;text-align:center}
+.hasht-mobile__title{display:block;width:100%;margin:0;font-size:22px;letter-spacing:.18em;line-height:1.2;text-align:center}
+.hasht-mobile__copy-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:34em;margin:12px auto 20px;text-align:center}
+.hasht-mobile__copy{display:block;width:100%;margin:0;color:#222;font-family:'Poppins',sans-serif;font-size:13px;font-weight:400;letter-spacing:.02em;line-height:1.7;text-align:center}
 .hasht-mobile__button{display:inline-block;width:auto;margin:0 auto;font-family:'Poppins',sans-serif;text-align:center}
 .hasht-products{position:relative;width:100%;overflow:hidden}
 .hasht-products .productSwiper{width:100%;padding:40px 0;overflow:hidden;touch-action:pan-y}
