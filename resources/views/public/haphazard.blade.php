@@ -115,6 +115,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   position: relative;
   overflow: hidden;
   display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 /* Keep a single, exact 8px gap without Bootstrap's split/negative gutters. */
@@ -137,6 +140,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 }
 .haphazard-product-grid > [class*="col-"] > .product-card{
   width:100%;
+  text-decoration:none;
+  color:inherit;
+  cursor:pointer;
 }
 .haphazard-product-grid .product-card img{
   width:100%;
@@ -340,15 +346,12 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
     @foreach($featuredProducts as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
-            <div class="product-card">
+            <a href="{{ route('product.details', $product->slug) }}" class="product-card">
 
                 @if($img)
                     <img src="{{ asset($img) }}"
                          class="img-fluid w-100 grid-img-200"
-                         alt="{{ $product->name ?? 'Haphazard Product' }}"
-                         data-gallery="haphazardGalleryTop"
-                         data-index="{{ $index }}"
-                         style="cursor:pointer;">
+                         alt="{{ $product->name ?? 'Haphazard Product' }}">
                 @else
                     <div style="width:100%; height:200px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                         <span class="text-muted">No image</span>
@@ -356,12 +359,10 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <a href="{{ route('product.details', $product->slug) }}" class="discover-more-btn">
-                        Discover More
-                    </a>
+                    <span class="discover-more-btn">Discover More</span>
                 </div>
 
-            </div>
+            </a>
         </div>
     @endforeach
 </div>
@@ -408,14 +409,11 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
     @foreach($bottomProducts as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
-            <div class="product-card">
+            <a href="{{ route('product.details', $product->slug) }}" class="product-card">
                 @if($img)
                     <img src="{{ asset($img) }}"
-                         class="img-fluid w-100 grid-img-200 gallery-image"
-                         alt="{{ $product->name ?? 'Haphazard Product' }}"
-                         data-gallery="bottomGallery"
-                         data-index="{{ $index }}"
-                         style="cursor:pointer;">
+                         class="img-fluid w-100 grid-img-200"
+                         alt="{{ $product->name ?? 'Haphazard Product' }}">
                 @else
                     <div style="width:100%; height:200px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                         <span class="text-muted">No image</span>
@@ -423,9 +421,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <a href="{{ route('product.details', $product->slug) }}" class="discover-more-btn">Discover More</a>
+                    <span class="discover-more-btn">Discover More</span>
                 </div>
-            </div>
+            </a>
         </div>
     @endforeach
 </div>
@@ -437,14 +435,11 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
     @foreach($bottomProductsRow2 as $index => $product)
         @php $img = $getImg($product); @endphp
         <div class="col-6 col-md-3">
-            <div class="product-card">
+            <a href="{{ route('product.details', $product->slug) }}" class="product-card">
                 @if($img)
                     <img src="{{ asset($img) }}"
-                         class="img-fluid w-100 grid-img-200 gallery-image"
-                         alt="{{ $product->name ?? 'Haphazard Product' }}"
-                         data-gallery="bottomGalleryRow2"
-                         data-index="{{ $index }}"
-                         style="cursor:pointer;">
+                         class="img-fluid w-100 grid-img-200"
+                         alt="{{ $product->name ?? 'Haphazard Product' }}">
                 @else
                     <div style="width:100%; height:200px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                         <span class="text-muted">No image</span>
@@ -452,9 +447,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <a href="{{ route('product.details', $product->slug) }}" class="discover-more-btn">Discover More</a>
+                    <span class="discover-more-btn">Discover More</span>
                 </div>
-            </div>
+            </a>
         </div>
     @endforeach
 </div>
@@ -506,14 +501,11 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endphp
 
                 <div class="col-6 col-md-3">
-                    <div class="product-card">
+                    <a href="{{ route('product.details', $product->slug) }}" class="product-card">
                         @if($img)
                             <img src="{{ asset($img) }}"
-                                 class="img-fluid w-100 grid-img-200 gallery-image"
-                                 alt="{{ $product->name ?? 'Haphazard Product' }}"
-                                 data-gallery="dynamicGallery"
-                                 data-index="{{ $globalIndex }}"
-                                 style="cursor:pointer;">
+                                 class="img-fluid w-100 grid-img-200"
+                                 alt="{{ $product->name ?? 'Haphazard Product' }}">
                         @else
                             <div style="width:100%; height:200px; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
                                 <span class="text-muted">No image</span>
@@ -521,11 +513,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                         @endif
 
                         <div class="discover-overlay">
-                            <a href="{{ route('product.details', $product->slug) }}" class="discover-more-btn">
-                                Discover More
-                            </a>
+                            <span class="discover-more-btn">Discover More</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @endforeach
         </div>
