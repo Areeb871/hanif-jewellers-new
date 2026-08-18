@@ -648,10 +648,10 @@
                         @php
                             $isRingSizeProduct = $product->requiresAsianRingSize();
                             $asianRingSizes = range(4, 27);
-                            $pricePositive = ($product->price ?? 0) > 0;
+                            $showRingSizeSelector = $isRingSizeProduct && $canShowPrice;
                         @endphp
 
-                        @if($isRingSizeProduct)
+                        @if($showRingSizeSelector)
                             <div class="ring-size-panel" id="productSizePanel">
                                 <div class="ring-size-heading">
                                     <label for="productSizeToggle">Select - Asian Ring Size</label>
@@ -1991,7 +1991,7 @@
 
         // ===== CART FUNCTIONALITY =====
         // Ring and supported gold-colour tags require an Asian ring size.
-        const requiresSizeSelection = @json($isRingSizeProduct);
+        const requiresSizeSelection = @json($showRingSizeSelector);
 
         const productSizePanel = document.getElementById('productSizePanel');
         const productSizeToggle = document.getElementById('productSizeToggle');

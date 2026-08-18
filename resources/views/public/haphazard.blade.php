@@ -68,22 +68,12 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 }
 
 /* =========================
-   PROMO SECTION HEIGHT (DESKTOP)
+   PROMO: video + 2 products share the product-row height
    ========================= */
-.promo-section{ height:auto; }
-@media (min-width:768px){  .promo-section{ height:63vh; min-height:400px; } }
-@media (min-width:992px){  .promo-section{ height:65vh; min-height:450px; } }
-@media (min-width:1200px){ .promo-section{ height:70vh; min-height:500px; } }
-@media (min-width:1400px){ .promo-section{ height:75vh; min-height:550px; } }
-
-.promo-row{ height:100%; }
-.promo-col{ height:100%; }
-
-/* =========================
-   VIDEO TILE (PROMO)
-   ========================= */
-.promo-video-wrap{ width:100%; height:100%; position:relative; overflow:hidden; }
-.promo-video-wrap video{ width:100%; height:100%; object-fit:cover; display:block; }
+.promo-section{
+  height:auto !important;
+  min-height:0 !important;
+}
 
 /* Shop Now overlay */
 .discover-button-overlay{
@@ -113,30 +103,6 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   color:#fff;
   transform:scale(1.05);
   text-decoration:none;
-}
-
-/* =========================
-   RIGHT GRID (2 images)
-   ========================= */
-.right-grid{
-  height:100%;
-  width:100%;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .5rem; /* same as g-2 */
-}
-.right-tile{
-  height:100%;
-  width:100%;
-  overflow:hidden;
-  display:block;
-  position:relative;
-}
-.right-tile img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
 }
 
 /* =========================
@@ -172,6 +138,12 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 .haphazard-product-grid > [class*="col-"] > .product-card{
   width:100%;
 }
+.haphazard-product-grid .product-card img{
+  width:100%;
+  height:auto;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+}
 /* A real sibling spacer cannot be covered by the full-height promo media. */
 .haphazard-section-gap{
   display:block;
@@ -189,34 +161,68 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   }
 }
 
-/* Promo rows follow the same one-sided 8px spacing model. */
 .haphazard-promo-grid{
   --bs-gutter-x:0;
   --bs-gutter-y:0;
   margin:8px 0 0 !important;
   padding:0 !important;
 }
-.haphazard-promo-grid > .haphazard-promo-shell{
-  margin:0 !important;
-  padding:0 !important;
-}
 .haphazard-promo-row{
-  --bs-gutter-x:0;
-  --bs-gutter-y:0;
   display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
+  grid-template-columns:repeat(4, minmax(0, 1fr));
   gap:8px;
+  align-items:stretch;
   margin:0 !important;
 }
-.haphazard-promo-row > .promo-col{
-  width:auto;
-  max-width:none;
-  margin-top:0 !important;
-  padding:0 !important;
+.promo-video-col{
+  grid-column:span 2;
+  min-width:0;
+  min-height:0;
 }
-@media (max-width:1024px){
+.promo-video-wrap{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+.promo-video-wrap video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.right-tile{
+  position:relative;
+  display:block;
+  width:100%;
+  min-width:0;
+  aspect-ratio:1 / 1;
+  overflow:hidden;
+}
+.right-tile img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+@media (max-width:767.98px){
   .haphazard-promo-row{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  .promo-video-col{
+    grid-column:1 / -1;
+  }
+  .haphazard-promo-row--video-end .promo-video-col{
+    order:-1;
+  }
+  .promo-video-wrap{
+    height:auto;
+    aspect-ratio:16 / 9;
   }
 }
 
@@ -286,35 +292,6 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
   .right-tile .discover-overlay{
     bottom: 10px;
   }
-}
-
-/* =========================
-   TABLET LAYOUT:
-   first video full width then 2 images below
-   ========================= */
-@media (min-width:768px) and (max-width:1024px){
-  .promo-section, .promo-row, .promo-col { height:auto !important; min-height:0 !important; }
-  .promo-section .promo-col { flex:0 0 100% !important; max-width:100% !important; width:100% !important; }
-
-  .promo-video-wrap{ height:420px !important; }
-  .right-grid{ height:420px !important; grid-template-columns: 1fr 1fr !important; }
-}
-@media (min-width:768px) and (max-width:820px){
-  .promo-video-wrap{ height:360px !important; }
-  .right-grid{ height:360px !important; }
-}
-
-/* =========================
-   MOBILE: ensure promo has visible height
-   ========================= */
-@media (max-width:767.98px){
-  .promo-section .h-100, .promo-row.h-100, .promo-col{ height:auto !important; }
-  .promo-video-wrap{ height:320px !important; min-height:320px !important; }
-  .right-grid{ height:320px !important; grid-template-columns:1fr 1fr !important; }
-}
-@media (max-width:575.98px){
-  .promo-video-wrap{ height:260px !important; min-height:260px !important; }
-  .right-grid{ height:260px !important; }
 }
 
 /* =========================
@@ -391,51 +368,36 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 {{-- ===== PROMO VIDEO (LEFT) + 2 PRODUCTS (RIGHT) ===== --}}
-<div class="row onlineStore haphazard-promo-grid promo-section">
-    <div class="col-12 h-100 haphazard-promo-shell">
-        <div class="row align-items-stretch promo-row haphazard-promo-row h-100">
-
-            {{-- LEFT: VIDEO --}}
-            <div class="col-12 col-md-6 promo-col d-flex position-relative">
-                <div class="promo-video-wrap">
-                    <video autoplay muted loop playsinline>
-                        <source src="{{ asset('assets/f_assets/image/haphazard/product1.mp4') }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-
-                    <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
-                    </div>
+<div class="haphazard-promo-grid promo-section">
+    <div class="haphazard-promo-row">
+        <div class="promo-video-col">
+            <div class="promo-video-wrap">
+                <video autoplay muted loop playsinline>
+                    <source src="{{ asset('assets/f_assets/image/haphazard/product1.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
+                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
                 </div>
             </div>
-
-            {{-- RIGHT: 2 PRODUCTS (WITH DISCOVER) --}}
-            <div class="col-12 col-md-6 promo-col d-flex">
-                <div class="right-grid">
-                    @if(isset($sideProducts) && $sideProducts->count() > 0)
-                        @foreach($sideProducts as $index => $product)
-                            @php $img = $getImg($product); @endphp
-
-                            {{-- Whole tile is link. Button is visual only --}}
-                            <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card">
-                                @if($img)
-                                    <img src="{{ asset($img) }}" alt="{{ $product->name ?? 'Product ' . ($index + 1) }}">
-                                @else
-                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
-                                        <span class="text-muted">No image</span>
-                                    </div>
-                                @endif
-
-                                <div class="discover-overlay">
-                                    <span class="discover-more-btn">Discover More</span>
-                                </div>
-                            </a>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-
         </div>
+        @if(isset($sideProducts) && $sideProducts->count() > 0)
+            @foreach($sideProducts as $index => $product)
+                @php $img = $getImg($product); @endphp
+                <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card">
+                    @if($img)
+                        <img src="{{ asset($img) }}" alt="{{ $product->name ?? 'Product ' . ($index + 1) }}">
+                    @else
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
+                            <span class="text-muted">No image</span>
+                        </div>
+                    @endif
+                    <div class="discover-overlay">
+                        <span class="discover-more-btn">Discover More</span>
+                    </div>
+                </a>
+            @endforeach
+        @endif
     </div>
 </div>
 <div class="haphazard-section-gap" aria-hidden="true"></div>
@@ -499,48 +461,35 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 {{-- ===== PROMO VIDEO (RIGHT) + 2 PRODUCTS (LEFT) from bottomProductsRow3 ===== --}}
-<div class="row onlineStore haphazard-promo-grid promo-section">
-    <div class="col-12 h-100 haphazard-promo-shell">
-        <div class="row align-items-stretch promo-row haphazard-promo-row h-100">
-
-            {{-- LEFT: 2 PRODUCTS (Desktop LEFT, Mobile SECOND) --}}
-            <div class="col-12 col-md-6 promo-col d-flex order-2 order-md-1">
-                <div class="right-grid">
-                    @if(isset($bottomProductsRow3) && $bottomProductsRow3->count() > 0)
-                        @foreach($bottomProductsRow3 as $index => $product)
-                            @php $img = $getImg($product); @endphp
-                            <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card">
-                                @if($img)
-                                    <img src="{{ asset($img) }}" alt="{{ $product->name ?? 'Product ' . ($index + 1) }}">
-                                @else
-                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
-                                        <span class="text-muted">No image</span>
-                                    </div>
-                                @endif
-
-                                <div class="discover-overlay">
-                                    <span class="discover-more-btn">Discover More</span>
-                                </div>
-                            </a>
-                        @endforeach
+<div class="haphazard-promo-grid promo-section">
+    <div class="haphazard-promo-row haphazard-promo-row--video-end">
+        @if(isset($bottomProductsRow3) && $bottomProductsRow3->count() > 0)
+            @foreach($bottomProductsRow3 as $index => $product)
+                @php $img = $getImg($product); @endphp
+                <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card">
+                    @if($img)
+                        <img src="{{ asset($img) }}" alt="{{ $product->name ?? 'Product ' . ($index + 1) }}">
+                    @else
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
+                            <span class="text-muted">No image</span>
+                        </div>
                     @endif
-                </div>
-            </div>
-
-            {{-- RIGHT: VIDEO (Desktop RIGHT, Mobile FIRST) --}}
-            <div class="col-12 col-md-6 promo-col d-flex position-relative order-1 order-md-2">
-                <div class="promo-video-wrap">
-                    <video autoplay muted loop playsinline>
-                        <source src="{{ asset('assets/f_assets/image/haphazard/product2.mp4') }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-
-                    <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                        <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
+                    <div class="discover-overlay">
+                        <span class="discover-more-btn">Discover More</span>
                     </div>
+                </a>
+            @endforeach
+        @endif
+        <div class="promo-video-col">
+            <div class="promo-video-wrap">
+                <video autoplay muted loop playsinline>
+                    <source src="{{ asset('assets/f_assets/image/haphazard/product2.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
+                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

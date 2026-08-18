@@ -318,9 +318,10 @@
 
 /* Center box locked to center */
 .lux-box{
-  width: 240px;
-  height: 240px;
-  background: rgba(245,245,245,0.95);
+  width: 88%;
+  height: 78%;
+  padding: 38px 28px;
+  background: rgba(245,245,245,0.96);
 
   position: absolute;
   top: 50%;
@@ -328,17 +329,19 @@
   transform: translate(-50%, -50%) scale(0.9);
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 
   z-index: 3;
   transition: transform .45s ease;
 }
 
-/* ✅ Logo ALWAYS inside box */
+/* Logo ALWAYS inside box */
 .lux-logo{
-  max-width: 80%;
-  max-height: 70%;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -381,10 +384,20 @@
 .lux-card:hover::before{ transform: scaleX(1); }
 .lux-card:hover::after{ transform: scaleY(1); }
 
-/* Mobile */
+/* Mobile: overlay stays visible so logo + tagline can be read without hover */
 @media (max-width: 767px){
-  .lux-box{ width: 140px; height: 140px; }
-  .lux-card::before, .lux-card::after{ inset: 10px; }
+  .lux-hover{ opacity: .85; }
+  .lux-box{
+    width: 90%;
+    height: 80%;
+    padding: 32px 20px;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .lux-logo{ max-width: 90%; max-height: 100%; }
+  .lux-card::before, .lux-card::after{ inset: 10px; opacity: 1; }
+  .lux-card::before{ transform: scaleX(1); }
+  .lux-card::after{ transform: scaleY(1); }
+  .lux-img{ transform: scale(1.03); }
 }
 /* =========================
    WATCHES SCROLLER — no snap/animation, first card flush left
@@ -962,8 +975,6 @@ towering peaks</div>
                                 <div class="lux-box">
                                     @if(!empty($product->hover_image))
                                         <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @else
-                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
                                     @endif
                                 </div>
                             </div>
@@ -1002,8 +1013,6 @@ towering peaks</div>
                                 <div class="lux-box">
                                     @if(!empty($product->hover_image))
                                         <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @else
-                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
                                     @endif
                                 </div>
                             </div>

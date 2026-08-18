@@ -23,10 +23,10 @@
 .hasht-story__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .hasht-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(10px,.85vw,16px);width:clamp(300px,27.6vw,500px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;font-family:'Poppins',sans-serif;text-align:left}
 .hasht-story__panel--right{right:clamp(20px,3.65vw,70px);left:auto}
-.hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Atelier',serif;font-size:clamp(25px,1.45vw,22px);font-weight:500;letter-spacing:clamp(2px,.24vw,4px);line-height:1.15}
+.hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Atelier',serif;font-size:clamp(25px,1.45vw,22px);font-weight:500;letter-spacing:clamp(2px,.24vw,4px);line-height:0.5}
 .hasht-story__title{font-family:'Poppins',sans-serif}
 .hasht-story__copy-wrap{display:flex;flex-direction:column;gap:.7em;width:100%;max-width:340px}
-.hasht-story__copy{margin:0;color:#111;font-size:clamp(14px,.66vw,12px);line-height:1.65}
+.hasht-story__copy{margin:0;color:#111;font-size:clamp(14px,.66vw,12px)}
 .hasht-story__button,.hasht-mobile__button{display:inline-block;margin-top:1px;padding:clamp(8px,.6vw,11px) clamp(14px,1.15vw,22px);background:#111;color:#fff;font-size:clamp(12px,.52vw,10px);letter-spacing:clamp(1px,.1vw,2px);line-height:1.4;text-decoration:none;text-transform:uppercase}
 .hasht-story__button:hover,.hasht-mobile__button:hover{background:#2b2b2b;color:#fff}
 .hasht-manifesto{padding:48px 20px;text-align:center;font-size:15px;line-height:1.8}
