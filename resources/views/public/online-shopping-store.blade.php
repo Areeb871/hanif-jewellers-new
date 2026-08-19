@@ -1275,7 +1275,7 @@
                 });
             </script>
       {{-- Dynamic Products Grid --}}
-<div class="row onlineStore os-products-grid">
+<div id="os-products" class="row onlineStore os-products-grid">
 
     @php
         $absoluteStart = ($products->perPage() * ($products->currentPage() - 1)) + 1;
@@ -1524,16 +1524,6 @@
         });
     })();
 
-    // Function to scroll to products section
-    function scrollToProducts() {
-        const productsSection = document.querySelector('.onlineStore');
-        if (productsSection) {
-            productsSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
 
     // Handle mobile video responsiveness
     function handleMobileVideoResize() {

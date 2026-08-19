@@ -9,7 +9,7 @@
     $stories = [
         ['name' => 'SAPPHIRE', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Saphire Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Saphire Mob.jpg', 'copy' => [
             "A piece crafted by House of Hanif to signify Man's connection with the Creator.",
-            'Embellished with the finest of His creations, the purest of precious metals and the rarest of stones to create an expression and an experience of pure art.',
+            'Embellished with the finest of His creations, the purest of precious metals and the rarest of stones to create an expression and an experience of pure' . "\u{00A0}" . 'art.',
         ], 'side' => 'left'],
         ['name' => 'EMERALD', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Emerald Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Emerald Mob.jpg', 'copy' => 'BESPOKE COLLECTION FROM THE HOUSE OF HANIF.', 'side' => 'left'],
         ['name' => 'RUBY', 'image' => 'assets/f_assets/image/Hasht Web/Banners/Hasht Ruby Desktop.jpg', 'mobile_image' => 'assets/f_assets/image/Hasht Web/Banners/Hast Ruby Mob.jpg', 'copy' => 'HASHT ہشت, literally meaning "Eight", an inspiration taken from the emerald cut and its 8 sides, the 8 doors of heaven, ultimate success and the fulfilment of dreams.', 'side' => 'right'],
@@ -24,8 +24,8 @@
 .hasht-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;font-family:'Poppins',sans-serif;text-align:left}
 .hasht-story__panel--right{right:clamp(20px,3.65vw,70px);left:auto}
 .hasht-story__title,.hasht-mobile__title{margin:0;color:#111;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2;text-wrap:balance}
-.hasht-story__copy-wrap{display:flex;flex-direction:column;gap:10px;width:100%;max-width:28em;margin:10px 0 18px}
-.hasht-story__copy{margin:0;color:#111;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.hasht-story__copy-wrap{display:flex;flex-direction:column;gap:10px;width:100%;max-width:min(100%,42em);margin:10px 0 18px}
+.hasht-story__copy{margin:0;width:100%;max-width:40em;color:#111;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
 .hasht-story__button,.hasht-mobile__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#111;color:#fff;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-transform:uppercase}
 .hasht-story__button:hover,.hasht-mobile__button:hover{background:#2b2b2b;color:#fff}
 .hasht-manifesto{padding:48px 20px;text-align:center;font-size:15px;line-height:1.8}

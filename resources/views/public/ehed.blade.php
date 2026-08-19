@@ -24,686 +24,258 @@
     $mobileBannerUrl = filter_var($mobileBannerSource, FILTER_VALIDATE_URL) ? $mobileBannerSource : asset($mobileBannerSource);
 @endphp
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
-    .ehed-hero-section {
-        display: flex;
-        align-items: center;
-    }
-    .ehed-video-container {
-        width: 50%;
-        position: relative;
-        overflow: hidden;
-        min-height: 0;
-        padding-top: 59.92%; /* Aspect ratio: 746/447 = 1.669 - fallback for older browsers */
-    }
-    @supports (aspect-ratio: 1) {
-        .ehed-video-container {
-            padding-top: 0;
-            aspect-ratio: 746 / 430;
-        }
-    }
-    .ehed-video-container video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .ehed-media-cover {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .ehed-content-container {
-        width: 50%;
-        padding: 80px 60px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: #fff;
-    }
-    .ehed-category-label {
-        font-size: 14px;
-        font-weight: 400;
-        color: #999;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-        margin-bottom: 20px;
-    }
-    .ehed-main-title {
-        font-size: 3rem;
-        color: #000;
-        font-family: Walbaum;
-        margin-bottom: 9px;
-        line-height: 0.3;
-        font-weight: 400;
-    }
-    .ehed-body-text {
-        font-size: 16px;
-        font-weight: 400;
-        color: #000;
-        line-height: 1.6;
-    }
-    .font-family--serif,
-    .ehed-body-text {
-        font-family: Fancy Cut, Almarai, Times, serif;
-    }
-    .hero__description {
-        margin-top: 1em;
-        font-size: 100%;
-    }
-    .text-large {
-        font-family: Walbaum, sans-serif;
-        color: #010307;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%;
-        font-size: 2rem;
-        letter-spacing: 1.6px;
-    }
-    .uppercase {
-        text-transform: uppercase;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-    @media (min-width: 48rem) {
-        .hero__description {
-            max-width: 40rem;
-            font-size: 110%;
-        }
-        .text-align--center .hero__description {
-            margin-left: auto;
-            margin-right: auto;
-        }
-    }
-    @media (min-width: 699px) {
-        .text-large {
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-        }
-    }
-    @media (min-width: 1024px) {
-        .text-large {
-            font-size: 3rem;
-            letter-spacing: 2.4px;
-        }
-    }
-    @media (max-width: 768px) {
-        .ehed-hero-section {
-            flex-direction: column;
-            min-height: auto;
-        }
-        .ehed-video-container {
-            width: 100%;
-            height: auto;
-        }
-        .ehed-content-container {
-            width: 100%;
-            padding: 40px 30px;
-        }
-        .ehed-main-title {
-            font-size: 48px;
-        }
-        .ehed-category-label {
-            font-size: 12px;
-        }
-        .ehed-body-text {
-            font-size: 14px;
-        }
-    }
-    @media (max-width: 576px) {
-        .ehed-main-title {
-            font-size: 36px;
-        }
-        .ehed-content-container {
-            padding: 30px 20px;
-        }
-    }
-    /* Promotional Carousel Styles */
-    #promoCarousel {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-    @media (min-width: 768px) {
-        #promoCarousel {
-            height: 100%;
-            min-height: 400px;
-        }
-        .promo-tile {
-            height: 63vh;
-            min-height: 400px;
-            display: flex;
-        }
-        .discover-button-overlay {
-            padding-bottom: 2.5rem;
-        }
-    }
-    @media (min-width: 992px) {
-        .promo-tile {
-            height: 65vh;
-            min-height: 450px;
-        }
-        .discover-button-overlay {
-            padding-bottom: 3rem;
-        }
-        .discover-btn {
-            padding: 0.875rem 3.5rem;
-        }
-    }
-    @media (min-width: 1200px) {
-        .promo-tile {
-            height: 70vh;
-            min-height: 500px;
-        }
-    }
-    @media (min-width: 1400px) {
-        .promo-tile {
-            height: 75vh;
-            min-height: 550px;
-        }
-    }
-    #promoCarousel .carousel-inner {
-        width: 100%;
-        height: 100%;
-    }
-    #promoCarousel .carousel-item {
-        height: 100%;
-        transition: transform 0.6s ease-in-out;
-        position: relative;
-    }
-    #promoCarousel .carousel-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-    }
-    #promoCarousel .carousel-control-prev,
-    #promoCarousel .carousel-control-next {
-        opacity: 1;
-        width: 50px;
-        height: 50px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0, 0, 0, 0.3);
-        border-radius: 50%;
-        z-index: 15;
-    }
-    #promoCarousel .carousel-control-prev {
-        left: 15px;
-    }
-    #promoCarousel .carousel-control-next {
-        right: 15px;
-    }
-    #promoCarousel .carousel-control-prev-icon,
-    #promoCarousel .carousel-control-next-icon {
-        filter: invert(1) brightness(200%);
-        width: 1.5rem;
-        height: 1.5rem;
-    }
-    #promoCarousel .carousel-control-prev:hover,
-    #promoCarousel .carousel-control-next:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    /* Discover Button Overlay Styles */
-    .discover-button-overlay {
-        z-index: 20;
-        pointer-events: none;
-        padding-bottom: 2rem;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-    .discover-btn {
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    pointer-events: auto;
-    backdrop-filter: none;
-    transition: all 0.3s ease;
-    padding: 0.75rem 3rem;
-    white-space: nowrap;
-    display: inline-block;
-    text-decoration: none;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap');
+@font-face{
+    font-family:"Argent CF";
+    src:url("{{ asset('assets/f_assets/css/fonts/fonnts.com-Argent-CF-.otf') }}") format("opentype");
+    font-weight:400;
+    font-style:normal;
+    font-display:swap;
 }
-    .discover-btn:hover {
-        background-color: rgba(128, 128, 128, 0.8);
-        color: white;
-        transform: scale(1.05);
-        text-decoration: none;
-    }
-    .discover-btn:active {
-        transform: scale(0.98);
-    }
-    /* Product Images Styles */
-    .product-images-container {
-        height: 100%;
-    }
-    @media (min-width: 768px) {
-        .product-images-container {
-            height: 100%;
-        }
-        .col-12.col-md-6.d-flex {
-            height: 63vh;
-            min-height: 400px;
-        }
-        .col-12.col-md-6:last-child {
-            height: 63vh;
-            min-height: 400px;
-        }
-    }
-    @media (min-width: 992px) {
-        .col-12.col-md-6.d-flex {
-            height: 65vh;
-            min-height: 450px;
-        }
-        .col-12.col-md-6:last-child {
-            height: 65vh;
-            min-height: 450px;
-        }
-    }
-    @media (min-width: 1200px) {
-        .col-12.col-md-6.d-flex {
-            height: 70vh;
-            min-height: 500px;
-        }
-        .col-12.col-md-6:last-child {
-            height: 70vh;
-            min-height: 500px;
-        }
-    }
-    @media (min-width: 1400px) {
-        .col-12.col-md-6.d-flex {
-            height: 75vh;
-            min-height: 550px;
-        }
-        .col-12.col-md-6:last-child {
-            height: 75vh;
-            min-height: 550px;
-        }
-    }
-    .product-image-wrapper {
-        height: 100%;
-    }
-    .product-image {
-        height: 100%;
-        object-fit: cover;
-    }
-    /* Tablet and Mobile Responsive Styles */
-    @media (max-width: 991px) and (min-width: 769px) {
-        #promoCarousel {
-            height: 100%;
-            min-height: 350px;
-        }
-        .promo-tile {
-            height: 50vh;
-            min-height: 350px;
-        }
-        .col-12.col-md-6.d-flex {
-            height: 50vh;
-            min-height: 350px;
-        }
-        .col-12.col-md-6:last-child {
-            height: 50vh;
-            min-height: 350px;
-        }
-        .discover-button-overlay {
-            padding-bottom: 2rem;
-        }
-    }
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        .onlineStore {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-        }
-        .onlineStore .row {
-            margin-left: 0;
-            margin-right: 0;
-        }
-        .onlineStore .g-2 {
-            --bs-gutter-x: 0.25rem;
-            --bs-gutter-y: 0.25rem;
-        }
-        #promoCarousel {
-            height: auto;
-            min-height: 300px;
-            position: relative;
-            margin-top: 0;
-            margin-bottom: 0;
-            overflow: hidden;
-        }
-        @supports (aspect-ratio: 1) {
-            #promoCarousel {
-                aspect-ratio: 4 / 5;
-            }
-        }
-        @supports not (aspect-ratio: 1) {
-            #promoCarousel {
-                padding-top: 125%;
-            }
-        }
-        #promoCarousel .carousel-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        #promoCarousel .carousel-item {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        }
-        #promoCarousel .carousel-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            z-index: 1;
-        }
-        #promoCarousel .carousel-control-prev,
-        #promoCarousel .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        #promoCarousel .carousel-control-prev {
-            left: 10px;
-        }
-        #promoCarousel .carousel-control-next {
-            right: 10px;
-        }
-        #promoCarousel .carousel-control-prev-icon,
-        #promoCarousel .carousel-control-next-icon {
-            width: 1rem;
-            height: 1rem;
-        }
-        .promo-tile {
-            height: auto;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            padding: 0 !important;
-        }
-        .product-image-wrapper {
-            height: 40vh;
-            min-height: 250px;
-        }
-        .product-image {
-            height: 100%;
-            min-height: 250px;
-        }
-        .product-images-container {
-            height: auto;
-            margin-top: 0 !important;
-        }
-        .col-12.col-md-6:last-child {
-            height: auto;
-        }
-        .col-12.col-md-6.d-flex {
-            margin-top: 0;
-        }
-        .product-images-container .col-6 {
-            padding-left: 0.25rem;
-            padding-right: 0.25rem;
-        }
-        .discover-button-overlay {
-            padding-bottom: 1.5rem !important;
-            z-index: 20 !important;
-            bottom: 0 !important;
-            position: absolute !important;
-        }
-        .discover-btn {
-            font-size: 0.875rem;
-            padding: 0.625rem 1.5rem !important;
-            letter-spacing: 1.5px;
-            width: auto;
-            max-width: 90%;
-        }
-    }
-    @media (max-width: 576px) {
-        #promoCarousel {
-            min-height: 280px;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-        @supports (aspect-ratio: 1) {
-            #promoCarousel {
-                aspect-ratio: 3 / 4;
-            }
-        }
-        @supports not (aspect-ratio: 1) {
-            #promoCarousel {
-                padding-top: 133.33%;
-            }
-        }
-        .product-image-wrapper {
-            height: 35vh;
-            min-height: 200px;
-        }
-        .product-image {
-            height: 100%;
-            min-height: 200px;
-        }
-        #promoCarousel .carousel-control-prev,
-        #promoCarousel .carousel-control-next {
-            width: 35px;
-            height: 35px;
-        }
-        #promoCarousel .carousel-control-prev {
-            left: 8px;
-        }
-        #promoCarousel .carousel-control-next {
-            right: 8px;
-        }
-        .discover-btn {
-            font-size: 0.75rem;
-            padding: 0.5rem 1.25rem !important;
-            letter-spacing: 1px;
-        }
-        .discover-button-overlay {
-            padding-bottom: 1rem !important;
-            z-index: 20 !important;
-            position: absolute !important;
-            bottom: 0 !important;
-        }
-    }
-    @media (max-width: 480px) {
-        #promoCarousel {
-            min-height: 250px;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-        @supports (aspect-ratio: 1) {
-            #promoCarousel {
-                aspect-ratio: 2 / 3;
-            }
-        }
-        @supports not (aspect-ratio: 1) {
-            #promoCarousel {
-                padding-top: 150%;
-            }
-        }
-        .discover-btn {
-            font-size: 1.2rem;
-            padding: 0.5rem 1rem !important;
-            letter-spacing: 0.5px;
-        }
-        .discover-button-overlay {
-            padding-bottom: 0.875rem !important;
-            z-index: 20 !important;
-            position: absolute !important;
-            bottom: 0 !important;
-        }
-        .product-image-wrapper {
-            height: 30vh;
-            min-height: 180px;
-        }
-        .product-image {
-            min-height: 180px;
-        }
-        .product-images-container .col-6 {
-            padding-left: 0.25rem;
-            padding-right: 0.25rem;
-        }
-    }
-    @media (max-width: 375px) {
-        #promoCarousel {
-            min-height: 220px;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-        .discover-btn {
-            font-size: 1.1rem;
-            padding: 0.45rem 0.875rem !important;
-            letter-spacing: 0.5px;
-        }
-        .discover-button-overlay {
-            padding-bottom: 0.75rem !important;
-            z-index: 20 !important;
-            position: absolute !important;
-            bottom: 0 !important;
-        }
-    }
-    /* Hide button on iPhone 6/7/8 (375x667) */
-    @media (max-width: 375px) and (max-height: 667px) {
-        .discover-button-overlay {
-            display: none !important;
-        }
-    }
-    /* Hide button on iPhone 6/7/8 Plus (414x736) */
-    @media (max-width: 414px) and (max-height: 736px) and (min-width: 376px) {
-        .discover-button-overlay {
-            display: none !important;
-        }
-    }
-    /* Specific styling for 360x740 screens */
-    @media (max-width: 360px) {
-        .discover-button-overlay {
-            bottom: auto !important;
-            top: 80% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            padding-bottom: 0 !important;
-        }
-    }
-        #promoCarousel .carousel-control-prev,
-        #promoCarousel .carousel-control-next {
-            width: 30px;
-            height: 30px;
-        }
-        #promoCarousel .carousel-control-prev {
-            left: 5px;
-        }
-        #promoCarousel .carousel-control-next {
-            right: 5px;
-        }
-        #promoCarousel .carousel-control-prev-icon,
-        #promoCarousel .carousel-control-next-icon {
-            width: 0.875rem;
-            height: 0.875rem;
-        }
-        .product-image-wrapper {
-            min-height: 160px;
-        }
-        .product-image {
-            min-height: 160px;
-        }
-    }
-    @media (max-width: 320px) {
-        #promoCarousel {
-            min-height: 200px;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
-        .discover-btn {
-            font-size: 0.6rem;
-            padding: 0.4rem 0.75rem !important;
-        }
-        .discover-button-overlay {
-            padding-bottom: 0.5rem !important;
-            z-index: 20 !important;
-            position: absolute !important;
-            bottom: 0 !important;
-        }
-        #promoCarousel .carousel-control-prev,
-        #promoCarousel .carousel-control-next {
-            width: 28px;
-            height: 28px;
-        }
-        .product-image-wrapper {
-            min-height: 150px;
-        }
-        .product-image {
-            min-height: 150px;
-        }
-    }
-    /* ===== PROMO SECTION: SAME HEIGHT BOTH SIDES ===== */
-.promo-section{ height:auto; }
-@media (min-width:768px){  .promo-section{ height:63vh; min-height:400px; } }
-@media (min-width:992px){  .promo-section{ height:65vh; min-height:450px; } }
-@media (min-width:1200px){ .promo-section{ height:70vh; min-height:500px; } }
-@media (min-width:1400px){ .promo-section{ height:75vh; min-height:550px; } }
 
-.promo-row{ height:100%; }
-.promo-col{ height:100%; }
+/* ========== ONE GAP EVERYWHERE ========== */
+:root{ --ehed-gap:8px; }
 
-/* Carousel fill */
-#promoCarouselEhed{ position:relative; width:100%; height:100%; overflow:hidden; }
+/* ========== HERO ========== */
+.ehed-hero-section{
+    display:flex;
+    align-items:stretch;
+}
+.ehed-video-container{
+    width:50%;
+    position:relative;
+    overflow:hidden;
+    flex-shrink:0;
+    aspect-ratio:746 / 430;
+    background:#fff;
+}
+.ehed-video-container video,
+.ehed-media-cover{
+    position:absolute;
+    inset:0;
+    width:99.6%;
+    height:104%;
+    object-fit:contain;
+    object-position:center center;
+    display:block;
+}
+.ehed-content-container{
+    width:50%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:8px 24px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:#fff;
+}
+.ehed-category-label{
+    font-size:14px; font-weight:400; color:#999; text-transform:uppercase;
+    letter-spacing:.05em;
+    font-family:'Poppins',sans-serif;
+    margin:0 0 16px;
+}
+.ehed-main-title{
+    font-size:3rem; color:#000; font-family:"Argent CF",Georgia,serif;
+    margin:0 0 10px; line-height:1.1; font-weight:400;
+}
+.ehed-body-text{
+    font-size:16px; font-weight:400; color:#000; line-height:1.6; max-width:100%;
+    font-family:'Poppins',sans-serif;
+}
+.hero__description{ margin-top:0; font-size:100%; max-width:100%; }
+.text-large{
+    font-family:Walbaum,sans-serif; color:#010307; font-style:normal;
+    font-weight:400; line-height:120%; font-size:2rem; letter-spacing:1.6px;
+}
+.uppercase{ text-transform:uppercase; }
+h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
+
+@media(min-width:48rem){
+    .hero__description{ max-width:40rem; font-size:110%; }
+    .text-align--center .hero__description{ margin-left:auto; margin-right:auto; }
+}
+@media(min-width:699px){ .text-large{ font-size:2.5rem; letter-spacing:2px; } }
+@media(min-width:1024px){ .text-large{ font-size:3rem; letter-spacing:2.4px; } }
+
+@media(max-width:991.98px){
+    .ehed-hero-section{ padding-top:56px; }
+}
+@media(min-width:768px){
+    .ehed-content-container{ padding:8px 40px; }
+    .ehed-cards{ margin-top: var(--ehed-gap); }
+}
+@media(min-width:768px) and (max-width:1199.98px){
+    .ehed-hero-section{ align-items:stretch; }
+    .ehed-video-container{
+        aspect-ratio:746 / 430;
+        min-height:0;
+        height:auto;
+    }
+    .ehed-content-container{
+        padding:8px 28px;
+        overflow:visible;
+        justify-content:center;
+    }
+    .ehed-category-label{ font-size:12px; margin:0 0 8px; }
+    .ehed-main-title{ font-size:clamp(28px,3.6vw,42px); line-height:1.1; margin:0 0 8px; overflow:visible; }
+    .ehed-body-text{ font-size:14px; line-height:1.55; }
+    .hero__description{ max-width:100%; font-size:100%; }
+}
+@media(min-width:1200px){
+    .ehed-content-container{ padding:8px 60px; }
+}
+@media(max-width:767.98px){
+    .ehed-hero-section{ flex-direction:column; min-height:auto; }
+    .ehed-video-container{ width:100%; height:auto; aspect-ratio:746 / 430; }
+    .ehed-content-container{ width:100%; padding:24px 20px; }
+    .ehed-main-title{ font-size:48px; }
+    .ehed-category-label{ font-size:12px; }
+    .ehed-body-text{ font-size:14px; }
+}
+@media(max-width:576px){
+    .ehed-main-title{ font-size:36px; }
+    .ehed-content-container{ padding:30px 20px; }
+}
+
+/* ========== DISCOVER BUTTON ========== */
+.discover-button-overlay{
+    z-index:20; pointer-events:none; padding-bottom:2rem;
+    left:0; right:0; bottom:0;
+}
+.discover-btn{
+    background-color:transparent; border:1px solid rgba(255,255,255,.7);
+    color:#fff; font-weight:600; font-size:1rem; letter-spacing:2px;
+    text-transform:uppercase; border-radius:4px; pointer-events:auto;
+    transition:all .3s ease; padding:.75rem 3rem;
+    white-space:nowrap; display:inline-block; text-decoration:none;
+}
+.discover-btn:hover{ background-color:rgba(128,128,128,.8); color:#fff; transform:scale(1.05); text-decoration:none; }
+.discover-btn:active{ transform:scale(.98); }
+
+@media(min-width:992px){ .discover-btn{ padding:.875rem 3.5rem; } .discover-button-overlay{ padding-bottom:3rem; } }
+@media(max-width:768px){
+    .discover-button-overlay{ padding-bottom:1.5rem!important; z-index:20!important; bottom:0!important; position:absolute!important; }
+    .discover-btn{ font-size:.875rem; padding:.625rem 1.5rem!important; letter-spacing:1.5px; width:auto; max-width:90%; }
+}
+@media(max-width:576px){
+    .discover-btn{ font-size:.75rem; padding:.5rem 1.25rem!important; letter-spacing:1px; }
+    .discover-button-overlay{ padding-bottom:1rem!important; }
+}
+@media(max-width:480px){
+    .discover-btn{ font-size:1.2rem; padding:.5rem 1rem!important; letter-spacing:.5px; }
+    .discover-button-overlay{ padding-bottom:.875rem!important; }
+}
+@media(max-width:375px){
+    .discover-btn{ font-size:1.1rem; padding:.45rem .875rem!important; letter-spacing:.5px; }
+    .discover-button-overlay{ padding-bottom:.75rem!important; }
+}
+@media(max-width:375px)and(max-height:667px){ .discover-button-overlay{ display:none!important; } }
+@media(max-width:414px)and(max-height:736px)and(min-width:376px){ .discover-button-overlay{ display:none!important; } }
+@media(max-width:360px){
+    .discover-button-overlay{ bottom:auto!important; top:80%!important; left:50%!important; transform:translate(-50%,-50%)!important; padding-bottom:0!important; }
+}
+
+/* ========== CARDS: same 8px gap top-to-bottom and left-to-right ========== */
+.ehed-cards{
+    display:flex;
+    flex-direction:column;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+}
+.ehed-cards img{ display:block; }
+.ehed-grid{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap: 8px;
+    margin:0 !important;
+    --bs-gutter-x:0;
+    --bs-gutter-y:0;
+}
+.ehed-grid > [class*="col-"]{
+    width:auto;
+    max-width:none;
+    padding:0;
+    margin:0;
+    line-height:0;
+}
+.ehed-grid-img{
+    width:100%; aspect-ratio:1/1; object-fit:cover; display:block;
+    vertical-align:top;
+}
+@media(max-width:767.98px){
+    .ehed-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+
+/* ========== PROMO SECTION (carousel + right images) ========== */
+.ehed-promo{
+    margin:0 !important;
+    padding:0;
+}
+.ehed-promo .discover-btn,
+.ehed-promo .shop-now-btn{
+    border-color:#ECECEC !important;
+    color:#ECECEC !important;
+}
+.ehed-promo .discover-btn:hover,
+.ehed-promo .shop-now-btn:hover,
+.ehed-promo .discover-btn:focus,
+.ehed-promo .shop-now-btn:focus{
+    background:#000 !important;
+    border-color:#000 !important;
+    color:#fff !important;
+}
+
+.ehed-promo__row{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap: 8px;
+    align-items:stretch;
+}
+
+/* Carousel col */
+.ehed-promo__carousel-col{
+    grid-column:span 2;
+    min-width:0; min-height:0;
+}
+.ehed-promo__carousel-wrap{
+    position:relative; width:100%; height:100%; overflow:hidden;
+}
+#promoCarouselEhed{ position:absolute; inset:0; width:100%; height:100%; }
 #promoCarouselEhed .carousel-inner,
 #promoCarouselEhed .carousel-item{ height:100%; }
 #promoCarouselEhed .carousel-item img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  display:block;
-  z-index:1;
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block; z-index:1;
 }
 
-/* Right side grid */
-.right-grid{
-  height:100%;
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.5rem; /* same as g-2 */
+/* Product tiles — aspect-ratio drives the row height */
+.ehed-promo__tile{
+    position:relative; display:block; width:100%; min-width:0;
+    aspect-ratio:1/1; overflow:hidden;
 }
-.right-tile{
-  height:100%;
-  width:100%;
-  overflow:hidden;
-  display:block;
+.ehed-promo__tile img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
 }
-.right-tile img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+
+/* Mobile: stack carousel on top, tiles side by side below */
+@media(max-width:767.98px){
+    .ehed-promo__row{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .ehed-promo__carousel-col{ grid-column:1 / -1; }
+    .ehed-promo__carousel-wrap{ height:auto; aspect-ratio:1/1; }
 }
+
+/* ========== SHOP NOW SPACER ========== */
+.ehed-shop-spacing{
+    display:flex; align-items:center; justify-content:center;
+    padding:2.5rem 0;
+}
+@media(max-width:767.98px){ .ehed-shop-spacing{ padding:1.5rem 0; } }
 </style>
 
+{{-- ========== HERO SECTION ========== --}}
 <section class="ehed-hero-section">
     <div class="ehed-video-container d-none d-md-block">
         @if($desktopIsVideo)
@@ -726,24 +298,27 @@
         @endif
     </div>
     <div class="ehed-content-container">
-        <div class="ehed-category-label">MEN & WOMEN</div>
         <h1 class="ehed-main-title">EHED</h1>
-        <p class="ehed-body-text hero__description font-family--serif">
+        <div class="ehed-category-label">MEN & WOMEN</div>
+        <p class="ehed-body-text hero__description">
             Ehed by Hanif is for all those unbreakable promises. Explore a whole world of possibilities elegantly handcrafted for all occasions.
         </p>
     </div>
 </section>
+
+<div class="ehed-cards">
+{{-- ========== TOP GALLERY ROW ========== --}}
 @if(isset($galleryImages) && $galleryImages->count() > 0)
-<div class="row g-2 mb-3" id="qawsAlMatarGallery" style="margin-top:1rem;">
+<div class="ehed-grid" id="qawsAlMatarGallery">
     @foreach($galleryImages as $index => $image)
-        <div class="col-md-3 {{ $index > 0 ? 'justify-content-center d-flex align-items-center' : '' }}">
-            <img src="{{ asset($image->image) }}" class="img-fluid gallery-image" alt="Ehed Gallery Image" data-gallery="qawsAlMatarGallery" data-index="{{ $index }}" style="cursor: pointer;" onclick="openImageModal('qawsAlMatarGallery', {{ $index }})">
+        <div class="col-6 col-md-3">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="qawsAlMatarGallery" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('qawsAlMatarGallery', {{ $index }})">
         </div>
     @endforeach
     @if($galleryImages->count() < 4)
         @for($i = $galleryImages->count(); $i < 4; $i++)
-            <div class="col-md-3 justify-content-center d-flex align-items-center">
-                <div style="width: 100%; height: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+            <div class="col-6 col-md-3">
+                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
                     <span class="text-muted">No image</span>
                 </div>
             </div>
@@ -751,97 +326,71 @@
     @endif
 </div>
 @endif
-      {{-- PROMO + RIGHT 2 IMAGES (SAME HEIGHT ALWAYS) --}}
-<div class="row onlineStore g-2 promo-section">
-    <div class="col-12 h-100">
-        <div class="row g-2 align-items-stretch promo-row h-100">
 
-            {{-- LEFT CAROUSEL --}}
-            <div class="col-12 col-md-6 promo-col d-flex position-relative">
-                <div id="promoCarouselEhed" class="carousel slide w-100 h-100" data-bs-ride="carousel">
+{{-- ========== PROMO: CAROUSEL + 2 PRODUCT IMAGES ========== --}}
+<div class="ehed-promo">
+    <div class="ehed-promo__row">
+        {{-- Carousel: spans 2 of 4 columns, both rows on desktop --}}
+        <div class="ehed-promo__carousel-col">
+            <div class="ehed-promo__carousel-wrap">
+                <div id="promoCarouselEhed" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner h-100">
-
                         <div class="carousel-item active h-100 position-relative">
-                            <img src="{{ asset('assets/f_assets/image/ehed/male_ehed.png') }}"
-                                 alt="Promotional Banner 1"
-                                 class="img-fluid w-100 h-100">
+                            <img src="{{ asset('assets/f_assets/image/ehed/male_ehed.png') }}" alt="Promotional Banner 1">
                             <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <x-shop-now :href="route('collections.ehed')" class="btn discover-btn" label="Shop Now" />
+                                <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn discover-btn" label="Shop Now" />
                             </div>
                         </div>
-
                         <div class="carousel-item h-100 position-relative">
-                            <img src="{{ asset('assets/f_assets/image/ehed/female_ehed.png') }}"
-                                 alt="Promotional Banner 2"
-                                 class="img-fluid w-100 h-100">
+                            <img src="{{ asset('assets/f_assets/image/ehed/female_ehed.png') }}" alt="Promotional Banner 2">
                             <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <x-shop-now :href="route('collections.ehed')" class="btn discover-btn" label="Shop Now" />
+                                <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn discover-btn" label="Shop Now" />
                             </div>
                         </div>
-
                     </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarouselEhed" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#promoCarouselEhed" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-
                 </div>
             </div>
-
-            {{-- RIGHT 2 PRODUCTS (GRID = FULL HEIGHT, NO GAP) --}}
-            <div class="col-12 col-md-6 promo-col d-flex">
-                <div class="right-grid">
-                    @if(isset($productImages) && $productImages->count() > 0)
-                        @foreach($productImages as $index => $image)
-                            @php $img = $image->image ?? null; @endphp
-
-                            <a href="#" class="right-tile">
-                                @if($img)
-                                    <img src="{{ asset($img) }}" alt="Product {{ $index + 1 }}">
-                                @else
-                                    <div style="width:100%; height:100%; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
-                                        <span class="text-muted">No image</span>
-                                    </div>
-                                @endif
-                            </a>
-                        @endforeach
-
-                        {{-- if less than 2 images, fill --}}
-                        @if($productImages->count() < 2)
-                            @for($i = $productImages->count(); $i < 2; $i++)
-                                <a href="#" class="right-tile">
-                                    <div style="width:100%; height:100%; background:#f5f5f5; display:flex; align-items:center; justify-content:center;">
-                                        <span class="text-muted">No image</span>
-                                    </div>
-                                </a>
-                            @endfor
-                        @endif
-
-                    @endif
-                </div>
-            </div>
-
         </div>
+
+        {{-- Product tiles: each is a direct grid child (1 col each) --}}
+        @if(isset($productImages) && $productImages->count() > 0)
+            @foreach($productImages->take(2) as $index => $image)
+                @php $img = $image->image ?? null; @endphp
+                <a href="#" class="ehed-promo__tile">
+                    @if($img)
+                        <img src="{{ asset($img) }}" alt="Product {{ $index + 1 }}">
+                    @else
+                        <div style="width:100%;height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
+                            <span class="text-muted">No image</span>
+                        </div>
+                    @endif
+                </a>
+            @endforeach
+            @if($productImages->count() < 2)
+                @for($i = $productImages->count(); $i < 2; $i++)
+                    <a href="#" class="ehed-promo__tile">
+                        <div style="width:100%;height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
+                            <span class="text-muted">No image</span>
+                        </div>
+                    </a>
+                @endfor
+            @endif
+        @endif
     </div>
 </div>
 
-
+{{-- ========== BOTTOM GALLERY ROW 1 ========== --}}
 @if(isset($bottomImages) && $bottomImages->count() > 0)
-<div class="row g-2 mb-3 mt-3" id="bottomGallery">
+<div class="ehed-grid" id="bottomGallery">
     @foreach($bottomImages as $index => $image)
-        <div class="col-md-3 {{ $index > 0 ? 'justify-content-center d-flex align-items-center' : '' }}">
-            <img src="{{ asset($image->image) }}" class="img-fluid gallery-image" alt="Ehed Gallery Image" data-gallery="bottomGallery" data-index="{{ $index }}" style="cursor: pointer;" onclick="openImageModal('bottomGallery', {{ $index }})">
+        <div class="col-6 col-md-3">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGallery" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('bottomGallery', {{ $index }})">
         </div>
     @endforeach
     @if($bottomImages->count() < 4)
         @for($i = $bottomImages->count(); $i < 4; $i++)
-            <div class="col-md-3 justify-content-center d-flex align-items-center">
-                <div style="width: 100%; height: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+            <div class="col-6 col-md-3">
+                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
                     <span class="text-muted">No image</span>
                 </div>
             </div>
@@ -850,17 +399,18 @@
 </div>
 @endif
 
+{{-- ========== BOTTOM GALLERY ROW 2 ========== --}}
 @if(isset($bottomImagesRow2) && $bottomImagesRow2->count() > 0)
-<div class="row g-2 mb-3 mt-3" id="bottomGalleryRow2">
+<div class="ehed-grid" id="bottomGalleryRow2">
     @foreach($bottomImagesRow2 as $index => $image)
-        <div class="col-md-3 {{ $index > 0 ? 'justify-content-center d-flex align-items-center' : '' }}">
-            <img src="{{ asset($image->image) }}" class="img-fluid gallery-image" alt="Ehed Gallery Image" data-gallery="bottomGalleryRow2" data-index="{{ $index }}" style="cursor: pointer;" onclick="openImageModal('bottomGalleryRow2', {{ $index }})">
+        <div class="col-6 col-md-3">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGalleryRow2" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('bottomGalleryRow2', {{ $index }})">
         </div>
     @endforeach
     @if($bottomImagesRow2->count() < 4)
         @for($i = $bottomImagesRow2->count(); $i < 4; $i++)
-            <div class="col-md-3 justify-content-center d-flex align-items-center">
-                <div style="width: 100%; height: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+            <div class="col-6 col-md-3">
+                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
                     <span class="text-muted">No image</span>
                 </div>
             </div>
@@ -868,28 +418,12 @@
     @endif
 </div>
 @endif
-<style>
-.ehed-shop-spacing {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 9.5rem;
-}
-</style>
-<div class="ehed-shop-spacing">
-    <x-shop-now :href="route('collections.ehed')" class="btn border btn-outline-dark px-5 py-2" />
 </div>
 
-
+{{-- ========== SHOP NOW ========== --}}
+<div class="ehed-shop-spacing">
+    <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn border btn-outline-dark px-5 py-2" />
+</div>
 
 @include('public.partials.image-gallery-modal')
 @endsection
-
-
-
-
-
-
-
-
-
