@@ -30,15 +30,15 @@
     ];
 
     $reviewLinks = [
-        ['name' => 'MM Alam', 'url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review'],
-        ['name' => 'DHA', 'url' => 'https://g.page/r/CScW4gIKzKZPEAE/review'],
-        ['name' => 'F6 Islamabad', 'url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review'],
-        ['name' => 'Serena Islamabad', 'url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review'],
-        ['name' => 'Marriott Islamabad', 'url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review'],
-        ['name' => 'Dolmen Mall', 'url' => 'https://g.page/r/CYp_YF50r60TEAE/review'],
-        ['name' => 'Dubai', 'url' => 'https://g.page/r/CbeYicQsEHflEAE/review'],
-        ['name' => 'Franck Muller Pakistan', 'url' => 'https://g.page/r/CViIXJGaBTPyEAE/review'],
-        ['name' => 'Zatash Couture', 'url' => 'https://g.page/r/CWV3wNZpmaxFEAE/review'],
+        ['name' => 'MM Alam', 'slug' => 'mm-alam'],
+        ['name' => 'DHA', 'slug' => 'dha'],
+        ['name' => 'F6 Islamabad', 'slug' => 'f6-islamabad'],
+        ['name' => 'Serena Islamabad', 'slug' => 'serena-islamabad'],
+        ['name' => 'Marriott Islamabad', 'slug' => 'marriott-islamabad'],
+        ['name' => 'Dolmen Mall', 'slug' => 'dolmen-mall'],
+        ['name' => 'Dubai', 'slug' => 'dubai'],
+        ['name' => 'Franck Muller Pakistan', 'slug' => 'franck-muller'],
+        ['name' => 'Zartash Couture', 'slug' => 'zartash-couture'],
     ];
 @endphp
 
@@ -317,14 +317,14 @@
 
         <section class="reviews-section" aria-labelledby="google-reviews-title">
             <div class="social-links-page__section-heading">
-                <span class="social-links-page__section-icon" aria-hidden="true"><i class="fa-brands fa-google"></i></span>
-                <h2 class="social-links-page__section-title" id="google-reviews-title">Google Reviews</h2>
-                <p class="social-links-page__section-copy">Select a location to share your experience.</p>
+                <span class="social-links-page__section-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+                <h2 class="social-links-page__section-title" id="google-reviews-title">Our Locations</h2>
+                <p class="social-links-page__section-copy">Select a location to view its profile &amp; links.</p>
             </div>
 
             <div class="review-links-grid">
                 @foreach ($reviewLinks as $reviewLink)
-                    <a class="review-link" href="{{ $reviewLink['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="Review {{ $reviewLink['name'] }} on Google in a new tab">
+                    <a class="review-link" href="{{ route('location-profile', $reviewLink['slug']) }}" aria-label="View {{ $reviewLink['name'] }} profile">
                         <i class="fa-solid fa-location-dot review-link__pin" aria-hidden="true"></i>
                         <span>{{ $reviewLink['name'] }}</span>
                         <i class="fa-solid fa-arrow-up-right-from-square review-link__arrow" aria-hidden="true"></i>
