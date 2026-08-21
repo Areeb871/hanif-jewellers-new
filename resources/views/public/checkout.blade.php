@@ -234,7 +234,12 @@
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
 
-        $cartItems = \App\Models\Cart::with(['product.tags', 'solitaireProduct'])
+        $cartItems = \App\Models\Cart::with([
+            'product.tags',
+            'product.category',
+            'product.subcategory.watchPricingSetting',
+            'solitaireProduct',
+        ])
             ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -246,6 +251,14 @@
         $calcNormalProductPrice = function ($product, bool $forStore = false) {
             if (!$product) {
                 return 0;
+            }
+
+            $watchPriceBreakdown = $product->isWatchProduct()
+                ? \App\Services\WatchPriceCalculator::calculateBreakdownForProduct($product)
+                : null;
+
+            if ($watchPriceBreakdown !== null) {
+                return max(0, round((float) $watchPriceBreakdown['final_price'], -3));
             }
 
             $price = (float) $product->displayPrice($forStore);
@@ -403,13 +416,24 @@
                             : ($hasDiscount ? 'PKR ' . number_format(($basePrice - $price), 0, '.', ',') . ' OFF' : '');
 
                     } else {
-                        $basePrice = (float) $product->displayPrice($forStore);
-                        $price = (float) $calcNormalProductPrice($product, $forStore);
+                        $watchPriceBreakdown = $product && $product->isWatchProduct()
+                            ? \App\Services\WatchPriceCalculator::calculateBreakdownForProduct($product)
+                            : null;
 
-                        $hasDiscount = false;
-                        $discountText = '';
+                        if ($watchPriceBreakdown !== null) {
+                            $price = max(0, round((float) $watchPriceBreakdown['final_price'], -3));
+                            $basePrice = !empty($watchPriceBreakdown['is_sale'])
+                                ? max(0, round((float) $watchPriceBreakdown['regular_price'], -3))
+                                : $price;
+                            $hasDiscount = !empty($watchPriceBreakdown['is_sale'])
+                                && $basePrice > $price;
+                            $discountText = $hasDiscount ? 'SALE' : '';
+                        } else {
+                            $basePrice = (float) $product->displayPrice($forStore);
+                            $price = (float) $calcNormalProductPrice($product, $forStore);
+                            $hasDiscount = false;
+                            $discountText = '';
 
-                        if ($product) {
                             if ((int) ($product->discount_type ?? 0) === 2 && (float) ($product->discount_percentage ?? 0) > 0) {
                                 $hasDiscount = true;
                                 $discountText = $product->discount_percentage . '% OFF';

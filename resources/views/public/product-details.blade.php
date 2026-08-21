@@ -226,7 +226,7 @@
     color: #17120f;
     font-family: "Argent CF", Georgia, serif !important;
     font-size: 1.15rem;
-    font-weight: 100;
+    font-weight: 500;
     letter-spacing: .015em;
     /* text-transform: uppercase; */
     text-decoration: none;

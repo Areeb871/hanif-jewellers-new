@@ -39,6 +39,20 @@ class ProductController extends Controller
 
     private function calculateAutoPrice(Request $request, ?Products $product = null): ?float
     {
+        $categoryId = $request->input('category_id', $product?->category_id);
+        $isWatch = $categoryId
+            ? Categories::whereKey($categoryId)
+                ->where(function ($query) {
+                    $query->where('slug', 'like', '%watch%')
+                        ->orWhere('name', 'like', '%watch%');
+                })
+                ->exists()
+            : false;
+
+        if ($isWatch) {
+            return null;
+        }
+
         $description = $request->description ?? '';
         $goldWeight = $request->filled('gold_weight') ? (float) $request->gold_weight : null;
 
@@ -142,6 +156,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'watch_rate' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
                 'gold_service_id' => 'nullable|exists:gold_service_settings,id',
                 // AED price is optional / nullable
@@ -187,6 +202,7 @@ class ProductController extends Controller
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->watch_rate = $request->filled('watch_rate') ? $request->watch_rate : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
             $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
             // If AED price not provided, keep it null
@@ -255,6 +271,7 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'watch_rate' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
                 'gold_service_id' => 'nullable|exists:gold_service_settings,id',
                 // AED price is optional / nullable
@@ -367,6 +384,7 @@ class ProductController extends Controller
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->watch_rate = $request->filled('watch_rate') ? $request->watch_rate : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
             $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
             // If AED price not provided, keep it null

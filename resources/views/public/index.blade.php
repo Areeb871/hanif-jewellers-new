@@ -797,19 +797,14 @@ culminating in a true resemblance of experience pure art.</div>
 </section> -->
 
 <section class="custom-banner d-none d-md-block position-relative">
-    <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    
-    <!--  <img-->
-    <!--    src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"-->
-    <!--    alt="Franck Muller"-->
-    <!--    class="custom-banner-video"-->
-    <!--    fetchpriority="high"-->
-    <!-->
-    
-            <a href="/collections/franck-muller" class="custom-banner-btn">DISCOVER MORE</a>
+ <img
+        src="{{ asset('assets/f_assets/image/pak-banner.jpeg') }}"
+        alt="Jeweller of the Nation"
+        class="custom-banner-video"
+        width="3840"
+        height="2160"
+        fetchpriority="high"
+    >
 </section>
 
 
@@ -857,7 +852,7 @@ towering peaks</div>
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
   <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
-    <source src="{{ asset('assets/f_assets/image/watches/FMPK-Mob-Banner.mp4') }}" type="video/mp4">
+    <source src="{{ asset('assets/f_assets/image/pakistan_watch/mobile_fm.mp4') }}" type="video/mp4">
   </video>
   
   
@@ -876,7 +871,9 @@ towering peaks</div>
 /> -->
 
   </div>
+{{-- Mobile hero overlay button hidden for the Pakistan campaign.
 <a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
+--}}
 </section>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
@@ -1173,7 +1170,7 @@ FARAH KHAN
 </section>
 <section class="home-brands watch-brands-section">
   <h4 class="section-title text-center">
-    INTERNATIONAL WATCH BRANDS
+    INTERNATIONAL WATCH BRAND
   </h4>
 
 <style>

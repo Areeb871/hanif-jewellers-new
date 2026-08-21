@@ -147,16 +147,45 @@ public function forevermark()
     return view('public.forevermark');
 }
 
- public function corumCollection()
+    public function corumCollection(Request $request)
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
 
-        $gender = collect(explode(',', request()->input('gender', '')))->map(fn($s)=>trim($s))->filter();
-        $series = collect(explode(',', request()->input('series', '')))->map(fn($s)=>trim($s))->filter();
-        $tags   = collect(explode(',', request()->input('tags', '')))->map(fn($s)=>trim($s))->filter();
+        $corumSeries = [
+            'admiral' => 'Admiral',
+            'golden-bridge' => 'Golden Bridge',
+            'bubble' => 'Bubble',
+            'heritage' => 'Heritage',
+            'lab' => 'LAB',
+        ];
 
-        // Constrain to category "Watches" and subcategory "chronoswiss"
+        $parseCsv = static function ($value): Collection {
+            return collect(explode(',', (string) $value))
+                ->map(fn ($item) => strtolower(trim($item)))
+                ->filter()
+                ->unique()
+                ->values();
+        };
+
+        // Keep old `tags=` links working while the UI sends grouped parameters.
+        $legacyTags = $parseCsv($request->input('tags', ''));
+        $genderValues = ['mens', 'men', 'male', 'ladies', 'women', 'womens', 'female'];
+        $seriesValues = array_keys($corumSeries);
+
+        $gender = $parseCsv($request->input('gender', ''))
+            ->merge($legacyTags->filter(fn ($tag) => in_array($tag, $genderValues, true)))
+            ->unique()
+            ->values();
+        $series = $parseCsv($request->input('series', ''))
+            ->merge($legacyTags->filter(fn ($tag) => in_array($tag, $seriesValues, true)))
+            ->unique()
+            ->values();
+        $otherTags = $legacyTags
+            ->reject(fn ($tag) => in_array($tag, $genderValues, true) || in_array($tag, $seriesValues, true))
+            ->values();
+
+        // Constrain the collection to Corum watches.
         $corumSubcat = Subcategory::where(function ($q) {
                 $q->whereRaw('LOWER(slug) = ?', ['corum'])
                   ->orWhereRaw('LOWER(name) = ?', ['corum']);
@@ -166,24 +195,24 @@ public function forevermark()
             })
             ->first();
 
-        $productsQuery = Products::with(['category', 'subcategory', 'images', 'tags'])
-    ->where('status', 'published')   // ✅ only published products
-    ->whereHas('category', function ($q) {
-        $q->whereRaw('LOWER(name) LIKE ?', ['%watch%']);
-    })
-    ->where(function($q) use ($corumSubcat) {
-        if ($corumSubcat) {
-            $q->orWhere('subcategory_id', $corumSubcat->id);
-        }
-        $q->orWhereHas('subcategory', function($qq){
-            $qq->whereRaw('LOWER(slug) LIKE ?', ['%corum%'])
-               ->orWhereRaw('LOWER(name) LIKE ?', ['%corum%']);
-        })
-        ->orWhereHas('tags', function($qq){
-            $qq->whereRaw('LOWER(slug) = ?', ['corum'])
-               ->orWhereRaw('LOWER(name) LIKE ?', ['%corum%']);
-        });
-    });
+        $productsQuery = Products::with(['category', 'subcategory.watchPricingSetting', 'images', 'tags'])
+            ->where('status', 'published')
+            ->whereHas('category', function ($q) {
+                $q->whereRaw('LOWER(name) LIKE ?', ['%watch%']);
+            })
+            ->where(function ($q) use ($corumSubcat) {
+                if ($corumSubcat) {
+                    $q->orWhere('subcategory_id', $corumSubcat->id);
+                }
+                $q->orWhereHas('subcategory', function ($qq) {
+                    $qq->whereRaw('LOWER(slug) LIKE ?', ['%corum%'])
+                       ->orWhereRaw('LOWER(name) LIKE ?', ['%corum%']);
+                })
+                ->orWhereHas('tags', function ($qq) {
+                    $qq->whereRaw('LOWER(slug) = ?', ['corum'])
+                       ->orWhereRaw('LOWER(name) LIKE ?', ['%corum%']);
+                });
+            });
         // Utility: expand input into likely tag slug variants (case/diacritics/spacing)
         $expandToSlugVariants = function (string $val): array {
             $v = trim(strtolower($val));
@@ -193,15 +222,21 @@ public function forevermark()
             $base = preg_replace('/\s+/', '-', $v);
 
             $candidates = [$base];
-            // Corum series synonyms
-            if (in_array($base, ['tourbillon'], true)) { $candidates = array_merge($candidates, ['tourbillon']); }
-            if (in_array($base, ['skeltec','skel-tec'], true)) { $candidates = array_merge($candidates, ['skeltec']); }
-            if (in_array($base, ['open-gear','open gear'], true)) { $candidates = array_merge($candidates, ['open-gear']); }
-            if (in_array($base, ['flying'], true)) { $candidates = array_merge($candidates, ['flying']); }
-            if (in_array($base, ['classic'], true)) { $candidates = array_merge($candidates, ['classic']); }
-            if (in_array($base, ['sirius'], true)) { $candidates = array_merge($candidates, ['sirius']); }
-            if (in_array($base, ['artist-collection','artist collection'], true)) { $candidates = array_merge($candidates, ['artist-collection']); }
-            if (in_array($base, ['heritage'], true)) { $candidates = array_merge($candidates, ['heritage']); }
+            if (in_array($base, ['mens', 'men', 'male'], true)) {
+                $candidates = array_merge($candidates, ['mens', 'men', 'male']);
+            }
+            if (in_array($base, ['ladies', 'women', 'womens', 'female'], true)) {
+                $candidates = array_merge($candidates, ['ladies', 'women', 'womens', 'female']);
+            }
+            if (in_array($base, ['admiral', 'admirals-cup', 'admiral-s-cup'], true)) {
+                $candidates = array_merge($candidates, ['admiral', 'admirals-cup', "admiral's cup"]);
+            }
+            if (in_array($base, ['golden-bridge', 'corum-bridges', 'bridges'], true)) {
+                $candidates = array_merge($candidates, ['golden-bridge', 'golden bridge', 'corum-bridges', 'corum bridges']);
+            }
+            if (in_array($base, ['lab', 'lab-01'], true)) {
+                $candidates = array_merge($candidates, ['lab', 'lab-01', 'lab 01']);
+            }
 
             return array_unique($candidates);
         };
@@ -223,10 +258,10 @@ public function forevermark()
             });
         }
 
-        if ($tags->isNotEmpty()) {
-            $productsQuery->whereHas('tags', function($q) use ($tags, $expandToSlugVariants) {
-                $q->where(function($qq) use ($tags, $expandToSlugVariants) {
-                    foreach ($tags as $tag) {
+        if ($otherTags->isNotEmpty()) {
+            $productsQuery->whereHas('tags', function($q) use ($otherTags, $expandToSlugVariants) {
+                $q->where(function($qq) use ($otherTags, $expandToSlugVariants) {
+                    foreach ($otherTags as $tag) {
                         $variants = $expandToSlugVariants($tag);
                         foreach ($variants as $variant) {
                             $qq->orWhereRaw('LOWER(slug) = ?', [$variant])
@@ -238,7 +273,7 @@ public function forevermark()
         }
 
         // Optional sorting
-        $sort = request('sort');
+        $sort = $request->input('sort', '');
         $productsQuery->pinnedFirst();
         switch ($sort) {
             case 'az':
@@ -265,8 +300,8 @@ public function forevermark()
 
         $products = $productsQuery->paginate(20)->withQueryString();
 
-        // Get total count of filtered products (not just current page)
-        $totalFilteredProducts = $productsQuery->count();
+        // Use the paginator's pre-limit total; the query builder now has page limit/offset.
+        $totalFilteredProducts = $products->total();
         $currentPageProducts = $products->count();
         $totalProducts = $products->total();
 
@@ -279,13 +314,14 @@ public function forevermark()
             'current_page' => $products->currentPage(),
             'last_page' => $products->lastPage(),
             'query_sql' => $productsQuery->toSql(),
-            'query_bindings' => $productsQuery->getBindings()
+            'query_bindings' => $productsQuery->getBindings(),
         ]);
 
         // Get the Corum subcategory for banner display
         $corumSubcategory = $corumSubcat;
-        return view('public.collections.corum', compact('categories', 'watchCategories', 'products', 'corumSubcategory', 'totalFilteredProducts', 'currentPageProducts'));
+        return view('public.collections.corum', compact('categories', 'watchCategories', 'products', 'corumSubcategory', 'corumSeries', 'totalFilteredProducts', 'currentPageProducts'));
     }
+
 public function monalisa()
 {
         $subcategory = \App\Models\Subcategory::where('slug', 'mona-lisa')->first();
@@ -2332,7 +2368,12 @@ public function Online_Shopping_Store(Request $request)
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
-        $product = Products::with('images', 'tags', 'category', 'subcategory')
+        $product = Products::with(
+            'images',
+            'tags',
+            'category',
+            'subcategory.watchPricingSetting'
+        )
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -2370,7 +2411,7 @@ public function Online_Shopping_Store(Request $request)
         // changes for product details watches
         
         // return view('public.product-details', compact(
-        $detailsView = stripos((string) $product->category?->name, 'watch') !== false
+        $detailsView = $product->isWatchProduct()
             ? 'public.product-details-watches'
             : 'public.product-details';
 

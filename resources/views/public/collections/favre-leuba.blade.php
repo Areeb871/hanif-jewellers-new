@@ -60,7 +60,7 @@
 }
 
 .para-regular-upper {
-    font-size: 11px;
+    font-size: 24px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
     font-weight: 600;

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\GoldRateController;
 use App\Http\Controllers\Admin\DiamondRateController;
+use App\Http\Controllers\Admin\WatchPricingController;
 use App\Http\Controllers\CheckoutLeadController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
@@ -257,6 +258,10 @@ Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
     // Diamond rate settings (admin storage only; does not change product pricing yet)
     Route::get('/diamond-rates', [DiamondRateController::class, 'index'])->name('admin.diamond-rates.index');
     Route::post('/diamond-rates', [DiamondRateController::class, 'update'])->name('admin.diamond-rates.update');
+
+    // Watch pricing settings by watch subcategory
+    Route::get('/watch-pricing', [WatchPricingController::class, 'index'])->name('admin.watch-pricing.index');
+    Route::post('/watch-pricing', [WatchPricingController::class, 'update'])->name('admin.watch-pricing.update');
     
 
 });
