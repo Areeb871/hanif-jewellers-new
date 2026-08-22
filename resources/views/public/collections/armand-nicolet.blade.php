@@ -17,7 +17,7 @@
     flex-direction:column;
     align-items:center;
     gap:clamp(0.25rem, 0.75vw, 0.5rem);
-    /* padding:clamp(0.35rem, 1vw, 0.75rem) 14px; */
+    /*padding:clamp(0.35rem, 1vw, 0.75rem) 14px;*/
 }
 
 .armand-page .armand-filter-header .brand-logo-wrapper {
@@ -54,6 +54,15 @@
         padding-right:12px;
         padding-left:12px;
     }
+
+    .armand-page .gehnawaSection {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 0;
+        z-index: 0 !important;
+    }
 }
 </style>
 
@@ -84,7 +93,7 @@
             {{-- Mobile Video (Dynamic based on subcategory) --}}
             @php
                 $mobileVideo = null;
-               $mobileVideoPath = 'assets/f_assets/image/watches mobile view/armond_niclet_mobile.mp4'; // Corrected path without assets/ prefix
+               $mobileVideoPath = 'assets/f_assets/image/watches mobile view/armand_new_mobile.jpeg'; // Corrected path without assets/ prefix
 
                 if ($armandNicoletSubcategory->slug === 'armand-nicolet') {
                     $mobileVideo = $mobileVideoPath;
@@ -101,16 +110,16 @@
                     muted 
                     playsinline 
                     class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    style="width:100%; height:auto; object-fit:contain;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="video-fallback-mobile d-md-none" style="display:none; width:100%; height:auto; background-image:url('{{ asset($mobileVideo) }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
             @else
                 {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <img src="{{ asset($mobileVideo) }}" alt="{{ $armandNicoletSubcategory->name ?? 'Banner' }}" class="d-block d-md-none" style="width:100%; height:auto; display:block; object-fit:contain;">
             @endif
         </section>
     @endif

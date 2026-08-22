@@ -164,7 +164,7 @@ padding:0px;
     }
 
     .para-regular-upper {
-        font-size: 10px;
+        font-size: 16px;
         letter-spacing: 2px;
         margin-bottom: 12px;
     }

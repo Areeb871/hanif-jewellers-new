@@ -318,9 +318,10 @@
 
 /* Center box locked to center */
 .lux-box{
-  width: 240px;
-  height: 240px;
-  background: rgba(245,245,245,0.95);
+  width: 88%;
+  height: 78%;
+  padding: 38px 28px;
+  background: rgba(245,245,245,0.96);
 
   position: absolute;
   top: 50%;
@@ -328,23 +329,23 @@
   transform: translate(-50%, -50%) scale(0.9);
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 
   z-index: 3;
   transition: transform .45s ease;
 }
 
-/* ✅ Logo ALWAYS inside box */
 .lux-logo{
-  max-width: 80%;
-  max-height: 70%;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
 }
-
 /* Border animation (safe) */
 .lux-card::before,
 .lux-card::after{
@@ -381,10 +382,19 @@
 .lux-card:hover::before{ transform: scaleX(1); }
 .lux-card:hover::after{ transform: scaleY(1); }
 
-/* Mobile */
 @media (max-width: 767px){
-  .lux-box{ width: 140px; height: 140px; }
-  .lux-card::before, .lux-card::after{ inset: 10px; }
+  .lux-hover{ opacity: .85; }
+  .lux-box{
+    width: 90%;
+    height: 80%;
+    padding: 32px 20px;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .lux-logo{ max-width: 90%; max-height: 100%; }
+  .lux-card::before, .lux-card::after{ inset: 10px; opacity: 1; }
+  .lux-card::before{ transform: scaleX(1); }
+  .lux-card::after{ transform: scaleY(1); }
+  .lux-img{ transform: scale(1.03); }
 }
 /* =========================
    WATCHES SCROLLER — no snap/animation, first card flush left
@@ -796,26 +806,26 @@ culminating in a true resemblance of experience pure art.</div>
 </div>
 </section> -->
 
-<section class="custom-banner d-none d-md-block position-relative">
- <img
-        src="{{ asset('assets/f_assets/image/pak-banner.jpeg') }}"
-        alt="Jeweller of the Nation"
-        class="custom-banner-video"
-        width="3840"
-        height="2160"
-        fetchpriority="high"
-    >
-</section>
-
-
-
 <!--<section class="custom-banner d-none d-md-block position-relative">-->
-<!--    <video class="custom-banner-video" autoplay muted loop playsinline>-->
-<!--        <source src="{{ asset('assets/f_assets/image/nagar/main.mp4') }}" type="video/mp4">-->
-<!--        Your browser does not support the video tag.-->
-<!--    </video>-->
-<!--            <a href="/collections/nagar" class="custom-banner-btn">DISCOVER MORE</a>-->
+<!-- <img-->
+<!--        src="{{ asset('assets/f_assets/image/pak-banner.jpeg') }}"-->
+<!--        alt="Jeweller of the Nation"-->
+<!--        class="custom-banner-video"-->
+<!--        width="3840"-->
+<!--        height="2160"-->
+<!--        fetchpriority="high"-->
+<!--    >-->
 <!--</section>-->
+
+
+
+<section class="custom-banner d-none d-md-block position-relative">
+    <video class="custom-banner-video" autoplay muted loop playsinline>
+        <source src="{{ asset('assets/f_assets/image/miras/miras_desktop.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+            <a href="/collections/miras" class="custom-banner-btn">DISCOVER MORE</a>
+</section>
 
 <!-- <section class="custom-banner d-none d-md-block position-relative">
      @php
@@ -852,7 +862,7 @@ towering peaks</div>
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
   <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
-    <source src="{{ asset('assets/f_assets/image/pakistan_watch/mobile_fm.mp4') }}" type="video/mp4">
+    <source src="{{ asset('assets/f_assets/image/miras/miras_mob.webm') }}" type="video/mp4">
   </video>
   
   
@@ -871,9 +881,7 @@ towering peaks</div>
 /> -->
 
   </div>
-{{-- Mobile hero overlay button hidden for the Pakistan campaign.
 <a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
---}}
 </section>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
@@ -1194,6 +1202,7 @@ FARAH KHAN
     text-decoration: none;
     background: #fff;
     box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 .home-brands .brand-item::before,
@@ -1220,11 +1229,13 @@ FARAH KHAN
     transform-origin: center;
 }
 
-.home-brands .brand-item:hover::before {
+.home-brands .brand-item:hover::before,
+.home-brands .brand-item.is-touch-active::before {
     transform: scaleX(1);
 }
 
-.home-brands .brand-item:hover::after {
+.home-brands .brand-item:hover::after,
+.home-brands .brand-item.is-touch-active::after {
     transform: scaleY(1);
 }
 
@@ -1241,7 +1252,8 @@ FARAH KHAN
     display: block;
 }
 
-.home-brands .brand-item:hover img {
+.home-brands .brand-item:hover img,
+.home-brands .brand-item.is-touch-active img {
     transform: scale(1.06);
 }
 
@@ -1324,18 +1336,70 @@ $brands = [
 </div>
 
 <script>
-document.querySelectorAll('.home-brands .brand-item img').forEach(function(img) {
-    const original = img.src;
-    const hover = img.dataset.hover;
-    if (hover) { const pre = new Image(); pre.src = hover; }
+document.addEventListener('DOMContentLoaded', () => {
+    const selector = '.home-brands .brand-item';
+    const items = document.querySelectorAll(selector);
+    let gesture = null;
 
-    img.addEventListener('mouseenter', function() {
-        if (hover) img.src = hover;
+    const findItem = target => target.closest(selector);
+
+    function activate(activeItem) {
+        items.forEach(item => {
+            const image = item.querySelector('img[data-hover]');
+            const active = item === activeItem;
+            item.classList.toggle('is-touch-active', active);
+            if (image) image.src = image.dataset[active ? 'hover' : 'original'];
+        });
+    }
+
+    document.querySelectorAll('.home-brands .brand-item img[data-hover]').forEach(image => {
+        const item = image.closest('.brand-item');
+        image.dataset.original = image.src;
+        if (image.dataset.hover) new Image().src = image.dataset.hover;
+        image.addEventListener('mouseenter', () => image.src = image.dataset.hover);
+        image.addEventListener('mouseleave', () => {
+            if (!item.classList.contains('is-touch-active')) image.src = image.dataset.original;
+        });
     });
 
-    img.addEventListener('mouseleave', function() {
-        img.src = original;
-    });
+    document.addEventListener('touchstart', e => {
+        const point = e.touches[0];
+        const item = findItem(e.target);
+        if (!point) return;
+        gesture = {
+            item,
+            wasActive: !!(item && item.classList.contains('is-touch-active')),
+            x: point.clientX,
+            y: point.clientY,
+            moved: false
+        };
+        activate(item);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+        if (gesture && e.touches[0] && (Math.abs(e.touches[0].clientX - gesture.x) > 10 || Math.abs(e.touches[0].clientY - gesture.y) > 10)) {
+            gesture.moved = true;
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+        if (gesture && e.changedTouches[0] && (Math.abs(e.changedTouches[0].clientX - gesture.x) > 10 || Math.abs(e.changedTouches[0].clientY - gesture.y) > 10)) {
+            gesture.moved = true;
+        }
+        const g = gesture;
+        setTimeout(() => { if (gesture === g) gesture = null; }, 1500);
+    }, { passive: true });
+
+    document.addEventListener('click', e => {
+        if (!gesture || e.detail === 0) return;
+        const last = gesture;
+        gesture = null;
+        if (!last.item || findItem(e.target) !== last.item) return;
+        if (last.moved || !last.wasActive) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
 });
 </script>
 

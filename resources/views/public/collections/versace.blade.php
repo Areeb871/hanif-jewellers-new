@@ -1,6 +1,18 @@
 @extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+<style>
+@media (max-width: 767px) {
+    .gehnawaSection {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 0;
+        z-index: 0 !important;
+    }
+}
+</style>
     @if(isset($versaceSubcategory) && $versaceSubcategory && $versaceSubcategory->banner_url)
         <section class="gehnawaSection p-0 position-relative">
             {{-- Desktop Video --}}
@@ -43,16 +55,16 @@
                     muted 
                     playsinline 
                     class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    style="width:100%; height:auto; object-fit:contain; display:block;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="video-fallback-mobile d-md-none" style="display:none; width:100%; height:auto; background-image:url('{{ asset($mobileVideo) }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
             @else
                 {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <img src="{{ asset($mobileVideo) }}" alt="{{ $versaceSubcategory->name ?? 'Banner' }}" class="d-block d-md-none" style="width:100%; height:auto; display:block; object-fit:contain;">
             @endif
         </section>
     @endif

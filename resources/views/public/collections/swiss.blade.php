@@ -26,7 +26,7 @@
             {{-- Mobile Video (Dynamic based on subcategory) --}}
             @php
                 $mobileVideo = null;
-                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/swiss_mobile.mp4'; // Corrected path without assets/ prefix
+                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/swiss_mobile.jpg'; // Corrected path without assets/ prefix
 
                 if ($swissMilitarySubcategory->slug === 'swiss-military') {
                     $mobileVideo = $mobileVideoPath;
