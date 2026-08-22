@@ -276,7 +276,7 @@
             @php
                 $slugLower = isset($subcategory) ? strtolower($subcategory->slug ?? '') : '';
                 $nameLower = isset($subcategory) ? strtolower($subcategory->name ?? '') : '';
-                $hideLoadMore = in_array($slugLower, ['breathtaking', 'qaws-al-matar','selene','eid-par-sony-ki-choriyan','navratan','winter-jewels','heritage']) || in_array($nameLower, ['breathtaking', 'qaws-al-matar','selene','eid-par-sony-ki-choriyan','navratan','winter-jewels','heritage','nagar']);
+                $hideLoadMore = in_array($slugLower, ['breathtaking', 'qaws-al-matar','selene','eid-par-sony-ki-choriyan','navratan','winter-jewels','heritage','miras']) || in_array($nameLower, ['breathtaking', 'qaws-al-matar','selene','eid-par-sony-ki-choriyan','navratan','winter-jewels','heritage','nagar','miras']);
             @endphp
             <div class="text-center py-4" @if($hideLoadMore) style="display:none;" @endif>
                 <div style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">

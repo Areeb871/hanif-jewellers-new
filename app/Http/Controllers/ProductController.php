@@ -950,6 +950,9 @@ class ProductController extends Controller
         }
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
+        if ($subcategory && strtolower($subcategory->slug ?? '') === 'miras') {
+            return redirect()->route('miras');
+        }
         if ($subcategory && strtolower($subcategory->slug ?? '') === 'heritage') {
             return view('public.collections.heritage', compact('categories', 'products', 'subcategory', 'watchCategories'));
         }

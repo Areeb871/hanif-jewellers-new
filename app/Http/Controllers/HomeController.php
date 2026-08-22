@@ -1344,6 +1344,31 @@ public function Online_Shopping_Store(Request $request)
 
         return view('public.social-links', compact('categories', 'watchCategories'));
     }
+
+    public function locationProfile($slug)
+    {
+        $locations = [
+            'dha' => ['name' => 'DHA', 'review_url' => 'https://g.page/r/CScW4gIKzKZPEAE/review'],
+            'mm-alam' => ['name' => 'MM Alam', 'review_url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review'],
+            'f6-islamabad' => ['name' => 'F6 Islamabad', 'review_url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review'],
+            'serena-islamabad' => ['name' => 'Serena Islamabad', 'review_url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review'],
+            'marriott-islamabad' => ['name' => 'Marriott Islamabad', 'review_url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review'],
+            'dolmen-mall' => ['name' => 'Dolmen Mall', 'review_url' => 'https://g.page/r/CYp_YF50r60TEAE/review'],
+            'dubai' => ['name' => 'Dubai', 'review_url' => 'https://g.page/r/CbeYicQsEHflEAE/review'],
+            'franck-muller' => ['name' => 'Franck Muller Pakistan', 'review_url' => 'https://g.page/r/CViIXJGaBTPyEAE/review'],
+            'zartash-couture' => ['name' => 'Zartash Couture', 'review_url' => 'https://g.page/r/CWV3wNZpmaxFEAE/review'],
+        ];
+
+        if (!isset($locations[$slug])) {
+            abort(404);
+        }
+
+        $location = $locations[$slug];
+        $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
+        $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
+
+        return view('public.location-profile', compact('location', 'categories', 'watchCategories'));
+    }
     public function after_sale_services()
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
@@ -2195,6 +2220,28 @@ public function ehedCollection(Request $request)
         ->get();
 
     return view('public.hasht', compact('subcategory', 'products'));
+}
+public function miras()
+{
+    $subcategory = \App\Models\Subcategory::whereRaw('LOWER(slug) = ?', ['miras'])
+        ->orWhereRaw('LOWER(name) = ?', ['miras'])
+        ->first();
+
+    $products = Products::with(['category', 'subcategory', 'images', 'tags'])
+        ->where('status', 'published')
+        ->whereHas('category', function ($qc) {
+            $qc->whereRaw('LOWER(name) = ?', ['jewellery']);
+        })
+        ->whereHas('subcategory', function ($qs) {
+            $qs->where(function ($query) {
+                $query->whereRaw('LOWER(name) = ?', ['miras'])
+                    ->orWhereRaw('LOWER(slug) = ?', ['miras']);
+            });
+        })
+        ->orderBy('id')
+        ->get();
+
+    return view('public.miras', compact('subcategory', 'products'));
 }
     public function misterio()
     {

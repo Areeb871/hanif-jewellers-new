@@ -42,6 +42,7 @@ Route::get('/pages/assurance', [HomeController::class, 'assurance']);
 Route::get('/pages/about-us', [HomeController::class, 'about_us']);
 Route::get('/pages/friends-of-the-brand', [HomeController::class, 'friendsOfTheBrand'])->name('friends-of-the-brand');
 Route::get('/pages/social-links', [HomeController::class, 'socialLinks'])->name('social-links');
+Route::get('/pages/social-links/{slug}', [HomeController::class, 'locationProfile'])->name('location-profile');
 Route::get('/pages/after-sale-services', [HomeController::class, 'after_sale_services']);
 Route::get('/pages/care-instructions', [HomeController::class, 'care_instructions']);
 Route::get('/forevermark', [HomeController::class, 'forevermark'])->name('forevermark');
@@ -62,6 +63,8 @@ Route::redirect('cleopatra', '/collections/cleopatra', 301);
 // EHÉD Collection - shows only Rose Gold, White Gold, and Yellow Gold products
 Route::get('/collections/ehed', [HomeController::class, 'ehedCollection'])->name('collections.ehed');
 Route::get('collections/hasht', [HomeController::class, 'hasht'])->name('hasht');
+Route::get('collections/miras', [HomeController::class, 'miras'])->name('miras');
+Route::redirect('collections/Miras', '/collections/miras', 301);
 Route::get('collections/misterio', [HomeController::class, 'misterio'])->name('misterio');
 Route::get('collections/gohar', [HomeController::class, 'gohar'])->name('gohar');
 Route::get('collections/qaws-al-matar', [HomeController::class, 'qaws_al_matar'])->name('qaws-al-matar');
