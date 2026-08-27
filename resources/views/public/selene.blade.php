@@ -1,4 +1,4 @@
-@extends('public.layouts.header_black')
+@extends('public.layouts.header_black_white_fixed')
 
 @section('content')
 @php
@@ -34,45 +34,37 @@
     $mobileBannerUrl = filter_var($mobileBannerSource, FILTER_VALIDATE_URL) ? $mobileBannerSource : asset($mobileBannerSource);
 @endphp
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap');
+    :root {
+        --selene-gap: 8px;
+    }
     .ehed-hero-section {
         display: flex;
-        align-items: center;
+        align-items: stretch;
     }
     .ehed-video-container {
         width: 50%;
         position: relative;
         overflow: hidden;
-        min-height: 0;
-        padding-top: 59.92%;
+        flex-shrink: 0;
+        aspect-ratio: 746 / 430;
+        background: #fff;
     }
-    @supports (aspect-ratio: 1) {
-        .ehed-video-container {
-            padding-top: 0;
-            aspect-ratio: 746 / 430;
-        }
-    }
-    .ehed-video-container video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
+    .ehed-video-container video,
     .ehed-media-cover {
         position: absolute;
-        top: 0;
-        left: 0;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center center;
         display: block;
     }
     .ehed-content-container {
         width: 50%;
-        padding: 80px 60px;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 8px 24px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -85,14 +77,14 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-        margin-bottom: 20px;
+        margin: 0 0 16px;
     }
     .ehed-main-title {
         font-size: 3rem;
         color: #000;
         font-family: Walbaum;
-        margin-bottom: 9px;
-        line-height: 0.3;
+        margin: 0 0 10px;
+        line-height: 1.1;
         font-weight: 400;
     }
     .ehed-body-text {
@@ -100,14 +92,16 @@
         font-weight: 400;
         color: #000;
         line-height: 1.6;
+        max-width: 100%;
     }
     .font-family--serif,
     .ehed-body-text {
         font-family: Fancy Cut, Almarai, Times, serif;
     }
     .hero__description {
-        margin-top: 1em;
+        margin-top: 0;
         font-size: 100%;
+        max-width: 100%;
     }
     .text-large {
         font-family: Walbaum, sans-serif;
@@ -147,7 +141,49 @@
             letter-spacing: 2.4px;
         }
     }
-    @media (max-width: 768px) {
+    @media (max-width: 991.98px) {
+        .ehed-hero-section {
+            padding-top: 56px;
+        }
+    }
+    @media (min-width: 768px) {
+        .ehed-content-container {
+            padding: 8px 40px;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 1199.98px) {
+        .ehed-video-container {
+            min-height: 0;
+            height: auto;
+        }
+        .ehed-content-container {
+            padding: 8px 28px;
+            overflow: visible;
+        }
+        .ehed-category-label {
+            font-size: 12px;
+            margin: 0 0 8px;
+        }
+        .ehed-main-title {
+            font-size: clamp(28px, 3.6vw, 42px);
+            line-height: 1.1;
+            margin: 0 0 8px;
+        }
+        .ehed-body-text {
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .hero__description {
+            max-width: 100%;
+            font-size: 100%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .ehed-content-container {
+            padding: 8px 60px;
+        }
+    }
+    @media (max-width: 767.98px) {
         .ehed-hero-section {
             flex-direction: column;
             min-height: auto;
@@ -155,10 +191,11 @@
         .ehed-video-container {
             width: 100%;
             height: auto;
+            aspect-ratio: 746 / 430;
         }
         .ehed-content-container {
             width: 100%;
-            padding: 40px 30px;
+            padding: 24px 20px;
         }
         .ehed-main-title {
             font-size: 48px;
@@ -264,7 +301,50 @@
         display: block;
         object-fit: cover;
     }
-  
+    .selene-gallery {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--selene-gap);
+        margin: var(--selene-gap) 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .selene-gallery__item {
+        display: block;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        line-height: 0;
+        overflow: hidden;
+    }
+    .selene-gallery__item--center-start {
+        grid-column: 2;
+    }
+    .selene-gallery .gallery-image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+    @media (max-width: 767.98px) {
+        .selene-gallery {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .selene-gallery__item--center-start {
+            grid-column: auto;
+        }
+    }
+    .selene-appointment-spacing {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 0;
+    }
+    @media (max-width: 767.98px) {
+        .selene-appointment-spacing {
+            padding: 1.5rem 0;
+        }
+    }
 </style>
 
 <section class="ehed-hero-section">
@@ -296,68 +376,24 @@ A Pure Gold Series in 24k Gold as it was meant to be — raw, regal, alive. Cele
     </div>
 </section>
 
-<div class="row g-3 mb-0" id="pureLockTopGallery" style="margin-top:1rem;">
-   <div class="row g-3">
-
-<!-- 1 -->
-@if(isset($products[0]))
-<div class="col-md-4">
-    <a href="{{ route('product.details', $products[0]->slug) }}">
-        <img src="{{ asset('assets/f_assets/image/selene/selene_1.png') }}" class="img-fluid gallery-image">
-    </a>
-</div>
-@endif
-
-<!-- 2 -->
-@if(isset($products[1]))
-<div class="col-md-4">
-    <a href="{{ route('product.details', $products[1]->slug) }}">
-        <img src="{{ asset('assets/f_assets/image/selene/selene_2.png') }}" class="img-fluid gallery-image">
-    </a>
-</div>
-@endif
-
-<!-- 3 -->
-@if(isset($products[2]))
-<div class="col-md-4">
-    <a href="{{ route('product.details', $products[2]->slug) }}">
-        <img src="{{ asset('assets/f_assets/image/selene/selene_3.png') }}" class="img-fluid gallery-image">
-    </a>
-</div>
-@endif
-
-<!-- 4 -->
-@if(isset($products[3]))
-<div class="col-md-4">
-    <a href="{{ route('product.details', $products[3]->slug) }}">
-        <img src="{{ asset('assets/f_assets/image/selene/selene_4.png') }}" class="img-fluid gallery-image">
-    </a>
-</div>
-@endif
-
-    <!-- 5 -->
-    @if(isset($products[4]))
-    <div class="col-md-4 ">
-        <a href="{{ route('product.details', $products[4]->slug) }}">
-            <img src="{{ asset('assets/f_assets/image/selene/selene_5.png') }}" class="img-fluid gallery-image">
-        </a>
-    </div>
-    @endif
-
-    <!-- 6 -->
-    @if(isset($products[5]))
-    <div class="col-md-4 ">
-        <a href="{{ route('product.details', $products[5]->slug) }}">
-            <img src="{{ asset('assets/f_assets/image/selene/selene.jpg') }}" class="img-fluid gallery-image">
-        </a>
-    </div>
-    @endif
-
-</div>
-
-
-</div>
-
+@php
+    $seleneImages = [
+        'assets/f_assets/image/selene/selene_1.png',
+        'assets/f_assets/image/selene/selene_2.png',
+        'assets/f_assets/image/selene/selene_3.png',
+        'assets/f_assets/image/selene/selene_4.png',
+        'assets/f_assets/image/selene/selene_5.png',
+        'assets/f_assets/image/selene/selene.jpg',
+    ];
+@endphp
+<div class="selene-gallery">
+    @foreach($seleneImages as $index => $imagePath)
+        @if(isset($products[$index]))
+            <a href="{{ route('product.details', $products[$index]->slug) }}" class="selene-gallery__item{{ $index === 4 ? ' selene-gallery__item--center-start' : '' }}">
+                <img src="{{ asset($imagePath) }}" class="gallery-image">
+            </a>
+        @endif
+    @endforeach
 </div>
 <!-- <div class="d-none d-md-block" style="position: relative; height: 768px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden;">
     <video autoplay loop muted playsinline preload="auto" 
@@ -377,14 +413,6 @@ A Pure Gold Series in 24k Gold as it was meant to be — raw, regal, alive. Cele
 </div>  -->
 
 
-<style>
-.selene-appointment-spacing {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 9.5rem;
-}
-</style>
 <div class="selene-appointment-spacing">
     <x-book-appointment class="btn border btn-outline-dark px-5 py-2" />
 </div>

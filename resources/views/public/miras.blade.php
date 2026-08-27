@@ -8,7 +8,7 @@
     $desktopBannerSrc = filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner);
     $stories = [
         ['name' => 'Miras | ميراث - Inherited Faith', 'image' => 'assets/f_assets/image/miras/desktop2.jpg', 'mobile_image' => 'assets/f_assets/image/miras/mobile2.jpg', 'copy' => [
-            'Some things are not bought they are received. Miras is fine gold jewellery that carries the weight of what came before and the promise of what comes after. Crafted entirely in gold, built to move through hands and years and generations.' . "\u{00A0}" . 'art.',
+           'Some things are not bought, they are inherited. Miras is a fine example of cultural art. Jewellery that carries the weight of what came before and the promise of what comes after. Crafted entirely in gold, built to move through hands and hearts for generations.',
         ], 'side' => 'left'],
         ['name' => '', 'image' => 'assets/f_assets/image/miras/desktop1.jpg', 'mobile_image' => 'assets/f_assets/image/miras/mobile1.jpg', 'copy' => '', 'side' => 'left'],
     ];
@@ -97,12 +97,15 @@
 @if($products->isNotEmpty())
 {{-- SWIPER PRODUCT SLIDER (Desktop + Mobile) --}}
 <section class="onlineStore">
-    <h2 class="miras-products__title">MIRAS JEWELLERY</h2>
+    <!-- <h2 class="miras-products__title">MIRAS JEWELLERY</h2> -->
     <div class="swiper productSwiper">
         <div class="swiper-wrapper">
             @foreach ($products as $product)
                 <div class="swiper-slide">
-                    @include('public.partials.simple-card', ['product' => $product])
+                    @include('public.partials.simple-card', [
+                        'product' => $product,
+                        'storeContext' => true,
+                    ])
                 </div>
             @endforeach
         </div>

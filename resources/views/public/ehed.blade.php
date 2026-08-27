@@ -312,7 +312,7 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 <div class="ehed-grid" id="qawsAlMatarGallery">
     @foreach($galleryImages as $index => $image)
         <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="qawsAlMatarGallery" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('qawsAlMatarGallery', {{ $index }})">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="qawsAlMatarGallery" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('qawsAlMatarGallery', {{ $loop->index }})">
         </div>
     @endforeach
     @if($galleryImages->count() < 4)
@@ -384,7 +384,7 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 <div class="ehed-grid" id="bottomGallery">
     @foreach($bottomImages as $index => $image)
         <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGallery" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('bottomGallery', {{ $index }})">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGallery" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('bottomGallery', {{ $loop->index }})">
         </div>
     @endforeach
     @if($bottomImages->count() < 4)
@@ -404,7 +404,7 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 <div class="ehed-grid" id="bottomGalleryRow2">
     @foreach($bottomImagesRow2 as $index => $image)
         <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGalleryRow2" data-index="{{ $index }}" style="cursor:pointer;" onclick="openImageModal('bottomGalleryRow2', {{ $index }})">
+            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGalleryRow2" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('bottomGalleryRow2', {{ $loop->index }})">
         </div>
     @endforeach
     @if($bottomImagesRow2->count() < 4)

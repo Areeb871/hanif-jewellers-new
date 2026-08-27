@@ -34,45 +34,37 @@
     $mobileBannerUrl = filter_var($mobileBannerSource, FILTER_VALIDATE_URL) ? $mobileBannerSource : asset($mobileBannerSource);
 @endphp
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@400;500;600&display=swap');
+    :root {
+        --pure-lock-gap: 8px;
+    }
     .ehed-hero-section {
         display: flex;
-        align-items: center;
+        align-items: stretch;
     }
     .ehed-video-container {
         width: 50%;
         position: relative;
         overflow: hidden;
-        min-height: 0;
-        padding-top: 59.92%;
+        flex-shrink: 0;
+        aspect-ratio: 746 / 430;
+        background: #fff;
     }
-    @supports (aspect-ratio: 1) {
-        .ehed-video-container {
-            padding-top: 0;
-            aspect-ratio: 746 / 430;
-        }
-    }
-    .ehed-video-container video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
+    .ehed-video-container video,
     .ehed-media-cover {
         position: absolute;
-        top: 0;
-        left: 0;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center center;
         display: block;
     }
     .ehed-content-container {
         width: 50%;
-        padding: 80px 60px;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 8px 24px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -85,14 +77,14 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-        margin-bottom: 20px;
+        margin: 0 0 16px;
     }
     .ehed-main-title {
         font-size: 3rem;
         color: #000;
         font-family: Walbaum;
-        margin-bottom: 9px;
-        line-height: 0.3;
+        margin: 0 0 10px;
+        line-height: 1.1;
         font-weight: 400;
     }
     .ehed-body-text {
@@ -100,14 +92,16 @@
         font-weight: 400;
         color: #000;
         line-height: 1.6;
+        max-width: 100%;
     }
     .font-family--serif,
     .ehed-body-text {
         font-family: Fancy Cut, Almarai, Times, serif;
     }
     .hero__description {
-        margin-top: 1em;
+        margin-top: 0;
         font-size: 100%;
+        max-width: 100%;
     }
     .text-large {
         font-family: Walbaum, sans-serif;
@@ -147,7 +141,49 @@
             letter-spacing: 2.4px;
         }
     }
-    @media (max-width: 768px) {
+    @media (max-width: 991.98px) {
+        .ehed-hero-section {
+            padding-top: 56px;
+        }
+    }
+    @media (min-width: 768px) {
+        .ehed-content-container {
+            padding: 8px 40px;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 1199.98px) {
+        .ehed-video-container {
+            min-height: 0;
+            height: auto;
+        }
+        .ehed-content-container {
+            padding: 8px 28px;
+            overflow: visible;
+        }
+        .ehed-category-label {
+            font-size: 12px;
+            margin: 0 0 8px;
+        }
+        .ehed-main-title {
+            font-size: clamp(28px, 3.6vw, 42px);
+            line-height: 1.1;
+            margin: 0 0 8px;
+        }
+        .ehed-body-text {
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .hero__description {
+            max-width: 100%;
+            font-size: 100%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .ehed-content-container {
+            padding: 8px 60px;
+        }
+    }
+    @media (max-width: 767.98px) {
         .ehed-hero-section {
             flex-direction: column;
             min-height: auto;
@@ -155,10 +191,11 @@
         .ehed-video-container {
             width: 100%;
             height: auto;
+            aspect-ratio: 746 / 430;
         }
         .ehed-content-container {
             width: 100%;
-            padding: 40px 30px;
+            padding: 24px 20px;
         }
         .ehed-main-title {
             font-size: 48px;
@@ -264,6 +301,110 @@
         display: block;
         object-fit: cover;
     }
+    .pure-lock-gallery {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--pure-lock-gap);
+        padding: 0;
+        margin: var(--pure-lock-gap) 0;
+        box-sizing: border-box;
+        --bs-gutter-x: 0;
+        --bs-gutter-y: 0;
+    }
+    .pure-lock-gallery > * {
+        width: auto;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+        line-height: 0;
+    }
+    .pure-lock-gallery .gallery-image,
+    .pure-lock-gallery .gallery-placeholder {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+    }
+    @media (max-width: 767.98px) {
+        .pure-lock-gallery {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    .pure-lock-products {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    .pure-lock-products__title {
+        margin: 0;
+        padding: 48px 20px 0;
+        color: #111;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(22px, 2vw, 32px);
+        font-weight: 500;
+        letter-spacing: .18em;
+        line-height: 1.3;
+        text-align: center;
+    }
+    .pure-lock-product-swiper {
+        width: 100%;
+        padding: 40px 8px;
+        overflow: hidden;
+        touch-action: pan-y;
+    }
+    .pure-lock-product-swiper .swiper-slide {
+        height: auto;
+        min-width: 0;
+    }
+    .pure-lock-product-swiper .hjPagination {
+        display: none !important;
+    }
+    .pure-lock-product-swiper .swiper-button-next,
+    .pure-lock-product-swiper .swiper-button-prev {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+        color: #000;
+    }
+    .pure-lock-product-swiper .swiper-button-next::after,
+    .pure-lock-product-swiper .swiper-button-prev::after {
+        font-size: 16px;
+        font-weight: 700;
+    }
+    .pure-lock-product-swiper > .swiper-pagination {
+        display: none;
+    }
+    @media (max-width: 575px) {
+        .pure-lock-products__title {
+            padding-top: 36px;
+            font-size: 20px;
+        }
+        .pure-lock-product-swiper {
+            padding-bottom: 42px;
+        }
+        .pure-lock-product-swiper .swiper-button-next,
+        .pure-lock-product-swiper .swiper-button-prev {
+            display: none;
+        }
+        .pure-lock-product-swiper > .swiper-pagination {
+            display: flex;
+            bottom: 10px;
+            justify-content: center;
+        }
+    }
+    .pure-lock-shop-spacing {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 0;
+    }
+    @media (max-width: 767.98px) {
+        .pure-lock-shop-spacing {
+            padding: 1.5rem 0;
+        }
+    }
 </style>
 
 <section class="ehed-hero-section">
@@ -297,7 +438,7 @@
 </section>
 
 @if(isset($galleryImages) && $galleryImages->count() > 0)
-<div class="row g-3 mb-3" id="pureLockTopGallery" style="margin-top:1rem;">
+<div class="pure-lock-gallery" id="pureLockTopGallery">
     @foreach($galleryImages as $index => $image)
         <div class="col-md-3 {{ $index > 0 ? 'justify-content-center d-flex align-items-center' : '' }}">
             <img src="{{ asset($image->image) }}" class="img-fluid gallery-image" alt="Pure Lock Gallery Image" data-gallery="pureLockTopGallery" data-index="{{ $index }}" style="cursor: pointer;" onclick="openImageModal('pureLockTopGallery', {{ $index }})">
@@ -306,7 +447,7 @@
     @if($galleryImages->count() < 4)
         @for($i = $galleryImages->count(); $i < 4; $i++)
             <div class="col-md-3 justify-content-center d-flex align-items-center">
-                <div style="width: 100%; height: 200px; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                <div class="gallery-placeholder d-flex align-items-center justify-content-center" style="background-color: #f5f5f5;">
                     <span class="text-muted">No image</span>
                 </div>
             </div>
@@ -331,15 +472,49 @@
     </video>
 </div>  -->
 
+@if(isset($products) && $products->isNotEmpty())
+<section class="pure-lock-products">
+    <h2 class="pure-lock-products__title">PURE LOCK JEWELLERY</h2>
+    <div class="swiper pure-lock-product-swiper">
+        <div class="swiper-wrapper">
+            @foreach($products as $product)
+                <div class="swiper-slide">
+                    @include('public.partials.simple-card', ['product' => $product])
+                </div>
+            @endforeach
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
 
-<style>
-.pure-lock-shop-spacing {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 9.5rem;
-}
-</style>
+<script>
+document.querySelectorAll('.pure-lock-product-swiper').forEach((swiperEl) => {
+    new Swiper(swiperEl, {
+        loop: false,
+        grabCursor: true,
+        watchOverflow: true,
+        observer: true,
+        observeParents: true,
+        breakpoints: {
+            0: { slidesPerView: 1, spaceBetween: 8 },
+            576: { slidesPerView: 2, spaceBetween: 8 },
+            768: { slidesPerView: 3, spaceBetween: 8 },
+            1200: { slidesPerView: 4, spaceBetween: 8 }
+        },
+        navigation: {
+            nextEl: swiperEl.querySelector('.swiper-button-next'),
+            prevEl: swiperEl.querySelector('.swiper-button-prev')
+        },
+        pagination: {
+            el: swiperEl.querySelector('.swiper-pagination'),
+            clickable: true
+        }
+    });
+});
+</script>
+@endif
 <div class="pure-lock-shop-spacing">
     <x-shop-now
         href="https://www.hanifjewellers.com/products/pure-lock-p233590?store=1"

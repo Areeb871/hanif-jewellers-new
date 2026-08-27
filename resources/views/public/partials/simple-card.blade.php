@@ -5,6 +5,11 @@
     $displayImage = $hasImages
         ? asset(ltrim($product->images->first()->image, '/'))
         : (!empty($product->image) ? asset(ltrim($product->image, '/')) : asset('default.jpg'));
+
+    $storeContext = $storeContext ?? false;
+    $detailUrl = $storeContext
+        ? route('product.details', $product->slug) . '?store=1'
+        : route('product.details', $product->slug);
 @endphp
 
 <style>
@@ -390,7 +395,7 @@
                 <div class="carousel-inner">
                     @foreach($product->images as $i => $img)
                         <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                            <a href="{{ route('product.details', $product->slug) }}"
+                            <a href="{{ $detailUrl }}"
                                class="hjImageLink d-block">
                                 <img src="{{ asset(ltrim($img->image,'/')) }}"
                                      alt="{{ $product->name }} image"
@@ -428,7 +433,7 @@
 
             </div>
         @else
-            <a href="{{ route('product.details', $product->slug) }}" class="hjImageLink d-block">
+            <a href="{{ $detailUrl }}" class="hjImageLink d-block">
                 <img src="{{ $displayImage }}"
                      alt="{{ $product->name ?? 'Product' }}"
                      loading="lazy">
@@ -453,7 +458,7 @@
 
             <div class="hjSwapArea">
                 <div class="hjDesc">{!! $product->description !!}</div>
-                <a href="{{ route('product.details', $product->slug) }}" class="btn hjBtn">
+                <a href="{{ $detailUrl }}" class="btn hjBtn">
                     Discover More
                 </a>
             </div>
