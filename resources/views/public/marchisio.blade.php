@@ -388,7 +388,10 @@ html, body{
         <div class="swiper-wrapper">
             @foreach ($products->take(max(0, $products->count())) as $product)
                 <div class="swiper-slide">
-                    @include('public.partials.simple-card', ['product' => $product])
+                    @include('public.partials.simple-card', [
+                        'product' => $product,
+                        'hideDetails' => true,
+                    ])
                 </div>
             @endforeach
         </div>

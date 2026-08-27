@@ -7,6 +7,7 @@
         : (!empty($product->image) ? asset(ltrim($product->image, '/')) : asset('default.jpg'));
 
     $storeContext = $storeContext ?? false;
+    $hideDetails = $hideDetails ?? false;
     $detailUrl = $storeContext
         ? route('product.details', $product->slug) . '?store=1'
         : route('product.details', $product->slug);
@@ -457,7 +458,9 @@
             <!--<h3 class="hjTitle">{{ $product->name }}</h3>-->
 
             <div class="hjSwapArea">
-                <div class="hjDesc">{!! $product->description !!}</div>
+                @unless($hideDetails)
+                    <div class="hjDesc">{!! $product->description !!}</div>
+                @endunless
                 <a href="{{ $detailUrl }}" class="btn hjBtn">
                     Discover More
                 </a>
