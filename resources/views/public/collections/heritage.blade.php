@@ -172,7 +172,7 @@
 
         <!-- LEFT IMAGE CAROUSEL -->
         <div class="col-md-7">
-            <div id="heritageHighlightCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+            <div id="heritageHighlightCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
                 <div class="carousel-inner">
 
                     <div class="carousel-item active">
