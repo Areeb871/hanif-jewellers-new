@@ -296,29 +296,20 @@
                 </ul>
             </div>
             <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('swissSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="swissSeriesList">
+                    @php $series = ['swiss-military','recruit','naval','airborne']; @endphp
+                    @foreach($series as $s)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox swiss-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace('-', ' ', $s)) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('swissCaseSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="swissCaseSizeList">
                     @php $caseSizes = ['28mm','30mm','36mm','37mm','39mm','40mm','41mm','42mm','42.5mm','43mm','45mm','48mm']; @endphp
                     @foreach($caseSizes as $size)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox swiss-filter" data-group="caseSize" value="{{ $size }}" {{ $selectedTags->contains($size) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $size }}</span></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('swissMovementList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Movement Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="swissMovementList">
-                    @php $movements = ['quartz','automatic','chronograph']; @endphp
-                    @foreach($movements as $movement)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox swiss-filter" data-group="movementType" value="{{ $movement }}" {{ $selectedTags->contains($movement) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords($movement) }}</span></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('swissCaseTypeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="swissCaseTypeList">
-                    @php $caseTypes = ['steel','titanium']; @endphp
-                    @foreach($caseTypes as $caseType)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox swiss-filter" data-group="caseType" value="{{ $caseType }}" {{ $selectedTags->contains($caseType) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords($caseType) }}</span></li>
                     @endforeach
                 </ul>
             </div>

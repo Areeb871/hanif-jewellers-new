@@ -156,8 +156,6 @@ public function forevermark()
             'admiral' => 'Admiral',
             'golden-bridge' => 'Golden Bridge',
             'bubble' => 'Bubble',
-            'heritage' => 'Heritage',
-            'lab' => 'LAB',
         ];
 
         $parseCsv = static function ($value): Collection {

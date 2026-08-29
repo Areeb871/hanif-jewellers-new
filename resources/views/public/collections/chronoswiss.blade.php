@@ -545,6 +545,15 @@ padding:15px 15px 0;
                     @endforeach
                 </ul>
             </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('chronoswissSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="chronoswissSizeList">
+                    @php $sizes = ['40','41','42','44']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox chronoswiss-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 

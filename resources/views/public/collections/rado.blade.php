@@ -370,6 +370,15 @@
                     @endforeach
                 </ul>
             </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('radoSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="radoSizeList">
+                    @php $sizes = ['35','38','40','42','43','45']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox rado-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 

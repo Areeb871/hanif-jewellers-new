@@ -5,8 +5,7 @@
         /* ── Tissot page: typography & spacing tokens ── */
         .tissot-home-content,
         .tissot-products,
-        .tissot-brand-bar,
-        .offcanvas-modern {
+        .tissot-brand-bar {
             font-family: "Lato", Helvetica Neue, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -170,8 +169,8 @@
             padding: 0;
         }
         .tissot-products .container-fluid {
-            padding-left: clamp(24px, 4vw, 48px);
-            padding-right: clamp(24px, 4vw, 48px);
+            padding-left: 1rem;
+            padding-right: 1rem;
         }
         .tissot-products .onlineStore {
             padding-top:16px;
@@ -246,45 +245,183 @@
             }
         }
 
-        .offcanvas-modern { background:#fff !important; color:#222; min-width:320px; max-width:380px; }
-        @media (max-width: 767px) { .offcanvas-modern { min-width:100% !important; max-width:100% !important; width:100% !important; } }
-        .offcanvas-modern .offcanvas-header { border-bottom:1px solid #ecebe7; padding-bottom:0.75rem; background:#fff; }
-        .offcanvas-modern .offcanvas-title { font-size:12px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:#1a1a1a; }
-        .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
-        .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:12px; font-weight:500; letter-spacing:0.12em; line-height:1.5; display:flex; align-items:center; gap:6px; z-index:10; font-family:"Poppins", sans-serif; }
+        /* Sort/Filter drawer — match Bovet */
+        .offcanvas-modern {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #fff !important;
+            color: #222;
+            min-width: 320px;
+            max-width: 380px;
+        }
+        @media (max-width: 767px) {
+            .offcanvas-modern {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                min-width: 100vw !important;
+            }
+        }
+        .offcanvas-modern .offcanvas-header {
+            border-bottom: 1px solid #fff;
+            padding-bottom: 0.5rem;
+            background: #fff;
+        }
+        .offcanvas-modern .offcanvas-title {
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            color: #222;
+        }
+        .offcanvas-modern .btn-close {
+            filter: none;
+            opacity: 1;
+            background-size: 1em;
+            width: 1em;
+            height: 1em;
+        }
+        .offcanvas-modern .offcanvas-body {
+            background: #fff;
+            padding: 1rem;
+        }
+        .filter .navbar-toggler {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            padding: 4px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+            font-family: "Poppins", sans-serif;
+        }
         .filter .navbar-toggler:focus,
         .filter .navbar-toggler:hover,
-        .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
-        .filter .navbar-toggler-icon {
-            width: 18px; height: 14px; background: none; display: inline-block; position: relative;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
-            background-size: 100% 100%; background-repeat: no-repeat; margin-right: 2px;
+        .filter .navbar-toggler:active {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
         }
-        .sort-list, .category-list, .subcategory-list { list-style:none; padding-left:0; margin-bottom:0; }
-        .sort-list { max-height: 0; overflow:hidden; transition: max-height 0.3s ease-out; }
-        .sort-list.show { max-height: 300px; transition: max-height 0.3s ease-in; }
-        .sort-list li { padding: 0.5rem 0; font-size: 15px; font-weight: 400; display:flex; align-items:center; color:#4a4a4a; cursor:pointer; line-height: 1.5; }
-        .sort-list li.selected { font-weight: 500; color:#1a1a1a; }
-        .sort-list li .diamond { font-size: 0.7em; margin-right: 0.7em; color: #b2b2b2; }
-        .sort-list li.selected .diamond { color:#1a1a1a; }
-        .category-list > li { padding: 0.5rem 0; font-size: 15px; font-weight: 400; display:flex; align-items:center; color:#4a4a4a; cursor:pointer; line-height: 1.5; }
-        .filter-section-title { font-size:12px; font-weight:500; letter-spacing:0.12em; margin-bottom:16px; margin-top:24px; text-transform:uppercase; color:#1a1a1a; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #ecebe7; padding-bottom:8px; cursor:pointer; }
+        .filter .navbar-toggler-icon {
+            width: 18px;
+            height: 14px;
+            background: none;
+            display: inline-block;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            margin-right: 2px;
+        }
+        .sort-list,
+        .category-list,
+        .subcategory-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .sort-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sort-list.show {
+            max-height: 300px;
+            transition: max-height 0.3s ease-in;
+        }
+        .sort-list li {
+            padding: 0.4rem 0;
+            font-size: 0.97rem;
+            display: flex;
+            align-items: center;
+            color: #222;
+            cursor: pointer;
+        }
+        .sort-list li.selected {
+            font-weight: 600;
+            color: #111;
+        }
+        .sort-list li .diamond {
+            font-size: 0.7em;
+            margin-right: 0.7em;
+            color: #b2b2b2;
+        }
+        .sort-list li.selected .diamond { color: #111; }
+        .filter-section-title {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: .01em;
+            margin-bottom: .8rem;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ecebe7;
+            padding-bottom: .5rem;
+            cursor: pointer;
+        }
         .filter-section-title:first-child { margin-top: 0; }
-        .category-list { list-style:none; padding-left:0; margin-bottom:0; }
-        .category-list.collapsible { max-height:1000px; overflow:hidden; transition:max-height .3s ease-out; }
-        .category-list.collapsible:not(.show) { max-height:0; transition:max-height .3s ease-in; }
-        .category-toggle { font-size:1.1em; color:#b2b2b2; cursor:pointer; user-select:none; width:20px; text-align:center; margin-left:10px; }
-        .form-check-input.filter-tag-checkbox { accent-color:#111; border-color:#bbb; box-shadow:none !important; }
-        .form-check-input.filter-tag-checkbox:checked { background-color:#111; border-color:#111; }
-        .filter-actions { position:sticky; bottom:-16px; background:#fff; padding:16px 0 0 0; }
-        .filter-actions-inner { border-top:1px solid #ecebe7; padding-top:16px; display:flex; gap:12px; }
-        .filter-actions .btn { border-radius:8px; font-size:12px; font-weight:500; letter-spacing:0.08em; padding:10px 16px; font-family:inherit; }
-        .offcanvas-modern .offcanvas-body { background: rgb(255, 255, 255); padding: 1.25rem; }
+        .category-list.collapsible {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height .3s ease-out;
+        }
+        .category-list.collapsible:not(.show) {
+            max-height: 0;
+            transition: max-height .3s ease-in;
+        }
+        .category-list > li {
+            padding: .4rem 0;
+            font-size: .97rem;
+            display: flex;
+            align-items: center;
+            color: #222;
+            cursor: pointer;
+        }
+        .category-toggle {
+            font-size: 1.1em;
+            color: #b2b2b2;
+            cursor: pointer;
+            user-select: none;
+            width: 20px;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .form-check-input.filter-tag-checkbox {
+            accent-color: #111;
+            border-color: #bbb;
+            box-shadow: none !important;
+        }
+        .form-check-input.filter-tag-checkbox:checked {
+            background-color: #111;
+            border-color: #111;
+        }
+        .filter-tag-checkbox { margin-right: 8px; }
+        .filter-actions {
+            position: sticky;
+            bottom: -16px;
+            background: #fff;
+            padding: 12px 0 0 0;
+        }
+        .filter-actions-inner {
+            border-top: 1px solid #fff;
+            padding-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        .filter-actions .btn {
+            border-radius: 10px;
+            font-size: 13px;
+            padding: 8px 14px;
+        }
         .onlineStore .col-6, .onlineStore .col-sm-4, .onlineStore .col-md-3, .onlineStore .col-lg-3 { display: flex; flex-direction: column; }
         .onlineStore .card { flex: 1; display: flex; flex-direction: column; }
         .onlineStore .card-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .discover-more-btn { align-self: center; margin: 0 auto; }
-        .filter-tag-checkbox { margin-right: 8px; }
         .offcanvas.offcanvas-modern { z-index: 20000 !important; }
         .offcanvas { z-index: 20000 !important; }
         .offcanvas-backdrop { z-index: 19999 !important; }
@@ -464,6 +601,15 @@
                     @php $series = ['prx','prc 200','prs 200','pr 100','prs 516','desire','classic dream','carson','couturier','tradition','t-race','bridge port','quickster']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox tissot-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('tissotSizeList', this.querySelector('.category-toggle'))">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="tissotSizeList">
+                    @php $sizes = ['35','38','39','40','41','42','43','45']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox tissot-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach
                 </ul>
             </div>

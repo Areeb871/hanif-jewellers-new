@@ -115,6 +115,16 @@
         height:auto;
     }
 
+    .corum-filter-wrap .corum-collections-heading{
+        margin:0 0 8px;
+        text-align:center;
+        font-family:'Poppins', sans-serif;
+        font-weight:500;
+        letter-spacing:0.15em;
+        text-transform:uppercase;
+        color:#222;
+    }
+
     .corum-filter-wrap .corum-filterbar__right{
         display:flex;
         align-items:center;
@@ -556,8 +566,9 @@
 <!--    </div>-->
 <!--</section>-->
 
-<section >
+<section>
     <div class="corum-filter-wrap">
+        <h2 class="corum-collections-heading">Our Collections</h2>
         <div class="corum-filterbar__right">
             <button type="button"
                     class="navbar-toggler corum-filterbar__btn"
@@ -641,7 +652,7 @@
 
                 <div class="mt-3">
                     <div class="filter-section-title" onclick="toggleCorumCategory('corumSeriesList', this.querySelector('.category-toggle'))">
-                        Collection <span class="category-toggle">+</span>
+                        Series <span class="category-toggle">+</span>
                     </div>
 
                     <ul class="category-list collapsible" id="corumSeriesList">
@@ -650,6 +661,27 @@
                                 <label class="filter-option-label">
                                     <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="series" value="{{ $slug }}" @checked($selectedSeries->contains($slug))>
                                     <span class="subcat-label">{{ $label }}</span>
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="mt-3">
+                    <div class="filter-section-title" onclick="toggleCorumCategory('corumSizeList', this.querySelector('.category-toggle'))">
+                        Case Size <span class="category-toggle">+</span>
+                    </div>
+
+                    <ul class="category-list collapsible" id="corumSizeList">
+                        @php
+                        $corumSizes = ['38','42','47','52'];
+                            $selectedSizes = collect(explode(',', (string) request('tags', '')))->map(fn ($s) => trim($s));
+                        @endphp
+                        @foreach($corumSizes as $sz)
+                            <li>
+                                <label class="filter-option-label">
+                                    <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="size" value="{{ $sz }}" @checked($selectedSizes->contains($sz))>
+                                    <span class="subcat-label">{{ $sz }}mm</span>
                                 </label>
                             </li>
                         @endforeach
@@ -746,6 +778,10 @@
 
                 if (selected.length) url.searchParams.set(group, selected.join(','));
             });
+
+            const selectedSizes = Array.from(document.querySelectorAll('.corum-filter[data-group="size"]:checked'))
+                .map(input => input.value);
+            if (selectedSizes.length) url.searchParams.set('tags', selectedSizes.join(','));
 
             const selectedSort = document.querySelector('#corumSortList li.selected');
             if (selectedSort) {

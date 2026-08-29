@@ -368,6 +368,15 @@
                 </ul>
             </div>
             <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('armandNicoletSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="armandNicoletSeriesList">
+                    @php $series = ['amadeo','l13','a13','m12','hh2']; @endphp
+                    @foreach($series as $s)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox armand-nicolet-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ strtoupper($s) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('armandNicoletSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="armandNicoletSizeList">
                     @php $sizes = ['40','41','42','43','44','34','38.5']; @endphp
@@ -399,6 +408,7 @@
             // Build unified tags param to match server-side filtering
             url.searchParams.delete('tags');
             url.searchParams.delete('gender');
+            url.searchParams.delete('series');
             url.searchParams.delete('size');
             const selected = Array.from(document.querySelectorAll('.armand-nicolet-filter:checked')).map(i=>i.value);
             if (selected.length) url.searchParams.set('tags', selected.join(',')); else url.searchParams.delete('tags');

@@ -380,6 +380,24 @@
                     <li><input type="checkbox" class="form-check-input filter-tag-checkbox ferragamo-filter" data-group="gender" value="ladies" {{ $selectedTags->contains('ladies') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Ladies</span></li>
                 </ul>
             </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('ferragamoSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="ferragamoSeriesList">
+                    @php $series = ['f-80','lungarno','1898','ganci']; @endphp
+                    @foreach($series as $s)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox ferragamo-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ strtoupper(str_replace('-', ' ', $s)) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('ferragamoSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="ferragamoSizeList">
+                    @php $sizes = ['33','38','40','42','44']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox ferragamo-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -402,6 +420,8 @@
             const url = new URL(window.location.href);
             url.searchParams.delete('tags');
             url.searchParams.delete('gender');
+            url.searchParams.delete('series');
+            url.searchParams.delete('size');
             const selected = Array.from(document.querySelectorAll('.ferragamo-filter:checked')).map(i=>i.value);
             if (selected.length) url.searchParams.set('tags', selected.join(',')); else url.searchParams.delete('tags');
             url.searchParams.set('page', '1');
