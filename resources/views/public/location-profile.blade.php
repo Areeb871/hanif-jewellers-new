@@ -125,7 +125,7 @@
 <main class="loc-profile">
     <div class="loc-profile__shell">
         <header class="loc-profile__header">
-            <p class="loc-profile__eyebrow">HANIF FLAGSHIP STORE</p>
+            <p class="loc-profile__eyebrow"></p>
             <h1 class="loc-profile__title">{{ $location['name'] }}</h1>
             <div class="loc-profile__rule" aria-hidden="true"></div>
         </header>

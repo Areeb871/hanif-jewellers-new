@@ -40,6 +40,20 @@ html, body{
     display: block;
     object-fit: contain;   /* 👈 NO CROP */
 }
+.gulposh-story{position:relative;aspect-ratio:16/9;background:#07140d}
+.gulposh-story__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.gulposh-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;font-family:'Poppins',sans-serif;text-align:left}
+.gulposh-story__title,.gulposh-mobile__title{margin:0;color:#fff;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2;text-wrap:balance}
+.gulposh-story__copy{margin:10px 0 18px;width:100%;max-width:40em;color:#fff;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.gulposh-story__button,.gulposh-mobile__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#fff;color:#111;font-family:'Poppins',sans-serif;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-transform:uppercase}
+.gulposh-story__button:hover{background:#e7e7e7;color:#111}
+.gulposh-mobile{background:#fff;text-align:center}
+.gulposh-mobile__image{width:100%;height:auto;display:block}
+.gulposh-mobile__content{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:32px 24px 36px;font-family:'Poppins',sans-serif;text-align:center}
+.gulposh-mobile__title{display:block;width:100%;color:#111;font-size:22px;text-align:center}
+.gulposh-mobile__copy{display:block;width:100%;max-width:34em;margin:12px auto 20px;color:#222;font-family:'Poppins',sans-serif;font-size:13px;font-weight:400;letter-spacing:.02em;line-height:1.7;text-align:center}
+.gulposh-mobile__button{width:auto;background:#111;color:#fff;text-align:center}
+.gulposh-mobile__button:hover{background:#2b2b2b;color:#fff}
 </style>
 
 {{-- DESKTOP (FROM BACKEND) --}}
@@ -63,8 +77,49 @@ html, body{
         Your browser does not support the video tag.
     </video>
 </section>
-    <section class="container pt-4 pt-md-5">
-        <div class="row g-3 mb-3">
+    <section>
+        <div class="fullBanner gulposh-story d-none d-lg-block">
+            <img src="{{ asset('assets/f_assets/image/gulposh/desktop1.png') }}" class="gulposh-story__image" alt="Gulposh collection">
+            <div class="gulposh-story__panel">
+                <h2 class="gulposh-story__title">GULPOSH</h2>
+                <p class="gulposh-story__copy">A garden of nature's beauty and luxury's refinement. Inspired by the earth's splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.</p>
+                <a class="gulposh-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+            </div>
+        </div>
+        <div class="fullBanner gulposh-mobile d-lg-none">
+            <img src="{{ asset('assets/f_assets/image/gulposh/mob1.png') }}" class="gulposh-mobile__image" alt="Gulposh collection">
+            <div class="gulposh-mobile__content">
+                <h2 class="gulposh-mobile__title">GULPOSH</h2>
+                <p class="gulposh-mobile__copy">A garden of nature's beauty and luxury's refinement. Inspired by the earth's splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.</p>
+                <a class="gulposh-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+            </div>
+        </div>
+        <div class="d-none">
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="text-center">
+                    <p class="p-4 m-0">
+                    A garden of nature’s beauty and luxury’s refinement. Inspired by the earth’s splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.
+                    </p>
+                </div>
+            </div>
+        </div>
+       <!-- DESKTOP -->
+<!-- DESKTOP -->
+<div class="fullBanner d-none d-md-block">
+    <video autoplay loop muted playsinline class="fullBannerMedia">
+        <source src="{{ asset('assets/f_assets/image/gulposh/Golposh Product Desktop Banner 1.mp4') }}" type="video/mp4">
+    </video>
+</div>
+
+<!-- MOBILE -->
+<div class="fullBanner d-md-none">
+    <video autoplay loop muted playsinline class="fullBannerMedia">
+        <source src="{{ asset('assets/f_assets/image/gulposh/Product Mobile.mp4') }}" type="video/mp4">
+    </video>
+</div>
+
+        <div class="container pt-4 pt-md-5">
+        <div class="row g-3 mb-3 mt-0">
             <div class="col-md-6">
                 @php
                     $gulposhImages1 = [];
@@ -81,7 +136,7 @@ html, body{
                 ])
             </div>
             <div class="col-md-6">
-            @php
+                @php
                     $gulposhImages2 = [];
                     for ($i = 1; $i <= 4; $i++) {
                         $gulposhImages2[] = [
@@ -96,29 +151,7 @@ html, body{
                 ])
             </div>
         </div>
-        <div class="row g-3 justify-content-center align-items-center">
-            <div class="col-md-6 d-flex justify-content-center align-items-center">
-                <div class="text-center">
-                    <p class="p-4 m-0">
-                    A garden of nature’s beauty and luxury’s refinement. Inspired by the earth’s splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.
-                    </p>
-                </div>
-            </div>
         </div>
-       <!-- DESKTOP -->
-<!-- DESKTOP -->
-<div class="fullBanner bannerGap d-none d-md-block">
-    <video autoplay loop muted playsinline class="fullBannerMedia">
-        <source src="{{ asset('assets/f_assets/image/gulposh/Golposh Product Desktop Banner 1.mp4') }}" type="video/mp4">
-    </video>
-</div>
-
-<!-- MOBILE -->
-<div class="fullBanner bannerGap d-md-none">
-    <video autoplay loop muted playsinline class="fullBannerMedia">
-        <source src="{{ asset('assets/f_assets/image/gulposh/Product Mobile.mp4') }}" type="video/mp4">
-    </video>
-</div>
 
 <style>
 html, body{

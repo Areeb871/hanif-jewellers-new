@@ -44,7 +44,7 @@
 .ehed-hero-section { display:flex; align-items:center; }
 .ehed-video-container { width:50%; position:relative; overflow:hidden; min-height:0; padding-top:59.92%; }
 @supports (aspect-ratio: 1) { .ehed-video-container { padding-top:0; aspect-ratio:746/430; } }
-.ehed-video-container video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.ehed-video-container video { position:absolute; inset:0; width:99.6%; height:100%; object-fit:cover; display:block; }
 .ehed-media-cover { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 .ehed-content-container { width:50%; padding:80px 60px; display:flex; flex-direction:column; justify-content:center; background:#fff; }
 .ehed-category-label { font-size:14px; font-weight:400; color:#999; text-transform:uppercase; letter-spacing:.05em; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; margin-bottom:20px; }
@@ -456,12 +456,12 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 @endif
 
 {{-- ===== PROMO VIDEO (RIGHT) + 2 PRODUCTS (LEFT) from bottomProductsRow3 ===== --}}
-<div class="haphazard-promo-grid promo-section">
+<div class="haphazard-promo-grid promo-section d-none" id="haphazardDeferredPromo">
     <div class="haphazard-promo-row haphazard-promo-row--video-end">
         @if(isset($bottomProductsRow3) && $bottomProductsRow3->count() > 0)
             @foreach($bottomProductsRow3 as $index => $product)
                 @php $img = $getImg($product); @endphp
-                <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card">
+                <a href="{{ route('product.details', $product->slug) }}" class="right-tile product-card haphazard-deferred-product" data-haphazard-deferred>
                     @if($img)
                         <img src="{{ asset($img) }}" alt="{{ $product->name ?? 'Product ' . ($index + 1) }}">
                     @else
@@ -500,7 +500,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     $globalIndex = ($rowIndex * 4) + $index; // unique index
                 @endphp
 
-                <div class="col-6 col-md-3">
+                <div class="col-6 col-md-3 d-none haphazard-deferred-product" data-haphazard-deferred>
                     <a href="{{ route('product.details', $product->slug) }}" class="product-card">
                         @if($img)
                             <img src="{{ asset($img) }}"
@@ -521,6 +521,62 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
         </div>
     @endforeach
 @endif
+
+@php
+    $initiallyShown = min(14, $totalProducts ?? 0);
+@endphp
+@if(($totalProducts ?? 0) > 0)
+<div class="text-center py-4 haphazard-load-more-footer">
+    <div id="haphazardProductsCounter"
+         data-total="{{ $totalProducts }}"
+         data-current="{{ $initiallyShown }}"
+         style="font-size:1rem;letter-spacing:.2em;margin-bottom:1.5rem;">
+        SHOWING {{ $initiallyShown }} OF {{ $totalProducts }} PRODUCTS
+    </div>
+    @if($totalProducts > $initiallyShown)
+        <button id="haphazardLoadMoreBtn"
+                type="button"
+                style="background:#e3e4e5;border:none;color:#222;font-size:.8rem;letter-spacing:.15em;padding:.8rem 2rem;border-radius:8px;font-family:inherit;font-weight:400;box-shadow:none;transition:background .2s;">
+            LOAD MORE
+        </button>
+    @endif
+</div>
+@endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('haphazardLoadMoreBtn');
+    const counter = document.getElementById('haphazardProductsCounter');
+    const deferredProducts = Array.from(document.querySelectorAll('[data-haphazard-deferred]'));
+    const deferredPromo = document.getElementById('haphazardDeferredPromo');
+    const batchSize = 14;
+    let visibleCount = parseInt(counter?.dataset.current || '0', 10);
+    const total = parseInt(counter?.dataset.total || '0', 10);
+    let nextIndex = 0;
+
+    if (!button || !counter) return;
+
+    button.addEventListener('click', function () {
+        if (deferredPromo && nextIndex === 0) {
+            deferredPromo.classList.remove('d-none');
+        }
+
+        const batch = deferredProducts.slice(nextIndex, nextIndex + batchSize);
+        batch.forEach(function (product) {
+            product.classList.remove('d-none');
+        });
+
+        nextIndex += batch.length;
+        visibleCount = Math.min(total, visibleCount + batch.length);
+        counter.dataset.current = String(visibleCount);
+        counter.textContent = `SHOWING ${visibleCount} OF ${total} PRODUCTS`;
+
+        if (nextIndex >= deferredProducts.length || visibleCount >= total) {
+            button.style.display = 'none';
+        }
+    });
+});
+</script>
 
 <!--<div class="text-center">-->
 <!--    <a class="m-5 btn border btn-outline-dark px-5 py-2" href="{{ route('collections.haphazard_new') }}">SHOP NOW</a>-->

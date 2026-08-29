@@ -3,259 +3,109 @@
 @section('content')
 @php
     $backgroundType = $backgroundType ?? 'video';
-    $backgroundFile = $backgroundFile ?? 'assets/f_assets/image/colection-design-images/banner.mp4';
-    $mobileBackgroundFile = $mobileBackgroundFile ?? 'assets/f_assets/image/colection-design-images/mobile.mp4';
+    $desktopBanner = $backgroundFile ?? 'assets/f_assets/image/colection-design-images/banner.mp4';
+    $mobileBanner = $mobileBackgroundFile ?? 'assets/f_assets/image/colection-design-images/mobile.mp4';
+    $isDesktopVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
+    $desktopBannerSrc = filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner);
+    $cleopatraCopy = "An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.";
+    $stories = [
+        [
+            'image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/desktop1.png',
+            'mobile_image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/mob1.png',
+            'copy' => $cleopatraCopy,
+        ],
+        [
+            'image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/desktop2.png',
+            'mobile_image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/mob2.png',
+            'copy' => null,
+        ],
+        [
+            'image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/desktop3.png',
+            'mobile_image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/mob3.png',
+            'copy' => null,
+        ],
+    ];
 @endphp
 
-<!-- Desktop Banner -->
-<section class="sectionOne d-md-block d-none">
-    @if($backgroundType === 'video' && !empty($backgroundFile))
-        <video autoplay loop muted playsinline class="bannerMedia">
-            <source src="{{ asset($backgroundFile) }}" type="video/mp4">
-            Your browser does not support the video tag.
+<style>
+.cleopatra-full-bleed{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);overflow:hidden}
+.cleopatra-intro-media{width:100%;height:auto;display:block}
+.cleopatra-story{position:relative;aspect-ratio:16/9;background:#080604}
+.cleopatra-story__image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cleopatra-story__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;font-family:'Poppins',sans-serif;text-align:left}
+.cleopatra-story__title,.cleopatra-mobile__title{margin:0;color:#fff;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2;text-wrap:balance}
+.cleopatra-story__copy{margin:10px 0 18px;width:100%;max-width:40em;color:#fff;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.cleopatra-story__button,.cleopatra-mobile__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#fff;color:#111;font-family:'Poppins',sans-serif;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-transform:uppercase}
+.cleopatra-story__button:hover,.cleopatra-mobile__button:hover{background:#e7e7e7;color:#111}
+.cleopatra-mobile{background:#fff;text-align:center}
+.cleopatra-mobile__image{width:100%;height:auto;display:block}
+.cleopatra-mobile__content{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:32px 24px 36px;font-family:'Poppins',sans-serif;text-align:center}
+.cleopatra-mobile__title{display:block;width:100%;color:#111;font-size:22px;text-align:center}
+.cleopatra-mobile__copy{display:block;width:100%;max-width:34em;margin:12px auto 20px;color:#222;font-family:'Poppins',sans-serif;font-size:13px;font-weight:400;letter-spacing:.02em;line-height:1.7;text-align:center}
+.cleopatra-mobile__button{width:auto;background:#111;color:#fff;text-align:center}
+.cleopatra-mobile__button:hover{background:#2b2b2b;color:#fff}
+.cleopatra-square-pair__image{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block}
+.cleopatra-ending-appointment{display:flex;align-items:center;justify-content:center;padding-block:clamp(32px,4vw,64px);background:#fff}
+</style>
+
+<section class="cleopatra-full-bleed d-none d-md-block">
+    @if($backgroundType === 'video' && $isDesktopVideo)
+        <video class="cleopatra-intro-media" autoplay loop muted playsinline preload="metadata">
+            <source src="{{ $desktopBannerSrc }}" type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
         </video>
-    @elseif($backgroundType === 'image' && !empty($backgroundFile))
-        <img src="{{ asset($backgroundFile) }}" class="bannerMedia" alt="Banner">
+    @else
+        <img class="cleopatra-intro-media" src="{{ $desktopBannerSrc }}" alt="Cleopatra collection">
     @endif
 </section>
 
-<!-- Mobile Banner -->
-<section class="sectionMobile d-md-none">
-    <video autoplay loop muted playsinline class="bannerMedia">
-        <source src="{{ asset($mobileBackgroundFile) }}" type="video/mp4">
-        Your browser does not support the video tag.
+<section class="cleopatra-full-bleed d-md-none">
+    <video class="cleopatra-intro-media" autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset($mobileBanner) }}" type="video/mp4">
     </video>
 </section>
 
-<style>
-html, body{
-    margin: 0;
-    padding: 0;
-}
-
-/* =========================
-   REMOVE HEADER GAP
-========================= */
-header,
-.main-header,
-.navbar,
-.header-wrapper,
-.top-header{
-    margin: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-header .container,
-header .row,
-header .col,
-.navbar .container,
-.navbar .row{
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-/* =========================
-   RESPONSIVE BANNER
-========================= */
-.sectionOne,
-.sectionMobile{
-    width: 100%;
-    height: auto; /* 👈 IMPORTANT */
-    position: relative;
-    overflow: hidden;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* =========================
-   MEDIA (VIDEO + IMAGE)
-========================= */
-.bannerMedia{
-    width: 100%;
-    height: auto;        /* 👈 SHRINKS */
-    display: block;
-    object-fit: contain; /* 👈 NO CROP */
-}
-
-/* remove unwanted gaps */
-.sectionOne,
-.sectionMobile,
-section{
-    margin-top: 0 !important;
-}
-</style>
-
-    <section class="container pt-4 pt-md-5">
-    <div class="row g-2 pb-2">
-        <style>
-            [id^="cleopatraCarousel"] .carousel-control-prev-icon,
-            [id^="cleopatraCarousel"] .carousel-control-next-icon {
-                filter: invert(1) brightness(200%) drop-shadow(0 0 2px rgba(0,0,0,0.6)) !important;
-                width: 1.5rem !important;
-                height: 1.5rem !important;
-                background-size: 60% 60% !important;
-                background-position: center !important;
-            }
-
-            [id^="cleopatraCarousel"] .carousel-control-prev,
-            [id^="cleopatraCarousel"] .carousel-control-next {
-                opacity: 1 !important;
-                display: block !important;
-                z-index: 30 !important;
-                pointer-events: auto !important;
-            }
-
-            [id^="cleopatraCarousel"] .carousel-indicators {
-                display: none !important;
-            }
-        </style>
-
-        @for ($look = 1; $look <= 4; $look++)
-            @php
-                $slides = [];
-
-                // Supported formats with AVIF priority
-                $formats = ['avif', ($look === 2 ? 'jpg' : 'png'), 'jpg', 'png'];
-
-                for ($i = 1; $i <= 20; $i++) {
-                    $found = false;
-
-                    foreach ($formats as $ext) {
-                        $pathsToTry = [
-                            "assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look {$look}/Cleopatra Look {$look} ({$i}).{$ext}",
-                            "assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look {$look}/Cleopatra Look {$look}({$i}).{$ext}",
-                            "assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look {$look}/Cleopatra Look {$look}  ({$i}).{$ext}",
-                        ];
-
-                        foreach ($pathsToTry as $relative) {
-                            if (file_exists(public_path($relative))) {
-                                $slides[] = $relative;
-                                $found = true;
-                                break 2;
-                            }
-                        }
-                    }
-
-                    if (!$found) {
-                        break;
-                    }
-                }
-            @endphp
-
-            <div class="col-md-3 col-6">
-                @if(count($slides))
-                    <div id="cleopatraCarousel{{ $look }}" class="carousel slide">
-                        <div class="carousel-inner">
-                            @foreach ($slides as $idx => $img)
-                                <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
-                                    <img
-                                        src="{{ asset($img) }}"
-                                        class="d-block w-100 img-fluid"
-                                        alt="Cleopatra Look {{ $look }} {{ $idx + 1 }}"
-                                        style="cursor: pointer;"
-                                        onclick="openImageModal('cleopatraCarousel{{ $look }}', {{ $idx }})"
-                                    >
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <button class="carousel-control-prev" type="button" data-bs-target="#cleopatraCarousel{{ $look }}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-
-                        <button class="carousel-control-next" type="button" data-bs-target="#cleopatraCarousel{{ $look }}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                @else
-                    <div class="text-center">
-                        <div class="border p-5">No images found for Cleopatra Look {{ $look }}</div>
-                    </div>
+@foreach($stories as $index => $story)
+    <section class="cleopatra-full-bleed cleopatra-story d-none d-lg-block">
+        <img class="cleopatra-story__image" src="{{ asset($story['image']) }}" alt="Cleopatra collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+        @if($index === 0)
+            <div class="cleopatra-story__panel">
+                <h2 class="cleopatra-story__title">CLEOPATRA</h2>
+                @if($story['copy'])
+                    <p class="cleopatra-story__copy">{{ $story['copy'] }}</p>
                 @endif
+                <a class="cleopatra-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
             </div>
-        @endfor
-    </div>
+        @endif
+    </section>
+@endforeach
 
-    <div class="row">
-        <style>
-            .app-btn {
-                padding: 6px 16px !important;
-            }
-
-            .cleopatra-appointment-spacing {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 3rem 0 3.5rem;
-            }
-        </style>
-
-        {{-- <div class="text-center">
-            <x-book-appointment class="m-1" />
-        </div> --}}
-
-        <!-- <div class="col-md-6 text-center">
-            <x-shop-now :href="route('subcategory', ['subcategory' => 'gohar'])" class="m-5 btn border btn-outline-dark px-5 py-2" style="padding: 10px 100px !important" />
-        </div> -->
-    </div>
-
-<div class="row g-4 align-items-center">
-
-    <!-- BIG IMAGE -->
-    <div class="col-md-7">
-        <img
-            src="{{ asset('assets/f_assets/image/colection-design-images/Cleopatra_single.png') }}"
-            class="img-fluid"
-        >
-    </div>
-
-    <!-- SMALL IMAGE -->
-    <div class="col-md-4 d-flex align-items-center justify-content-center">
-        <img
-            src="{{ asset('assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look 5/Cleopatra Look 5.avif') }}"
-            class="img-fluid"
-        >
-    </div>
-</div>
-</section>
-<section class="pt-5 pb-0 text-center">
-
-    <div class="container">
-        <div class="mx-auto" style="max-width: 520px;">
-
-            <p style="width: min(100%, 65ch); margin: 0 auto; font-size: 13px; line-height: 1.6;
-                text-align: justify; text-align-last: center; text-justify: inter-character;">
-                An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.
-            </p>
-
-            <div class="cleopatra-appointment-spacing">
-                <x-book-appointment />
+@foreach($stories as $index => $story)
+    <section class="cleopatra-full-bleed cleopatra-mobile d-lg-none">
+        <img class="cleopatra-mobile__image" src="{{ asset($story['mobile_image']) }}" alt="Cleopatra collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+        @if($index === 0)
+            <div class="cleopatra-mobile__content">
+                <h2 class="cleopatra-mobile__title">CLEOPATRA</h2>
+                @if($story['copy'])
+                    <p class="cleopatra-mobile__copy">{{ $story['copy'] }}</p>
+                @endif
+                <a class="cleopatra-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
             </div>
+        @endif
+    </section>
+@endforeach
 
+<section class="container pt-4 pt-md-5" aria-label="Cleopatra collection looks">
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <img class="cleopatra-square-pair__image" src="{{ asset('assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look 4/Cleopatra Look 4  (1).avif') }}" alt="Cleopatra Look 4" loading="lazy">
+        </div>
+        <div class="col-md-6">
+            <img class="cleopatra-square-pair__image" src="{{ asset('assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look 5/Cleopatra Look 5.avif') }}" alt="Cleopatra Look 5" loading="lazy">
         </div>
     </div>
-
 </section>
 
-@include('public.partials.image-gallery-modal')
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    for (let i = 1; i <= 4; i++) {
-        const carouselElement = document.getElementById('cleopatraCarousel' + i);
-        if (carouselElement) {
-            new bootstrap.Carousel(carouselElement, {
-                interval: false,
-                wrap: true,
-                touch: true
-            });
-        }
-    }
-});
-</script>
+<section class="cleopatra-ending-appointment" aria-label="Book an appointment">
+    <x-book-appointment />
+</section>
 @endsection

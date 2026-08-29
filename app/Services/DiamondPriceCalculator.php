@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\DiamondRateSetting;
+use App\Models\GoldRateSetting;
 use App\Models\Products;
 
 class DiamondPriceCalculator
@@ -47,7 +48,15 @@ class DiamondPriceCalculator
             return null;
         }
 
-        $rate = (float) $setting->rate_per_carat;
+        $goldRateSetting = GoldRateSetting::where('karat', $karat)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$goldRateSetting) {
+            return null;
+        }
+
+        $rate = (float) $goldRateSetting->gold_rate_per_gram;
         $making = (float) $setting->making_charge;
         $gstPercent = (float) $setting->gst_percent;
         $dollarRate = (float) $setting->dollar_rate;

@@ -119,6 +119,7 @@ class HomeController extends Controller
 
     // ✅ Dynamic: after Row3 (start from index 16 till end) in rows of 4
     $dynamicBottomRows = $allProducts->slice(16)->chunk(4);
+    $totalProducts = $allProducts->count();
 
     $subcategory = Subcategory::where(function ($q) {
             $q->whereRaw('LOWER(slug) = ?', ['haphazard'])
@@ -133,6 +134,7 @@ class HomeController extends Controller
         'bottomProductsRow2',
         'bottomProductsRow3',
         'dynamicBottomRows',
+        'totalProducts',
         'subcategory'
     ));
 }
@@ -1348,14 +1350,14 @@ public function Online_Shopping_Store(Request $request)
     public function locationProfile($slug)
     {
         $locations = [
-            'dha' => ['name' => 'DHA', 'review_url' => 'https://g.page/r/CScW4gIKzKZPEAE/review'],
-            'mm-alam' => ['name' => 'MM Alam', 'review_url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review'],
-            'f6-islamabad' => ['name' => 'F6 Islamabad', 'review_url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review'],
-            'serena-islamabad' => ['name' => 'Serena Islamabad', 'review_url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review'],
-            'marriott-islamabad' => ['name' => 'Marriott Islamabad', 'review_url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review'],
-            'dolmen-mall' => ['name' => 'Dolmen Mall', 'review_url' => 'https://g.page/r/CYp_YF50r60TEAE/review'],
-            'dubai' => ['name' => 'Dubai', 'review_url' => 'https://g.page/r/CbeYicQsEHflEAE/review'],
-            'franck-muller' => ['name' => 'Franck Muller Pakistan', 'review_url' => 'https://g.page/r/CViIXJGaBTPyEAE/review'],
+            'dha' => ['name' => 'DHA Premium Store, Lahore', 'review_url' => 'https://g.page/r/CScW4gIKzKZPEAE/review'],
+            'mm-alam' => ['name' => 'MM Alam Flagship Store, Lahore', 'review_url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review'],
+            'f6-islamabad' => ['name' => 'F6 Flagship Store, Islamabad', 'review_url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review'],
+            'serena-islamabad' => ['name' => 'Serena Exclusive Store, Islamabad', 'review_url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review'],
+            'marriott-islamabad' => ['name' => 'Marriott Lifestyle Store, Islamabad', 'review_url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review'],
+            'dolmen-mall' => ['name' => 'Dolmen Premium Store, Lahore', 'review_url' => 'https://g.page/r/CYp_YF50r60TEAE/review'],
+            'dubai' => ['name' => 'Flagship Store, Dubai', 'review_url' => 'https://g.page/r/CbeYicQsEHflEAE/review'],
+            'franck-muller' => ['name' => 'Franck Muller Boutique, Lahore', 'review_url' => 'https://g.page/r/CViIXJGaBTPyEAE/review'],
             'zartash-couture' => ['name' => 'Zartash Couture', 'review_url' => 'https://g.page/r/CWV3wNZpmaxFEAE/review'],
         ];
 

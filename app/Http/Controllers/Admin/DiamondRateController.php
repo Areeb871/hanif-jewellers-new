@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DiamondRateSetting;
+use App\Models\GoldRateSetting;
 use Illuminate\Http\Request;
 
 class DiamondRateController extends Controller
@@ -16,6 +17,9 @@ class DiamondRateController extends Controller
         $karats = [18, 21, 22, 24];
 
         $settings = DiamondRateSetting::whereIn('karat', $karats)
+            ->get()
+            ->keyBy('karat');
+        $goldRates = GoldRateSetting::whereIn('karat', $karats)
             ->get()
             ->keyBy('karat');
 
@@ -35,6 +39,7 @@ class DiamondRateController extends Controller
 
         return view('admin.diamond_rates.index', [
             'settings' => $settings,
+            'goldRates' => $goldRates,
             'karats' => $karats,
         ]);
     }
@@ -45,10 +50,11 @@ class DiamondRateController extends Controller
     public function update(Request $request)
     {
         $karats = [18, 21, 22, 24];
+        $goldRates = GoldRateSetting::whereIn('karat', $karats)
+            ->pluck('gold_rate_per_gram', 'karat');
 
         foreach ($karats as $karat) {
             $request->validate([
-                "rate_per_carat.$karat" => 'nullable|numeric|min:0',
                 "making_charge.$karat" => 'nullable|numeric|min:0',
                 "gst_percent.$karat" => 'nullable|numeric|min:0',
                 "dollar_rate.$karat" => 'nullable|numeric|min:0',
@@ -58,7 +64,9 @@ class DiamondRateController extends Controller
             DiamondRateSetting::updateOrCreate(
                 ['karat' => $karat],
                 [
-                    'rate_per_carat' => $request->input("rate_per_carat.$karat", 0),
+                    // Retained for backward compatibility; GoldRateSetting is
+                    // the source of truth used by the diamond calculator.
+                    'rate_per_carat' => $goldRates->get($karat, 0),
                     'making_charge' => $request->input("making_charge.$karat", 0),
                     'gst_percent' => $request->input("gst_percent.$karat", 4),
                     'dollar_rate' => $request->input("dollar_rate.$karat", 0),

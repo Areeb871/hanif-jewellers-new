@@ -28,7 +28,8 @@
         <div class="card-header">
             <h3 class="card-title mb-0">Configure Diamond Rates</h3>
             <small class="d-block text-muted mt-1">
-                Used for products with a diamond tag (not watches): (Rate + Making) × Gross Weight + (Dollar × diamond price) + GST%.
+                Used for products with a diamond tag (not watches): (Gold Rate + Making) × Gross Weight + (Dollar × diamond price) + GST%.
+                Gold Rate / gram is managed from <a href="{{ route('admin.gold-rates.index') }}">Gold Rate Settings</a>.
             </small>
         </div>
         <div class="card-body">
@@ -40,7 +41,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 80px;">Karat</th>
-                                <th>Rate / carat</th>
+                                <th>Gold Rate / gram</th>
                                 <th>Making</th>
                                 <th>GST %</th>
                                 <th>Dollar</th>
@@ -52,7 +53,7 @@
                             @foreach($karats as $karat)
                                 @php
                                     $row = $settings[$karat];
-                                    $ratePerCarat = old("rate_per_carat.$karat", $row->rate_per_carat);
+                                    $goldRate = $goldRates->get($karat)?->gold_rate_per_gram ?? 0;
                                     $making = old("making_charge.$karat", $row->making_charge);
                                     $gst = old("gst_percent.$karat", $row->gst_percent);
                                     $dollar = old("dollar_rate.$karat", $row->dollar_rate);
@@ -61,9 +62,10 @@
                                 <tr>
                                     <td><strong>{{ $karat }}K</strong></td>
                                     <td>
-                                        <input type="number" step="0.01" min="0" name="rate_per_carat[{{ $karat }}]"
-                                               value="{{ $ratePerCarat }}"
-                                               class="form-control">
+                                        <input type="number" step="0.01" min="0"
+                                               value="{{ $goldRate }}"
+                                               class="form-control bg-light" readonly
+                                               aria-label="{{ $karat }}K gold rate per gram">
                                     </td>
                                     <td>
                                         <input type="number" step="0.01" min="0" name="making_charge[{{ $karat }}]"

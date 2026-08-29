@@ -30,15 +30,15 @@
     ];
 
     $reviewLinks = [
-        ['name' => 'MM Alam', 'slug' => 'mm-alam'],
-        ['name' => 'DHA', 'slug' => 'dha'],
-        ['name' => 'F6 Islamabad', 'slug' => 'f6-islamabad'],
-        ['name' => 'Serena Islamabad', 'slug' => 'serena-islamabad'],
-        ['name' => 'Marriott Islamabad', 'slug' => 'marriott-islamabad'],
-        ['name' => 'Dolmen Mall', 'slug' => 'dolmen-mall'],
-        ['name' => 'Dubai', 'slug' => 'dubai'],
-        ['name' => 'Franck Muller Pakistan', 'slug' => 'franck-muller'],
-        ['name' => 'Zartash Couture', 'slug' => 'zartash-couture'],
+        ['name' => 'MM Alam Flagship Store, Lahore', 'slug' => 'mm-alam'],
+        ['name' => 'DHA Premium Store, Lahore', 'slug' => 'dha'],
+        ['name' => 'Dolmen Premium Store, Lahore', 'slug' => 'dolmen-mall'],
+        ['name' => 'Franck Muller Boutique, Lahore', 'slug' => 'franck-muller'],
+        ['name' => 'F6 Flagship Store, Islamabad', 'slug' => 'f6-islamabad'],
+        ['name' => 'Serena Exclusive Store, Islamabad', 'slug' => 'serena-islamabad'],
+        ['name' => 'Marriott Lifestyle Store, Islamabad', 'slug' => 'marriott-islamabad'],
+        ['name' => 'Flagship Store, Dubai', 'slug' => 'dubai'],
+        ['name' => 'ZARTASH Couture , Lahore ', 'slug' => 'zartash-couture']
     ];
 @endphp
 
