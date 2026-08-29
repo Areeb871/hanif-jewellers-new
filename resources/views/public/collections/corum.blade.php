@@ -25,10 +25,7 @@
         width:100%;
         background:#fff;
         text-align:center;
-        margin-top:-8px;
-        line-height:0;
-        padding:2px 15px 0;
-        margin:0;
+        margin: 50px 0px;
     }
 
     .corum-logo-main{
@@ -341,9 +338,10 @@
     }
 
     .corum-filter-wrap .products-counter{
-        font-size:1rem;
+        font-size:0.8rem;
         letter-spacing:0.2em;
-        margin-bottom:1.5rem;
+        font-family: 'Poppins';
+        /* margin-bottom:1.5rem; */
     }
 
     body.corum-filter-open{
@@ -590,7 +588,7 @@
 <!--    </div>-->
 <!--</section>-->
 
-<section class="py-4">
+<section >
     <div class="corum-filter-wrap">
         <!--<div class="navbar navbar-white align-items-center filter-bar justify-content-center py-3">-->
         <!--    <div class="brand-logo-wrapper w-70 text-center" style="display:none;">-->
@@ -695,7 +693,7 @@
             </div>
         </div>
 
-        <div class="text-center py-4 corum-footer">
+        <div class="text-center py-5 corum-footer">
             @if($products->count() > 0)
                 @php
                     $totalShown = $currentPageProducts;

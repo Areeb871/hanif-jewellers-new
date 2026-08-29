@@ -9,29 +9,30 @@ body{
 
 
 /* responsive banner wrapper */
-.sectionOne,
-.sectionMobile{
+.watches-video-hero{
     position: relative;
     width: 100%;
-    height: auto;
+    height: auto !important;
+    min-height: 0 !important;
     overflow: hidden;
     margin: 0 !important;
     padding: 0 !important;
+    background: #fff;
+    line-height: 0;
 }
 
 /* responsive video - no crop */
-.sectionOne video,
-.sectionMobile video{
+.watches-video-hero video{
     width: 100%;
     height: auto;
     display: block;
     object-fit: contain;
     position: relative;
+    vertical-align: top;
 }
 
 /* remove unwanted top gap */
-.sectionOne,
-.sectionMobile,
+.watches-video-hero,
 section{
     margin-top: 0 !important;
 }
@@ -391,7 +392,7 @@ section{
         margin-top:41px
     }
     .ehed-body-text {
-        font-size: 16px;
+        font-size: 13px;
         font-weight: 400;
         color: #000;
         line-height: 1.6;
@@ -402,7 +403,7 @@ section{
     } */
     .hero__description {
         margin-top: 1em;
-        font-size: 100%;
+        font-size: 13px;
     }
     .text-large {
         font-family: Walbaum, sans-serif;
@@ -423,7 +424,7 @@ section{
     @media (min-width: 48rem) {
         .hero__description {
             max-width: 40rem;
-            font-size: 110%;
+            font-size: 13px;
         }
         .text-align--center .hero__description {
             margin-left: auto;
@@ -462,7 +463,7 @@ section{
             font-size: 12px;
         }
         .ehed-body-text {
-            font-size: 14px;
+            font-size: 13px;
         }
     }
     @media (max-width: 576px) {
@@ -564,7 +565,10 @@ section{
     padding-bottom: 48px !important;
 }
 .explore-brands-title {
-    margin: 0 0 40px;
+    font-family: "Argent CF", Georgia, serif !important;
+    font-weight: 600;
+    letter-spacing: .04em;
+    margin: 40px 0;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
@@ -615,7 +619,7 @@ section{
         margin-bottom: 24px;
     }
     .explore-brands-title {
-        margin-bottom: 24px;
+        margin: 24px 0;
     }
     .ehed-content-container {
         padding-top: 32px;
@@ -647,20 +651,24 @@ section{
 }
 </style>
 @section('content')
-<!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none" style="position: relative; min-height: 500px; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-            <source src="{{ asset('assets/f_assets/image/pakistan_watch/desktop_fm.mp4') }}" type="video/mp4">
+<section class="watches-video-hero d-none d-md-block" data-header-hero>
+        <video autoplay loop muted playsinline>
+            <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>
-     Mobile Video Banner 
-    <section class="d-md-none" style="position: relative; height: 110vh; overflow: hidden;">
-        <video autoplay loop muted playsinline style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-            <source src="{{ asset('assets/f_assets/image/pakistan_watch/mobile_fm.mp4') }}" type="video/mp4">
+    <!-- Mobile Video Banner -->
+    <section class="watches-video-hero d-md-none" data-header-hero>
+        <video autoplay loop muted playsinline>
+            <source src="{{ asset('assets/f_assets/image/watches/FMPK-Mob-Banner.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section> -->
-<section class="watches-desktop-hero d-none d-md-block"
+    </section>
+
+
+
+    <!-- Hero Section Slider -->
+<!-- <section class="watches-desktop-hero d-none d-md-block"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarousel"
@@ -669,35 +677,24 @@ section{
 
         <div class="carousel-inner">
 
-            <!-- SLIDE 1 -->
-            <!--<div class="carousel-item active">-->
-            <!--    <div class="hero-slide">-->
-                    
-            <!--        <img src="{{ asset('assets/f_assets/image/watches/cys_web.jpg') }}"-->
-            <!--            alt="Franck Muller"-->
-            <!--            class="hero-bg-img">-->
-            <!--    </div>-->
-            <!--</div>-->
-              <!-- SLIDE 1 -->
+
             <div class="carousel-item active">
                 <div class="hero-slide">
                     
-                    <!-- FULL COVER IMAGE -->
+
                     <img
                         src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
                         alt="Franck Muller"
                         class="hero-bg-img">
 
                     <div class="hero-content">
-                        <!-- <h2>Carlos</h2>
-                        <h1>This crown is yours</h1> -->
-                        <!-- <a href="#" class="hero-cta">Learn more</a> -->
+
                     </div>
 
                 </div>
             </div>
 
-            <!-- SLIDE 2 -->
+
             <div class="carousel-item">
                 <div class="hero-slide">
 
@@ -707,9 +704,6 @@ section{
                         class="hero-bg-img">
 
                     <div class="hero-content">
-                        <!-- <h2>NAGAR</h2>
-                        <h1>Royal rubies, carved in light</h1> -->
-                        <!-- <a href="#" class="hero-cta">Discover</a> -->
                     </div>
 
                 </div>
@@ -737,16 +731,13 @@ section{
                         class="hero-bg-img">
 
                     <div class="hero-content">
-                        <!-- <h2>NAGAR</h2>
-                        <h1>Royal rubies, carved in light</h1> -->
-                        <!-- <a href="#" class="hero-cta">Discover</a> -->
                     </div>
 
                 </div>
             </div>
         </div>
 
-        <!-- Dots -->
+
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="0" class="active" style="display:none;"></button>
             <button type="button" data-bs-target="#rolexCarousel" data-bs-slide-to="1"  style="display:none;"></button>
@@ -756,13 +747,12 @@ section{
         </div>
 
     </div>
-</section>
+</section> -->
 
 
 
 <!-- <section class="sectionOne d-flex align-items-end justify-content-center text-center p-5 d-md-block d-none"
     style="position: relative; min-height: 500px; overflow: hidden;">
-
     <img
         src="{{ asset('assets/f_assets/image/franck_muller_new.jpg') }}"
         alt="Banner"
@@ -777,8 +767,9 @@ section{
         "
     >
 </section> -->
-<!-- MOBILE HERO -->
-<section class="sectionOneMobile d-block d-md-none"
+
+<!-- MOBILE HERO Slider-->
+<!-- <section class="sectionOneMobile d-block d-md-none"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarouselMobile"
@@ -823,10 +814,10 @@ section{
 
         </div>
     </div>
-</section>
+</section> -->
 
 <section class="py-5 luxury-watch-section">
-    <p class="text-center py-3 px-3 fs-5">
+    <p class="text-center py-3 px-3 fs-6">
         Discover our hand picked selection of luxury Watches from renowned brands.
     </p>
 
@@ -910,7 +901,7 @@ section{
 </section>
 
 <section class="pb-5">
-<h2 class="text-center pt-5 pb-2 mb-0">EXPLORE OUR BRANDS</h2>
+<h2 class="explore-brands-title text-center pt-2 pb-2 mb-0">EXPLORE OUR BRANDS</h2>
 
 <style>
 
@@ -1193,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <style>
 .bannerWrap{
     width: 100%;
-    height: clamp(180px, 28vw, 410px);
+    aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
 }
@@ -1201,55 +1192,16 @@ document.addEventListener('DOMContentLoaded', function () {
 .bannerVideo{
     width: 100%;
     height: 100%;
-    object-fit: cover;   /* IMPORTANT: cinematic banner look */
+    object-fit: cover;
     object-position: center;
     display: block;
 }
 
-/* Base – Mobile (default) */
-.bannerWrap{
-    width: 100%;
-    height: 180px;      /* phones */
-    position: relative;
-    overflow: hidden;
-}
-
-/* Small tablets */
-@media (min-width: 576px){
-    .bannerWrap{
-        height: 350px;
-    }
-}
-
-/* Tablets */
-@media (min-width: 768px){
-    .bannerWrap{
-        height: 600px;
-    }
-}
-
-/* Laptops */
-@media (min-width: 992px){
-    .bannerWrap{
-        height: 700px;
-    }
-}
-
-/* Large desktops */
-@media (min-width: 1200px){
-    .bannerWrap{
-        height: 900px;
-    }
-}
-
 </style>
 <div class="triangle-text">
-  <h1 class="ehed-main-title-perrelet">Perrelet</h1>
+  <h1 class="ehed-main-title-perrelet">ARTYA</h1>
   <p class="ehed-body-text hero__description font-family--serif px-2">
-    Discover the Turbine Poker Royal Flush by Perrelet
-    a limited edition of just 99 pieces for poker enthusiasts.
-    This luxury watch, with its distinctive turbine technology inspired by aviation propulsion,
-    reveals a royal flush with every movement.
+    Experience the Purity collection by ArtyA:  new revolutionary movements where each layer of the architecture is taken to the extreme. Complexity that only appears to be simple, the essence minimalism – extreme, pure simplicity.
   </p>
 </div>
 <div class="container-fluid p-0">
@@ -1261,7 +1213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             muted
             playsinline
         >
-            <source src="{{ asset('assets/f_assets/image/watches/Perrelet.mp4') }}" type="video/mp4">
+            <source src="{{ asset('assets/f_assets/image/watches/artya-14-aug.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>

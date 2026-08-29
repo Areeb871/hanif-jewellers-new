@@ -118,39 +118,39 @@ img{
 
     .le-intro{
         text-align:center;
-        padding:34px 16px 10px;
+        /* padding:34px 16px 10px; */
     }
 
     .le-title{
         margin:0 0 14px;
-        font-family:Arial, Helvetica, sans-serif;
-        font-size:clamp(24px, 2.4vw, 50px);
+        font-family:"Argent CF", Georgia, serif;
+        font-size:24px;
         line-height:1.1;
-        font-weight:500;
+        font-weight:400;
         color:#000;
         text-transform:uppercase;
     }
 
     .le-copy{
-        max-width:860px;
+        max-width:1100px;
         margin:0 auto;
-        font-family:Arial, Helvetica, sans-serif;
-        font-size:16px;
-        line-height:1.75;
+        font-family:"Poppins", sans-serif;
+        font-size:13px;
+        line-height:1.59;
         color:#111;
     }
 
     .le-collections{
         text-align:center;
-        padding:34px 16px 8px;
+        padding:49px 31px 8px;
     }
 
     .le-collections-copy{
         max-width:720px;
         margin:0 auto;
-        font-family:Arial, Helvetica, sans-serif;
-        font-size:16px;
-        line-height:1.75;
+        font-family:"Poppins", sans-serif;
+        font-size:13px;
+        line-height:1.7;
         color:#111;
     }
 
@@ -429,13 +429,13 @@ img{
         }
 
         .le-title{
-            font-size:22px;
+            font-size:24px;
             margin-bottom:12px;
         }
 
         .le-copy,
         .le-collections-copy{
-            font-size:14px;
+            font-size:13px;
             line-height:1.7;
         }
 
@@ -512,19 +512,22 @@ padding:2px 15px 0;
 
 .louis-page-wrap .le-intro,
 .louis-page-wrap .le-collections {
-    padding:0 16px var(--louis-section-space);
+    /* padding:0 16px var(--louis-section-space); */
 }
 
 .louis-page-wrap .le-title {
     margin:0 0 var(--louis-content-gap);
-    font-size:clamp(1.5rem, 2.5vw, 2.25rem);
+    font-family:"Argent CF", Georgia, serif;
+    font-size:36px;
+    font-weight:400;
     line-height:1.2;
 }
 
 .louis-page-wrap .le-copy,
 .louis-page-wrap .le-collections-copy {
-    font-size:clamp(0.875rem, 1.25vw, 1rem);
-    line-height:1.7;
+    font-family:"Poppins", sans-serif;
+    font-size:13px;
+    line-height:1.59;
 }
 
 .louis-page-wrap .louis-products-section {
@@ -532,7 +535,7 @@ padding:2px 15px 0;
 }
 
 .louis-page-wrap .louis-products-section .onlineStore {
-    padding-top:var(--louis-content-gap) !important;
+    padding-top:16px !important;
 }
 
 .louis-page-wrap .louis-erard-footer {
@@ -639,7 +642,7 @@ padding:2px 15px 0;
             .offcanvas-modern .offcanvas-title { font-size:1.1rem; font-weight:400; letter-spacing:.02em; text-transform:uppercase; color:#222; }
             .offcanvas-modern .btn-close { filter:none; opacity:1; background-size:1em; width:1em; height:1em; }
             /* Simple SORT & FILTER button - no borders on any state */
-            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-size:14px; line-height:1.1; display:flex; align-items:center; gap:6px; }
+            .filter .navbar-toggler { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; padding:4px 10px; font-family:"Poppins", sans-serif; font-size:12px; line-height:1.1; display:flex; align-items:center; gap:6px; }
             .filter .navbar-toggler:focus,
             .filter .navbar-toggler:hover,
             .filter .navbar-toggler:active { border:none !important; outline:none !important; box-shadow:none !important; background:transparent !important; }
@@ -745,7 +748,7 @@ padding:2px 15px 0;
                 .filter .navbar-toggler {
                     /* margin-top: 100px !important; */
                     margin-right: 15px !important;
-                    font-size: 13px !important;
+                    font-size: 12px !important;
                 }
             }
             /* Tablet screens (768px to 991px) */
@@ -780,7 +783,9 @@ padding:2px 15px 0;
             <div class="brand-logo-wrapper w-70 my-3 text-center"style="display:none;">
                 <img src="{{ asset('assets/f_assets/image/watch logo/LE.png') }}" alt="Loius Erad logo" class="brand-logo">
             </div>
-            <button class="navbar-toggler border-0 text-black position-absolute end-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLouisErard" aria-controls="offcanvasLouisErard" aria-label="Toggle navigation">
+        </div>
+        <div class="filter d-flex justify-content-end px-3">
+            <button class="navbar-toggler border-0 text-black" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLouisErard" aria-controls="offcanvasLouisErard" aria-label="Toggle navigation" style="position:static!important; margin:0!important;">
                 <span class="navbar-toggler-icon"></span> SORT & FILTER
             </button>
         </div>
@@ -806,7 +811,7 @@ padding:2px 15px 0;
                 $hasMorePages = $products->currentPage() < $products->lastPage();
             @endphp
             @if($totalFilteredProducts > 0)
-            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-size: 1rem; letter-spacing: 0.2em;">
+            <div class="products-counter" data-total="{{ $totalFilteredProducts }}" data-current="{{ $currentPageProducts }}" data-per-page="{{ $products->perPage() }}" data-current-page="{{ $products->currentPage() }}" style="font-family: 'Poppins', sans-serif; font-size: 0.8rem; letter-spacing: 0.2em;">
                 SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
             </div>
             @endif
@@ -816,7 +821,7 @@ padding:2px 15px 0;
             @endphp
             @if($shouldShowLoadMore)
                 <button id="loadMoreBtn"
-                        style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                        style="background: #e3e4e5; border: none; color: #222; font-family: 'Poppins', sans-serif; font-size: 0.7rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                         data-page="{{ $products->currentPage() + 1 }}"
                         data-last-page="{{ $products->lastPage() }}"
                         data-per-page="{{ $products->perPage() }}"
