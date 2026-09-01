@@ -154,7 +154,7 @@ html, body{
     .mobile-btn-wrap{
         text-align: center;
         margin-top: 20px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 
     .app-btn{
@@ -207,11 +207,11 @@ html, body{
     </video>
 </section>
 
-<section class="container pt-4 pt-md-5">
+<section class="container pt-4 pt-md-0">
     <!-- =========================
          DESKTOP FIRST SECTION
     ========================= -->
-    <div class="row g-3 mb-3 mb-md-5 d-none d-md-flex">
+    <div class="row g-3 py-5 d-none d-md-flex">
         <div class="col-md-6 justify-content-center d-flex align-items-center">
             <div class="text-center my-5 collection-text">
                 <p>
@@ -312,21 +312,21 @@ html, body{
     <!-- =========================
          DESKTOP BOTTOM SECTION
     ========================= -->
-    <div class="row g-3 mb-3 align-items-center d-none d-md-flex">
+    <div class="row g-3 py-5 align-items-center d-none d-md-flex">
         <div class="col-md-6">
             <div id="ehadBottomSliderDesktop" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_20_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection" style="margin-top:20px;">
+                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_20_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_21_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection" style="margin-top:20px;">
+                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_21_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_25_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection" style="margin-top:20px;">
+                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_25_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_35_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection" style="margin-top:20px;">
+                        <img src="{{ asset('assets/f_assets/image/Marchisio Updated Website Data/MArchisio Selected Web Image/MARCHISIO_HANIF_35_1500X2100.jpg') }}" class="img-fluid w-100" alt="Marchisio Collection">
                     </div>
                 </div>
 
@@ -411,7 +411,7 @@ html, body{
 
 .productSwiper{
     position: relative;
-    padding: 40px 0 40px;
+    padding: 0 0 40px;
     overflow: visible !important;
 }
 
@@ -495,6 +495,12 @@ html, body{
     .productSwiper{
         padding-left: 8px;
         padding-right: 8px;
+    }
+}
+
+@media (max-width: 767.98px){
+    .productSwiper{
+        padding-top: 0;
     }
 }
 </style>

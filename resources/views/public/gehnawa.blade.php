@@ -1,260 +1,156 @@
 @extends('public.layouts.header_new')
 
 @section('content')
+@php
+    $campaignSlides = [
+        ['desktop' => 'assets/f_assets/image/Gehwana/desktop2.png', 'mobile' => 'assets/f_assets/image/Gehwana/mob2.png', 'show_copy' => true],
+        ['desktop' => 'assets/f_assets/image/Gehwana/desktop3.png', 'mobile' => 'assets/f_assets/image/Gehwana/mob3.png', 'show_copy' => false],
+    ];
+
+    $gehnawaCopy = "Gehnawa fuses modern day bridals with their heritage jewels. Rooting from 'Gehna' (meaning jewels) and 'Pehnawa' meaning 'clothes', gehnawa is the latest essence table to be dressed in gold, head to toe; which is every bridal's dream attire!";
+    $appointmentUrl = 'https://api.whatsapp.com/send?phone=923070222666&text=' . rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.');
+
+    $lookGroups = [
+        ['id' => 'gehnawaCarousel-6', 'column' => 'col-md-6', 'directory' => 'Look 6', 'pattern' => 'Gehwana %d.jpg', 'alt' => 'Gehnawa look 6'],
+        ['id' => 'gehnawaCarousel-3', 'column' => 'col-md-6', 'directory' => 'Look 3', 'pattern' => 'Gehwana %d.jpg', 'alt' => 'Gehnawa look 3'],
+        ['id' => 'gehnawaCarousel-5', 'column' => 'col-md-4', 'directory' => 'Look 5', 'pattern' => '%d.jpg', 'alt' => 'Gehnawa look 5'],
+    ];
+
+    foreach ($lookGroups as &$group) {
+        $group['images'] = [];
+        for ($imageIndex = 1; $imageIndex <= 4; $imageIndex++) {
+            $group['images'][] = [
+                'src' => asset('assets/f_assets/image/Gehwana/' . $group['directory'] . '/' . sprintf($group['pattern'], $imageIndex)),
+                'alt' => $group['alt'] . ' image ' . $imageIndex,
+            ];
+        }
+    }
+    unset($group);
+
+@endphp
+
 <style>
-html, body{
-    margin: 0;
-    padding: 0;
-}
-
-/* =========================
-   REMOVE HEADER SPACING
-========================= */
-header,
-.main-header,
-.navbar,
-.header-wrapper,
-.top-header {
-    margin: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-header .container,
-header .row,
-header .col,
-.navbar .container,
-.navbar .row {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-/* =========================
-   BANNER (RESPONSIVE - NO CROP)
-========================= */
-.sectionOne,
-.sectionMobile{
-    position: relative;
-    width: 100%;
-    height: auto; /* 👈 responsive height */
-    overflow: hidden;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* VIDEO */
-.sectionOne video,
-.sectionMobile video{
-    width: 100%;
-    height: auto;          /* 👈 SHRINK WITH SCREEN */
-    display: block;
-    object-fit: contain;   /* 👈 NO CROP */
-}
-
-/* remove unwanted gaps */
-.sectionOne,
-.sectionMobile,
-section{
-    margin-top: 0 !important;
+.gehnawa-full-bleed{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);overflow:hidden}
+.gehnawa-banner,.gehnawa-mobile-banner{margin:0;padding:0;background:#000}
+.gehnawa-banner video,.gehnawa-mobile-banner video{display:block;width:100%;height:auto;object-fit:contain}
+.gehnawa-campaign{background:#d9af78}
+.gehnawa-campaign__slide{position:relative}
+.gehnawa-campaign__image{display:block;width:100%;height:auto}
+.gehnawa-campaign__panel{position:absolute;left:clamp(20px,3.65vw,70px);bottom:clamp(20px,4.7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);box-sizing:border-box;padding:0;background:transparent;color:#fff;font-family:'Poppins',sans-serif;text-align:left;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.gehnawa-campaign__title{margin:0;color:inherit;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2}
+.gehnawa-campaign__copy{width:100%;max-width:40em;margin:10px 0 18px;color:inherit;font-family:'Poppins',sans-serif;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.gehnawa-campaign__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#fff;color:#111;font-family:'Poppins',sans-serif;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-shadow:none;text-transform:uppercase}
+.gehnawa-campaign__button:hover,.gehnawa-campaign__button:focus{background:#e7e7e7;color:#111}
+.gehnawa-campaign__mobile-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:32px 24px 36px;background:#fff;color:#111;font-family:'Poppins',sans-serif;text-align:center}
+.gehnawa-campaign__mobile-panel .gehnawa-campaign__title{width:100%;font-size:22px;text-align:center}
+.gehnawa-campaign__mobile-panel .gehnawa-campaign__copy{max-width:34em;margin:12px auto 20px;font-size:13px;text-align:center}
+.gehnawa-campaign__mobile-panel .gehnawa-campaign__button{background:#111;color:#fff}
+.gehnawa-campaign__mobile-panel .gehnawa-campaign__button:hover,.gehnawa-campaign__mobile-panel .gehnawa-campaign__button:focus{background:#2b2b2b;color:#fff}
+.gehnawa-looks{position:relative;background:#fff;overflow:hidden}
+.gehnawa-looks__slider{position:relative;width:100%;max-width:1320px;margin:0 auto;padding:0;overflow:hidden!important;touch-action:pan-y}
+.gehnawa-looks__slider .swiper-slide{height:auto;min-width:0}
+.gehnawa-looks__box{height:100%}
+.gehnawa-looks__box .carousel,.gehnawa-looks__box .carousel-inner,.gehnawa-looks__box .carousel-item{height:100%}
+.gehnawa-looks__box .carousel-item img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover}
+.gehnawa-ending-appointment{display:flex;align-items:center;justify-content:center;padding:48px 20px;background:#fff}
+@media(max-width:575px){
+    .gehnawa-looks__slider{padding:0 8px}
 }
 </style>
 
-<!-- =========================
-     DESKTOP BANNER
-========================= -->
-<section class="sectionOne d-md-block d-none">
-    <video autoplay loop muted playsinline>
+{{-- The main desktop hero is one looping video, not a slider. --}}
+<section class="gehnawa-full-bleed gehnawa-banner d-none d-md-block" aria-label="Gehnawa desktop banner">
+    <video autoplay loop muted playsinline preload="metadata">
         <source src="{{ asset('assets/f_assets/image/Gehwana/gehnawa.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </section>
 
-<!-- =========================
-     MOBILE BANNER
-========================= -->
-<section class="sectionMobile d-md-none">
-    <video autoplay loop muted playsinline>
+<section class="gehnawa-full-bleed gehnawa-mobile-banner d-md-none" aria-label="Gehnawa mobile banner">
+    <video autoplay loop muted playsinline preload="metadata">
         <source src="{{ asset('assets/f_assets/image/Gehwana/Gehnawa Banner Mob View.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </section>
-<style>
-    .mt-3 {
-        margin-top: 1rem !important;
-    }
-</style>
-    <section>
-        <div class="container py-5">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    @php
-                        $gehnawaImages1 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages1[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look 6/Gehwana ' . $i . '.jpg'),
-                                'alt' => 'gehnawa-6-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-6',
-                        'images' => $gehnawaImages1,
-                    ])
-                </div>
-                <div class="col-md-6">
-                    @php
-                        $gehnawaImages3 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages3[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look 3/Gehwana ' . $i . '.jpg'),
-                                'alt' => 'gehnawa-3-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-3',
-                        'images' => $gehnawaImages3,
-                    ])
-                </div>
-            </div>
 
-            <div class="row g-3 pt-4 align-items-center">
-                <div class="col-md-6">
-                    @php
-                        $gehnawaImages4 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages4[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look 4/Gehwana ' . $i . '.jpg'),
-                                'alt' => 'gehnawa-4-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-4',
-                        'images' => $gehnawaImages4,
-                    ])
-                </div>
-                <div class="col-md-6 d-flex flex-column align-items-center text-center">
-    <p style="width: min(100%, 66ch); margin: 0 auto; font-size: 13px; line-height: 1.6;
-        text-align: justify; text-align-last: center; text-justify: inter-word;">
-        Gehnawa fuses modern day bridals with their heritage jewels. Rooting from 'Gehna' (meaning
-        jewels) and 'Pehnawa' meaning 'clothes', Gehnawa is the latest essence table to be dressed
-        in gold, head to toe; which is every bridal's dream attire!
-    </p>
+{{-- Separate full-width campaign sections in desktop2, desktop3 order. --}}
+<section class="gehnawa-full-bleed gehnawa-campaign" aria-label="Gehnawa campaign">
+    @foreach($campaignSlides as $index => $slide)
+        <div class="gehnawa-campaign__slide">
+            <picture>
+                <source media="(max-width: 991.98px)" srcset="{{ asset($slide['mobile']) }}">
+                <img class="gehnawa-campaign__image" src="{{ asset($slide['desktop']) }}" alt="Gehnawa campaign image {{ $index + 1 }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" decoding="async">
+            </picture>
 
-    <x-book-appointment class="mt-3" />
-</div>
-            </div>
+            @if($slide['show_copy'])
+                <div class="gehnawa-campaign__panel d-none d-lg-flex">
+                    <h2 class="gehnawa-campaign__title">GEHNAWA</h2>
+                    <p class="gehnawa-campaign__copy">{{ $gehnawaCopy }}</p>
+                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                </div>
 
-
-            <div class="row g-3 pt-4">
-                <div class="col-md-4">
-                    @php
-                        $gehnawaImages4 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages4[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look 2/Gehnawa-Look-2-' . $i . '.png'),
-                                'alt' => 'gehnawa-2-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-2',
-                        'images' => $gehnawaImages4,
-                    ])
+                <div class="gehnawa-campaign__mobile-panel d-lg-none">
+                    <h2 class="gehnawa-campaign__title">GEHNAWA</h2>
+                    <p class="gehnawa-campaign__copy">{{ $gehnawaCopy }}</p>
+                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
                 </div>
-                <div class="col-md-4">
-                    @php
-                        $gehnawaImages5 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages5[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look1/Gehwana ' . $i . '.jpg'),
-                                'alt' => 'gehnawa-1-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-1',
-                        'images' => $gehnawaImages5,
-                    ])
-                </div>
-                <div class="col-md-4">
-                    @php
-                        $gehnawaImages6 = [];
-                        for ($i = 1; $i <= 4; $i++) {
-                            $gehnawaImages6[] = [
-                                'src' => asset('assets/f_assets/image/Gehwana/Look 5/' . $i . '.jpg'),
-                                'alt' => 'gehnawa-5-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-5',
-                        'images' => $gehnawaImages6,
-                    ])
-                </div>
-            </div>
-            <!-- <div class="row g-3 pt-3">
-                <div class="col-md-4">
-                    @php
-                        $gehnawaImages7 = [];
-                        for ($i = 0; $i < 3; $i++) {
-                            $gehnawaImages7[] = [
-                                'src' => asset('assets/f_assets/image/Hasht_Rubies_Rose_Gold_Pendant_1500X2100.jpg'),
-                                'alt' => 'gehnawa-7-' . ($i+1),
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-7',
-                        'images' => $gehnawaImages7,
-                    ])
-                </div>
-                <div class="col-md-4">
-                    @php
-                        $gehnawaImages8 = [];
-                        for ($i = 0; $i < 3; $i++) {
-                            $gehnawaImages8[] = [
-                                'src' => asset('assets/f_assets/image/Hasht_Rubies_Rose_Gold_Pendant_1500X2100.jpg'),
-                                'alt' => 'gehnawa-8-' . ($i+1),
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-8',
-                        'images' => $gehnawaImages8,
-                    ])
-                </div>
-                 <div class="col-md-4">
-                    @php
-                        $gehnawaImages9 = [];
-                        for ($i = 0; $i < 3; $i++) {
-                            $gehnawaImages9[] = [
-                                'src' => asset('assets/f_assets/image/Hasht_Rubies_Rose_Gold_Pendant_1500X2100.jpg'),
-                                'alt' => 'gehnawa-9-' . ($i+1),
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'gehnawaCarousel-9',
-                        'images' => $gehnawaImages9,
-                    ])
-                </div> -->
-            </div>
-
-            @include('public.partials.image-gallery-modal')
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Initialize all Gehnawa carousels (1..9)
-                    for (let i = 1; i <= 9; i++) {
-                        const el = document.getElementById('gehnawaCarousel-' + i);
-                        if (el) new bootstrap.Carousel(el, { interval: false, wrap: true, touch: true });
-                    }
-                });
-            </script>
+            @endif
         </div>
-    </section>
+    @endforeach
+</section>
+
+{{-- One outer slider with six look boxes; every box keeps its four-image carousel. --}}
+<section class="gehnawa-looks">
+    <div class="container-fluid px-3 px-md-4 pt-3 pb-0">
+        <div id="gehnawaLookGroups" class="swiper gehnawa-looks__slider" aria-label="Gehnawa collection looks">
+            <div class="swiper-wrapper">
+                @foreach($lookGroups as $group)
+                    <div class="swiper-slide">
+                        <div class="gehnawa-looks__box">
+                            @include('public.partials.carousel', [
+                                'id' => $group['id'],
+                                'images' => $group['images'],
+                            ])
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="gehnawa-ending-appointment" aria-label="Book an appointment">
+    <x-book-appointment />
+</section>
+
+@include('public.partials.image-gallery-modal')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[id^="gehnawaCarousel-"]').forEach(function (carouselElement) {
+        bootstrap.Carousel.getOrCreateInstance(carouselElement, {
+            interval: false,
+            wrap: true,
+            touch: false,
+        });
+    });
+
+    const looksElement = document.getElementById('gehnawaLookGroups');
+    if (looksElement) {
+        new Swiper(looksElement, {
+            loop: false,
+            grabCursor: true,
+            watchOverflow: true,
+            observer: true,
+            observeParents: true,
+            breakpoints: {
+                0: { slidesPerView: 1, spaceBetween: 8 },
+                576: { slidesPerView: 2, spaceBetween: 10 },
+                768: { slidesPerView: 3, spaceBetween: 12 },
+            },
+        });
+    }
+});
+</script>
 @endsection

@@ -119,7 +119,7 @@ html, body{
 </div>
 
         <div class="container pt-4 pt-md-5">
-        <div class="row g-3 mb-3 mt-0">
+        <div class="row g-3 mt-0">
             <div class="col-md-6">
                 @php
                     $gulposhImages1 = [];
@@ -183,7 +183,7 @@ html, body{
     object-fit: contain;
 }
 </style>
-        <div class="row">
+        <div class="row g-0">
             <style>
                     .app-btn {
                         padding: 6px 16px !important;
@@ -192,7 +192,10 @@ html, body{
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        height: 9.5rem;
+                        width: 100%;
+                        height: auto;
+                        padding: 48px 20px;
+                        box-sizing: border-box;
                     }
             </style>
             <div class="gulposh-appointment-spacing">

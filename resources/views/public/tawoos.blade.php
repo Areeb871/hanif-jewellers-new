@@ -99,7 +99,7 @@
 .heroBtn{
   display: inline-block;
   background: transparent;     /* transparent by default */
-  color: #111;                 /* dark text */
+  color: white;                 /* dark text */
   text-decoration: none;
   padding: 14px 26px;
   letter-spacing: 2px;
@@ -109,6 +109,7 @@
 
   border: 1px solid #111;      /* outline style */
   transition: all 0.3s ease;   /* smooth luxury hover */
+  background-color: black; /* white background */
 }
 
 /* Hover effect */
