@@ -307,7 +307,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('swissCaseSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="swissCaseSizeList">
-                    @php $caseSizes = ['28mm','30mm','36mm','37mm','39mm','40mm','41mm','42mm','42.5mm','43mm','45mm','48mm']; @endphp
+                @php $caseSizes = ['28 mm','30 mm','33 mm','38 mm','39 mm','40 mm','41 mm','42 mm','43 mm','44 mm','45 mm','46 mm']; @endphp
                     @foreach($caseSizes as $size)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox swiss-filter" data-group="caseSize" value="{{ $size }}" {{ $selectedTags->contains($size) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $size }}</span></li>
                     @endforeach

@@ -598,7 +598,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('tissotSeriesList', this.querySelector('.category-toggle'))">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="tissotSeriesList">
-                    @php $series = ['prx','prc 200','prs 200','pr 100','prs 516','desire','classic dream','carson','couturier','tradition','t-race','bridge port','quickster']; @endphp
+                    @php $series = ['prx','prc 200','carson','tradition','t-race']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox tissot-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
                     @endforeach
@@ -607,7 +607,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('tissotSizeList', this.querySelector('.category-toggle'))">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="tissotSizeList">
-                    @php $sizes = ['35','38','39','40','41','42','43','45']; @endphp
+                    @php $sizes = ['35','39','41','42','45']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox tissot-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach

@@ -660,7 +660,7 @@ img{
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('mauriceLacroixSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="mauriceLacroixSeriesList">
-                    @php $series = ['pontos','aikon','fiaba','elisir','les-classiques','maurice-lacroix','masterpiece']; @endphp
+                    @php $series = ['pontos','aikon','fiaba','eliros','1975']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox maurice-lacroix-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-', 'les'], [' ', 'Les'], $s)) }}</span></li>
                     @endforeach
@@ -669,7 +669,7 @@ img{
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('mauriceLacroixSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="mauriceLacroixSizeList">
-                    @php $sizes = ['35','38','40','41','42','43','44','45']; @endphp
+                    @php $sizes = ['35','40','41','42','43','44']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox maurice-lacroix-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach

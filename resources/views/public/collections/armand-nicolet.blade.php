@@ -370,7 +370,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('armandNicoletSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="armandNicoletSeriesList">
-                    @php $series = ['amadeo','l13','a13','m12','hh2']; @endphp
+                @php $series = ['JS9-41','M02','J09-3','L15']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox armand-nicolet-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ strtoupper($s) }}</span></li>
                     @endforeach
@@ -379,7 +379,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('armandNicoletSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="armandNicoletSizeList">
-                    @php $sizes = ['40','41','42','43','44','34','38.5']; @endphp
+                    @php $sizes = ['41','42','43','44','34','38.5']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox armand-nicolet-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach

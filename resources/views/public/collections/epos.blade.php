@@ -368,7 +368,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('eposSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="eposSizeList">
-                    @php $sizes = ['32','41','41.5','45']; @endphp
+                    @php $sizes = ['32','41','41.5']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach

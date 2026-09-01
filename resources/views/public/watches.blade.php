@@ -656,29 +656,29 @@ section{
         height: auto !important;
         object-fit: contain !important;
         display: block;
-        margin-top:35px;
+        margin-top:0px;
     }
 }
 </style>
 @section('content')
-<section class="watches-video-hero d-none d-md-block" data-header-hero>
+<!-- <section class="watches-video-hero d-none d-md-block" data-header-hero>
         <video autoplay loop muted playsinline>
             <source src="{{ asset('assets/f_assets/image/watches/hero.webm') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>
+    </section> -->
     <!-- Mobile Video Banner -->
-    <section class="watches-video-hero d-md-none" data-header-hero>
+    <!-- <section class="watches-video-hero d-md-none" data-header-hero>
         <video autoplay loop muted playsinline>
             <source src="{{ asset('assets/f_assets/image/watches/hero-mob.webm') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>
+    </section> -->
 
 
 
     <!-- Hero Section Slider -->
-<!-- <section class="watches-desktop-hero d-none d-md-block"
+<section class="watches-desktop-hero d-none d-md-block"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarousel"
@@ -757,7 +757,7 @@ section{
         </div>
 
     </div>
-</section> -->
+</section>
 
 
 
@@ -779,7 +779,7 @@ section{
 </section> -->
 
 <!-- MOBILE HERO Slider-->
-<!-- <section class="sectionOneMobile d-block d-md-none"
+<section class="sectionOneMobile d-block d-md-none"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarouselMobile"
@@ -824,7 +824,7 @@ section{
 
         </div>
     </div>
-</section> -->
+</section>
 
 <section class="py-5 luxury-watch-section">
     <p class="text-center py-3 px-3 fs-6">

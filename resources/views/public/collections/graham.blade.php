@@ -356,7 +356,7 @@
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('grahamSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="grahamSizeList">
-                    @php $sizes = ['42','44','46','47']; @endphp
+                    @php $sizes = ['44','46','47']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox graham-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach
