@@ -171,7 +171,7 @@
                      style="width: 25vw; min-width: 350px; max-width: 400px; scroll-snap-align: start;"
                      alt="Tasbeeh Image"
                      data-index="{{ $index }}"
-                     onclick="DivineGallery.open('imageSlider', Number(this.dataset.index))">
+                     onclick="openImageModal('imageSlider', Number(this.dataset.index))">
             @endforeach
         </div>
     </div>
@@ -220,60 +220,14 @@
                      style="width: 25vw; min-width: 350px; max-width: 400px; scroll-snap-align: start;"
                      alt="Pendant Image {{ $index + 1 }}" 
                      data-index="{{ $index }}"
-                     onclick="DivineGallery.open('imageSlider2', Number(this.dataset.index))">
+                     onclick="openImageModal('imageSlider2', Number(this.dataset.index))">
             @endforeach
         </div>
     </div>
 </section>
 
-<!-- ✅ Your existing modal -->
-<div class="divine-image-modal" id="imageModal" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content bg-transparent border-0">
-            <div class="modal-header border-0">
-                <button type="button" class="divine-modal-close" aria-label="Close" onclick="DivineGallery.close()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center p-0 position-relative"
-                 style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                <img id="modalImage" src="" class="img-fluid"
-                     style="max-height: 90vh; max-width: 90vw; cursor: grab; touch-action: none; user-select: none;"
-                     draggable="false" alt="">
-                
-                <!-- Navigation Arrows -->
-                <button id="modalPrev" class="btn btn-link position-absolute top-50 start-0 translate-middle-y text-white"
-                        style="left: 20px; z-index: 10;" onclick="DivineGallery.navigate(-1)">
-                    <i class="fas fa-chevron-left fa-1x"></i>
-                </button>
-                <button id="modalNext" class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-white"
-                        style="right: 20px; z-index: 10;" onclick="DivineGallery.navigate(1)">
-                    <i class="fas fa-chevron-right fa-1x"></i>
-                </button>
-
-                <!-- Zoom Controls -->
-                <div class="divine-zoom-controls">
-                    <div class="btn-group-vertical" role="group">
-                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.zoomIn()" title="Zoom In">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.zoomOut()" title="Zoom Out">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-dark btn-sm" onclick="DivineGallery.resetZoom()" title="Reset Zoom">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Image Counter -->
-                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3">
-                    <span id="imageCounter" class="badge bg-dark bg-opacity-75 text-white px-3 py-2"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{{-- Use the same gallery viewer as Gehnawa. --}}
+@include('public.partials.image-gallery-modal')
 <div class="row">
             <style>
                     .app-btn {
