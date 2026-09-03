@@ -12,8 +12,7 @@
         <div class="hj-ring-hero-content">
             <h1>Solitaire Engagement Rings</h1>
             <p>
-                Classic, sparkling and endlessly symbolic solitaire rings bring sleek style.
-                Explore gemstone and diamond solitaire engagement rings in gold and platinum.
+               Classic, sparkling and endlessly symbolic solitaire rings bring sleek style. Explore diamond solitaire engagement rings in round, oval and princess cut.
             </p>
         </div>
 

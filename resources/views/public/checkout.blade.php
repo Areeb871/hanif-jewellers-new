@@ -256,7 +256,10 @@
                 $price = (float) $product->discounted_price;
             }
 
-            return max(0, round($price));
+            // Use the same rounded unit price that is shown to the customer.
+            // Otherwise a displayed PKR 107,000 price such as 106,714 would
+            // incorrectly total PKR 747,000 for a quantity of seven.
+            return max(0, round($price, -3));
         };
 
         $makeImageUrl = function ($imagePath) {
@@ -289,7 +292,7 @@
                 || !empty($cartItem->solitaire_product_id);
 
             if ($isSolitaire) {
-                $price = (float) ($cartItem->variant_price ?? 0);
+                $price = (float) round((float) ($cartItem->variant_price ?? 0), -3);
             } else {
                 $cartKey = $cartItem->product_id . '_' . ($cartItem->size ?: 'default');
                 $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
@@ -393,7 +396,7 @@
                     |--------------------------------------------------------------------------
                     */
                     if ($isSolitaire) {
-                        $price = (float) ($item->variant_price ?? 0);
+                        $price = (float) round((float) ($item->variant_price ?? 0), -3);
                         $basePrice = (float) ($item->old_price ?? $price);
                         $discountPercent = $item->discount_percent ?? null;
 

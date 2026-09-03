@@ -358,7 +358,7 @@ public function processCheckout(Request $request)
                 || !empty($item->solitaire_product_id);
 
             if ($isSolitaire) {
-                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0)));
+                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0), -3));
             } else {
                 $forStore = $this->cartUsesStorefront((int) $item->product->id, $item->size);
                 $priceData = $calcNormalProductPrice($item->product, $forStore);
@@ -411,7 +411,7 @@ public function processCheckout(Request $request)
             if ($isSolitaire) {
                 $product = $item->solitaireProduct;
 
-                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0)));
+                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0), -3));
                 $originalPrice = (int) max(0, round((float) ($item->old_price ?? $unitPrice)));
                 $discountAmount = max(0, $originalPrice - $unitPrice);
                 $qty = (int) $item->quantity;

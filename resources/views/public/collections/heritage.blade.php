@@ -3,358 +3,140 @@
 @section('content')
 @php
     $desktopBanner = $subcategory->banner_url ?? null;
-    $isDesktopVideo = $desktopBanner ? \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']) : false;
-    $desktopBannerExt = $isDesktopVideo ? strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) : null;
+    $isDesktopVideo = $desktopBanner
+        ? \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg'])
+        : false;
+    $mobileBanner = 'assets/f_assets/image/heritage_mobile.mp4';
+    $heritageCopy = "An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.";
 @endphp
 
-<!-- DESKTOP -->
-<section class="sectionOne d-md-block d-none">
+@if($desktopBanner)
+    <section class="heritage-hero d-none d-md-block" aria-label="Heritage desktop banner">
+        @if($isDesktopVideo)
+            <video autoplay loop muted playsinline preload="metadata">
+                <source src="{{ asset($desktopBanner) }}" type="video/{{ strtolower(pathinfo($desktopBanner, PATHINFO_EXTENSION)) }}">
+                Your browser does not support the video tag.
+            </video>
+        @else
+            <img src="{{ asset($desktopBanner) }}" alt="{{ $subcategory->name ?? 'Heritage' }} banner">
+        @endif
+    </section>
+@endif
 
-    @if($isDesktopVideo)
-        <video autoplay loop muted playsinline class="bannerMedia"
-            onerror="this.style.display='none'; this.nextElementSibling?.classList.remove('d-none');">
-            <source src="{{ asset($desktopBanner) }}" type="video/{{ $desktopBannerExt }}">
-        </video>
-
-        <img src="{{ asset($desktopBanner) }}" 
-             alt="{{ $subcategory->name ?? 'Heritage Banner' }}" 
-             class="bannerMedia d-none">
-
-    @elseif($desktopBanner)
-        <img src="{{ asset($desktopBanner) }}" 
-             alt="{{ $subcategory->name ?? 'Heritage Banner' }}" 
-             class="bannerMedia">
-    @else
-        <video autoplay loop muted playsinline class="bannerMedia">
-            <source src="{{ asset('assets/f_assets/image/heritage_mobile.mp4') }}" type="video/mp4">
-        </video>
-    @endif
-
-</section>
-
-<!-- MOBILE -->
-<section class="sectionMobile d-md-none">
-    <video autoplay loop muted playsinline class="bannerMedia">
-        <source src="{{ asset('assets/f_assets/image/heritage_mobile.mp4') }}" type="video/mp4">
+<section class="heritage-hero d-md-none" aria-label="Heritage mobile banner">
+    <video autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset($mobileBanner) }}" type="video/mp4">
+        Your browser does not support the video tag.
     </video>
 </section>
-<style>
-    :root{
-    --header-desktop: 120px;
-    --header-mobile: 80px;
-}
 
-/* DESKTOP */
-.sectionOne{
-    position: relative;
-    min-height: calc(100vh - var(--header-desktop));
-    overflow: hidden;
-}
+<section class="heritage-campaign" aria-label="Heritage campaign">
+    @foreach(range(1, 3) as $index)
+        <div class="heritage-campaign__banner">
+            <img class="heritage-campaign__image heritage-campaign__image--desktop"
+                 src="{{ asset('assets/f_assets/image/heritage/desktop' . $index . '.png') }}"
+                 alt="Heritage campaign banner {{ $index }}"
+                 loading="{{ $index === 1 ? 'eager' : 'lazy' }}" decoding="async">
+            <img class="heritage-campaign__image heritage-campaign__image--mobile"
+                 src="{{ asset('assets/f_assets/image/heritage/mob' . $index . '.png') }}"
+                 alt="Heritage mobile campaign banner {{ $index }}"
+                 loading="{{ $index === 1 ? 'eager' : 'lazy' }}" decoding="async">
 
-/* MOBILE */
-.sectionMobile{
-    position: relative;
-    min-height: calc(100vh - var(--header-mobile));
-    overflow: hidden;
-}
-
-/* MEDIA (video + img same behavior) */
-.bannerMedia{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* remove any unwanted spacing */
-.sectionOne,
-.sectionMobile{
-    margin: 0 !important;
-    padding: 0 !important;
-}
-</style>
-
-   <section class="container pt-4 pt-md-5">
-    <style>
-        @media (max-width: 767.98px) {
-            .container {
-                padding-top: 1.5rem !important;
-            }
-
-            .py-3 {
-                padding-top: 1rem !important;
-                padding-bottom: 2rem !important;
-            }
-
-            .mt-4 {
-                margin-top: 1rem !important;
-            }
-
-            .mb-4 {
-                margin-bottom: 1.5rem !important;
-            }
-
-            .mb-3 {
-                margin-bottom: 1.5rem !important;
-            }
-
-            .g-3 {
-                gap: 1rem !important;
-            }
-
-            .px-5 {
-                padding-left: 1.5rem !important;
-                padding-right: 1.5rem !important;
-                margin-bottom: 2rem !important;
-            }
-
-            p,
-            .text-center {
-                text-align: center !important;
-            }
-        }
-
-        .mt-3 {
-            margin-top: 0rem !important;
-        }
-
-        p {
-            text-align: center !important;
-        }
-    </style>
-
-    <!-- TOP GALLERY -->
-    <div class="row g-3 mb-3" id="heritageGalleryTop">
-        <div class="col-md-3">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 1.png') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 1"
-                style="cursor:pointer"
-                onclick="openImageModal('heritageGalleryTop', 0)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 2.png') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 2"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryTop', 1)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 3.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 3"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryTop', 2)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 4.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 4"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryTop', 3)">
-        </div>
-    </div>
-
-    <!-- MIDDLE SECTION -->
-    <div class="row g-4 align-items-center">
-
-        <!-- LEFT IMAGE CAROUSEL -->
-        <div class="col-md-7">
-            <div id="heritageHighlightCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 13.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 1"
-                            onclick="openImageModal('heritageHighlightCarousel', 0)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 14.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 2"
-                            onclick="openImageModal('heritageHighlightCarousel', 1)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 15.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 3"
-                            onclick="openImageModal('heritageHighlightCarousel', 2)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 16.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 4"
-                            onclick="openImageModal('heritageHighlightCarousel', 3)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 17.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 5"
-                            onclick="openImageModal('heritageHighlightCarousel', 4)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 18.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 6"
-                            onclick="openImageModal('heritageHighlightCarousel', 5)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 19.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 7"
-                            onclick="openImageModal('heritageHighlightCarousel', 6)">
-                    </div>
-
-                    <div class="carousel-item">
-                        <img
-                            src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 20.jpg') }}"
-                            class="d-block w-100 img-fluid gallery-image"
-                            alt="Heritage Highlight 8"
-                            onclick="openImageModal('heritageHighlightCarousel', 7)">
-                    </div>
-
+            @if($index === 1)
+                <div class="heritage-campaign__content d-none d-md-flex">
+                    <h2 class="heritage-campaign__title">HERITAGE</h2>
+                    <p class="heritage-campaign__copy">{{ $heritageCopy }}</p>
+                    <x-book-appointment class="heritage-campaign__button" />
                 </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#heritageHighlightCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#heritageHighlightCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
-            </div>
+                <div class="heritage-campaign__mobile-content d-md-none">
+                    <h2 class="heritage-campaign__mobile-title">HERITAGE</h2>
+                    <p class="heritage-campaign__mobile-copy">{{ $heritageCopy }}</p>
+                    <x-book-appointment />
+                </div>
+            @endif
         </div>
-
-        <!-- RIGHT TEXT -->
-        <div class="col-md-5 d-flex justify-content-center align-items-center">
-            <div class="text-center">
-                <p class="mb-4">
-                    An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.
-                </p>
-
-                <x-book-appointment class="mt-3" />
-            </div>
-        </div>
-
-    </div>
-
-    <!-- BOTTOM GALLERY -->
-    <div class="row g-3 mb-3" id="heritageGalleryBottom">
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 5.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 5"
-                style="margin-top: 10px;"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 0)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 6.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 6"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 1)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 7.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 7"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 2)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 8.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 8"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 3)">
-        </div>
-
-        <!--<div class="col-md-3">-->
-        <!--    <img-->
-        <!--        src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 9.jpg') }}"-->
-        <!--        class="img-fluid gallery-image"-->
-        <!--        alt="Heritage Jewel 9"-->
-        <!--        style="cursor:pointer"-->
-
-        <!--        onclick="openImageModal('heritageGalleryBottom', 4)">-->
-        <!--</div>-->
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 10.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 10"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 5)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 11.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 11"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 6)">
-        </div>
-
-        <div class="col-md-3 justify-content-center d-flex align-items-center">
-            <img
-                src="{{ asset('assets/f_assets/image/heritage/Heritage Jewels 12.jpg') }}"
-                class="img-fluid gallery-image"
-                alt="Heritage Jewel 12"
-                style="cursor:pointer"
-
-                onclick="openImageModal('heritageGalleryBottom', 7)">
-        </div>
-    </div>
+    @endforeach
 </section>
 
-    @include('public.partials.image-gallery-modal')
+@if($products->isNotEmpty())
+<section class="heritage-looks" aria-label="Heritage products">
+    <div class="swiper heritage-looks-slider">
+        <div class="swiper-wrapper heritage-collection-grid">
+            @foreach($products as $product)
+                <div class="swiper-slide">
+                    @include('public.partials.simple-card', [
+                        'product' => $product,
+                        'storeContext' => true,
+                        'hideDetails' => true,
+                    ])
+                </div>
+            @endforeach
+        </div>
+        <button class="swiper-button-prev heritage-looks-slider__prev" type="button" aria-label="Previous Heritage looks"></button>
+        <button class="swiper-button-next heritage-looks-slider__next" type="button" aria-label="Next Heritage looks"></button>
+    </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Modal functionality is already included in the image-gallery-modal partial
-        // No additional initialization needed for the gallery
-    });
-    </script>
+    <div class="heritage-appointment text-center">
+        <x-book-appointment />
+    </div>
+</section>
+@endif
+
+<style>
+html, body{margin:0;padding:0}
+.heritage-hero,.heritage-campaign{width:100%;overflow:hidden}
+.heritage-hero,.heritage-campaign,.heritage-campaign__banner{margin:0;padding:0}
+.heritage-hero img,.heritage-hero video,.heritage-campaign__image{display:block;width:100%;height:auto}
+.heritage-campaign{margin-bottom:34px}
+.heritage-campaign__banner{position:relative}
+.heritage-campaign__image--desktop{display:none}
+.heritage-campaign__image--mobile{display:block}
+.heritage-campaign__content{position:absolute;top:50%;left:auto;right:clamp(20px,3.65vw,70px);width:clamp(340px,34vw,560px);max-width:calc(100% - 40px);transform:translateY(-50%);flex-direction:column;align-items:flex-start;box-sizing:border-box;padding:clamp(24px,3vw,48px);background:#d8bca5;color:#111;font-family:"Poppins",sans-serif;text-align:left}
+.heritage-campaign__title,.heritage-campaign__mobile-title{font-family:"Poppins",sans-serif;font-weight:500;letter-spacing:.18em}
+.heritage-campaign__title{margin:0;font-size:clamp(20px,1.6vw,26px);line-height:1.2}
+.heritage-campaign__copy{width:100%;max-width:40em;margin:10px 0 18px;font-family:"Poppins",sans-serif;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7;text-align:left}
+.heritage-campaign__button{margin:0!important;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px)!important;border:1px solid #000!important;background:#000!important;color:#fff!important;font-size:clamp(10px,.58vw,11px)!important;letter-spacing:.16em!important;line-height:1.4!important}
+.heritage-campaign__button:hover,.heritage-campaign__button:focus{background:#222!important;color:#fff!important}
+.heritage-campaign__mobile-content{padding:32px 24px 38px;background:#fff;color:#111;text-align:center}
+.heritage-campaign__mobile-title{margin:0 0 14px;font-size:22px}
+.heritage-campaign__mobile-copy{max-width:36em;margin:0 auto 22px;font-family:"Poppins",sans-serif;font-size:13px;font-weight:400;line-height:1.7}
+.heritage-looks{width:100%;overflow:hidden}
+.heritage-looks-slider{width:100%;overflow:hidden}
+.heritage-looks-slider .swiper-slide{height:auto;min-width:0}
+.heritage-looks-slider__prev,.heritage-looks-slider__next{width:44px;height:44px;margin-top:0;top:calc(50% - 22px);transform:translateY(-50%);z-index:9999;border:0;border-radius:50%;background:#fff;color:#000;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;pointer-events:auto}
+.heritage-looks-slider__prev{left:10px}
+.heritage-looks-slider__next{right:10px}
+.heritage-looks-slider__prev::after,.heritage-looks-slider__next::after{color:#000;font-size:16px;font-weight:700}
+.heritage-looks-slider__prev:hover,.heritage-looks-slider__next:hover{background:#f8f8f8}
+.heritage-looks-slider__prev.swiper-button-disabled,.heritage-looks-slider__next.swiper-button-disabled{opacity:.35;cursor:not-allowed;pointer-events:none!important}
+.heritage-looks-slider__prev::before,.heritage-looks-slider__next::before{content:"";position:absolute;inset:-12px}
+.heritage-appointment{padding:3.5rem 20px}
+@media(min-width:768px){.heritage-campaign__image--desktop{display:block}.heritage-campaign__image--mobile{display:none}}
+@media(max-width:575.98px){.heritage-looks-slider__prev,.heritage-looks-slider__next{display:none}}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const looksSlider = document.querySelector('.heritage-looks-slider');
+    if (looksSlider && typeof Swiper !== 'undefined') {
+        new Swiper(looksSlider, {
+            loop:false,
+            grabCursor:true,
+            watchOverflow:true,
+            observer:true,
+            observeParents:true,
+            navigation:{
+                nextEl:looksSlider.querySelector('.heritage-looks-slider__next'),
+                prevEl:looksSlider.querySelector('.heritage-looks-slider__prev')
+            },
+            breakpoints:{
+                0:{slidesPerView:1,spaceBetween:8},
+                576:{slidesPerView:2,spaceBetween:10},
+                768:{slidesPerView:3,spaceBetween:12},
+                1200:{slidesPerView:4,spaceBetween:12}
+            }
+        });
+    }
+});
+</script>
 @endsection

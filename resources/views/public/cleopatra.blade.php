@@ -95,7 +95,7 @@
 @endforeach
 
 <section class="container pt-4 pt-md-5" aria-label="Cleopatra collection looks">
-    <div class="row g-3 mb-3">
+    <div class="row gx-3 gy-3 gy-md-0">
         <div class="col-md-6">
             <img class="cleopatra-square-pair__image" src="{{ asset('assets/f_assets/image/Cleopatra 1 Ratio 1/Cleopatra Look 4/Cleopatra Look 4  (1).avif') }}" alt="Cleopatra Look 4" loading="lazy">
         </div>
