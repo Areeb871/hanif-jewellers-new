@@ -449,6 +449,7 @@
 
                         @php
                             $forStore = false;
+                            $usesWatchPricing = false;
                             if (!$isSolitaire && $item->product_id) {
                                 $cartKey = $item->product_id . '_' . ($item->size ?: 'default');
                                 $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
@@ -492,16 +493,22 @@
                                 $discountText = $item->discount_percent ? $item->discount_percent . '% OFF' : '';
                                 $hasDiscount = !empty($discountText);
                             } else {
-                                $basePrice = (float) $cartProduct->displayPrice($forStore);
+                                $watchPriceBreakdown = $cartProduct->isWatchProduct()
+                                    ? \App\Services\WatchPriceCalculator::calculateBreakdownForProduct($cartProduct)
+                                    : null;
+                                $usesWatchPricing = $watchPriceBreakdown !== null;
+                                $basePrice = $usesWatchPricing
+                                    ? (float) $watchPriceBreakdown['final_price']
+                                    : (float) $cartProduct->displayPrice($forStore);
                                 $price = $basePrice;
                                 $hasDiscount = false;
                                 $discountText = '';
 
-                                if (($cartProduct->discount_type ?? null) == 2 && ($cartProduct->discount_percentage ?? 0) > 0) {
+                                if (!$usesWatchPricing && ($cartProduct->discount_type ?? null) == 2 && ($cartProduct->discount_percentage ?? 0) > 0) {
                                     $price = $basePrice - ($basePrice * $cartProduct->discount_percentage / 100);
                                     $hasDiscount = true;
                                     $discountText = $cartProduct->discount_percentage . '% OFF';
-                                } elseif (($cartProduct->discount_type ?? null) == 3 && ($cartProduct->discounted_price ?? 0) > 0) {
+                                } elseif (!$usesWatchPricing && ($cartProduct->discount_type ?? null) == 3 && ($cartProduct->discounted_price ?? 0) > 0) {
                                     $price = $cartProduct->discounted_price;
                                     $hasDiscount = true;
 
@@ -511,7 +518,9 @@
                                 }
                             }
 
-                            $price = max(0, round($price));
+                            $price = max(0, $usesWatchPricing
+                                ? round($price, -3)
+                                : round($price));
                             $subtotal = $price * $item->quantity;
                             $total += $subtotal;
                         @endphp

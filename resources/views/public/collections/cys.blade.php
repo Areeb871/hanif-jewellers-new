@@ -656,6 +656,26 @@
       </ul>
     </div>
 
+    {{-- CASE SIZE --}}
+    <div class="mt-3">
+      <div class="filter-section-title"
+           onclick="toggleCategory('cysSizeList', this.querySelector('.category-toggle'))"
+           style="font-size:14px!important;">
+        CASE SIZE <span class="category-toggle">+</span>
+      </div>
+
+      @php $cysSizes = ['36','38','40','43','44','52']; @endphp
+      <ul class="category-list collapsible" id="cysSizeList">
+        @foreach($cysSizes as $sz)
+          <li>
+            <input type="checkbox" class="form-check-input filter-tag-checkbox cys-filter"
+                   value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }}>
+            <span class="subcat-label">{{ $sz }}mm</span>
+          </li>
+        @endforeach
+      </ul>
+    </div>
+
   </div>
 </div>
 

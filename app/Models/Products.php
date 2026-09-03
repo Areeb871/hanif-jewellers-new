@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\GoldPriceCalculator;
 use App\Services\DiamondPriceCalculator;
+use App\Services\WatchPriceCalculator;
 
 class Products extends Model
 {
     protected $table = 'products';
-    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'gold_weight', 'gold_service_id', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_pinned', 'is_latest', 'show_price'];
+    protected $fillable = ['category_id', 'sub_category_id', 'name', 'online_store_name', 'slug', 'sku', 'barcode', 'description', 'online_store_description', 'image', 'hover_image', 'price', 'diamond_price', 'watch_rate', 'gold_weight', 'gold_service_id', 'price_aed', 'discounted_price', 'discount_percentage', 'quantity', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'is_featured', 'is_pinned', 'is_latest', 'show_price'];
     protected $casts = [
         'is_pinned' => 'boolean',
+        'watch_rate' => 'decimal:2',
     ];
     protected $hidden = ['created_at', 'updated_at'];
     // public function getPriceAttribute($value)
@@ -125,6 +127,12 @@ class Products extends Model
      */
     public function finalPriceForDescription(?string $description): float
     {
+        if ($this->isWatchProduct()) {
+            $watchPrice = WatchPriceCalculator::calculateForProduct($this);
+
+            return $watchPrice ?? (float) ($this->attributes['price'] ?? 0);
+        }
+
         if ($this->shouldUseDiamondPricing()) {
             $diamond = DiamondPriceCalculator::calculateFromDescription(
                 $description ?? '',
@@ -204,7 +212,12 @@ class Products extends Model
             ? $this->category
             : $this->category()->first();
 
-        return $category && str_contains(strtolower($category->name ?? ''), 'watch');
+        if (!$category) {
+            return false;
+        }
+
+        return str_contains(strtolower($category->name ?? ''), 'watch')
+            || str_contains(strtolower($category->slug ?? ''), 'watch');
     }
 
     public function hasDiamondTag(): bool

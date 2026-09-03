@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use App\Models\CheckoutLead;
 use App\Models\SolitaireProduct;
+use App\Services\WatchPriceCalculator;
 
 
 class CartController extends Controller
@@ -42,7 +43,11 @@ class CartController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
 
-        $cartItems = Cart::with('product','solitaireProduct')
+        $cartItems = Cart::with([
+            'product.category',
+            'product.subcategory.watchPricingSetting',
+            'solitaireProduct',
+        ])
             ->when($userId, function($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -177,7 +182,11 @@ class CartController extends Controller
         $userId = Auth::check() ? Auth::id() : null;
         $sessionId = !$userId ? session()->getId() : null;
         
-        $cartItems = Cart::with('product','solitaireProduct')
+        $cartItems = Cart::with([
+            'product.category',
+            'product.subcategory.watchPricingSetting',
+            'solitaireProduct',
+        ])
             ->when($userId, function($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -250,7 +259,12 @@ public function processCheckout(Request $request)
         | 3. Fetch and lock the exact cart being ordered
         |--------------------------------------------------------------------------
         */
-        $cartItems = Cart::with(['product.tags', 'solitaireProduct'])
+        $cartItems = Cart::with([
+            'product.tags',
+            'product.category',
+            'product.subcategory.watchPricingSetting',
+            'solitaireProduct',
+        ])
             ->when($userId, function ($query) use ($userId) {
                 return $query->where('user_id', $userId);
             })
@@ -322,25 +336,53 @@ public function processCheckout(Request $request)
                 ];
             }
 
-            $originalPrice = (float) $product->displayPrice($forStore);
-            $unitPrice = $originalPrice;
+            $watchBreakdown = $product->isWatchProduct()
+                ? WatchPriceCalculator::calculateBreakdownForProduct($product)
+                : null;
+            $usesWatchPricing = $watchBreakdown !== null;
+            $isWatchSale = $usesWatchPricing && !empty($watchBreakdown['is_sale']);
 
-            $discountType = $product->discount_type ?? null;
-            $discountPercentage = (float) ($product->discount_percentage ?? 0);
-            $discountAmount = 0;
+            if ($usesWatchPricing) {
+                $unitPrice = (float) $watchBreakdown['final_price'];
+                $originalPrice = $isWatchSale
+                    ? (float) $watchBreakdown['regular_price']
+                    : $unitPrice;
+                $discountAmount = $isWatchSale
+                    ? max(0, $originalPrice - $unitPrice)
+                    : 0;
+                $discountType = $isWatchSale ? 'watch_sale' : null;
+                $discountPercentage = $isWatchSale
+                    ? (float) $watchBreakdown['sale_discount_percent']
+                    : 0;
+            } else {
+                $originalPrice = (float) $product->displayPrice($forStore);
+                $unitPrice = $originalPrice;
+                $discountType = $product->discount_type ?? null;
+                $discountPercentage = (float) ($product->discount_percentage ?? 0);
+                $discountAmount = 0;
+            }
 
-            if ((int) ($discountType ?? 0) === 2 && $discountPercentage > 0) {
+            if (!$usesWatchPricing && (int) ($discountType ?? 0) === 2 && $discountPercentage > 0) {
                 $discountAmount = $originalPrice * $discountPercentage / 100;
                 $unitPrice = $originalPrice - $discountAmount;
-            } elseif ((int) ($discountType ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
+            } elseif (!$usesWatchPricing && (int) ($discountType ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
                 $unitPrice = (float) $product->discounted_price;
                 $discountAmount = max(0, $originalPrice - $unitPrice);
             }
 
+            $roundedUnitPrice = (int) max(0, round($unitPrice, -3));
+            $roundedOriginalPrice = (int) max(0, round(
+                $originalPrice,
+                $usesWatchPricing ? -3 : 0
+            ));
+            $roundedDiscountAmount = $isWatchSale
+                ? max(0, $roundedOriginalPrice - $roundedUnitPrice)
+                : (int) max(0, round($discountAmount));
+
             return [
-                'unit_price' => (int) max(0, round($unitPrice, -3)),
-                'original_price' => (int) max(0, round($originalPrice)),
-                'discount_amount' => (int) max(0, round($discountAmount)),
+                'unit_price' => $roundedUnitPrice,
+                'original_price' => $roundedOriginalPrice,
+                'discount_amount' => $roundedDiscountAmount,
                 'discount_type' => $discountType,
                 'discount_percentage' => $discountPercentage,
             ];

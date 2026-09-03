@@ -60,7 +60,7 @@
 }
 
 .para-regular-upper {
-    font-size: 11px;
+    font-size: 24px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
     font-weight: 600;
@@ -164,7 +164,7 @@ padding:0px;
     }
 
     .para-regular-upper {
-        font-size: 10px;
+        font-size: 16px;
         letter-spacing: 2px;
         margin-bottom: 12px;
     }
@@ -673,9 +673,9 @@ padding:0px;
 
             <ul class="sort-list show" id="favreSortList">
                 @php $currentSort = request('sort'); @endphp
-                <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
+                <!-- <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
                     <span class="diamond">{{ !$currentSort ? '◆' : '◇' }}</span> Best Selling
-                </li>
+                </li> -->
                 <li data-value="new_old" class="{{ $currentSort=='new_old' ? 'selected' : '' }}">
                     <span class="diamond">{{ $currentSort=='new_old' ? '◆' : '◇' }}</span> Date, new to old
                 </li>
@@ -741,6 +741,28 @@ padding:0px;
                                value="{{ $s }}"
                                {{ $selectedTags->contains($s) ? 'checked' : '' }}>
                         <span class="subcat-label">{{ ucwords(str_replace('-', ' ', $s)) }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+        {{-- CASE SIZE --}}
+        <div class="mt-3">
+            <div class="filter-section-title"
+                 onclick="toggleCategory('favreSizeList', this.querySelector('.category-toggle'))"
+                 style="font-size:14px!important;">
+                CASE SIZE <span class="category-toggle">+</span>
+            </div>
+
+            @php $favreSizes = ['39','40','41']; @endphp
+            <ul class="category-list collapsible" id="favreSizeList">
+                @foreach($favreSizes as $sz)
+                    <li>
+                        <input type="checkbox"
+                               class="form-check-input filter-tag-checkbox favre-filter"
+                               value="{{ $sz }}"
+                               {{ $selectedTags->contains($sz) ? 'checked' : '' }}>
+                        <span class="subcat-label">{{ $sz }}mm</span>
                     </li>
                 @endforeach
             </ul>

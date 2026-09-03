@@ -115,115 +115,91 @@
         height:auto;
     }
 
-    .corum-filter-wrap .filter-bar{
-        position:relative;
+    .corum-filter-wrap .corum-collections-heading{
+        margin:0 0 8px;
+        text-align:center;
+        font-family:'Poppins', sans-serif;
+        font-weight:500;
+        letter-spacing:0.15em;
+        text-transform:uppercase;
+        color:#222;
     }
 
-    .corum-filter-wrap .custom-filter-btn{
+    .corum-filter-wrap .corum-filterbar__right{
+        display:flex;
+        align-items:center;
+        justify-content:flex-end;
+        width:100%;
+        background:#fff;
+    }
+
+    .corum-filter-wrap .corum-filterbar__btn{
         border:none !important;
         outline:none !important;
         box-shadow:none !important;
         background:transparent !important;
-        padding:4px 10px;
-        font-size:14px;
-        line-height:1.1;
+        padding:6px 18px;
+        font-size:12px;
         display:flex;
         align-items:center;
         gap:6px;
-        color:#222;
-        font-weight:400;
-        position:absolute;
-        right:0;
-        top:50%;
-        transform:translateY(-50%);
-        z-index:10001;
-        cursor:pointer;
+        white-space:nowrap;
+        font-family:'Poppins', sans-serif;
     }
 
-    .corum-filter-wrap .custom-filter-btn:focus,
-    .corum-filter-wrap .custom-filter-btn:hover,
-    .corum-filter-wrap .custom-filter-btn:active{
+    .corum-filter-wrap .corum-filterbar__btn:focus,
+    .corum-filter-wrap .corum-filterbar__btn:hover,
+    .corum-filter-wrap .corum-filterbar__btn:active{
         border:none !important;
         outline:none !important;
         box-shadow:none !important;
         background:transparent !important;
     }
 
-    .corum-filter-wrap .custom-filter-btn .navbar-toggler-icon{
+    .corum-filter-wrap .corum-filterbar__btn .navbar-toggler-icon{
         width:18px;
         height:14px;
         background:none;
         display:inline-block;
-        position:relative;
-        flex:0 0 auto;
         background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3e%3crect x='0' y='0' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='9' width='30' height='2' fill='%23333'/%3e%3crect x='0' y='18' width='30' height='2' fill='%23333'/%3e%3c/svg%3e");
         background-size:100% 100%;
         background-repeat:no-repeat;
-        margin-right:2px;
     }
 
-    .corum-filter-overlay{
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,0.35);
-        opacity:0;
-        visibility:hidden;
-        transition:all 0.3s ease;
-        z-index:19999;
+    #offcanvasCorum{
+        --bs-offcanvas-width:380px;
+        z-index:10080 !important;
+        min-width:320px;
+        max-width:380px;
+        font-family:'Inter', Arial, sans-serif;
+        background:#fff !important;
+        color:#222;
     }
 
-    .corum-filter-overlay.show{
+    #offcanvasCorum .offcanvas-header{
+        padding-bottom:.5rem;
+        border-bottom:1px solid #fff;
+        background:#fff;
+    }
+
+    #offcanvasCorum .offcanvas-title{
+        font-size:1.1rem;
+        font-weight:400;
+        letter-spacing:.02em;
+        text-transform:uppercase;
+        color:#222;
+    }
+
+    #offcanvasCorum .btn-close{
+        width:1em;
+        height:1em;
+        background-size:1em;
+        filter:none;
         opacity:1;
-        visibility:visible;
     }
 
-    .corum-filter-panel{
-        position:fixed;
-        top:0;
-        right:-380px;
-        width:360px;
-        max-width:90vw;
-        height:100vh;
-        background:#fff;
-        box-shadow:-8px 0 24px rgba(0,0,0,0.12);
-        z-index:20000;
-        transition:right 0.35s ease;
-        overflow-y:auto;
-    }
-
-    .corum-filter-panel.show{
-        right:0;
-    }
-
-    .corum-filter-header{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:18px 20px;
-        border-bottom:1px solid #e5e5e5;
-        position:sticky;
-        top:0;
-        background:#fff;
-        z-index:2;
-    }
-
-    .corum-filter-title{
-        font-size:16px;
-        font-weight:600;
-        letter-spacing:.4px;
-    }
-
-    .corum-filter-close{
-        border:0;
-        background:transparent;
-        font-size:28px;
-        line-height:1;
-        color:#000;
-        cursor:pointer;
-    }
-
-    .corum-filter-body{
-        padding:18px 20px 30px;
+    #offcanvasCorum .offcanvas-body{
+        padding:1rem;
         background:#fff;
     }
 
@@ -241,22 +217,24 @@
     }
 
     .corum-filter-wrap .sort-list.show{
-        max-height:320px;
+        max-height:300px;
+        transition:max-height 0.3s ease-in;
     }
 
     .corum-filter-wrap .category-list.collapsible{
-        max-height:0;
+        max-height:1000px;
         overflow:hidden;
-        transition:max-height 0.3s ease-out;
+        transition:max-height .3s ease-out;
     }
 
-    .corum-filter-wrap .category-list.collapsible.show{
-        max-height:1000px;
+    .corum-filter-wrap .category-list.collapsible:not(.show){
+        max-height:0;
+        transition:max-height .3s ease-in;
     }
 
     .corum-filter-wrap .sort-list li,
     .corum-filter-wrap .category-list > li{
-        padding:.55rem 0;
+        padding:.4rem 0;
         font-size:.97rem;
         display:flex;
         align-items:center;
@@ -280,7 +258,7 @@
     }
 
     .corum-filter-wrap .filter-section-title{
-        font-size:.98rem;
+        font-size:14px !important;
         font-weight:300;
         letter-spacing:.01em;
         margin-bottom:.8rem;
@@ -298,6 +276,7 @@
     .corum-filter-wrap .category-toggle{
         font-size:1.1em;
         color:#b2b2b2;
+        cursor:pointer;
         user-select:none;
         width:20px;
         text-align:center;
@@ -309,6 +288,24 @@
         accent-color:#111;
         border-color:#bbb;
         box-shadow:none !important;
+    }
+
+    .corum-filter-wrap .filter-tag-checkbox:checked{
+        background-color:#111;
+        border-color:#111;
+    }
+
+    .corum-filter-wrap .filter-option-label{
+        display:flex;
+        align-items:center;
+        width:100%;
+        cursor:pointer;
+    }
+
+    .corum-filter-wrap.is-loading #corumGrid,
+    .corum-filter-wrap.is-loading .corum-footer{
+        opacity:.55;
+        transition:opacity .15s ease;
     }
 
     .corum-filter-wrap .onlineStore .col-6,
@@ -344,11 +341,14 @@
         /* margin-bottom:1.5rem; */
     }
 
-    body.corum-filter-open{
-        overflow:hidden;
-    }
-
     @media (max-width:767px){
+        #offcanvasCorum{
+            --bs-offcanvas-width:100vw;
+            width:100vw !important;
+            min-width:100vw !important;
+            max-width:100vw !important;
+        }
+
         .corum-hero-media{
             height:72vh;
             min-height:320px;
@@ -404,26 +404,11 @@
             width:40%;
         }
 
-        .corum-filter-wrap .custom-filter-btn{
-            right:10px;
-            font-size:12px;
-            padding:4px 8px;
-        }
-
-        .corum-filter-panel{
-            width:100vw;
-            max-width:100vw;
-        }
     }
 
     @media (min-width:576px) and (max-width:767px){
         .corum-filter-wrap .brand-logo{
             width:30%;
-        }
-
-        .corum-filter-wrap .custom-filter-btn{
-            right:15px;
-            font-size:13px;
         }
     }
 
@@ -432,9 +417,6 @@
             width:20%;
         }
 
-        .corum-filter-wrap .custom-filter-btn{
-            right:20px;
-        }
     }
 
     @media (min-width:992px){
@@ -442,9 +424,6 @@
             width:20%;
         }
 
-        .corum-filter-wrap .custom-filter-btn{
-            right:23px;
-        }
     }
     /*watch land */
         .watchland-section{
@@ -518,7 +497,6 @@
 }
 
 </style>
-</style>
 
 <section class="corum-hero-media">
     @if(isset($corumSubcategory) && $corumSubcategory && $corumSubcategory->banner_url)
@@ -588,94 +566,129 @@
 <!--    </div>-->
 <!--</section>-->
 
-<section >
+<section>
     <div class="corum-filter-wrap">
-        <!--<div class="navbar navbar-white align-items-center filter-bar justify-content-center py-3">-->
-        <!--    <div class="brand-logo-wrapper w-70 text-center" style="display:none;">-->
-        <!--        <img src="{{ asset('assets/f_assets/image/watch logo/Corum.png') }}" alt="Corum logo" class="brand-logo">-->
-        <!--    </div>-->
+        <h2 class="corum-collections-heading">Our Collections</h2>
+        <div class="corum-filterbar__right">
+            <button type="button"
+                    class="navbar-toggler corum-filterbar__btn"
+                    id="openCorumFilter"
+                    aria-label="Open sort and filter"
+                    aria-controls="offcanvasCorum"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasCorum">
+                <span class="navbar-toggler-icon" aria-hidden="true"></span>
+                SORT &amp; FILTER
+            </button>
+        </div>
 
-        <!--    <button type="button" class="custom-filter-btn" id="openCorumFilter" aria-label="Open sort and filter">-->
-        <!--        <span class="navbar-toggler-icon"></span> SORT & FILTER-->
-        <!--    </button>-->
-        <!--</div>-->
+        @php
+            $legacyTags = collect(explode(',', (string) request('tags', '')))
+                ->map(fn ($value) => strtolower(trim($value)))
+                ->filter();
+            $selectedGender = collect(explode(',', (string) request('gender', '')))
+                ->map(fn ($value) => strtolower(trim($value)))
+                ->filter()
+                ->merge($legacyTags->filter(fn ($value) => in_array($value, ['mens', 'men', 'male', 'ladies', 'women', 'womens', 'female'], true)));
+            $selectedSeries = collect(explode(',', (string) request('series', '')))
+                ->map(fn ($value) => strtolower(trim($value)))
+                ->filter()
+                ->merge($legacyTags->filter(fn ($value) => isset($corumSeries[$value])));
+            $mensSelected = $selectedGender->intersect(['mens', 'men', 'male'])->isNotEmpty();
+            $ladiesSelected = $selectedGender->intersect(['ladies', 'women', 'womens', 'female'])->isNotEmpty();
+            $currentSort = request('sort', '');
+        @endphp
 
-        <div id="corumFilterOverlay" class="corum-filter-overlay"></div>
+        <aside id="offcanvasCorum"
+               class="offcanvas offcanvas-end corum-filter-panel"
+               tabindex="-1"
+               aria-labelledby="corumFilterTitle"
+               data-bs-backdrop="true"
+               data-bs-scroll="true">
+            <div class="offcanvas-header">
+                <span class="offcanvas-title" id="corumFilterTitle">SORT &amp; FILTER</span>
+                <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close sort and filter"></button>
+            </div>
 
-        <!--<div id="offcanvasCorum" class="corum-filter-panel">-->
-        <!--    <div class="corum-filter-header">-->
-        <!--        <span class="corum-filter-title">SORT & FILTER</span>-->
-        <!--        <button type="button" class="corum-filter-close" id="closeCorumFilter" aria-label="Close">&times;</button>-->
-        <!--    </div>-->
+            <div class="offcanvas-body">
+                <div>
+                    <div class="filter-section-title" onclick="toggleCorumCategory('corumSortList', this.querySelector('.category-toggle'))">
+                        Sort By <span class="category-toggle">+</span>
+                    </div>
 
-        <!--    <div class="corum-filter-body">-->
-        <!--        <div>-->
-        <!--            <div class="filter-section-title" onclick="toggleCorumCategory('corumSortList', this.querySelector('.category-toggle'))">-->
-        <!--                Sort By <span class="category-toggle">+</span>-->
-        <!--            </div>-->
+                    <ul class="sort-list" id="corumSortList">
+                        <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
+                            <span class="diamond">{{ !$currentSort ? '◆' : '◇' }}</span> Featured
+                        </li>
+                        <li data-value="az" class="{{ $currentSort === 'az' ? 'selected' : '' }}">
+                            <span class="diamond">{{ $currentSort === 'az' ? '◆' : '◇' }}</span> Alphabetically, A-Z
+                        </li>
+                        <li data-value="za" class="{{ $currentSort === 'za' ? 'selected' : '' }}">
+                            <span class="diamond">{{ $currentSort === 'za' ? '◆' : '◇' }}</span> Alphabetically, Z-A
+                        </li>
+                    </ul>
+                </div>
 
-        <!--            @php $currentSort = request('sort'); @endphp-->
-        <!--            <ul class="sort-list" id="corumSortList">-->
-        <!--                <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ !$currentSort ? '◆' : '◇' }}</span> Best Selling-->
-        <!--                </li>-->
-        <!--                <li data-value="az" class="{{ $currentSort == 'az' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'az' ? '◆' : '◇' }}</span> Alphabetically, A-Z-->
-        <!--                </li>-->
-        <!--                <li data-value="za" class="{{ $currentSort == 'za' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'za' ? '◆' : '◇' }}</span> Alphabetically, Z-A-->
-        <!--                </li>-->
-        <!--                <li data-value="price_low_high" class="{{ $currentSort == 'price_low_high' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'price_low_high' ? '◆' : '◇' }}</span> Price, low to high-->
-        <!--                </li>-->
-        <!--                <li data-value="price_high_low" class="{{ $currentSort == 'price_high_low' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'price_high_low' ? '◆' : '◇' }}</span> Price, high to low-->
-        <!--                </li>-->
-        <!--                <li data-value="new_old" class="{{ $currentSort == 'new_old' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'new_old' ? '◆' : '◇' }}</span> Date, new to old-->
-        <!--                </li>-->
-        <!--                <li data-value="old_new" class="{{ $currentSort == 'old_new' ? 'selected' : '' }}">-->
-        <!--                    <span class="diamond">{{ $currentSort == 'old_new' ? '◆' : '◇' }}</span> Date, old to new-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </div>-->
+                <div>
+                    <div class="filter-section-title" onclick="toggleCorumCategory('corumGenderList', this.querySelector('.category-toggle'))">
+                        Gender <span class="category-toggle">+</span>
+                    </div>
 
-        <!--        @php $selectedTags = collect(explode(',', request('tags', '')))->map(fn($s) => trim($s)); @endphp-->
+                    <ul class="category-list collapsible" id="corumGenderList">
+                        <li>
+                            <label class="filter-option-label">
+                                <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="gender" value="mens" @checked($mensSelected)>
+                                <span class="subcat-label">Men's</span>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="filter-option-label">
+                                <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="gender" value="ladies" @checked($ladiesSelected)>
+                                <span class="subcat-label">Ladies</span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
 
-        <!--        <div class="mt-3">-->
-        <!--            <div class="filter-section-title" onclick="toggleCorumCategory('corumGenderList', this.querySelector('.category-toggle'))">-->
-        <!--                Gender <span class="category-toggle">+</span>-->
-        <!--            </div>-->
+                <div class="mt-3">
+                    <div class="filter-section-title" onclick="toggleCorumCategory('corumSeriesList', this.querySelector('.category-toggle'))">
+                        Series <span class="category-toggle">+</span>
+                    </div>
 
-        <!--            <ul class="category-list collapsible" id="corumGenderList">-->
-        <!--                <li>-->
-        <!--                    <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" value="mens" {{ $selectedTags->contains('mens') ? 'checked' : '' }}>-->
-        <!--                    <span class="subcat-label">Men's</span>-->
-        <!--                </li>-->
-        <!--                <li>-->
-        <!--                    <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" value="ladies" {{ $selectedTags->contains('ladies') ? 'checked' : '' }}>-->
-        <!--                    <span class="subcat-label">Ladies</span>-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </div>-->
+                    <ul class="category-list collapsible" id="corumSeriesList">
+                        @foreach($corumSeries as $slug => $label)
+                            <li>
+                                <label class="filter-option-label">
+                                    <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="series" value="{{ $slug }}" @checked($selectedSeries->contains($slug))>
+                                    <span class="subcat-label">{{ $label }}</span>
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-        <!--        <div class="mt-3">-->
-        <!--            <div class="filter-section-title" onclick="toggleCorumCategory('corumSeriesList', this.querySelector('.category-toggle'))">-->
-        <!--                Series <span class="category-toggle">+</span>-->
-        <!--            </div>-->
+                <div class="mt-3">
+                    <div class="filter-section-title" onclick="toggleCorumCategory('corumSizeList', this.querySelector('.category-toggle'))">
+                        Case Size <span class="category-toggle">+</span>
+                    </div>
 
-        <!--            @php $series = ['tourbillon','skeltec','open-gear','flying','classic','sirius','artist-collection','heritage']; @endphp-->
-        <!--            <ul class="category-list collapsible" id="corumSeriesList">-->
-        <!--                @foreach($series as $s)-->
-        <!--                    <li>-->
-        <!--                        <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }}>-->
-        <!--                        <span class="subcat-label">{{ ucwords(str_replace('-', ' ', $s)) }}</span>-->
-        <!--                    </li>-->
-        <!--                @endforeach-->
-        <!--            </ul>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--</div>-->
+                    <ul class="category-list collapsible" id="corumSizeList">
+                        @php
+                        $corumSizes = ['38','42','47','52'];
+                            $selectedSizes = collect(explode(',', (string) request('tags', '')))->map(fn ($s) => trim($s));
+                        @endphp
+                        @foreach($corumSizes as $sz)
+                            <li>
+                                <label class="filter-option-label">
+                                    <input type="checkbox" class="form-check-input filter-tag-checkbox corum-filter" data-group="size" value="{{ $sz }}" @checked($selectedSizes->contains($sz))>
+                                    <span class="subcat-label">{{ $sz }}mm</span>
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </aside>
 
         <div class="container-fluid px-3">
             <div class="row onlineStore g-2 pt-3" id="corumGrid">
@@ -747,52 +760,28 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const panel = document.getElementById('offcanvasCorum');
-        const overlay = document.getElementById('corumFilterOverlay');
-        const openBtn = document.getElementById('openCorumFilter');
-        const closeBtn = document.getElementById('closeCorumFilter');
-
-        function openFilter() {
-            if (panel) panel.classList.add('show');
-            if (overlay) overlay.classList.add('show');
-            document.body.classList.add('corum-filter-open');
-        }
-
-        function closeFilter() {
-            if (panel) panel.classList.remove('show');
-            if (overlay) overlay.classList.remove('show');
-            document.body.classList.remove('corum-filter-open');
-        }
-
-        if (openBtn) {
-            openBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                openFilter();
-            });
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeFilter);
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', closeFilter);
-        }
-
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeFilter();
-        });
+        const filterWrap = document.querySelector('.corum-filter-wrap');
+        let activeFilterRequest = null;
 
         function buildUrl() {
             const url = new URL(window.location.href);
 
             url.searchParams.delete('tags');
+            url.searchParams.delete('gender');
+            url.searchParams.delete('series');
+            url.searchParams.delete('size');
             url.searchParams.delete('page');
 
-            const selected = Array.from(document.querySelectorAll('.corum-filter:checked')).map(i => i.value);
-            if (selected.length) {
-                url.searchParams.set('tags', selected.join(','));
-            }
+            ['gender', 'series'].forEach(group => {
+                const selected = Array.from(document.querySelectorAll(`.corum-filter[data-group="${group}"]:checked`))
+                    .map(input => input.value);
+
+                if (selected.length) url.searchParams.set(group, selected.join(','));
+            });
+
+            const selectedSizes = Array.from(document.querySelectorAll('.corum-filter[data-group="size"]:checked'))
+                .map(input => input.value);
+            if (selectedSizes.length) url.searchParams.set('tags', selectedSizes.join(','));
 
             const selectedSort = document.querySelector('#corumSortList li.selected');
             if (selectedSort) {
@@ -809,13 +798,20 @@
         }
 
         function fetchAndRender(url) {
-            window.history.pushState({}, '', url.toString());
+            if (activeFilterRequest) activeFilterRequest.abort();
+            const requestController = new AbortController();
+            activeFilterRequest = requestController;
+            if (filterWrap) filterWrap.classList.add('is-loading');
 
             fetch(url.toString(), {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                cache: 'no-cache'
+                cache: 'no-cache',
+                signal: requestController.signal
             })
-            .then(resp => resp.text())
+            .then(resp => {
+                if (!resp.ok) throw new Error(`Request failed with status ${resp.status}`);
+                return resp.text();
+            })
             .then(html => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
@@ -832,11 +828,19 @@
                     currentFooter.innerHTML = incomingFooter.innerHTML;
                 }
 
+                window.history.pushState({}, '', url.toString());
                 bindLoadMore();
                 updateCounter();
-                closeFilter();
             })
-            .catch(error => console.error('Filter AJAX error:', error));
+            .catch(error => {
+                if (error.name !== 'AbortError') console.error('Filter AJAX error:', error);
+            })
+            .finally(() => {
+                if (activeFilterRequest === requestController) {
+                    activeFilterRequest = null;
+                    if (filterWrap) filterWrap.classList.remove('is-loading');
+                }
+            });
         }
 
         const sortList = document.getElementById('corumSortList');
@@ -868,7 +872,7 @@
             const grid = document.querySelector('#corumGrid');
             if (!grid) return;
 
-            const totalShown = grid.children.length;
+            const totalShown = grid.querySelectorAll('.card.addToCartProductDetailsTop').length;
             const counter = document.querySelector('.corum-footer .products-counter');
 
             if (counter) {
@@ -949,7 +953,9 @@
                     updateCounter();
 
                     const total = parseInt(btn.getAttribute('data-total') || '0', 10);
-                    const shown = currentGrid ? currentGrid.children.length : 0;
+                    const shown = currentGrid
+                        ? currentGrid.querySelectorAll('.card.addToCartProductDetailsTop').length
+                        : 0;
 
                     if (shown >= total || appended === 0) {
                         btn.style.display = 'none';
@@ -968,6 +974,10 @@
 
         bindLoadMore();
         updateCounter();
+
+        window.addEventListener('popstate', function () {
+            window.location.reload();
+        });
     });
 </script>
 @endsection

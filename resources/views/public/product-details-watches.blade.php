@@ -211,7 +211,7 @@
 .product-detail-full-name {
     color: #17120f;
     font-family: 'Argent CF', Georgia, serif !important;
-    font-size: clamp(1.5rem, 2.7vw, 3rem) !important;
+    font-size: clamp(1.5rem, 2vw, 3rem) !important;
     font-weight: 600;
     letter-spacing: .015em;
     line-height: 1.06;
@@ -293,7 +293,7 @@
 }
 
 .product-old-price {
-    /* margin-bottom: 1.35rem; */
+    margin-bottom: .2rem;
     color: #8f867d;
     font-size: .9rem;
     font-weight: 500;
@@ -610,8 +610,17 @@
                             @endif
                         </div> -->
 @php
-    $livePrice    = $product->displayPrice($storeContext);
+    $watchPriceBreakdown = \App\Services\WatchPriceCalculator::calculateBreakdownForProduct($product);
+    $isWatchSale = (bool) data_get($watchPriceBreakdown, 'is_sale', false);
+    $breakdownPrice = $isWatchSale
+        ? data_get($watchPriceBreakdown, 'sale_price')
+        : data_get($watchPriceBreakdown, 'final_price');
+    $livePrice = $breakdownPrice !== null
+        ? (float) $breakdownPrice
+        : $product->displayPrice($storeContext);
     $roundedPrice = round($livePrice, -3);
+    $regularPrice = (float) data_get($watchPriceBreakdown, 'regular_price', $livePrice);
+    $roundedRegularPrice = round($regularPrice, -3);
     $isJewelleryProduct = optional($product->category)->slug !== 'watches';
     $canShowPrice = $storeContext
         ? ($roundedPrice > 0)
@@ -629,9 +638,16 @@
     @endif   -->
 @if($canShowPrice)
 <div class="product-price-panel">
-    
-
+    @if($isWatchSale && $roundedRegularPrice > 0)
+        <div class="product-old-price">
+            <span class="visually-hidden">Regular price:</span>
+            PKR {{ number_format($roundedRegularPrice, 0, '.', ',') }}
+        </div>
+    @endif
     <div class="price-display">
+        @if($isWatchSale)
+            <span class="visually-hidden">Sale price:</span>
+        @endif
         PKR {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
@@ -646,14 +662,9 @@
                         @php
                             $isRingSizeProduct = $product->requiresAsianRingSize();
                             $asianRingSizes = range(4, 27);
-                            $showRingSizeSelector = $isRingSizeProduct && $canShowPrice;
+                            $pricePositive = ($product->price ?? 0) > 0;
                         @endphp
-<<<<<<< HEAD
-
-                        @if($showRingSizeSelector)
-=======
                          @if($isRingSizeProduct)
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
                             <div class="ring-size-panel" id="productSizePanel">
                                 <div class="ring-size-heading">
                                     <label for="productSizeToggle">Select - Asian Ring Size</label>
@@ -779,7 +790,7 @@
                         <div class="scroller-container">
                             @foreach($recommendedProducts as $recProduct)
                                 <div class="scroller-item">
-                                    @include('public.partials.product-card-new', [
+                                    @include('public.partials.product-card-watches', [
                                         'product' => $recProduct,
                                         'storeContext' => $storeContext,
                                     ])
@@ -1754,6 +1765,7 @@
                 font-size: 1.7rem !important;
                 line-height: 1.15;
                 margin: 0;
+                margin-bottom: 50px !important;
             }
 
             #ymlDesktop .mobile-product-scroller {
@@ -1899,6 +1911,8 @@
                 opacity: 1 !important;
             }
 
+
+
             #ymlDesktop .scroller-dots {
                 display: block;
                 margin-top: 14px !important;
@@ -1990,13 +2004,8 @@
         }
 
         // ===== CART FUNCTIONALITY =====
-<<<<<<< HEAD
-        // Ring and supported gold-colour tags require an Asian ring size.
-        const requiresSizeSelection = @json($showRingSizeSelector);
-=======
         // Check if product requires size selection (for gold bracelets, gold rings, and diamond rings)
                 const requiresSizeSelection = @json($isRingSizeProduct);
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 
         const productSizePanel = document.getElementById('productSizePanel');
         const productSizeToggle = document.getElementById('productSizeToggle');
@@ -2825,7 +2834,7 @@
                     id: {{ $product->id }},
                     name: '{{ $product->name }}',
                     slug: '{{ $product->slug }}',
-                    price: {{ $product->price ?? 0 }},
+                    price: {{ $livePrice ?? $product->price ?? 0 }},
                     show_price: {{ $product->show_price ? 'true' : 'false' }},
                     image: '{{ $product->image ? asset($product->image) : asset('default.jpg') }}',
                     images: @json($product->images->map(function($img) { return $img->image; })->toArray()),

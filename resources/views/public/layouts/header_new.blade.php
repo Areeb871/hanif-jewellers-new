@@ -3,6 +3,19 @@
 
 <head>
 <link rel="canonical" href="{{ request()->url() }}">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17511895971"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-17511895971');
+</script>
+
+
+
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)

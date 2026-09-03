@@ -8,6 +8,8 @@
     $displayImage = $hasImages
         ? asset($product->images->first()->image)
         : ($product->image ? asset($product->image) : asset('default.jpg'));
+
+    $watchDisplayPrice = round($product->displayPrice($storeContext ?? false), -3);
 @endphp
  <style>
     /*desktop 2000px*/
@@ -95,6 +97,8 @@
     /* Adjust button spacing - reduced when price is shown */
     .addToCartProductDetailsTop .card-body .discover-more-btn {
         margin-top: 0.5rem;
+        margin-left: auto;
+        margin-right: auto;
         opacity: 0.8;
         transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                     opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -351,41 +355,31 @@
     left: -10px;
     right: -10px;
 }
-/* Card image area */
+
 .card-img {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
 }
 
-/* Make carousel behave like centered container too */
-.card-img .carousel,
-.card-img .carousel-inner,
-.card-img .carousel-item {
-  width: 100%;
-}
-
-/* Center image in each slide */
-.card-img .carousel-item {
-  text-align: center;
-}
-
-/* The link becomes a flex box to center image perfectly */
 .product-image-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Image sizing + center */
 .product-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
+
+
+
 .sale-badge{
     position:absolute;
     top:12px;
@@ -433,11 +427,11 @@
         padding-bottom: 0 !important;
     }
 
-    .addToCartProductDetailsTop .card-img .carousel-inner,
+    /* .addToCartProductDetailsTop .card-img .carousel-inner,
     .addToCartProductDetailsTop .card-img .carousel-item,
     .addToCartProductDetailsTop .card-img .product-image-link {
         height: clamp(145px, 42vw, 190px);
-    }
+    } */
 
     .addToCartProductDetailsTop .card-img .carousel {
         height: auto !important;
@@ -468,13 +462,13 @@
         flex: 0 0 24px;
     }
 
-    .addToCartProductDetailsTop .card-body {
-        height: auto !important;
-        min-height: 0 !important;
-        overflow: visible !important;
-        justify-content: flex-start !important;
-        padding: 10px 6px 12px !important;
-    }
+   .addToCartProductDetailsTop .card-body {
+    min-height: 120px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 10px 6px 12px !important;
+}
 
     .addToCartProductDetailsTop .card-body .product-name-fixed,
     .addToCartProductDetailsTop .card-body.no-price .product-name-fixed,
@@ -514,7 +508,7 @@
 
     .addToCartProductDetailsTop .card-body .addToCartProductDetails.discover-more-btn,
     .addToCartProductDetailsTop .card-body.no-price .addToCartProductDetails.discover-more-btn {
-        margin: 0.6rem auto 0 !important;
+        margin: auto auto 0 !important;
         align-self: center !important;
         width: auto !important;
         min-width: 94px;
@@ -536,6 +530,58 @@
         transform: translateY(0) !important;
     }
 }
+
+
+
+
+
+
+
+@media (max-width: 767.98px) {
+    .addToCartProductDetailsTop .product-name-fixed {
+        min-height: 32px;
+    }
+
+    .addToCartProductDetailsTop .card-body .card-text {
+        min-height: 17px;
+    }
+
+    .addToCartProductDetailsTop .discover-more-btn {
+        margin-top: auto !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* Keep product details and button aligned */
+.addToCartProductDetailsTop .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .addToCartProductDetailsTop .product-name-fixed {
+    min-height: 48px;
+} */
+
+/* .addToCartProductDetailsTop .card-body .card-text {
+    min-height: 24px;
+} */
+
+/* .addToCartProductDetailsTop .discover-more-btn {
+    margin-top: auto !important;
+} */
+
+
+
+    
+
+
 </style>
 <div class="card addToCartProductDetailsTop h-100">
     <div class="card-img">
@@ -568,7 +614,7 @@
                 </div>
 
                 {{-- ✅ UNIQUE INDICATORS --}}
-                <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
+                <!-- <ul class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"
                     id="{{ $indicatorId }}">
 
                     @foreach ($product->images as $imgIndex => $img)
@@ -581,7 +627,7 @@
                             </button>
                         </li>
                     @endforeach
-                </ul>
+                </ul> -->
 
                 {{-- ✅ controls (REMOVE pe-none so clicks work) --}}
                 <button class="carousel-control-prev" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="prev">
@@ -611,7 +657,7 @@
 
     </div>
 
-    <div class="card-body text-center {{ empty($product->price) || $product->price <= 0 || empty($product->show_price) ? 'no-price' : '' }}"
+    <div class="card-body text-center {{ $watchDisplayPrice <= 0 || empty($product->show_price) ? 'no-price' : '' }}"
          style="background-color: #F6F4F2;">
 
         <h5 class="card-title product-name-fixed pb-5 pb-md-0">
@@ -625,9 +671,9 @@
         </h5>
        
 
-        @if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
+        @if($watchDisplayPrice > 0 && !empty($product->show_price))
             <p class="card-text">
-                PKR {{ number_format($product->price, 0, '.', ',') }}
+                PKR {{ number_format($watchDisplayPrice, 0, '.', ',') }}
             </p>
         @endif
 

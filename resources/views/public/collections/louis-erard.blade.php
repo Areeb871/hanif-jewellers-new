@@ -885,6 +885,15 @@ padding:2px 15px 0;
                     @endforeach
                 </ul>
             </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('louisErardSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="louisErardSizeList">
+                    @php $sizes = ['39','40','42','42.5','43']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox louis-erard-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -909,6 +918,7 @@ padding:2px 15px 0;
             url.searchParams.delete('tags');
             url.searchParams.delete('gender');
             url.searchParams.delete('series');
+            url.searchParams.delete('size');
             const selected = Array.from(document.querySelectorAll('.louis-erard-filter:checked')).map(i=>i.value);
             if (selected.length) url.searchParams.set('tags', selected.join(',')); else url.searchParams.delete('tags');
             url.searchParams.set('page', '1');

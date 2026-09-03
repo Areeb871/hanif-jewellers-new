@@ -131,6 +131,10 @@
                 min-width:320px;
                 max-width:380px;
             }
+            #offcanvasBovet{
+                /* Keep the drawer above the shared backdrop (z-index: 10070). */
+                z-index:10080 !important;
+            }
             .offcanvas-modern .offcanvas-header{
                 border-bottom:1px solid #fff;
                 padding-bottom:0.5rem;
@@ -503,7 +507,7 @@
     outline:none !important;
     box-shadow:none !important;
     background:transparent !important;
-    padding:6px 8px;
+    padding:6px 18px;
     font-size:12px;
     display:flex;
     align-items:center;
@@ -934,7 +938,7 @@ document.addEventListener("DOMContentLoaded", function () {
          tabindex="-1"
          id="offcanvasBovet"
          aria-labelledby="offcanvasBovetLabel"
-         data-bs-backdrop="false"
+         data-bs-backdrop="true"
          data-bs-scroll="true">
         <div class="offcanvas-header">
             <span class="offcanvas-title" id="offcanvasBovetLabel">SORT & FILTER</span>
@@ -950,16 +954,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 <ul class="sort-list" id="bovetSortList">
                     @php $currentSort = request('sort'); @endphp
 
-                    <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
+                    <!-- <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
                         <span class="diamond">{{ !$currentSort ? '◆' : '◇' }}</span> Best Selling
-                    </li>
+                    </li> -->
                     <li data-value="az" class="{{ $currentSort=='az' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='az' ? '◆' : '◇' }}</span> Alphabetically, A-Z
                     </li>
                     <li data-value="za" class="{{ $currentSort=='za' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='za' ? '◆' : '◇' }}</span> Alphabetically, Z-A
                     </li>
-                    <li data-value="price_low_high" class="{{ $currentSort=='price_low_high' ? 'selected' : '' }}">
+                    <!-- <li data-value="price_low_high" class="{{ $currentSort=='price_low_high' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='price_low_high' ? '◆' : '◇' }}</span> Price, low to high
                     </li>
                     <li data-value="price_high_low" class="{{ $currentSort=='price_high_low' ? 'selected' : '' }}">
@@ -970,7 +974,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </li>
                     <li data-value="old_new" class="{{ $currentSort=='old_new' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='old_new' ? '◆' : '◇' }}</span> Date, old to new
-                    </li>
+                    </li> -->
                 </ul>
             </div>
 
@@ -1000,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
 
                 <ul class="category-list collapsible" id="bovetSeriesList">
-                    @php $series = ['fleurier','dimier','recital','amadeo','miss-audrey','the-art-of-miniature-painting','monsieur']; @endphp
+                    @php $series = ['dimier','recital','miss-audrey','monsieur','19-Thirty', 'Virtuoso']; @endphp
                     @foreach($series as $s)
                         <li>
                             <input type="checkbox" class="form-check-input filter-tag-checkbox bovet-filter" data-group="series" value="{{ $s }}"

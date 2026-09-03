@@ -284,6 +284,11 @@
                                                             <div class="text-muted fs-7">For diamond products only (used in auto pricing).</div>
                                                         </div>
                                                         <div class="col-md-6">
+                                                            <label class="form-label">Watch Rate</label>
+                                                            <input type="number" name="watch_rate" class="form-control" placeholder="Watch price in CHF" value="{{ old('watch_rate', $product->watch_rate) }}" min="0" step="0.01" />
+                                                            <div class="text-muted fs-7">For watch products only. CHF, discount and GST are taken from Watch Pricing settings.</div>
+                                                        </div>
+                                                        <div class="col-md-6">
                                                             <label class="form-label">Gold Weight (grams)</label>
                                                             <input type="number" name="gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('gold_weight', $product->gold_weight) }}" min="0" step="0.001" />
                                                             <div class="text-muted fs-7">Weight in grams. Used in auto price calculation (gold &amp; diamond).</div>

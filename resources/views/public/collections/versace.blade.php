@@ -1,6 +1,18 @@
 @extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+<style>
+@media (max-width: 767px) {
+    .gehnawaSection {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 0;
+        z-index: 0 !important;
+    }
+}
+</style>
     @if(isset($versaceSubcategory) && $versaceSubcategory && $versaceSubcategory->banner_url)
         <section class="gehnawaSection p-0 position-relative">
             {{-- Desktop Video --}}
@@ -43,16 +55,16 @@
                     muted 
                     playsinline 
                     class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    style="width:100%; height:auto; object-fit:contain; display:block;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="video-fallback-mobile d-md-none" style="display:none; width:100%; height:auto; background-image:url('{{ asset($mobileVideo) }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
             @else
                 {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <img src="{{ asset($mobileVideo) }}" alt="{{ $versaceSubcategory->name ?? 'Banner' }}" class="d-block d-md-none" style="width:100%; height:auto; display:block; object-fit:contain;">
             @endif
         </section>
     @endif
@@ -377,26 +389,21 @@
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('versaceSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="versaceSizeList">
-                    @php $sizes = ['25','27','28','30','32','34','35','36','37','38','40','41','42','43','44','45']; @endphp
-                    @foreach($sizes as $sz)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                <div class="filter-section-title" onclick="toggleCategory('versaceSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="versaceSeriesList">
+                    @php $series = ['medusa','greca']; @endphp
+                    @foreach($series as $s)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace('-', ' ', $s)) }}</span></li>
                     @endforeach
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('versaceMovementList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Movement Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="versaceMovementList">
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="movement" value="quartz" {{ $selectedTags->contains('quartz') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Quartz</span></li>
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="movement" value="automatic" {{ $selectedTags->contains('automatic') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Automatic</span></li>
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="movement" value="chronograph" {{ $selectedTags->contains('chronograph') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Chronograph</span></li>
-                </ul>
-            </div>
-            <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('versaceCaseTypeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="versaceCaseTypeList">
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="caseType" value="steel" {{ $selectedTags->contains('steel') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Steel</span></li>
+                <div class="filter-section-title" onclick="toggleCategory('versaceSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="versaceSizeList">
+                    @php $sizes = ['27','28','30','32','34','35','36','38','40','41','42','43','44','45']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox versace-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
                 </ul>
             </div>
         </div>

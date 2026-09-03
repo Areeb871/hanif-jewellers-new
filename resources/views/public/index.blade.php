@@ -338,7 +338,10 @@
   transition: transform .45s ease;
 }
 
+<<<<<<< HEAD
 /* Logo ALWAYS inside box */
+=======
+>>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 .lux-logo{
   max-width: 100%;
   max-height: 100%;
@@ -347,7 +350,6 @@
   object-fit: contain;
   display: block;
 }
-
 /* Border animation (safe) */
 .lux-card::before,
 .lux-card::after{
@@ -384,7 +386,10 @@
 .lux-card:hover::before{ transform: scaleX(1); }
 .lux-card:hover::after{ transform: scaleY(1); }
 
+<<<<<<< HEAD
 /* Mobile: overlay stays visible so logo + tagline can be read without hover */
+=======
+>>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 @media (max-width: 767px){
   .lux-hover{ opacity: .85; }
   .lux-box{
@@ -420,6 +425,13 @@ section.watch .mobile-product-scroller::-webkit-scrollbar {
 section.watch .scroller-item {
     scroll-snap-align: none;
 }
+
+/*section.watch .scroller-container {*/
+/*    display: flex;*/
+/*    width: max-content;*/
+/*    padding-inline: 16px;*/
+/*    gap: 10px;*/
+/*}*/
 
 section.watch .scroller-container {
     display: flex;
@@ -736,6 +748,11 @@ section.watch .card:hover {
     }
 }
 
+/*.watch-brands-section {*/
+/*    padding: 0;*/
+/*}*/
+
+
 .watch-brands-section {
     padding: 0 0 2rem;
 }
@@ -757,6 +774,11 @@ section.watch .card:hover {
         padding-top: calc(2.5rem + 0.5rem);
     }
 }
+
+
+
+
+
 
 #carouselExampleRide .carousel-control-prev,
 #carouselExampleRide .carousel-control-next {
@@ -792,25 +814,26 @@ culminating in a true resemblance of experience pure art.</div>
 </div>
 </section> -->
 
-<section class="custom-banner d-none d-md-block position-relative">
-    <img
-        src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
-        alt="Franck Muller"
-        class="custom-banner-video"
-        fetchpriority="high"
-    >
-            <!--<a href="/highend-jewellery" class="custom-banner-btn">DISCOVER MORE</a>-->
-</section>
-
-
-
 <!--<section class="custom-banner d-none d-md-block position-relative">-->
-<!--    <video class="custom-banner-video" autoplay muted loop playsinline>-->
-<!--        <source src="{{ asset('assets/f_assets/image/nagar/main.mp4') }}" type="video/mp4">-->
-<!--        Your browser does not support the video tag.-->
-<!--    </video>-->
-<!--            <a href="/collections/nagar" class="custom-banner-btn">DISCOVER MORE</a>-->
+<!-- <img-->
+<!--        src="{{ asset('assets/f_assets/image/pak-banner.jpeg') }}"-->
+<!--        alt="Jeweller of the Nation"-->
+<!--        class="custom-banner-video"-->
+<!--        width="3840"-->
+<!--        height="2160"-->
+<!--        fetchpriority="high"-->
+<!--    >-->
 <!--</section>-->
+
+
+
+<section class="custom-banner d-none d-md-block position-relative">
+    <video class="custom-banner-video" autoplay muted loop playsinline>
+        <source src="{{ asset('assets/f_assets/image/miras/miras_desktop.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+            <a href="/collections/miras" class="custom-banner-btn">DISCOVER MORE</a>
+</section>
 
 <!-- <section class="custom-banner d-none d-md-block position-relative">
      @php
@@ -846,12 +869,18 @@ towering peaks</div>
 </section> -->
 <section class="d-block d-md-none position-relative">
   <div class="mobileStackImgWrap">
-  <img
-    class="mobileStackVideo"
-    src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"
-    alt="Franck Muller"
-    fetchpriority="high"
-  >
+  <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
+    <source src="{{ asset('assets/f_assets/image/miras/miras_mob.webm') }}" type="video/mp4">
+  </video>
+  
+  
+  
+  <!-- <img-->
+  <!--  class="mobileStackVideo"-->
+  <!--  src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"-->
+  <!--  alt="Franck Muller"-->
+  <!--  fetchpriority="high"-->
+  <!-->-->
  <!-- <img
   class="mobileStackVideo"
   src="{{ asset('assets/f_assets/image/misterio_data/misterio_mobile.jpeg') }}"
@@ -860,7 +889,7 @@ towering peaks</div>
 /> -->
 
   </div>
-<!--<a href="/highend-jewellery" class="custom-banner-btn-new">DISCOVER MORE</a>-->
+<a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
@@ -876,7 +905,7 @@ towering peaks</div>
                 <div class="scroller-container">
                     @foreach ($products as $key => $product)
                         <div class="scroller-item">
-                            @include('public.partials.product-card-new', [
+                                @include('public.partials.product-card-new', [
                                 'product' => $product,
                                 'storeContext' => strtolower(optional($product->category)->slug ?? '') !== 'watches',
                             ])
@@ -1177,6 +1206,7 @@ FARAH KHAN
     text-decoration: none;
     background: #fff;
     box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 .home-brands .brand-item::before,
@@ -1203,11 +1233,13 @@ FARAH KHAN
     transform-origin: center;
 }
 
-.home-brands .brand-item:hover::before {
+.home-brands .brand-item:hover::before,
+.home-brands .brand-item.is-touch-active::before {
     transform: scaleX(1);
 }
 
-.home-brands .brand-item:hover::after {
+.home-brands .brand-item:hover::after,
+.home-brands .brand-item.is-touch-active::after {
     transform: scaleY(1);
 }
 
@@ -1224,7 +1256,8 @@ FARAH KHAN
     display: block;
 }
 
-.home-brands .brand-item:hover img {
+.home-brands .brand-item:hover img,
+.home-brands .brand-item.is-touch-active img {
     transform: scale(1.06);
 }
 
@@ -1307,18 +1340,70 @@ $brands = [
 </div>
 
 <script>
-document.querySelectorAll('.home-brands .brand-item img').forEach(function(img) {
-    const original = img.src;
-    const hover = img.dataset.hover;
-    if (hover) { const pre = new Image(); pre.src = hover; }
+document.addEventListener('DOMContentLoaded', () => {
+    const selector = '.home-brands .brand-item';
+    const items = document.querySelectorAll(selector);
+    let gesture = null;
 
-    img.addEventListener('mouseenter', function() {
-        if (hover) img.src = hover;
+    const findItem = target => target.closest(selector);
+
+    function activate(activeItem) {
+        items.forEach(item => {
+            const image = item.querySelector('img[data-hover]');
+            const active = item === activeItem;
+            item.classList.toggle('is-touch-active', active);
+            if (image) image.src = image.dataset[active ? 'hover' : 'original'];
+        });
+    }
+
+    document.querySelectorAll('.home-brands .brand-item img[data-hover]').forEach(image => {
+        const item = image.closest('.brand-item');
+        image.dataset.original = image.src;
+        if (image.dataset.hover) new Image().src = image.dataset.hover;
+        image.addEventListener('mouseenter', () => image.src = image.dataset.hover);
+        image.addEventListener('mouseleave', () => {
+            if (!item.classList.contains('is-touch-active')) image.src = image.dataset.original;
+        });
     });
 
-    img.addEventListener('mouseleave', function() {
-        img.src = original;
-    });
+    document.addEventListener('touchstart', e => {
+        const point = e.touches[0];
+        const item = findItem(e.target);
+        if (!point) return;
+        gesture = {
+            item,
+            wasActive: !!(item && item.classList.contains('is-touch-active')),
+            x: point.clientX,
+            y: point.clientY,
+            moved: false
+        };
+        activate(item);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+        if (gesture && e.touches[0] && (Math.abs(e.touches[0].clientX - gesture.x) > 10 || Math.abs(e.touches[0].clientY - gesture.y) > 10)) {
+            gesture.moved = true;
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+        if (gesture && e.changedTouches[0] && (Math.abs(e.changedTouches[0].clientX - gesture.x) > 10 || Math.abs(e.changedTouches[0].clientY - gesture.y) > 10)) {
+            gesture.moved = true;
+        }
+        const g = gesture;
+        setTimeout(() => { if (gesture === g) gesture = null; }, 1500);
+    }, { passive: true });
+
+    document.addEventListener('click', e => {
+        if (!gesture || e.detail === 0) return;
+        const last = gesture;
+        gesture = null;
+        if (!last.item || findItem(e.target) !== last.item) return;
+        if (last.moved || !last.wasActive) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
 });
 </script>
 

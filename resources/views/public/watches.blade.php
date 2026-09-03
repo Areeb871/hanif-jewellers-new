@@ -44,6 +44,7 @@ section{
   overflow: hidden;
   background: #000;
   width: 100%;
+  touch-action: manipulation;
  
 }
 
@@ -133,31 +134,40 @@ section{
   transition: transform .45s ease .15s, opacity .2s ease;
 }
 
-/* Hover */
-.lux-card:hover .lux-hover{ opacity: .85; }
-.lux-card:hover .lux-box{ transform: translate(-50%, -50%) scale(1); }
-.lux-card:hover .lux-img{ transform: scale(1.05); }
+/* Desktop hover + mobile touch */
+.lux-card:hover .lux-hover,
+.lux-card.is-touch-active .lux-hover{ opacity: .85; }
+.lux-card:hover .lux-box,
+.lux-card.is-touch-active .lux-box{ transform: translate(-50%, -50%) scale(1); }
+.lux-card:hover .lux-img,
+.lux-card.is-touch-active .lux-img{ transform: scale(1.05); }
 .lux-card:hover::before,
-.lux-card:hover::after{ opacity: 1; }
-.lux-card:hover::before{ transform: scaleX(1); }
-.lux-card:hover::after{ transform: scaleY(1); }
+.lux-card:hover::after,
+.lux-card.is-touch-active::before,
+.lux-card.is-touch-active::after{ opacity: 1; }
+.lux-card:hover::before,
+.lux-card.is-touch-active::before{ transform: scaleX(1); }
+.lux-card:hover::after,
+.lux-card.is-touch-active::after{ transform: scaleY(1); }
 
 /* Mobile */
 @media (max-width: 767px){
   .lux-box{ width: 140px; height: 140px; }
   .lux-card::before, .lux-card::after{ inset: 10px; }
 
-  /* Artya uses a wide, mobile-specific image. */
+  /* Artya uses a wide image, so its logo panel follows the card width. */
   .lux-card--artya .lux-ratio{ padding-top: 47.2727%; }
   .lux-card--artya .lux-box{
-    inset: 24px;
-    width: auto;
-    height: auto;
+    top: 3px;
+    left: 3px;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
     transform: scale(.9);
   }
-  .lux-card--artya:hover .lux-box{ transform: scale(1); }
+  .lux-card--artya:hover .lux-box,
+  .lux-card--artya.is-touch-active .lux-box{ transform: scale(1); }
   .lux-card--artya::before,
-  .lux-card--artya::after{ inset: 6px; }
+  .lux-card--artya::after{ inset: 8px; }
 }
 
 
@@ -602,7 +612,7 @@ section{
 }
 .triangle-text {
     padding-top: 48px;
-    padding-bottom: 24px;
+    padding-bottom: 48px;
 }
 .ehed-main-title-perrelet {
     margin-top: 0;
@@ -646,29 +656,29 @@ section{
         height: auto !important;
         object-fit: contain !important;
         display: block;
-        margin-top:35px;
+        margin-top:0px;
     }
 }
 </style>
 @section('content')
-<section class="watches-video-hero d-none d-md-block" data-header-hero>
+<!-- <section class="watches-video-hero d-none d-md-block" data-header-hero>
         <video autoplay loop muted playsinline>
-            <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
+            <source src="{{ asset('assets/f_assets/image/watches/hero.webm') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>
+    </section> -->
     <!-- Mobile Video Banner -->
-    <section class="watches-video-hero d-md-none" data-header-hero>
+    <!-- <section class="watches-video-hero d-md-none" data-header-hero>
         <video autoplay loop muted playsinline>
-            <source src="{{ asset('assets/f_assets/image/watches/FMPK-Mob-Banner.mp4') }}" type="video/mp4">
+            <source src="{{ asset('assets/f_assets/image/watches/hero-mob.webm') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </section>
+    </section> -->
 
 
 
     <!-- Hero Section Slider -->
-<!-- <section class="watches-desktop-hero d-none d-md-block"
+<section class="watches-desktop-hero d-none d-md-block"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarousel"
@@ -747,7 +757,7 @@ section{
         </div>
 
     </div>
-</section> -->
+</section>
 
 
 
@@ -769,7 +779,7 @@ section{
 </section> -->
 
 <!-- MOBILE HERO Slider-->
-<!-- <section class="sectionOneMobile d-block d-md-none"
+<section class="sectionOneMobile d-block d-md-none"
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarouselMobile"
@@ -814,7 +824,7 @@ section{
 
         </div>
     </div>
-</section> -->
+</section>
 
 <section class="py-5 luxury-watch-section">
     <p class="text-center py-3 px-3 fs-6">
@@ -900,6 +910,98 @@ section{
     </div>
 </section>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const selector = '.luxury-watch-section .lux-card, .brand-item';
+    const items = document.querySelectorAll(selector);
+    let gesture = null;
+
+    const findItem = target => target.closest(selector);
+
+    function activate(activeItem) {
+        items.forEach(item => {
+            const image = item.querySelector('img[data-hover]');
+            const active = item === activeItem;
+
+            item.classList.toggle('is-touch-active', active);
+            if (image) image.src = image.dataset[active ? 'hover' : 'original'];
+        });
+    }
+
+    document.querySelectorAll('.brand-item img[data-hover]').forEach(image => {
+        const item = image.closest('.brand-item');
+
+        image.dataset.original = image.src;
+        image.addEventListener('mouseenter', () => image.src = image.dataset.hover);
+        image.addEventListener('mouseleave', () => {
+            if (!item.classList.contains('is-touch-active')) {
+                image.src = image.dataset.original;
+            }
+        });
+    });
+
+    function trackMove(point) {
+        if (!gesture || !point) return;
+
+        if (
+            Math.abs(point.clientX - gesture.x) > 10 ||
+            Math.abs(point.clientY - gesture.y) > 10
+        ) gesture.moved = true;
+    }
+
+    function expireGesture() {
+        const finishedGesture = gesture;
+        setTimeout(() => {
+            if (gesture === finishedGesture) gesture = null;
+        }, 1500);
+    }
+
+    document.addEventListener('touchstart', event => {
+        const point = event.touches[0];
+        const item = findItem(event.target);
+        if (!point) return;
+
+        gesture = {
+            item,
+            wasActive: !!(item && item.classList.contains('is-touch-active')),
+            x: point.clientX,
+            y: point.clientY,
+            moved: false
+        };
+
+        activate(item);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', event => {
+        trackMove(event.touches[0]);
+    }, { passive: true });
+
+    document.addEventListener('touchend', event => {
+        trackMove(event.changedTouches[0]);
+        expireGesture();
+    }, { passive: true });
+
+    document.addEventListener('touchcancel', () => {
+        if (gesture) gesture.moved = true;
+        expireGesture();
+    }, { passive: true });
+
+    document.addEventListener('click', event => {
+        if (!gesture || event.detail === 0) return;
+
+        const lastGesture = gesture;
+        gesture = null;
+
+        if (!lastGesture.item || findItem(event.target) !== lastGesture.item) return;
+
+        if (lastGesture.moved || !lastGesture.wasActive) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }, true);
+});
+</script>
+
 <section class="pb-5">
 <h2 class="explore-brands-title text-center pt-2 pb-2 mb-0">EXPLORE OUR BRANDS</h2>
 
@@ -923,6 +1025,7 @@ justify-content:center;
 align-items:center;
 position:relative;
 padding:10px;
+touch-action:manipulation;
 }
 
 /* animated border container */
@@ -952,12 +1055,14 @@ transform:scaleY(0);
 transform-origin:top;
 }
 
-/* hover animation */
-.brand-item:hover::before{
+/* hover + touch animation */
+.brand-item:hover::before,
+.brand-item.is-touch-active::before{
 transform:scaleX(1);
 }
 
-.brand-item:hover::after{
+.brand-item:hover::after,
+.brand-item.is-touch-active::after{
 transform:scaleY(1);
 }
 
@@ -972,9 +1077,11 @@ padding:25px;
 transition:all .3s ease;
 }
 
-.brand-item img:hover{
+.brand-item img:hover,
+.brand-item.is-touch-active img{
 transform:scale(1.06);
 }
+
 /* tablet */
 @media(max-width:992px){
 .brand-item{
@@ -1094,8 +1201,8 @@ The Récital 30 focuses on the innovative roller system from the award winning R
 </section>
 <section class="ehed-hero-section reverse reveal reveal-right">
 @php
-    $desktopBanner = 'assets/f_assets/image/watches/fm.jpg';
-    $mobileBanner  = 'assets/f_assets/image/watches/fm.jpg';
+    $desktopBanner = 'assets/f_assets/image/watches/Yatch-Banner.png';
+    $mobileBanner  = 'assets/f_assets/image/watches/Yatch-Banner.png';
 
     $desktopIsVideo = Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
     $mobileIsVideo  = Str::endsWith(strtolower($mobileBanner),  ['.mp4', '.webm', '.ogg']);
@@ -1112,9 +1219,7 @@ The Récital 30 focuses on the innovative roller system from the award winning R
         <div class="ehed-category-label">Featuring Wasim Akram</div>
         <h1 class="ehed-main-title">Franck Muller</h1>
         <p class="ehed-body-text hero__description font-family--serif">
-           Time respects only the extraordinary.
-Wasim Akram for Franck Muller —
-an enduring symbol of power, discipline, and timeless elegance.
+          Against the breathtaking view of Lake Geneva and the iconic Franck Muller geneve Watchland Manufacture, the legendary Wasim Akram embraced the spirit of the Vanguard Yachting Mariner. Inspired by life at sea, its bold architecture and presence embody the freedom to explore and the artistry of Swiss Haute Horlogerie.
         </p>
     </div>
 
@@ -1240,22 +1345,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ride: 'carousel'
   });
 });
-</script>
-<script>
-document.querySelectorAll('.brand-item img').forEach(img => {
-
-const original = img.src
-const hover = img.dataset.hover
-
-img.addEventListener('mouseenter',()=>{
-img.src = hover
-})
-
-img.addEventListener('mouseleave',()=>{
-img.src = original
-})
-
-})
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {

@@ -416,9 +416,18 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('artyaSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="artyaSeriesList">
-                    @php $series = ['purity','complications','butterfly','russian-roulette']; @endphp
+                @php $series = ['purity','Complexity','aqua','russian-roulette']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox artya-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('artyaSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="artyaSizeList">
+                         @php $sizes = ['40','41','42','43','44']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox artya-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach
                 </ul>
             </div>
@@ -446,6 +455,7 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
             url.searchParams.delete('tags');
             url.searchParams.delete('gender');
             url.searchParams.delete('series');
+            url.searchParams.delete('size');
             const selected = Array.from(document.querySelectorAll('.artya-filter:checked')).map(i=>i.value);
             if (selected.length) url.searchParams.set('tags', selected.join(',')); else url.searchParams.delete('tags');
             url.searchParams.set('page', '1');

@@ -17,7 +17,7 @@
     flex-direction:column;
     align-items:center;
     gap:clamp(0.25rem, 0.75vw, 0.5rem);
-    /* padding:clamp(0.35rem, 1vw, 0.75rem) 14px; */
+    /*padding:clamp(0.35rem, 1vw, 0.75rem) 14px;*/
 }
 
 .armand-page .armand-filter-header .brand-logo-wrapper {
@@ -54,6 +54,15 @@
         padding-right:12px;
         padding-left:12px;
     }
+
+    .armand-page .gehnawaSection {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 0;
+        z-index: 0 !important;
+    }
 }
 </style>
 
@@ -84,7 +93,7 @@
             {{-- Mobile Video (Dynamic based on subcategory) --}}
             @php
                 $mobileVideo = null;
-               $mobileVideoPath = 'assets/f_assets/image/watches mobile view/armond_niclet_mobile.mp4'; // Corrected path without assets/ prefix
+               $mobileVideoPath = 'assets/f_assets/image/watches mobile view/armand_new_mobile.jpeg'; // Corrected path without assets/ prefix
 
                 if ($armandNicoletSubcategory->slug === 'armand-nicolet') {
                     $mobileVideo = $mobileVideoPath;
@@ -101,16 +110,16 @@
                     muted 
                     playsinline 
                     class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    style="width:100%; height:auto; object-fit:contain;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
                 {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="video-fallback-mobile d-md-none" style="display:none; width:100%; height:auto; background-image:url('{{ asset($mobileVideo) }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
             @else
                 {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <img src="{{ asset($mobileVideo) }}" alt="{{ $armandNicoletSubcategory->name ?? 'Banner' }}" class="d-block d-md-none" style="width:100%; height:auto; display:block; object-fit:contain;">
             @endif
         </section>
     @endif
@@ -359,9 +368,18 @@
                 </ul>
             </div>
             <div class="mt-3">
+                <div class="filter-section-title" onclick="toggleCategory('armandNicoletSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="armandNicoletSeriesList">
+                @php $series = ['JS9-41','M02','J09-3','L15']; @endphp
+                    @foreach($series as $s)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox armand-nicolet-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ strtoupper($s) }}</span></li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('armandNicoletSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="armandNicoletSizeList">
-                    @php $sizes = ['40','41','42','43','44','34','38.5']; @endphp
+                    @php $sizes = ['41','42','43','44','34','38.5']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox armand-nicolet-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach
@@ -390,6 +408,7 @@
             // Build unified tags param to match server-side filtering
             url.searchParams.delete('tags');
             url.searchParams.delete('gender');
+            url.searchParams.delete('series');
             url.searchParams.delete('size');
             const selected = Array.from(document.querySelectorAll('.armand-nicolet-filter:checked')).map(i=>i.value);
             if (selected.length) url.searchParams.set('tags', selected.join(',')); else url.searchParams.delete('tags');

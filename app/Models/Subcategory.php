@@ -17,6 +17,12 @@ class Subcategory extends Model
     {
         return $this->hasMany(Products::class);
     }
+
+    public function watchPricingSetting()
+    {
+        return $this->hasOne(WatchPricingSetting::class, 'subcategory_id');
+    }
+
     public function images() {
         return $this->hasMany(SubcatImages::class, 'sub_category_id');
     }

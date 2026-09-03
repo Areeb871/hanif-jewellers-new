@@ -358,23 +358,6 @@
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('eposSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="eposSizeList">
-                    @php $sizes = ['32','41','41.5','45']; @endphp
-                    @foreach($sizes as $sz)
-                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
-                    @endforeach
-                </ul>
-            </div>
-            <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('eposMovementList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Movement Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="eposMovementList">
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="movement" value="quartz" {{ $selectedTags->contains('quartz') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Quartz</span></li>
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="movement" value="automatic" {{ $selectedTags->contains('automatic') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Automatic</span></li>
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="movement" value="chronograph" {{ $selectedTags->contains('chronograph') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Chronograph</span></li>
-                </ul>
-            </div>
-            <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('eposSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="eposSeriesList">
                     <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="series" value="timeless" {{ $selectedTags->contains('timeless') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Timeless</span></li>
@@ -383,10 +366,12 @@
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('eposCaseTypeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Type <span class="category-toggle">+</span></div>
-                <ul class="category-list collapsible" id="eposCaseTypeList">
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="caseType" value="steel" {{ $selectedTags->contains('steel') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Steel</span></li>
-                    <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="caseType" value="titanium" {{ $selectedTags->contains('titanium') ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">Titanium</span></li>
+                <div class="filter-section-title" onclick="toggleCategory('eposSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
+                <ul class="category-list collapsible" id="eposSizeList">
+                    @php $sizes = ['32','41','41.5']; @endphp
+                    @foreach($sizes as $sz)
+                        <li><input type="checkbox" class="form-check-input filter-tag-checkbox epos-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
+                    @endforeach
                 </ul>
             </div>
         </div>

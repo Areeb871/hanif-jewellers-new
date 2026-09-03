@@ -66,8 +66,8 @@ img{
         $desktopBanner = $louisMoinetSubcategory->banner_url;
         $desktopIsVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
 
-        /* mobile banner dynamic */
-        $mobileBanner = $desktopBanner;
+        /* Dedicated mobile banner */
+        $mobileBanner = 'assets/f_assets/image/watches mobile view/LM-mobile-view.mp4';
 
 
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);
@@ -491,16 +491,16 @@ img{
                 </div>
                 <ul class="sort-list show" id="louisMoinetSortList">
                     @php $currentSort = request('sort'); @endphp
-                    <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
+                    <!-- <li data-value="" class="{{ !$currentSort ? 'selected' : '' }}">
                         <span class="diamond">{{ !$currentSort ? '◆' : '◇' }}</span> Best Selling
-                    </li>
+                    </li> -->
                     <li data-value="az" class="{{ $currentSort=='az' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='az' ? '◆' : '◇' }}</span> Alphabetically, A-Z
                     </li>
                     <li data-value="za" class="{{ $currentSort=='za' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='za' ? '◆' : '◇' }}</span> Alphabetically, Z-A
                     </li>
-                    <li data-value="price_low_high" class="{{ $currentSort=='price_low_high' ? 'selected' : '' }}">
+                    <!-- <li data-value="price_low_high" class="{{ $currentSort=='price_low_high' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='price_low_high' ? '◆' : '◇' }}</span> Price, low to high
                     </li>
                     <li data-value="price_high_low" class="{{ $currentSort=='price_high_low' ? 'selected' : '' }}">
@@ -511,7 +511,7 @@ img{
                     </li>
                     <li data-value="old_new" class="{{ $currentSort=='old_new' ? 'selected' : '' }}">
                         <span class="diamond">{{ $currentSort=='old_new' ? '◆' : '◇' }}</span> Date, old to new
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div>
@@ -523,9 +523,9 @@ img{
                 </ul>
             </div>
             <div class="mt-3">
-                <div class="filter-section-title" onclick="toggleCategory('louisMoinetCollectionList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Collection <span class="category-toggle">+</span></div>
+                <div class="filter-section-title" onclick="toggleCategory('louisMoinetCollectionList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="louisMoinetCollectionList">
-                    @php $collections = ['astronef','memoris-spirit','time-to-race','tempograph-spirit','super-moon','mars-mission']; @endphp
+                    @php $collections = ['memoris','time-to-race','tempograph','super-moon','mars-mission', 'metropolis', 'tourbillon', 'allende-meteorite', 'derrick', 'mars-red', 'geograph', 'skylink']; @endphp
                     @foreach($collections as $c)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox louis-moinet-filter" data-group="collection" value="{{ $c }}" {{ $selectedTags->contains($c) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace('-', ' ', $c)) }}</span></li>
                     @endforeach
@@ -534,7 +534,7 @@ img{
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('louisMoinetSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="louisMoinetSizeList">
-                    @php $sizes = ['36','40','42','43','43.30','44','44.00','45','46.30','48.30']; @endphp
+                   @php $sizes = ['40','40.6 ','43','44','45']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox louis-moinet-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach
