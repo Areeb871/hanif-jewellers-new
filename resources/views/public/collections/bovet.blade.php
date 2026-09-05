@@ -1004,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
 
                 <ul class="category-list collapsible" id="bovetSeriesList">
-                    @php $series = ['dimier','recital','miss-audrey','monsieur','19-Thirty', 'Virtuoso']; @endphp
+                    @php $series = ['recital','miss-audrey','monsieur','19-Thirty', 'Virtuoso']; @endphp
                     @foreach($series as $s)
                         <li>
                             <input type="checkbox" class="form-check-input filter-tag-checkbox bovet-filter" data-group="series" value="{{ $s }}"

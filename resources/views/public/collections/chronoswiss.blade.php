@@ -532,7 +532,6 @@ padding:15px 15px 0;
                             'opus-chronograph' => 'Opus Chronograph',
                             'srtike-two' => 'Srtike Two',
                             'open-gear' => 'Open Gear',
-                            'classic' => 'Classic',
                             'flying' => 'Flying',
                             'lunar' => 'Lunar',
                             'skeltec' => 'Skeltec',

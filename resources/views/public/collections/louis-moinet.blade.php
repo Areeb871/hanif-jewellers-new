@@ -756,7 +756,7 @@ img{
                         
                         // Check if we've reached the end
                         const currentTotal = parseInt(btn.getAttribute('data-total') || total, 10);
-                        const currentGrid = document.querySelector('#bovetGrid');
+                        const currentGrid = getGrid(document);
                         const currentShown = currentGrid ? currentGrid.querySelectorAll('.card.addToCartProductDetailsTop').length : 0;
                         const reachedEnd = currentShown >= currentTotal || appended === 0;
                         
