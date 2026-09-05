@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500&family=Lato:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 /* Argent CF — used by the Ehed shop. */
 @font-face {
@@ -865,10 +865,37 @@ a {
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
-  margin-top: -10rem;
-  z-index: -1;
+  background-position: center top;
+  margin-top: 0;
+  z-index: 0;
   position: relative;
+  object-fit:contain;
+}
+
+.care-banner-title {
+  position: absolute;
+  top: 61%;
+  left: clamp(1.5rem, 6vw, 7rem);
+  margin: 0;
+  transform: translateY(-50%);
+  color: #f8f3eb;
+  font-family:Helvetica, Arial, sans-serif;
+  font-size: clamp(2.5rem, 4.0vw, 5rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+.care-banner-title span {
+  display: block;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.care-banner-title span + span {
+  margin-top: 0.16em;
 }
 
 .accordion .accordion-button {
@@ -940,6 +967,17 @@ a {
     z-index: 0;
     background-size: cover;
     background-position: center;
+  }
+
+  .care-banner-title {
+    top: auto;
+    bottom: clamp(2.5rem, 10vw, 5rem);
+    left: 50%;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    transform: translateX(-50%);
+    font-size: clamp(2rem, 10vw, 3.25rem);
+    text-align: center;
   }
 
   .care-content-section {

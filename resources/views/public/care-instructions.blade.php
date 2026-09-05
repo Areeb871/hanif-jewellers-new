@@ -1,7 +1,12 @@
-@extends('public.layouts.header_latest')
+@extends('public.layouts.header_new')
 
 @section('content')
-    <section class="careInstructionsSection" aria-label="Care instructions banner"></section>
+    <section class="careInstructionsSection" aria-label="Care instructions banner">
+        <h1 class="care-banner-title">
+            <span>CARE</span>
+            <span>INSTRUCTION</span>
+        </h1>
+    </section>
 
     <section class="care-content-section">
         <!-- <div class="container py-4">
