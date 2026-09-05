@@ -43,6 +43,7 @@ Route::get('/pages/assurance', [HomeController::class, 'assurance']);
 Route::get('/pages/about-us', [HomeController::class, 'about_us']);
 Route::get('/pages/after-sale-services', [HomeController::class, 'after_sale_services']);
 Route::get('/pages/care-instructions', [HomeController::class, 'care_instructions']);
+Route::get('/pages/hanif-vault', [HomeController::class, 'hanifVault'])->name('hanif-vault');
 Route::get('/forevermark', [HomeController::class, 'forevermark'])->name('forevermark');
 Route::redirect('/contact-us', '/pages/contact-us', 301);
 Route::redirect('/locator', '/pages/locator', 301);
