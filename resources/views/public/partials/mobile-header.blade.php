@@ -376,7 +376,7 @@
 
     header.mobile-header-main > .mobile-header-main .row {
         display: grid;
-        grid-template-columns: 48px minmax(0, 1fr) 70px;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
         align-items: center;
         margin-left: 0;
         margin-right: 0;
@@ -387,6 +387,18 @@
         max-width: none;
         padding-left: 0;
         padding-right: 0;
+    }
+
+    header.mobile-header-main > .mobile-header-main .row > [class*="col-"]:first-child {
+        justify-self: start;
+    }
+
+    header.mobile-header-main > .mobile-header-main .row > [class*="col-"]:nth-child(2) {
+        justify-self: center;
+    }
+
+    header.mobile-header-main > .mobile-header-main .row > [class*="col-"]:last-child {
+        justify-self: end;
     }
 
     header.mobile-header-main .mobile-nav-icons {

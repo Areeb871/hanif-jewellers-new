@@ -1086,6 +1086,14 @@ body{
     object-fit: contain;
 }
 
+.hj-certificate-logos {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 7px;
+    min-height: 26px;
+}
+
 @media (max-width: 575px) {
     .hj-spec-card {
         padding: 20px 18px;

@@ -302,6 +302,47 @@ document.addEventListener('DOMContentLoaded', function () {
             && number_format((float)($variant['diamond_carat'] ?? 0), 2, '.', '') === number_format((float)$selectedCarat, 2, '.', '');
     });
 
+    $certificateForCarat = static function ($carat): array {
+        $value = (float) $carat;
+
+        if ($value >= 1.00) {
+            return [
+                'name' => 'HRD & GIA CERTIFICATES INCLUDED',
+                'logos' => [
+                    ['src' => asset('assets/f_assets/image/hrd-cert.svg'), 'alt' => 'HRD certificate logo'],
+                    ['src' => asset('assets/f_assets/image/gem-cert.png'), 'alt' => 'GIA certificate logo'],
+                ],
+            ];
+        }
+
+        if ($value >= 0.70) {
+            return [
+                'name' => 'HRD CERTIFICATE INCLUDED',
+                'logos' => [
+                    ['src' => asset('assets/f_assets/image/hrd-cert.svg'), 'alt' => 'HRD certificate logo'],
+                ],
+            ];
+        }
+
+        if ($value >= 0.50) {
+            return [
+                'name' => 'GIA CERTIFICATE INCLUDED',
+                'logos' => [
+                    ['src' => asset('assets/f_assets/image/gem-cert.png'), 'alt' => 'GIA certificate logo'],
+                ],
+            ];
+        }
+
+        return [
+            'name' => 'IGI CERTIFICATE INCLUDED',
+            'logos' => [
+                ['src' => asset('assets/f_assets/image/igi logo.png'), 'alt' => 'IGI certificate logo'],
+            ],
+        ];
+    };
+
+    $selectedCertificate = $certificateForCarat($selectedCarat);
+
     /*
         Image condition:
         1. Selected metal images show first.
@@ -662,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <button type="submit" class="hj-cart-btn" id="hjCartSubmitBtn">
-            BUY NOW
+            Buy Now
         </button>
     </div>
 </form>
@@ -753,8 +794,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button class="hj-help-btn" type="button">?</button>
                     <div class="hj-help-dropdown">Color shows how white or colorless the diamond appears.</div>
                 </div>
-                <strong>F</strong>
-                <span>Exceptional Colorless Brilliance</span>
+                <strong>H</strong>
+                <span>Exceptional Near Colorless Brilliance</span>
             </div>
 
             <div class="hj-spec-item">
@@ -800,12 +841,16 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <img class="hj-certificate-logo js-certificate-logo"
-                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
-                alt="Gemological certificate logo">
+            <div class="hj-certificate-logos js-certificate-logos">
+                @foreach($selectedCertificate['logos'] as $certificateLogo)
+                    <img class="hj-certificate-logo"
+                         src="{{ $certificateLogo['src'] }}"
+                         alt="{{ $certificateLogo['alt'] }}">
+                @endforeach
+            </div>
             <div>
                 <small>Certification</small>
-                <strong class="js-certificate-name">GEMOLOGICAL CERTIFICATE INCLUDED</strong>
+                <strong class="js-certificate-name">{{ $selectedCertificate['name'] }}</strong>
                 <p>Guaranteed authenticity</p>
             </div>
         </div>
@@ -910,12 +955,16 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <div class="hj-certificate">
-            <img class="hj-certificate-logo js-certificate-logo"
-                src="{{ asset('assets/f_assets/image/gem-cert.png') }}"
-                alt="Gemological certificate logo">
+            <div class="hj-certificate-logos js-certificate-logos">
+                @foreach($selectedCertificate['logos'] as $certificateLogo)
+                    <img class="hj-certificate-logo"
+                         src="{{ $certificateLogo['src'] }}"
+                         alt="{{ $certificateLogo['alt'] }}">
+                @endforeach
+            </div>
             <div>
                 <small>Certification</small>
-                <strong class="js-certificate-name">GEMOLOGICAL CERTIFICATE INCLUDED</strong>
+                <strong class="js-certificate-name">{{ $selectedCertificate['name'] }}</strong>
                 <p>Guaranteed authenticity</p>
             </div>
 </div>
@@ -961,8 +1010,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="hj-acc-item">
     <button type="button" class="hj-acc-btn">
-    Why Choose Our Lab Created Engagement Rings?
-
+Size & Fit
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -976,8 +1024,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-acc-content">
             <p>
-                Our lab created engagement rings offer exceptional brilliance, elegant craftsmanship, and excellent value while keeping the same luxury appearance.
-                <a
+               Our ring size finder has been created to help you accurately identify your ring size. Please refer to our full-size chart
+               <a
                     class="hj-acc-guide-link"
                     href="https://www.hanifjewellers.com/assets/f_assets/pdf/ring-size-guide.pdf"
                     target="_blank"
@@ -989,8 +1037,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-    Why Choose Our Lab Created Engagement Rings?
-
+    Details & Care
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1004,15 +1051,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-acc-content">
             <p>
-                We offer secure delivery and easy return support to make your shopping experience smooth and reliable.
+                Available in a variety of carat weights, every Hanif diamond is meticulously set by our master artisans. As a result, size, carat weight and stone quantities can vary slightly from one ring to another. For detailed information, please contact us or book an in-store appointment.
             </p>
         </div>
     </div>
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-    Why Choose Our Lab Created Engagement Rings?
-
+   Secure Shopping
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1026,15 +1072,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-acc-content">
             <p>
-                Each ring is designed with attention to detail, premium finishing, and carefully selected stones for a refined appearance.
+                We want to make sure your shopping experience exceeds your expectations, so we have taken measures to guarantee your orders will be safe and secure, from our door to yours
             </p>
         </div>
     </div>
 
     <div class="hj-acc-item">
        <button type="button" class="hj-acc-btn">
-    Why Choose Our Lab Created Engagement Rings?
-
+Free Shipping
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1048,7 +1093,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-acc-content">
             <p>
-                Our team will guide you with delivery, return, and after-sales support for a premium customer experience.
+                We offer free shipping on every order.
             </p>
         </div>
     </div>
@@ -1347,7 +1392,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         <div class="hj-review-stars-small">★★★★★</div>
 
-                        <h5>{{ $review->title ?? 'Review Title' }}</h5>
+                        <!--<h5>{{ $review->title ?? 'Review Title' }}</h5>-->
 
                         <p>
                             {{ $review->description ?? '' }}
@@ -1359,23 +1404,23 @@ document.addEventListener('DOMContentLoaded', function () {
                             {{ $review->created_at ? $review->created_at->format('F d, Y') : '' }}
                         </span>
 
-                        <!-- <div class="hj-single-review-img">
-                            @if(!empty($review->image))
-                                <img 
-                                    src="{{ asset($review->image) }}" 
-                                    alt="{{ $review->title ?? 'Review Image' }}"
-                                >
-                            @elseif(!empty($review->images[0]['image_path']))
-                                <img 
-                                    src="{{ asset($review->images[0]['image_path']) }}" 
-                                    alt="{{ $review->title ?? 'Review Image' }}"
-                                >
-                            @else
-                                <div class="hj-no-image">
-                                    No Image
-                                </div>
-                            @endif
-                        </div> -->
+                        <!--<div class="hj-single-review-img">-->
+                        <!--    @if(!empty($review->image))-->
+                        <!--        <img -->
+                        <!--            src="{{ asset($review->image) }}" -->
+                        <!--            alt="{{ $review->title ?? 'Review Image' }}"-->
+                        <!--        >-->
+                        <!--    @elseif(!empty($review->images[0]['image_path']))-->
+                        <!--        <img -->
+                        <!--            src="{{ asset($review->images[0]['image_path']) }}" -->
+                        <!--            alt="{{ $review->title ?? 'Review Image' }}"-->
+                        <!--        >-->
+                        <!--    @else-->
+                        <!--        <div class="hj-no-image">-->
+                        <!--            No Image-->
+                        <!--        </div>-->
+                        <!--    @endif-->
+                        <!--</div>-->
                     </div>
 
                 </div>
@@ -1592,8 +1637,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedCaratSpec = document.getElementById('selectedCaratSpec');
     const certificateSummaryEls = document.querySelectorAll('.js-certificate-summary');
     const certificateNameEls = document.querySelectorAll('.js-certificate-name');
-    const certificateLogoEls = document.querySelectorAll('.js-certificate-logo');
-    const gemologicalCertificateLogo = @json(asset('assets/f_assets/image/gem-cert.png'));
+    const certificateLogoContainers = document.querySelectorAll('.js-certificate-logos');
+    const certificateLogoUrls = {
+        igi: @json(asset('assets/f_assets/image/igi logo.png')),
+        hrd: @json(asset('assets/f_assets/image/hrd-cert.svg')),
+        gia: @json(asset('assets/f_assets/image/gem-cert.png')),
+    };
 
     const oldPriceEl = document.getElementById('detailOldPrice');
     const newPriceEl = document.getElementById('detailNewPrice');
@@ -1606,10 +1655,33 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCertificate(carat) {
-        const summary = 'Gemological certificate included';
-        const name = 'GEMOLOGICAL CERTIFICATE INCLUDED';
-        const logo = gemologicalCertificateLogo;
-        const logoAlt = 'Gemological certificate logo';
+        const value = Number(carat && carat.value ? carat.value : carat);
+        let name = 'IGI CERTIFICATE INCLUDED';
+        let logos = [
+            { src: certificateLogoUrls.igi, alt: 'IGI certificate logo' }
+        ];
+
+        if (value >= 1.00) {
+            name = 'HRD & GIA CERTIFICATES INCLUDED';
+            logos = [
+                { src: certificateLogoUrls.hrd, alt: 'HRD certificate logo' },
+                { src: certificateLogoUrls.gia, alt: 'GIA certificate logo' }
+            ];
+        } else if (value >= 0.70) {
+            name = 'HRD CERTIFICATE INCLUDED';
+            logos = [
+                { src: certificateLogoUrls.hrd, alt: 'HRD certificate logo' }
+            ];
+        } else if (value >= 0.50) {
+            name = 'GIA CERTIFICATE INCLUDED';
+            logos = [
+                { src: certificateLogoUrls.gia, alt: 'GIA certificate logo' }
+            ];
+        }
+
+        const summary = name.toLowerCase().replace(/\b\w/g, function (letter) {
+            return letter.toUpperCase();
+        });
 
         certificateSummaryEls.forEach(function (element) {
             element.textContent = summary;
@@ -1619,9 +1691,16 @@ document.addEventListener('DOMContentLoaded', function () {
             element.textContent = name;
         });
 
-        certificateLogoEls.forEach(function (element) {
-            element.src = logo;
-            element.alt = logoAlt;
+        certificateLogoContainers.forEach(function (container) {
+            container.replaceChildren();
+
+            logos.forEach(function (logo) {
+                const image = document.createElement('img');
+                image.className = 'hj-certificate-logo';
+                image.src = logo.src;
+                image.alt = logo.alt;
+                container.appendChild(image);
+            });
         });
     }
 
@@ -2328,11 +2407,11 @@ document.addEventListener('DOMContentLoaded', function () {
         clearRingSizeError();
 
         const formData = new FormData(form);
-        const defaultCartLabel = cartSubmitBtn ? cartSubmitBtn.textContent : 'BUY NOW';
+        const defaultCartLabel = cartSubmitBtn ? cartSubmitBtn.textContent : 'ADD TO CART';
 
         if (cartSubmitBtn) {
             cartSubmitBtn.disabled = true;
-            cartSubmitBtn.textContent = 'PROCESSING...';
+            cartSubmitBtn.textContent = 'ADDING...';
             cartSubmitBtn.setAttribute('aria-busy', 'true');
         }
 
@@ -2358,7 +2437,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (data.success) {
                 setTimeout(() => {
-                    window.location.href = "{{ route('checkout') }}";
+                    window.location.href = "{{ url('/checkout') }}";
                 }, 800);
             }
         })
