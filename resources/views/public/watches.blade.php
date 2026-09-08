@@ -1318,7 +1318,7 @@ document.addEventListener('DOMContentLoaded', function () {
             muted
             playsinline
         >
-            <source src="{{ asset('assets/f_assets/image/watches/artya-14-aug.mp4') }}" type="video/mp4">
+            <source src="{{ asset('assets/f_assets/image/watches/Aikon.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>
