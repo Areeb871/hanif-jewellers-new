@@ -8,8 +8,132 @@
     --epos-content-gap:clamp(1.25rem, 2.5vw, 2rem);
 }
 
+/*
+ * Pinned hero underlay — banner stays behind while content slides over.
+ * Uses fixed + spacer (more reliable than sticky when body has overflow-x:hidden).
+ */
+.epos-page .epos-hero-spacer {
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+.epos-page .epos-hero.gehnawaSection {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    background: #111;
+    pointer-events: none;
+}
+
+/* Keep site footer above the fixed hero video */
+body:has(.epos-page) .hj-footer {
+    position: relative;
+    z-index: 5;
+}
+
+.epos-page .epos-hero-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.epos-page .epos-hero-fallback {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media (min-width: 768px) {
+    .epos-page .epos-hero.gehnawaSection video,
+    .epos-page .epos-hero.gehnawaSection img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    .epos-page .epos-hero.gehnawaSection > div[style*="background-image"],
+    .epos-page .epos-hero .epos-hero-fallback {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: unset !important;
+        background-size: cover !important;
+        background-position: center !important;
+    }
+}
+
+.epos-page .epos-intro-sheet,
+.epos-page .epos-mid-sheet,
 .epos-page .epos-products-section {
-    padding:0 !important;
+    position: relative;
+    z-index: 2;
+    padding: 0 !important;
+    background: #fff;
+    box-shadow: 0 -18px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* Story sheet over pinned image — soft overlay so image stays visible behind */
+.epos-page .epos-mid-sheet {
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.epos-page .epos-mid-sheet .epos-story-label,
+.epos-page .epos-mid-sheet .epos-story-title,
+.epos-page .epos-mid-sheet .epos-story-text {
+    color: #fff;
+}
+
+/* Second pinned banner (same underlay feel as hero) */
+.epos-page .epos-mid-spacer {
+    position: relative;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+.epos-page .epos-mid-pin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #111;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.epos-page .epos-mid-pin img,
+.epos-page .epos-mid-pin .epos-hero-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .epos-page .epos-filter-header {
@@ -49,6 +173,48 @@
     padding-bottom:var(--epos-section-space) !important;
 }
 
+/* Story + mid banners — Poppins, existing site sizes */
+.epos-page .epos-story {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 5.5rem 1.7rem;
+    text-align: center;
+}
+
+.epos-page .epos-story-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 0.85rem;
+}
+
+.epos-page .epos-story-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #222;
+    margin: 0 0 1rem;
+}
+
+.epos-page .epos-story-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #555;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .epos-page .epos-story {
+        padding: 5.25rem 2rem;
+    }
+}
+
 @media (max-width: 767px) {
     .epos-page .epos-filter-header {
         padding-right:12px;
@@ -60,7 +226,8 @@
 <main class="epos-page">
 
     @if(isset($eposSubcategory) && $eposSubcategory && $eposSubcategory->banner_url)
-        <section class="gehnawaSection p-0 position-relative">
+        <div class="epos-hero-spacer" aria-hidden="true"></div>
+        <section class="gehnawaSection epos-hero p-0" aria-label="EPOS collection banner">
             {{-- Desktop Video --}}
             @if(Str::endsWith($eposSubcategory->banner_url, ['.mp4', '.webm', '.ogg']))
                 <video 
@@ -68,28 +235,25 @@
                     loop 
                     muted 
                     playsinline 
-                    class="video-desktop d-none d-md-block"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    class="video-desktop d-none d-md-block epos-hero-media"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($eposSubcategory->banner_url) }}" type="video/{{ pathinfo($eposSubcategory->banner_url, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
-                {{-- Fallback image for desktop --}}
-                <!-- <div class="video-fallback-desktop d-none d-md-block" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($eposSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div> -->
+                <div class="video-fallback-desktop d-none d-md-block epos-hero-fallback" style="display:none; background-image:url('{{ asset($eposSubcategory->banner_url) }}');"></div>
             @else
                 {{-- Static image for desktop --}}
-                <div class="d-none d-md-block" style="width:100%; height:120vh; background-image:url('{{ asset($eposSubcategory->banner_url) }}'); background-size:cover; background-position:center;"></div>
+                <div class="d-none d-md-block epos-hero-fallback" style="background-image:url('{{ asset($eposSubcategory->banner_url) }}');"></div>
             @endif
 
             {{-- Mobile Video (Dynamic based on subcategory) --}}
             @php
                 $mobileVideo = null;
-                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/epos_mobile_view.mp4'; // Corrected path without assets/ prefix
+                $mobileVideoPath = 'assets/f_assets/image/watches mobile view/epos_mobile_view.mp4';
 
                 if ($eposSubcategory->slug === 'epos') {
                     $mobileVideo = $mobileVideoPath;
                 } else {
-                    // fallback if no specific mobile version exists
                     $mobileVideo = $eposSubcategory->banner_url;
                 }
             @endphp
@@ -100,20 +264,40 @@
                     loop 
                     muted 
                     playsinline 
-                    class="video-mobile d-block d-md-none"
-                    style="width:100%; height:120vh; object-fit:cover;"
+                    class="video-mobile d-block d-md-none epos-hero-media"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <source src="{{ asset($mobileVideo) }}" type="video/{{ pathinfo($mobileVideo, PATHINFO_EXTENSION) }}">
                     Your browser does not support the video tag.
                 </video>
-                {{-- Fallback image for mobile --}}
-                <div class="video-fallback-mobile d-block d-md-none" style="display:none; width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="video-fallback-mobile d-block d-md-none epos-hero-fallback" style="display:none; background-image:url('{{ asset($mobileVideo) }}');"></div>
             @else
-                {{-- Static image for mobile --}}
-                <div class="d-block d-md-none" style="width:100%; height:120vh; background-image:url('{{ asset($mobileVideo) }}'); background-size:cover; background-position:center;"></div>
+                <div class="d-block d-md-none epos-hero-fallback" style="background-image:url('{{ asset($mobileVideo) }}');"></div>
             @endif
         </section>
     @endif
+
+    <section class="epos-intro-sheet">
+        <div class="epos-story">
+            <h2 class="epos-story-title">Artistry in Watchmaking</h2>
+            <p class="epos-story-text">
+            EPOS offers high-quality mechanical watches with interesting functions but still at an affordable price. Finished with loving care, according to the traditional Swiss watchmakers’ heritage, they deserve to be called Artistry in Watchmaking
+            </p>
+        </div>
+    </section>
+
+    <div class="epos-mid-spacer" aria-hidden="true"></div>
+
+    <section class="epos-mid-sheet">
+        <div class="epos-story">
+            <!-- <p class="epos-story-label">Heritage &amp; Detail</p> -->
+            <h2 class="epos-story-title">SPECIALIZED IN MECHANICAL WATCHES</h2>
+            <p class="epos-story-text">
+            EPOS is a Swiss producer of mechanical watches. All time pieces are designed and manufactured in Switzerland.
+
+EPOS has made itself a name as a creator of sophisticated Swiss mechanical watches, featuring complex complications.
+            </p>
+        </div>
+    </section>
 
     <section class="epos-products-section">
         <style>
@@ -627,6 +811,25 @@
         
         // Initialize counter on page load
         window.updateCounter();
+
+        // Keep hero video only until products sheet covers the screen —
+        // prevents fixed video from showing through the site footer.
+        (function () {
+            const hero = document.querySelector('.epos-page .epos-hero');
+            const sheet = document.querySelector('.epos-page .epos-products-section');
+            if (!hero || !sheet) return;
+
+            const syncPins = () => {
+                const top = sheet.getBoundingClientRect().top;
+                const hide = top <= 0;
+                hero.style.visibility = hide ? 'hidden' : 'visible';
+                hero.style.pointerEvents = 'none';
+            };
+
+            window.addEventListener('scroll', syncPins, { passive: true });
+            window.addEventListener('resize', syncPins);
+            syncPins();
+        })();
     });
     </script>
 </main>

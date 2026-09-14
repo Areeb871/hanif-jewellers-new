@@ -264,6 +264,7 @@ img{
 .maurice-page {
     --maurice-section-space:clamp(2.5rem, 5vw, 4.5rem);
     --maurice-content-gap:clamp(1.25rem, 2.5vw, 2rem);
+    overflow: visible;
 }
 
 .maurice-page .chronoswiss-logo-section {
@@ -340,6 +341,95 @@ img{
     }
 }
 
+/* ===== Scroll pin effects only (content/banners unchanged) ===== */
+.maurice-page .ml-hero-spacer {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0 !important;
+    pointer-events: none;
+    line-height: 0;
+}
+
+.maurice-page .ml-hero-pin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    margin: 0;
+    padding: 0 !important;
+    background: #000;
+    pointer-events: none;
+    line-height: 0;
+}
+
+/* Intro write-up: sticky under fixed header (exact visible top) */
+.maurice-page .ml-intro-anchor {
+    position: sticky;
+    top: 0; /* JS sets to active header height */
+    z-index: 1;
+    width: 100%;
+    margin: 0;
+    padding: 0 !important;
+    line-height: normal;
+    background: #fff;
+    box-shadow: 0 -18px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* Logo padding was pushing content down — keep sides/bottom, flush top while sticky */
+/* .maurice-page .ml-intro-anchor .chronoswiss-logo-section {
+    padding-top: 0.75rem !important;
+} */
+
+.maurice-page .ml-intro-pin {
+    position: relative;
+    width: 100%;
+    background: #fff;
+}
+
+/* Mid banner: sticky scroll-up over intro (no absolute→fixed swap / no jerk) */
+.maurice-page .ml-mid-scene {
+    position: relative;
+}
+
+.maurice-page .ml-mid-sticky {
+    position: sticky;
+    top: 0; /* JS sets to header height */
+    z-index: 2;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    background: #000;
+    line-height: 0;
+}
+
+.maurice-page .ml-mid-sticky .chronoswiss-intro-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.maurice-page .ml-sheet {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    box-shadow: 0 -18px 48px rgba(0, 0, 0, 0.12);
+}
+
+.maurice-page .ml-sheet-main {
+    z-index: 3;
+}
+
+body:has(.maurice-page) .hj-footer {
+    position: relative;
+    z-index: 5;
+}
+
 </style>
 
 <main class="maurice-page">
@@ -360,6 +450,8 @@ img{
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);
     @endphp
 
+    <div class="ml-hero-spacer" aria-hidden="true"></div>
+    <div class="ml-hero-pin">
     {{-- =========================
          DESKTOP BANNER
     ========================= --}}
@@ -387,9 +479,12 @@ img{
             <img src="{{ asset($mobileBanner) }}" alt="{{ $mauriceLacroixSubcategory->name ?? 'Banner' }}">
         @endif
     </section>
+    </div>
 
 @endif
 
+<div class="ml-intro-anchor">
+<div class="ml-intro-pin ml-sheet ml-sheet-intro">
 <section class="chronoswiss-logo-section">
     <img src="{{ asset('assets/f_assets/image/watch logo/Maurice_Lacroix_latest.png') }}"
          alt="Maurice Lacroix logo"
@@ -402,20 +497,31 @@ img{
             Living by the mantra #YourTimeIsNow, we never lose sight of the values we hold dear because they make us who we are. Join us to make the now the most precious asset in life, and enjoy the ride.
         </p>
     </div>
+</section>
+</div>
+</div>
 
-    <div class="chronoswiss-intro-image-wrap">
+<div class="ml-mid-scene">
+    <div class="ml-mid-sticky">
         <img
             src="{{ asset('assets/f_assets/image/ml_new_updated1.png') }}"
             alt="Independent Watchmaking, Born in 1983"
-            class="chronoswiss-intro-image"
+            class="chronoswiss-intro-image d-none d-md-block"
+        >
+        <img
+            src="{{ asset('assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif') }}"
+            alt="Independent Watchmaking, Born in 1983"
+            class="chronoswiss-intro-image d-block d-md-none"
         >
     </div>
 
+    <div class="ml-sheet ml-sheet-main">
+<section class="chronoswiss-intro-section">
     <div class="ml-bottom">
         <a href="javascript:void(0)" class="ml-discover">DISCOVER</a>
         <h2 class="ml-title">THE COLLECTIONS</h2>
     </div>
-</section> 
+</section>
     <section class="maurice-products-section">
         <style>
             .offcanvas-modern { font-family: 'Inter', Arial, sans-serif; background:#fff !important; color:#222; min-width:320px; max-width:380px; }
@@ -613,6 +719,8 @@ img{
         </div>
         @endif
     </section>
+</div>
+</div>
 
     <div class="offcanvas offcanvas-end offcanvas-modern" tabindex="-1" id="offcanvasMauriceLacroix" aria-labelledby="offcanvasMauriceLacroixLabel" data-bs-backdrop="true" data-bs-scroll="false">
         <div class="offcanvas-header">
@@ -928,6 +1036,69 @@ img{
         
         // Initialize counter on page load
         window.updateCounter();
+
+        // Hero pin + sticky intro/mid (no absolute→fixed swap = no jerk)
+        (function () {
+            const heroPin = document.querySelector('.maurice-page .ml-hero-pin');
+            const heroSpacer = document.querySelector('.maurice-page .ml-hero-spacer');
+            const introAnchor = document.querySelector('.maurice-page .ml-intro-anchor');
+            const midSticky = document.querySelector('.maurice-page .ml-mid-sticky');
+            const mainSheet = document.querySelector('.maurice-page .ml-sheet-main');
+            const desktopHeader = document.querySelector('.luxury-header');
+            const mobileHeader = document.querySelector('header.mobile-header-main');
+            if (!mainSheet) return;
+
+            const getHeaderHeight = () => {
+                const active = window.innerWidth < 992 ? mobileHeader : desktopHeader;
+                return active && active.offsetHeight ? active.offsetHeight : 0;
+            };
+
+            const measureHero = () => {
+                if (!heroPin || !heroSpacer) return;
+                const desktop = heroPin.querySelector('.sectionOne');
+                const mobile = heroPin.querySelector('.sectionMobile');
+                const active = window.matchMedia('(min-width: 768px)').matches ? desktop : mobile;
+                const h = active ? active.offsetHeight : 0;
+                if (h > 0) {
+                    heroSpacer.style.height = h + 'px';
+                }
+            };
+
+            const syncPins = () => {
+                measureHero();
+
+                const headerH = getHeaderHeight();
+                if (introAnchor) {
+                    introAnchor.style.top = headerH + 'px';
+                }
+                if (midSticky) {
+                    midSticky.style.top = headerH + 'px';
+                    midSticky.style.height = 'calc(100dvh - ' + headerH + 'px)';
+                }
+
+                if (!heroPin) return;
+                const introTop = introAnchor ? introAnchor.getBoundingClientRect().top : Infinity;
+                const midTop = midSticky ? midSticky.getBoundingClientRect().top : Infinity;
+                const mainTop = mainSheet.getBoundingClientRect().top;
+                const hideHero = introTop <= headerH || midTop <= headerH || mainTop <= headerH;
+                heroPin.style.visibility = hideHero ? 'hidden' : 'visible';
+            };
+
+            if (heroPin) {
+                heroPin.querySelectorAll('video').forEach((video) => {
+                    video.addEventListener('loadedmetadata', measureHero);
+                    video.addEventListener('loadeddata', measureHero);
+                });
+                heroPin.querySelectorAll('img').forEach((img) => {
+                    if (img.complete) measureHero();
+                    else img.addEventListener('load', measureHero);
+                });
+            }
+
+            window.addEventListener('scroll', syncPins, { passive: true });
+            window.addEventListener('resize', syncPins);
+            syncPins();
+        })();
     });
     </script>
 </main>

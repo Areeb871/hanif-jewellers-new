@@ -474,34 +474,54 @@ $products = Products::with(['category', 'subcategory', 'images', 'tags'])
 
         // Optional sorting
         $sort = request('sort');
-                $productsQuery->pinnedFirst();
-        switch ($sort) {
-            case 'az':
-                $productsQuery->orderBy('name', 'asc');
-                break;
-            case 'za':
-                $productsQuery->orderBy('name', 'desc');
-                break;
-            case 'price_low_high':
-                $productsQuery->orderByRaw('CAST(price AS DECIMAL(15,2)) ASC');
-                break;
-            case 'price_high_low':
-                $productsQuery->orderByRaw('CAST(price AS DECIMAL(15,2)) DESC');
-                break;
-            case 'new_old':
-                $productsQuery->orderBy('created_at', 'desc');
-                break;
-            case 'old_new':
-                $productsQuery->orderBy('created_at', 'asc');
-                break;
-            default:
-                $productsQuery->orderByDesc('created_at');
+        $productsQuery->pinnedFirst();
+        $isPriceSort = in_array($sort, ['price_low_high', 'price_high_low'], true);
+
+        if (!$isPriceSort) {
+            switch ($sort) {
+                case 'az':
+                    $productsQuery->orderBy('name', 'asc');
+                    break;
+                case 'za':
+                    $productsQuery->orderBy('name', 'desc');
+                    break;
+                case 'new_old':
+                    $productsQuery->orderBy('created_at', 'desc');
+                    break;
+                case 'old_new':
+                    $productsQuery->orderBy('created_at', 'asc');
+                    break;
+                default:
+                    $productsQuery->orderByDesc('created_at');
+            }
+
+            $products = $productsQuery->paginate(20)->withQueryString();
+        } else {
+            // Sort by displayed watch price (not DB price column)
+            $sorted = $productsQuery
+                ->with(['category', 'subcategory.watchPricingSetting', 'images', 'tags'])
+                ->get();
+
+            $sorted = $sort === 'price_low_high'
+                ? $sorted->sortBy(fn ($p) => (float) $p->displayPrice())->values()
+                : $sorted->sortByDesc(fn ($p) => (float) $p->displayPrice())->values();
+
+            $perPage = 20;
+            $page = LengthAwarePaginator::resolveCurrentPage() ?: 1;
+            $products = new LengthAwarePaginator(
+                $sorted->forPage($page, $perPage)->values(),
+                $sorted->count(),
+                $perPage,
+                $page,
+                [
+                    'path' => request()->url(),
+                    'query' => request()->query(),
+                ]
+            );
         }
 
-        $products = $productsQuery->paginate(20)->withQueryString();
-
         // Get total count of filtered products (not just current page)
-        $totalFilteredProducts = $productsQuery->count();
+        $totalFilteredProducts = $products->total();
         $currentPageProducts = $products->count();
         $totalProducts = $products->total();
 
@@ -512,8 +532,7 @@ $products = Products::with(['category', 'subcategory', 'images', 'tags'])
             'total_products' => $totalProducts,
             'current_page' => $products->currentPage(),
             'last_page' => $products->lastPage(),
-            'query_sql' => $productsQuery->toSql(),
-            'query_bindings' => $productsQuery->getBindings()
+            'sort' => $sort,
         ]);
 
         $mauriceLacroixSubcategory = $mauriceLacroixSubcat;

@@ -1304,9 +1304,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </style>
 <div class="triangle-text">
-  <h1 class="ehed-main-title-perrelet">ARTYA</h1>
+  <h1 class="ehed-main-title-perrelet">Maurice Lacroix</h1>
   <p class="ehed-body-text hero__description font-family--serif px-2">
-    Experience the Purity collection by ArtyA:  new revolutionary movements where each layer of the architecture is taken to the extreme. Complexity that only appears to be simple, the essence minimalism – extreme, pure simplicity.
+  Urban, versatile, and crafted for every occasion, the new AIKON-IC collection features high-performance materials: technical ceramic, bi-rubber strap, and the new patented ML Easy Change system. Made with the new ML1000 calibre, it embodies the Your Time is Now spirit, delivers precision and a taste of uniqueness. 
   </p>
 </div>
 <div class="container-fluid p-0">
