@@ -10,18 +10,23 @@
     .momentu-page { overflow:hidden; background:var(--momentu-cream); color:var(--momentu-ink); }
     .momentu-hero { width:100%; margin:0; padding:0; overflow:hidden; background:#000; line-height:0; }
     .momentu-hero__video { display:block; width:100%; height:auto; }
-    .momentu-intro { position:relative; padding:clamp(72px,9vw,150px) 24px; isolation:isolate; text-align:center;background:white;}
-    .momentu-kicker { display:block; margin-bottom:18px; font-size:11px; font-weight:600; letter-spacing:.36em; text-transform:uppercase; }
+    .momentu-intro { position:relative; padding:clamp(96px,10vw,168px) 24px; isolation:isolate; text-align:center; background:#fff; }
+    .momentu-kicker { display:block; margin-bottom:clamp(16px,1.5vw,24px); font-size:11px; font-weight:600; letter-spacing:.36em; text-transform:uppercase; }
     .momentu-title { margin:0; font-family:Georgia,'Times New Roman',serif; font-size:clamp(54px,8vw,132px); font-weight:400; letter-spacing:-.055em; line-height:.82; }
-    .momentu-subtitle { margin:16px 0 0; font-family:Georgia,'Times New Roman',serif; font-size:clamp(17px,2vw,28px); font-style:italic; font-weight:400; letter-spacing:.08em; }
-    .momentu-copy { max-width:680px; margin:32px auto 0; font-size:clamp(13px,1.1vw,16px); line-height:1.9; }
-    .momentu-story-banner { width:100%; height:clamp(320px,52vw,780px); overflow:hidden; background:#0b0b0b; line-height:0; }
-    .momentu-story-banner__image { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
-    .momentu-categories { padding:clamp(58px,7vw,108px) max(20px,5vw) 28px; background:#fff; text-align:center; }
-    .momentu-section-kicker { margin:0 0 11px; color:#657055; font-size:10px; font-weight:600; letter-spacing:.28em; text-transform:uppercase; }
+    .momentu-subtitle { margin:clamp(22px,2vw,32px) 0 0; font-family:Georgia,'Times New Roman',serif; font-size:clamp(17px,2vw,28px); font-weight:400; letter-spacing:.08em; }
+    .momentu-copy { max-width:680px; margin:clamp(18px,1.8vw,28px) auto 0; font-size:clamp(13px,1.1vw,16px); line-height:1.9; }
+    .momentu-story-banner { width:100%; overflow:hidden; background:#0b0b0b; line-height:0; }
+    .momentu-story-banner__image { display:block; width:100%; height:auto; }
+    .momentu-story-banner__image--mobile { display:none; }
+    @media (max-width:767px) {
+        .momentu-story-banner__image--desktop { display:none; }
+        .momentu-story-banner__image--mobile { display:block; }
+    }
+    .momentu-categories { padding:clamp(96px,9vw,144px) max(20px,5vw) clamp(104px,10vw,168px); background:#fff; text-align:center; }
+    .momentu-section-kicker { margin:0 0 14px; color:#657055; font-size:10px; font-weight:600; letter-spacing:.28em; text-transform:uppercase; }
     .momentu-section-title { margin:0; font-family:Georgia,'Times New Roman',serif; font-size:clamp(34px,4.4vw,68px); font-weight:400; line-height:1; }
-    .momentu-category-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:1040px; margin:46px auto 0; }
-    .momentu-category { position:relative; display:flex; min-height:260px; padding:30px; overflow:hidden; align-items:flex-end; border:0; color:#fff; text-align:left; text-decoration:none; cursor:pointer; transition:transform .35s ease; }
+    .momentu-category-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,1.8vw,28px); max-width:1400px; margin:clamp(52px,5vw,76px) auto 0; }
+    .momentu-category { position:relative; display:flex; min-height:clamp(320px,30vw,440px); padding:30px; overflow:hidden; align-items:flex-end; border:0; color:#fff; text-align:left; text-decoration:none; cursor:pointer; transition:transform .35s ease; }
     .momentu-category:hover { transform:translateY(-5px); }
     .momentu-category:nth-child(1) { background:linear-gradient(145deg,#213f29,#789447); }
     .momentu-category:nth-child(2) { background:linear-gradient(145deg,#c7d629,#6d8b32); }
@@ -33,7 +38,7 @@
     .momentu-category__number { position:absolute; z-index:3; top:33px; left:33px; right:33px; font-size:10px; letter-spacing:.18em; text-transform:uppercase; }
     .momentu-category__content { position:relative; z-index:3; }
     .momentu-category__label { display:block; font-family:Georgia,'Times New Roman',serif; font-size:clamp(25px,2.5vw,39px); font-weight:400; line-height:1.08; }
-    .momentu-category__price { display:block; margin-top:12px; font-size:10px; letter-spacing:.14em; }
+    .momentu-category__price { display:block; margin-top:16px; font-size:10px; letter-spacing:.14em; }
     .momentu-shop { padding:clamp(62px,7vw,110px) max(18px,4vw) clamp(72px,9vw,135px); background:#fff; }
     .momentu-shop__head { display:flex; max-width:1500px; margin:0 auto 36px; align-items:flex-end; justify-content:space-between; gap:30px; }
     .momentu-filter { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
@@ -66,8 +71,8 @@
     .momentu-cta__copy { max-width:560px; margin:20px auto 30px; color:rgba(255,255,255,.78); font-size:13px; line-height:1.8; }
     .momentu-cta__button { display:inline-block; padding:15px 27px; border:1px solid #fff; background:#fff; color:var(--momentu-deep); font-size:10px; font-weight:700; letter-spacing:.18em; text-decoration:none; text-transform:uppercase; transition:.25s ease; }
     .momentu-cta__button:hover { background:transparent; color:#fff; }
-    @media(max-width:991px) { .momentu-products{grid-template-columns:repeat(3,minmax(0,1fr))}.momentu-category{min-height:220px} }
-    @media(max-width:767px) { .momentu-intro{padding-inline:20px}.momentu-title{font-size:clamp(55px,20vw,90px)}.momentu-category-grid{grid-template-columns:1fr;margin-top:34px}.momentu-category{min-height:150px}.momentu-shop__head{display:block;text-align:center}.momentu-filter{margin-top:28px;justify-content:center}.momentu-products{grid-template-columns:repeat(2,minmax(0,1fr))}.momentu-product__body{padding-top:14px}.momentu-values__grid{grid-template-columns:1fr;gap:30px;margin-top:42px} }
+    @media(max-width:991px) { .momentu-products{grid-template-columns:repeat(3,minmax(0,1fr))}.momentu-category{min-height:280px} }
+    @media(max-width:767px) { .momentu-intro{padding:76px 20px 82px}.momentu-title{font-size:clamp(55px,16vw,90px)}.momentu-subtitle{margin-top:18px}.momentu-copy{margin-top:16px;line-height:1.75}.momentu-categories{padding:72px 16px 88px}.momentu-section-title{line-height:1.08}.momentu-category-grid{grid-template-columns:1fr;gap:18px;margin-top:40px}.momentu-category{aspect-ratio:1/1;min-height:0;padding:24px}.momentu-category::after{inset:14px}.momentu-category__number{top:26px;left:26px;right:26px}.momentu-category__price{margin-top:12px}.momentu-shop__head{display:block;text-align:center}.momentu-filter{margin-top:28px;justify-content:center}.momentu-products{grid-template-columns:repeat(2,minmax(0,1fr))}.momentu-product__body{padding-top:14px}.momentu-values__grid{grid-template-columns:1fr;gap:30px;margin-top:42px} }
     @media(max-width:420px) { .momentu-shop{padding-inline:10px}.momentu-products{gap:8px}.momentu-product__name{font-size:15px}.momentu-product__price{font-size:9px}.momentu-product__link{font-size:8px}.momentu-filter__button{padding:9px 12px;font-size:8px} }
     @media(prefers-reduced-motion:reduce) { .momentu-product__image,.momentu-category{transition:none} }
 </style>
@@ -87,7 +92,8 @@
     </section>
 
     <section class="momentu-story-banner" aria-label="Momento diamond collection">
-        <img class="momentu-story-banner__image" src="{{ asset('uploads/product/momentu-2.png') }}" alt="Momento diamond jewellery" loading="lazy">
+        <img class="momentu-story-banner__image momentu-story-banner__image--desktop" src="{{ asset('assets/f_assets/momento/momento-web.webp') }}" alt="Momento diamond jewellery" loading="lazy">
+        <img class="momentu-story-banner__image momentu-story-banner__image--mobile" src="{{ asset('assets/f_assets/momento/Momento.webp') }}" alt="Momento diamond jewellery" loading="lazy">
     </section>
 
     <section class="momentu-categories" aria-labelledby="momentu-categories-title">

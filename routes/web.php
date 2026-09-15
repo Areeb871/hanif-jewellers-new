@@ -61,6 +61,7 @@ Route::redirect('cleopatra', '/collections/cleopatra', 301);
 Route::get('/collections/ehed', [HomeController::class, 'ehedCollection'])->name('collections.ehed');
 Route::get('collections/hasht', [HomeController::class, 'hasht'])->name('hasht');
 Route::get('collections/misterio', [HomeController::class, 'misterio'])->name('misterio');
+Route::get('collections/momento', [HomeController::class, 'momentu'])->name('momento');
 Route::get('collections/gohar', [HomeController::class, 'gohar'])->name('gohar');
 Route::get('collections/qaws-al-matar', [HomeController::class, 'qaws_al_matar'])->name('qaws-al-matar');
 Route::get('collections/marchisio', [HomeController::class, 'marchisio'])->name('marchisio');

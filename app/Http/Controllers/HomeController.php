@@ -3195,6 +3195,50 @@ public function ehedCollection(Request $request)
     {
         return view('public.misterio');
     }
+
+
+
+
+    public function momentu()
+    {
+        $subcategory = Subcategory::query()
+            ->whereHas('category', function ($query) {
+                $query->where(function ($categoryQuery) {
+                    $categoryQuery->whereRaw('LOWER(name) = ?', ['jewellery'])
+                        ->orWhereRaw('LOWER(slug) = ?', ['jewellery']);
+                });
+            })
+            ->where(function ($query) {
+                $query->whereIn(DB::raw('LOWER(name)'), ['momentu', 'momento'])
+                    ->orWhereIn(DB::raw('LOWER(slug)'), ['momentu', 'momento']);
+            })
+            ->first();
+
+        $products = Products::with(['category', 'subcategory', 'images', 'tags'])
+            ->where('status', 'published')
+            ->whereHas('category', function ($query) {
+                $query->where(function ($categoryQuery) {
+                    $categoryQuery->whereRaw('LOWER(name) = ?', ['jewellery'])
+                        ->orWhereRaw('LOWER(slug) = ?', ['jewellery']);
+                });
+            })
+            ->whereHas('subcategory', function ($query) {
+                $query->where(function ($subcategoryQuery) {
+                    $subcategoryQuery->whereIn(DB::raw('LOWER(name)'), ['momentu', 'momento'])
+                        ->orWhereIn(DB::raw('LOWER(slug)'), ['momentu', 'momento']);
+                });
+            })
+            ->pinnedFirst()
+            ->latest()
+            ->get();
+
+        return view('public.momento', compact('subcategory', 'products'));
+    }
+
+
+
+
+
     public function gohar()
     {
         return view('public.gohar');
