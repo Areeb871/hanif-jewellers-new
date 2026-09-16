@@ -17,6 +17,23 @@ class GoldPriceCalculator
         ?float $goldWeight = null,
         ?int $goldServiceId = null
     ): ?float {
+        $breakdown = self::calculateBreakdownFromDescription(
+            $description,
+            $goldWeight,
+            $goldServiceId
+        );
+
+        return $breakdown['final_price'] ?? null;
+    }
+
+    /**
+     * @return array{regular_price: float, sale_price: float, final_price: float, is_sale: bool}|null
+     */
+    public static function calculateBreakdownFromDescription(
+        ?string $description,
+        ?float $goldWeight = null,
+        ?int $goldServiceId = null
+    ): ?array {
         if (!$description) {
             Log::warning('GoldPriceCalculator: empty description');
             return null;
@@ -25,6 +42,9 @@ class GoldPriceCalculator
         $description = self::normalizeText($description);
         $karat = self::detectKarat($description);
         $grams = (float) ($goldWeight ?? 0);
+        if ($grams <= 0) {
+            $grams = self::extractWeightFromDescription($description) ?? 0;
+        }
 
         if (!$karat || $grams <= 0) {
             Log::warning('GoldPriceCalculator: missing karat or gold weight', [
@@ -47,21 +67,26 @@ class GoldPriceCalculator
             return null;
         }
 
-        $threshold = (float) $service->weight_threshold;
+        $isSale = (bool) ($service->is_sale ?? false);
+        $threshold = $isSale
+            ? (float) $service->sale_weight_threshold
+            : (float) $service->weight_threshold;
         $isLightTier = $grams <= $threshold;
-        $ocFinal = $isLightTier
-            ? (float) $service->light_oc_final_per_article
-            : $grams * (float) $service->heavy_oc_final_per_gram;
+        $ocFinal = self::ocFinal($service, $grams, $isSale);
 
         $subtotal = (
             (float) $rateSetting->gold_rate_per_gram * $grams
         ) + $ocFinal;
         $vat = $subtotal * ((float) $rateSetting->vat_percent / 100);
-        $final = self::calculateUsingSettings($rateSetting, $service, $grams);
+        $breakdown = self::calculateBreakdownUsingSettings($rateSetting, $service, $grams);
+        $regularPrice = $breakdown['regular_price'];
+        $salePrice = $breakdown['sale_price'];
+        $final = $breakdown['final_price'];
 
         Log::info('GoldPriceCalculator: service rule applied', [
             'karat' => $karat,
             'service' => $service->slug,
+            'is_sale' => $isSale,
             'tier' => $isLightTier ? 'up_to_threshold' : 'above_threshold',
             'grams' => $grams,
             'oc_final' => $ocFinal,
@@ -69,7 +94,7 @@ class GoldPriceCalculator
             'final' => $final,
         ]);
 
-        return round($final, 2);
+        return $breakdown;
     }
 
     /** Kept public so the business formula can be verified without database access. */
@@ -78,13 +103,65 @@ class GoldPriceCalculator
         GoldServiceSetting $service,
         float $grams
     ): float {
-        $isLightTier = $grams <= (float) $service->weight_threshold;
-        $ocFinal = $isLightTier
-            ? (float) $service->light_oc_final_per_article
-            : $grams * (float) $service->heavy_oc_final_per_gram;
+        return self::calculateWithSaleState(
+            $rateSetting,
+            $service,
+            $grams,
+            (bool) ($service->is_sale ?? false)
+        );
+    }
+
+    /**
+     * @return array{regular_price: float, sale_price: float, final_price: float, is_sale: bool}
+     */
+    public static function calculateBreakdownUsingSettings(
+        GoldRateSetting $rateSetting,
+        GoldServiceSetting $service,
+        float $grams
+    ): array {
+        $regularPrice = self::calculateWithSaleState($rateSetting, $service, $grams, false);
+        $salePrice = self::calculateWithSaleState($rateSetting, $service, $grams, true);
+        $isSale = (bool) ($service->is_sale ?? false);
+
+        return [
+            'regular_price' => $regularPrice,
+            'sale_price' => $salePrice,
+            'final_price' => $isSale ? $salePrice : $regularPrice,
+            'is_sale' => $isSale,
+        ];
+    }
+
+    private static function calculateWithSaleState(
+        GoldRateSetting $rateSetting,
+        GoldServiceSetting $service,
+        float $grams,
+        bool $isSale
+    ): float {
+        $ocFinal = self::ocFinal($service, $grams, $isSale);
         $subtotal = ((float) $rateSetting->gold_rate_per_gram * $grams) + $ocFinal;
 
         return round($subtotal * (1 + ((float) $rateSetting->vat_percent / 100)), 2);
+    }
+
+    private static function ocFinal(
+        GoldServiceSetting $service,
+        float $grams,
+        bool $isSale
+    ): float {
+        $threshold = $isSale
+            ? (float) $service->sale_weight_threshold
+            : (float) $service->weight_threshold;
+        $isLightTier = $grams <= $threshold;
+
+        if ($isSale) {
+            return $isLightTier
+                ? (float) $service->sale_light_oc_final_per_article
+                : $grams * (float) $service->sale_heavy_oc_final_per_gram;
+        }
+
+        return $isLightTier
+            ? (float) $service->light_oc_final_per_article
+            : $grams * (float) $service->heavy_oc_final_per_gram;
     }
 
     private static function resolveService(?int $goldServiceId): ?GoldServiceSetting
@@ -115,6 +192,22 @@ class GoldPriceCalculator
         $text = preg_replace('/\s+/', ' ', $text);
 
         return trim($text);
+    }
+
+    /** Extract an explicitly labelled product weight for legacy/imported products. */
+    public static function extractWeightFromDescription(string $description): ?float
+    {
+        $description = self::normalizeText($description);
+
+        if (preg_match(
+            '/\b(?:gross\s+)?weight\s*:\s*(\d+(?:\.\d+)?)\s*(?:g|grams?)\b/i',
+            $description,
+            $matches
+        )) {
+            return (float) $matches[1];
+        }
+
+        return null;
     }
 
     private static function detectKarat(string $description): ?int

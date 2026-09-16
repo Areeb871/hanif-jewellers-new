@@ -945,6 +945,7 @@ $menus = [
         ['label' => 'SELENE',       'url' => url('collections/selene')], // ✅ FIXED
         ['label' => 'MARCHISIO',        'url' => route('marchisio')],
         ['label' => 'DIVINE TREASURES', 'url' => route('divine-treasures')],
+        ['label' => 'MOMENTU',       'url' => route('collections.momentu')],
 
     ],
      'Festive' => [

@@ -584,6 +584,7 @@
         'TAJ MAHAL' => route('taj-mahal'),
         'GULPOSH' => route('gulposh'),
         'PURE LOCK' => route('pure-lock'),
+        'MOMENTU' => route('collections.momentu'),
     ];
     
     $jewelryCollections = \App\Models\Subcategory::where([['status', 'active'],['category_id', 1]])->get();
@@ -591,7 +592,7 @@
     $highEndCollections =  ['HASHT', 'QAWS-AL-MATAR','NAGAR', 'GULPOSH','GOHAR','HAPHAZARD'];
     $bridalCollections = [ 'GEHNAWA', 'NAVRATAN', 'TAJ MAHAL', 'HERITAGE','BREATHTAKING','CLEOPATRA','DIVINE TREASURES','MISTERIO','MARCHISIO'];
     $seasonalCollections = ['EID PAR SONY KI CHORIYAN', 'VALENTINE JEWELS', 'WINTER JEWELS'];
-    $lifestyleCollections = ['EHED', 'JEWELPHABETS', 'MONA LISA', 'PURE LOCK', 'SELENE'];
+    $lifestyleCollections = ['EHED', 'JEWELPHABETS', 'MONA LISA', 'PURE LOCK', 'SELENE', 'MOMENTU'];
 @endphp
 
 <!-- Mobile Offcanvas Menu -->
@@ -650,6 +651,7 @@ BRIDALS
 <li><a href="/collections/selene">SELENE</a></li>
 <li><a href="{{ url('/collections/divine-treasures') }}">DIVINE TREASURES</a></li>
 <li><a href="{{ url('/collections/marchisio') }}">MARCHISIO</a></li>
+<li><a href="{{ route('collections.momentu') }}">MOMENTU</a></li>
     </ul>
     
      <!-- <div class="menu-section-title">

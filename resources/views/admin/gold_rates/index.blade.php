@@ -88,7 +88,8 @@
                     <h3 class="mb-1">Gold Jewellery Services</h3>
                     <p class="text-muted mb-0">
                         For weights up to and including the threshold, OC Final per article is used.
-                        Above it, OC Final per gram is used. The two displayed boundary values stay synchronized.
+                        Above it, OC Final per gram is used. Enable Sale for a service to use its Sale Weight
+                        and Sale OC Final everywhere that service's regular calculated price is shown.
                     </p>
                 </div>
 
@@ -100,8 +101,11 @@
                                 <th>Weight Range</th>
                                 <th>Weight (g)</th>
                                 <th>OC Final</th>
+                                <th>Sale Weight (g)</th>
+                                <th>Sale OC Final</th>
                                 <th>OC Unit</th>
                                 <th>Active</th>
+                                <th>Sale</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,11 +126,34 @@
                                                value="{{ old("services.{$service->id}.light_oc_final_per_article", $service->light_oc_final_per_article) }}"
                                                class="form-control" required>
                                     </td>
+                                    <td>
+                                        <input type="number" step="0.001" min="0.001"
+                                               name="services[{{ $service->id }}][sale_weight_threshold]"
+                                               value="{{ old("services.{$service->id}.sale_weight_threshold", $service->sale_weight_threshold) }}"
+                                               class="form-control sale-service-threshold-input"
+                                               data-service="{{ $service->id }}" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0"
+                                               name="services[{{ $service->id }}][sale_light_oc_final_per_article]"
+                                               value="{{ old("services.{$service->id}.sale_light_oc_final_per_article", $service->sale_light_oc_final_per_article) }}"
+                                               class="form-control" required>
+                                    </td>
                                     <td>Per article</td>
                                     <td class="text-center" rowspan="2">
                                         <input type="hidden" name="service_active[{{ $service->id }}]" value="0">
                                         <input type="checkbox" name="service_active[{{ $service->id }}]"
                                                value="1" @checked(old("service_active.{$service->id}", $service->is_active))>
+                                    </td>
+                                    <td class="text-center" rowspan="2">
+                                        <input type="hidden" name="service_sale[{{ $service->id }}]" value="0">
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input type="checkbox" id="gold-sale-{{ $service->id }}"
+                                                   name="service_sale[{{ $service->id }}]" value="1"
+                                                   class="form-check-input"
+                                                   @checked(old("service_sale.{$service->id}", $service->is_sale))>
+                                            <label class="form-check-label" for="gold-sale-{{ $service->id }}">Active</label>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -142,6 +169,19 @@
                                         <input type="number" step="0.01" min="0"
                                                name="services[{{ $service->id }}][heavy_oc_final_per_gram]"
                                                value="{{ old("services.{$service->id}.heavy_oc_final_per_gram", $service->heavy_oc_final_per_gram) }}"
+                                               class="form-control" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.001" min="0.001"
+                                               name="services[{{ $service->id }}][above_sale_weight_threshold]"
+                                               value="{{ old("services.{$service->id}.above_sale_weight_threshold", $service->sale_weight_threshold) }}"
+                                               class="form-control sale-service-threshold-input"
+                                               data-service="{{ $service->id }}" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0"
+                                               name="services[{{ $service->id }}][sale_heavy_oc_final_per_gram]"
+                                               value="{{ old("services.{$service->id}.sale_heavy_oc_final_per_gram", $service->sale_heavy_oc_final_per_gram) }}"
                                                class="form-control" required>
                                     </td>
                                     <td>Per gram</td>
@@ -187,6 +227,15 @@
         document.querySelectorAll('.service-threshold-input').forEach(input => {
             input.addEventListener('input', function () {
                 document.querySelectorAll(`.service-threshold-input[data-service="${this.dataset.service}"]`)
+                    .forEach(linkedInput => {
+                        if (linkedInput !== this) linkedInput.value = this.value;
+                    });
+            });
+        });
+
+        document.querySelectorAll('.sale-service-threshold-input').forEach(input => {
+            input.addEventListener('input', function () {
+                document.querySelectorAll(`.sale-service-threshold-input[data-service="${this.dataset.service}"]`)
                     .forEach(linkedInput => {
                         if (linkedInput !== this) linkedInput.value = this.value;
                     });

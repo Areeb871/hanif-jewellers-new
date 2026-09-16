@@ -2742,15 +2742,15 @@ public function Online_Shopping_Store(Request $request)
         }
     }
     
-     public function solitaire_new()
-{
-    $products = Products::with('category', 'subcategory', 'images')->where([
-            ['status', 'published'],
-            ['category_id', 7],
-            ['subcategory_id', 40]
-        ])->get();
-        return view('public.solitaire_new', compact('products'));
-}
+//      public function solitaire_new()
+// {
+//     $products = Products::with('category', 'subcategory', 'images')->where([
+//             ['status', 'published'],
+//             ['category_id', 7],
+//             ['subcategory_id', 40]
+//         ])->get();
+//         return view('public.solitaire_new', compact('products'));
+// }
 public function solitaire(Request $request)
 {
     $allProducts = SolitaireProduct::where('status', 1)
@@ -2905,7 +2905,7 @@ public function solitaire(Request $request)
         ]
     );
 
-    return view('public.solitaire', compact(
+    return view('public.solitaire_new', compact(
         'products',
         'availableShapes',
         'availableMetals',
@@ -3238,6 +3238,41 @@ public function miras()
     public function misterio()
     {
         return view('public.misterio');
+    }
+    public function momentu()
+    {
+        $subcategory = Subcategory::query()
+            ->whereHas('category', function ($query) {
+                $query->where(function ($categoryQuery) {
+                    $categoryQuery->whereRaw('LOWER(name) = ?', ['jewellery'])
+                        ->orWhereRaw('LOWER(slug) = ?', ['jewellery']);
+                });
+            })
+            ->where(function ($query) {
+                $query->whereIn(DB::raw('LOWER(name)'), ['momentu', 'momento'])
+                    ->orWhereIn(DB::raw('LOWER(slug)'), ['momentu', 'momento']);
+            })
+            ->first();
+
+        $products = Products::with(['category', 'subcategory', 'images', 'tags'])
+            ->where('status', 'published')
+            ->whereHas('category', function ($query) {
+                $query->where(function ($categoryQuery) {
+                    $categoryQuery->whereRaw('LOWER(name) = ?', ['jewellery'])
+                        ->orWhereRaw('LOWER(slug) = ?', ['jewellery']);
+                });
+            })
+            ->whereHas('subcategory', function ($query) {
+                $query->where(function ($subcategoryQuery) {
+                    $subcategoryQuery->whereIn(DB::raw('LOWER(name)'), ['momentu', 'momento'])
+                        ->orWhereIn(DB::raw('LOWER(slug)'), ['momentu', 'momento']);
+                });
+            })
+            ->pinnedFirst()
+            ->latest()
+            ->get();
+
+        return view('public.momentu', compact('subcategory', 'products'));
     }
     public function gohar()
     {

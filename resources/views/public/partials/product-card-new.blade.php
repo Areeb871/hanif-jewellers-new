@@ -4,7 +4,7 @@
     $displayImage = $hasImages ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg'));
     $storeContext = $storeContext ?? false;
     $cardName = $storeContext ? $product->storefrontName() : $product->name;
-    $livePrice = $storeContext ? $product->storefront_price : ($product->final_price ?? 0);
+    $livePrice = $product->isSeleneProduct() ? 0 : ($storeContext ? $product->storefront_price : ($product->final_price ?? 0));
     $detailUrl = $storeContext
         ? route('product.details', $product->slug) . '?store=1'
         : route('product.details', $product->slug);

@@ -67,6 +67,7 @@ Route::get('collections/hasht', [HomeController::class, 'hasht'])->name('hasht')
 Route::get('collections/miras', [HomeController::class, 'miras'])->name('miras');
 Route::redirect('collections/Miras', '/collections/miras', 301);
 Route::get('collections/misterio', [HomeController::class, 'misterio'])->name('misterio');
+Route::get('collections/momentu', [HomeController::class, 'momentu'])->name('collections.momentu');
 Route::get('collections/gohar', [HomeController::class, 'gohar'])->name('gohar');
 Route::get('collections/qaws-al-matar', [HomeController::class, 'qaws_al_matar'])->name('qaws-al-matar');
 Route::get('collections/marchisio', [HomeController::class, 'marchisio'])->name('marchisio');

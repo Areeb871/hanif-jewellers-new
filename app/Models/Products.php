@@ -112,6 +112,19 @@ class Products extends Model
         return $this->belongsTo(Subcategory::class, 'subcategory_id');
     }
 
+    public function isSeleneProduct(): bool
+    {
+        $subcategory = $this->subcategory;
+
+        return strtolower(trim((string) ($subcategory?->slug))) === 'selene'
+            || strtolower(trim((string) ($subcategory?->name))) === 'selene';
+    }
+
+    public function getShowPriceAttribute($value)
+    {
+        return $this->isSeleneProduct() ? false : $value;
+    }
+
     public function goldService()
     {
         return $this->belongsTo(GoldServiceSetting::class, 'gold_service_id');
@@ -200,6 +213,24 @@ class Products extends Model
     public function displayPrice(bool $forStore = false): float
     {
         return $forStore ? $this->storefront_price : $this->final_price;
+    }
+
+    /**
+     * Regular and sale prices for a gold product, used when both must be displayed.
+     *
+     * @return array{regular_price: float, sale_price: float, final_price: float, is_sale: bool}|null
+     */
+    public function goldPriceBreakdown(bool $forStore = false): ?array
+    {
+        if ($this->isWatchProduct() || $this->shouldUseDiamondPricing()) {
+            return null;
+        }
+
+        return GoldPriceCalculator::calculateBreakdownFromDescription(
+            $this->displayDescription($forStore),
+            filled($this->gold_weight) ? (float) $this->gold_weight : null,
+            filled($this->gold_service_id) ? (int) $this->gold_service_id : null
+        );
     }
 
     public function isWatchProduct(): bool

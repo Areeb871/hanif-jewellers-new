@@ -610,12 +610,18 @@
                             @endif
                         </div> -->
 @php
-    $livePrice    = $product->displayPrice($storeContext);
+    $goldPriceBreakdown = $product->goldPriceBreakdown($storeContext);
+    $isGoldSale = (bool) data_get($goldPriceBreakdown, 'is_sale', false);
+    $livePrice = $goldPriceBreakdown !== null
+        ? (float) $goldPriceBreakdown['final_price']
+        : $product->displayPrice($storeContext);
     $roundedPrice = round($livePrice, -3);
+    $regularPrice = (float) data_get($goldPriceBreakdown, 'regular_price', $livePrice);
+    $roundedRegularPrice = round($regularPrice, -3);
     $isJewelleryProduct = optional($product->category)->slug !== 'watches';
-    $canShowPrice = $storeContext
+    $canShowPrice = !$product->isSeleneProduct() && ($storeContext
         ? ($roundedPrice > 0)
-        : (!empty($product->show_price) && $roundedPrice > 0);
+        : (!empty($product->show_price) && $roundedPrice > 0));
     $isOutOfStock = $product->quantity !== null && (int) $product->quantity === 0;
 @endphp
 
@@ -629,9 +635,16 @@
     @endif   -->
 @if($canShowPrice)
 <div class="product-price-panel">
-    
-
+    @if($isGoldSale && $roundedRegularPrice > 0)
+        <div class="product-old-price">
+            <span class="visually-hidden">Regular price:</span>
+            PKR {{ number_format($roundedRegularPrice, 0, '.', ',') }}
+        </div>
+    @endif
     <div class="price-display">
+        @if($isGoldSale)
+            <span class="visually-hidden">Sale price:</span>
+        @endif
         PKR {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
@@ -648,12 +661,7 @@
                             $asianRingSizes = range(4, 27);
                             $showRingSizeSelector = $isRingSizeProduct && $canShowPrice;
                         @endphp
-<<<<<<< HEAD
-
                         @if($showRingSizeSelector)
-=======
-                         @if($isRingSizeProduct)
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
                             <div class="ring-size-panel" id="productSizePanel">
                                 <div class="ring-size-heading">
                                     <label for="productSizeToggle">Select - Asian Ring Size</label>
@@ -1990,13 +1998,8 @@
         }
 
         // ===== CART FUNCTIONALITY =====
-<<<<<<< HEAD
         // Ring and supported gold-colour tags require an Asian ring size.
         const requiresSizeSelection = @json($showRingSizeSelector);
-=======
-        // Check if product requires size selection (for gold bracelets, gold rings, and diamond rings)
-                const requiresSizeSelection = @json($isRingSizeProduct);
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 
         const productSizePanel = document.getElementById('productSizePanel');
         const productSizeToggle = document.getElementById('productSizeToggle');

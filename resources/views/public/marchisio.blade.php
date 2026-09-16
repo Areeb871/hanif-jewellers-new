@@ -1,6 +1,83 @@
 @extends('public.layouts.header_new')
 
 @section('content')
+@php
+    $marchisioAssetBase = 'assets/f_assets/image/Marchisio Updated Website Data';
+@endphp
+
+<style>
+.marchisio-campaign {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+.marchisio-campaign__panel,
+.marchisio-campaign__picture,
+.marchisio-campaign__image {
+    display: block;
+    width: 100%;
+}
+
+.marchisio-campaign__image {
+    height: auto;
+}
+
+.marchisio-main-banner,
+.marchisio-main-banner__video {
+    display: block;
+    width: 100%;
+}
+
+.marchisio-main-banner {
+    overflow: hidden;
+    background: #000;
+}
+
+.marchisio-main-banner__video {
+    height: auto;
+}
+</style>
+
+<section class="marchisio-main-banner d-none d-md-block" aria-label="Marchisio main banner">
+    <video class="marchisio-main-banner__video" autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset($marchisioAssetBase . '/marchisio.mp4') }}" type="video/mp4">
+    </video>
+</section>
+
+<section class="marchisio-main-banner d-md-none" aria-label="Marchisio main banner">
+    <video class="marchisio-main-banner__video" autoplay loop muted playsinline preload="metadata">
+        <source src="{{ asset($marchisioAssetBase . '/mobile_view.mp4') }}" type="video/mp4">
+    </video>
+</section>
+
+<div class="marchisio-campaign" aria-label="Marchisio collection campaign">
+    @for ($index = 1; $index <= 4; $index++)
+        <section class="marchisio-campaign__panel">
+            <picture class="marchisio-campaign__picture">
+                <source
+                    media="(max-width: 767.98px)"
+                    srcset="{{ asset($marchisioAssetBase . '/mob' . $index . '.png') }}"
+                    width="1080"
+                    height="1920"
+                >
+                <img
+                    class="marchisio-campaign__image"
+                    src="{{ asset($marchisioAssetBase . '/desktop' . $index . '.png') }}"
+                    width="3840"
+                    height="2160"
+                    alt="Marchisio collection campaign {{ $index }}"
+                    loading="{{ $index === 1 ? 'eager' : 'lazy' }}"
+                    @if ($index === 1) fetchpriority="high" @endif
+                >
+            </picture>
+        </section>
+    @endfor
+</div>
+
+@if (false)
 <style>
 html, body{
     margin: 0;
@@ -383,6 +460,7 @@ html, body{
     </div>
 </section>
 {{-- ✅ SWIPER PRODUCT SLIDER (Desktop + Mobile) --}}
+@endif
 <section class="onlineStore">
     <div class="swiper productSwiper">
         <div class="swiper-wrapper">
@@ -406,12 +484,13 @@ html, body{
 /* FIX: you missed the dot before .onlineStore */
 .onlineStore{
     position: relative;
+    margin-block: clamp(2rem, 4vw, 4rem);
     overflow: visible !important;
 }
 
 .productSwiper{
     position: relative;
-    padding: 0 0 40px;
+    padding: 0;
     overflow: visible !important;
 }
 

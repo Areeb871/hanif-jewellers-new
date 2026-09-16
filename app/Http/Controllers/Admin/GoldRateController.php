@@ -57,6 +57,10 @@ class GoldRateController extends Controller
             $rules["services.$serviceId.above_weight_threshold"] = "required|numeric|min:0.001|same:services.$serviceId.weight_threshold";
             $rules["services.$serviceId.light_oc_final_per_article"] = 'required|numeric|min:0';
             $rules["services.$serviceId.heavy_oc_final_per_gram"] = 'required|numeric|min:0';
+            $rules["services.$serviceId.sale_weight_threshold"] = 'required|numeric|min:0.001';
+            $rules["services.$serviceId.above_sale_weight_threshold"] = "required|numeric|min:0.001|same:services.$serviceId.sale_weight_threshold";
+            $rules["services.$serviceId.sale_light_oc_final_per_article"] = 'required|numeric|min:0';
+            $rules["services.$serviceId.sale_heavy_oc_final_per_gram"] = 'required|numeric|min:0';
         }
 
         $validated = $request->validate($rules);
@@ -78,11 +82,12 @@ class GoldRateController extends Controller
 
         foreach (GoldServiceSetting::all() as $service) {
             $serviceValues = $validated['services'][$service->id];
-            unset($serviceValues['above_weight_threshold']);
+            unset($serviceValues['above_weight_threshold'], $serviceValues['above_sale_weight_threshold']);
 
             $service->update([
                 ...$serviceValues,
                 'is_active' => $request->boolean("service_active.{$service->id}"),
+                'is_sale' => $request->boolean("service_sale.{$service->id}"),
             ]);
         }
 
