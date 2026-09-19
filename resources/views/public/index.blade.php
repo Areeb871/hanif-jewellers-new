@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-
 .custom-banner {
     width: 100%;
     margin: 0;
@@ -338,16 +337,14 @@
   transition: transform .45s ease;
 }
 
-<<<<<<< HEAD
 /* Logo ALWAYS inside box */
-=======
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 .lux-logo{
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
   object-fit: contain;
+  object-position: center;
   display: block;
 }
 /* Border animation (safe) */
@@ -386,10 +383,7 @@
 .lux-card:hover::before{ transform: scaleX(1); }
 .lux-card:hover::after{ transform: scaleY(1); }
 
-<<<<<<< HEAD
 /* Mobile: overlay stays visible so logo + tagline can be read without hover */
-=======
->>>>>>> 77d4938166fec9a3e050912796ad5fbde77786ee
 @media (max-width: 767px){
   .lux-hover{ opacity: .85; }
   .lux-box{
@@ -453,46 +447,148 @@ section.watch .watch-slider-viewport,
 section.watch .watch-scroller-arrow,
 .bespoke-collections .watch-scroller-arrow {
     position: absolute;
-    top: 47%;
-    transform: translateY(-50%);
+    top: 0;
+    bottom: 0;
     z-index: 30;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
+    width: 66px;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: #2a2a2a;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     padding: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, background 0.3s ease;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: visible;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.22s ease-out;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    isolation: isolate;
+}
+
+/* Frosted control matched to the supplied Apple UI reference. */
+section.watch .watch-scroller-arrow::before,
+.bespoke-collections .watch-scroller-arrow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-50%);
+    z-index: 0;
+    box-sizing: border-box;
+    background: rgba(151, 181, 196, 0.1);
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(12px) saturate(112%);
+    -webkit-backdrop-filter: blur(12px) saturate(112%);
+    pointer-events: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease,
+                transform 0.3s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Soft glass sheen; intentionally restrained like the reference. */
+section.watch .watch-scroller-arrow::after,
+.bespoke-collections .watch-scroller-arrow::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 50%;
+    width: calc(100% - 2px);
+    height: auto;
+    z-index: 1;
+    border-radius: 23px;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.07),
+        rgba(255, 255, 255, 0) 58%);
+    opacity: .65;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Fade the inner edge into the card so the glass has no visible seam. */
+section.watch .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::after,
+section.watch .watch-scroller-arrow--prev::after {
+    border-radius: 0 24px 24px 0;
+}
+
+section.watch .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::after,
+section.watch .watch-scroller-arrow--next::after {
+    border-radius: 24px 0 0 24px;
+}
+
+section.watch .watch-scroller-arrow--prev::before,
+section.watch .watch-scroller-arrow--prev::after,
+.bespoke-collections .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::after {
+    -webkit-mask-image: linear-gradient(to right,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+    mask-image: linear-gradient(to right,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+}
+
+section.watch .watch-scroller-arrow--next::before,
+section.watch .watch-scroller-arrow--next::after,
+.bespoke-collections .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::after {
+    -webkit-mask-image: linear-gradient(to left,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+    mask-image: linear-gradient(to left,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+}
+
+section.watch .watch-scroller-arrow .arrow-icon,
+.bespoke-collections .watch-scroller-arrow .arrow-icon {
+    position: relative;
+    z-index: 2;
+    color: rgba(0, 0, 0, 0.86);
+    filter: none;
+    transform: scale(1.08);
+    transition: none;
+}
+
+section.watch .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
+section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled),
+.bespoke-collections .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
+.bespoke-collections .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* The watch cards have 16px vertical margins inside their viewport. */
+section.watch .watch-scroller-arrow {
+    top: 16px;
+    bottom: 16px;
 }
 
 section.watch .watch-scroller-arrow--prev,
 .bespoke-collections .watch-scroller-arrow--prev {
-    left: 6px;
+    left: 0;
 }
 
 section.watch .watch-scroller-arrow--next,
 .bespoke-collections .watch-scroller-arrow--next {
-    right: 6px;
+    right: 0;
 }
 
 section.watch .watch-scroller-arrow .arrow-left svg,
 .bespoke-collections .watch-scroller-arrow .arrow-left svg {
     transform: rotate(180deg);
-}
-
-section.watch .watch-scroller-arrow:hover:not(:disabled),
-.bespoke-collections .watch-scroller-arrow:hover:not(:disabled) {
-    transform: translateY(-50%) scale(1.04);
-    background: #fff;
-    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
 }
 
 section.watch .watch-scroller-arrow:disabled,
@@ -538,21 +634,49 @@ section.watch .watch-scroller-arrow:disabled,
     }
 }
 
-@media (min-width: 992px) {
-    section.watch .watch-scroller-arrow,
+@media (min-width: 768px) and (max-width: 991.98px) {
     .bespoke-collections .watch-scroller-arrow {
-        width: 46px;
-        height: 46px;
+        width: calc((100vw - 120px) / 18);
+    }
+}
+
+@media (min-width: 992px) {
+    section.watch .watch-scroller-arrow {
+        width: 75px;
+        height: auto;
+    }
+
+    .bespoke-collections .watch-scroller-arrow {
+        width: calc((100vw - 120px) / 18);
+        height: auto;
     }
 
     section.watch .watch-scroller-arrow--prev,
     .bespoke-collections .watch-scroller-arrow--prev {
-        left: 10px;
+        left: 0;
     }
 
     section.watch .watch-scroller-arrow--next,
     .bespoke-collections .watch-scroller-arrow--next {
-        right: 10px;
+        right: 0;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1365.98px) {
+    section.watch .watch-scroller-arrow {
+        width: 80px;
+    }
+}
+
+@media (min-width: 1366px) and (max-width: 1919.98px) {
+    section.watch .watch-scroller-arrow {
+        width: 84px;
+    }
+}
+
+@media (min-width: 1920px) {
+    section.watch .watch-scroller-arrow {
+        width: 88px;
     }
 }
 
@@ -577,7 +701,95 @@ section.watch .addToCartProductDetailsTop .carousel-item {
     width: 100%;
 }
 
+/* Homepage product-card arrows: readable on light or dark artwork. */
+section.watch .addToCartProductDetailsTop .carousel-control-prev,
+section.watch .addToCartProductDetailsTop .carousel-control-next {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    bottom: auto;
+    width: 38px;
+    height: 96px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    visibility: hidden;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-50%);
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+section.watch .addToCartProductDetailsTop:hover .carousel-control-prev,
+section.watch .addToCartProductDetailsTop:hover .carousel-control-next,
+section.watch .addToCartProductDetailsTop:focus-within .carousel-control-prev,
+section.watch .addToCartProductDetailsTop:focus-within .carousel-control-next {
+    display: flex !important;
+    visibility: visible;
+    opacity: 0.92 !important;
+    pointer-events: auto !important;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev {
+    left: 8px;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-next {
+    right: 8px;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev:hover,
+section.watch .addToCartProductDetailsTop .carousel-control-next:hover {
+    background: transparent;
+    opacity: 1 !important;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev-icon,
+section.watch .addToCartProductDetailsTop .carousel-control-next-icon {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev-icon {
+    border-right: 1.5px solid #9a9a9a;
+    border-bottom: 1.5px solid #9a9a9a;
+    transform: rotate(135deg);
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-next-icon {
+    border-right: 1.5px solid #9a9a9a;
+    border-bottom: 1.5px solid #9a9a9a;
+    transform: rotate(-45deg);
+}
+
+/* Keep the complete product artwork visible, including on hover. */
+section.watch .addToCartProductDetailsTop .carousel-item img,
+section.watch .addToCartProductDetailsTop:hover .carousel-item img,
+section.watch .addToCartProductDetailsTop .product-image,
+section.watch .addToCartProductDetailsTop:hover .product-image {
+    object-fit: contain !important;
+    object-position: center !important;
+    transform: none !important;
+}
+
 @media (max-width: 767.98px) {
+    section.watch .addToCartProductDetailsTop .carousel-control-prev,
+    section.watch .addToCartProductDetailsTop .carousel-control-next {
+        width: 34px;
+        height: 82px;
+    }
+
     section.watch .mobile-product-scroller {
         touch-action: pan-x pan-y;
         overscroll-behavior-x: contain;

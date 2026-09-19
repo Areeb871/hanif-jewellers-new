@@ -1094,6 +1094,10 @@ body{
     min-height: 26px;
 }
 
+.hj-certificate-logos:empty {
+    display: none;
+}
+
 @media (max-width: 575px) {
     .hj-spec-card {
         padding: 20px 18px;

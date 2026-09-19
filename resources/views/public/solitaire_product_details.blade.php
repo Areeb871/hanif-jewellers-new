@@ -309,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return [
                 'name' => 'HRD & GIA CERTIFICATES INCLUDED',
                 'logos' => [
-                    ['src' => asset('assets/f_assets/image/hrd-cert.svg'), 'alt' => 'HRD certificate logo'],
                     ['src' => asset('assets/f_assets/image/gem-cert.png'), 'alt' => 'GIA certificate logo'],
                 ],
             ];
@@ -318,9 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if ($value >= 0.70) {
             return [
                 'name' => 'HRD CERTIFICATE INCLUDED',
-                'logos' => [
-                    ['src' => asset('assets/f_assets/image/hrd-cert.svg'), 'alt' => 'HRD certificate logo'],
-                ],
+                'logos' => [],
             ];
         }
 
@@ -502,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="hj-breadcrumb">
         <a href="{{ url('/') }}">Home</a>
         <span>/</span>
-        <a href="{{ route('solitaire') }}">Solitaire Rings</a>
+        <a href="{{ route('collections.solitaire_new') }}">Solitaire Rings</a>
         <span>/</span>
         <span id="selectedMetalTitle">Solitaire Engagement Ring - {{ $selectedMetal['name'] ?? '14K White Gold' }}</span>
     </div>
@@ -1148,7 +1145,7 @@ Free Shipping
                     <p>Every item we send comes in our signature Hanif packaging. The presentation box also secures your appraisal certificate and diamond grading report.</p>
                 </div>
 
-                <a href="{{ route('solitaire') }}">SHOP NOW</a>
+                <a href="{{ route('collections.solitaire_new') }}">SHOP NOW</a>
             </div>
         </div>
     </div>
@@ -1640,7 +1637,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const certificateLogoContainers = document.querySelectorAll('.js-certificate-logos');
     const certificateLogoUrls = {
         igi: @json(asset('assets/f_assets/image/igi logo.png')),
-        hrd: @json(asset('assets/f_assets/image/hrd-cert.svg')),
         gia: @json(asset('assets/f_assets/image/gem-cert.png')),
     };
 
@@ -1664,14 +1660,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (value >= 1.00) {
             name = 'HRD & GIA CERTIFICATES INCLUDED';
             logos = [
-                { src: certificateLogoUrls.hrd, alt: 'HRD certificate logo' },
                 { src: certificateLogoUrls.gia, alt: 'GIA certificate logo' }
             ];
         } else if (value >= 0.70) {
             name = 'HRD CERTIFICATE INCLUDED';
-            logos = [
-                { src: certificateLogoUrls.hrd, alt: 'HRD certificate logo' }
-            ];
+            logos = [];
         } else if (value >= 0.50) {
             name = 'GIA CERTIFICATE INCLUDED';
             logos = [

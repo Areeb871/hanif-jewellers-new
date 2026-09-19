@@ -3221,6 +3221,7 @@ public function miras()
 
     $products = Products::with(['category', 'subcategory', 'images', 'tags'])
         ->where('status', 'published')
+        ->whereNotIn('id', [2842, 2843, 2844, 2845, 2846])
         ->whereHas('category', function ($qc) {
             $qc->whereRaw('LOWER(name) = ?', ['jewellery']);
         })
