@@ -523,7 +523,9 @@
                 <a href="/" class="d-inline-block">
                     <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
                          alt="Hanif Jewellers"
-                         class="mobile-logo">
+                         class="mobile-logo"
+                         width="300"
+                         height="88">
                 </a>
             </div>
 
@@ -584,7 +586,7 @@
         'TAJ MAHAL' => route('taj-mahal'),
         'GULPOSH' => route('gulposh'),
         'PURE LOCK' => route('pure-lock'),
-        'MOMENTU' => route('collections.momentu'),
+        'MOMENTU' => url('/collections/momentu'),
     ];
     
     $jewelryCollections = \App\Models\Subcategory::where([['status', 'active'],['category_id', 1]])->get();
@@ -651,7 +653,7 @@ BRIDALS
 <li><a href="/collections/selene">SELENE</a></li>
 <li><a href="{{ url('/collections/divine-treasures') }}">DIVINE TREASURES</a></li>
 <li><a href="{{ url('/collections/marchisio') }}">MARCHISIO</a></li>
-<li><a href="{{ route('collections.momentu') }}">MOMENTU</a></li>
+<li><a href="{{ url('/collections/momentu') }}">MOMENTU</a></li>
     </ul>
     
      <!-- <div class="menu-section-title">

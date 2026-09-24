@@ -20,13 +20,11 @@ class ProductSearchService
             ->get()
             ->map(fn (Subcategory $subcategory) => $this->mapCollection($subcategory));
 
-        $products = Products::with('images')
+        $products = Products::with(['images', 'category:id,name,slug'])
             ->where('status', 'published')
-            ->whereHas('subcategory', function ($query) {
-                $query->whereIn('status', $this->publishedCollectionStatuses());
-            })
             ->select(
                 'id',
+                'category_id',
                 'name',
                 'online_store_name',
                 'slug',
@@ -41,10 +39,7 @@ class ProductSearchService
             ->map(fn (Products $product) => $this->mapProduct($product, $forStore))
             ->values();
 
-        return $collections
-            ->merge($products)
-            ->values()
-            ->all();
+        return array_merge($collections->all(), $products->all());
     }
 
     private function publishedCollectionStatuses(): array
@@ -67,17 +62,17 @@ class ProductSearchService
 
     private function mapProduct(Products $product, bool $forStore): array
     {
+        $isStoreProduct = $forStore
+            || strtolower((string) $product->category?->slug) === 'jewellery';
         $relatedImage = optional($product->images)->firstWhere('image', '!=', null)->image ?? null;
         $imagePath = $relatedImage ?: $product->hover_image ?: $product->image;
-        $label = $forStore ? $product->storefrontName() : ($product->name ?? '');
-        $description = $forStore ? $product->storefrontDescription() : ($product->description ?? '');
+        $label = $isStoreProduct ? $product->storefrontName() : ($product->name ?? '');
+        $description = $isStoreProduct ? $product->storefrontDescription() : ($product->description ?? '');
 
-        $searchParts = $forStore
-            ? [$product->name, $product->online_store_name, $product->slug, strip_tags($product->description ?? ''), strip_tags($product->online_store_description ?? '')]
-            : [$product->name, $product->slug, strip_tags($product->description ?? '')];
+        $searchParts = [$product->name, $product->online_store_name, $product->slug, strip_tags($product->description ?? ''), strip_tags($product->online_store_description ?? '')];
 
         $url = route('product.details', ['slug' => $product->slug]);
-        if ($forStore) {
+        if ($isStoreProduct) {
             $url .= '?store=1';
         }
 
@@ -111,4 +106,5 @@ class ProductSearchService
             'type' => 'collection',
         ];
     }
+    
 }

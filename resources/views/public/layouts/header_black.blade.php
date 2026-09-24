@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+@php
+    $isOnlineStore = request()->is('collections/online-shopping-store');
+@endphp
 <link rel="canonical" href="{{ request()->url() }}">
 <!-- Meta Pixel Code -->
 <script>
@@ -62,18 +65,32 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <title>Hanif Jewellers</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ asset('assets/f_assets/image/favicon_hanif_32x32.jpg') }}" type="image/x-icon">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @if($isOnlineStore)
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        as="style" onload="this.onload=null;this.rel='stylesheet'"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></noscript>
+    @else
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @endif
     <link rel="stylesheet" href="{{ asset('assets/f_assets/css/style.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@if($isOnlineStore)
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700&display=optional" rel="stylesheet"></noscript>
+@else
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+@endif
+@unless($isOnlineStore)
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+@endunless
     <style>
 :root{
   --bg:transparent;
@@ -743,13 +760,17 @@ header .dropdown-menu.mega-menu .carousel-underline-wrapper::after{
 </head>
 
 <body data-currency="pkr">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    @unless($isOnlineStore)
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    @endunless
 
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KSC9KD3H"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-    @include('public.partials.page-loader')
+    @unless($isOnlineStore)
+        @include('public.partials.page-loader')
+    @endunless
     
     <!-- Include Mobile Header -->
     @include('public.partials.mobile-header')
@@ -760,6 +781,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <img
     src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}"
     alt="Hanif Jewellers"
+    width="300"
+    height="88"
    style="width:auto; height:40px; object-fit:contain;"
   >
 </a>
@@ -814,7 +837,6 @@ $menus = [
         ['label' => 'TAJ MAHAL',    'url' => route('taj-mahal')],
         ['label' => 'HERITAGE',       'url' => url('collections/heritage')], // ✅ FIXED
         ['label' => 'CLEOPATRA',    'url' => route('cleopatra')],
-        ['label' => 'MISTERIO',         'url' => route('misterio')],
 
     ],
 
@@ -824,6 +846,8 @@ $menus = [
         ['label' => 'SELENE',       'url' => url('collections/selene')], // ✅ FIXED
         ['label' => 'MARCHISIO',        'url' => route('marchisio')],
         ['label' => 'DIVINE TREASURES', 'url' => route('divine-treasures')],
+        ['label' => 'MIRAS', 'url' => route('miras')],
+
 
     ],
      'Festive' => [
@@ -836,9 +860,9 @@ $menus = [
 ];
 
 $card = [
-    'img' => 'assets/f_assets/image/highend/9.png',
+    'img' => 'assets/f_assets/image/mega_menu.png',
     'btn' => 'EXPLORE COLLECTION',
-    'url' => url('highend-jewellery'),
+    'url' => url('collections/miras'),
 ];
 @endphp
 
@@ -898,9 +922,9 @@ $card = [
             <img src="{{ asset($card['img']) }}" alt="Promo" class="hanif-mega-card-img">
         </a>
         <br>
-        <div class="hanif-mega-title">
+        <!-- <div class="hanif-mega-title">
               HIGH END JEWELLERY
-        </div>
+        </div> -->
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
             {{ $card['btn'] }}
@@ -1108,7 +1132,7 @@ $card = [
                 <div class="modal-body">
                     <div class="nav-search-wrapper">
                         <div class="nav-search-brand">
-                            <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers">
+                            <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers" width="300" height="88" loading="lazy" decoding="async">
                         </div>
                         <form id="navSearchForm" class="nav-search-form">
                             <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="Search collections or products" autocomplete="off">

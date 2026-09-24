@@ -546,7 +546,7 @@ footer h4 {
     </svg>
 
 
-    <img src="{{ asset('assets/f_assets/image/emb1.png') }}" alt="HANIF Logo" class="hanif-inner-logo">
+    <img src="{{ asset('assets/f_assets/image/emb1.png') }}" alt="HANIF Logo" class="hanif-inner-logo" width="178" height="181" loading="lazy" decoding="async">
 </a> -->
 
 <style>

@@ -5,7 +5,7 @@
         @endif
     </div>
     <div class="logo-section">
-        <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers" class="mobile-logo">
+        <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers" class="mobile-logo" width="300" height="88" loading="lazy" decoding="async">
     </div>
     <!-- <div class="action-section">
         <a href="/cart" class="mobile-nav-icon position-relative">

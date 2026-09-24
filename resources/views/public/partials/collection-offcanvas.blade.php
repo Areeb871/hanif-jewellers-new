@@ -22,7 +22,7 @@
                     @endphp
                     @if($collection)
                         <a class="collection-card" href="{{ $url }}">
-                            <img src="{{ asset('assets/f_assets/image/jewelry-collection-logos/' . $name . '.jpg') }}" class="collection-card-img" alt="{{ $collectionName }}">
+                            <img src="{{ asset('assets/f_assets/image/jewelry-collection-logos/' . $name . '.jpg') }}" class="collection-card-img" alt="{{ $collectionName }}" width="1080" height="511" loading="lazy" decoding="async">
                             <div class="collection-card-title">{{ $collectionName }}</div>
                         </a>
                     @endif
@@ -32,4 +32,4 @@
         
         @include('public.partials.mobile-offcanvas-footer')
     </div>
-</div> 
+</div>
