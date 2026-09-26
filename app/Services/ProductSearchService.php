@@ -20,7 +20,7 @@ class ProductSearchService
             ->get()
             ->map(fn (Subcategory $subcategory) => $this->mapCollection($subcategory));
 
-        $products = Products::with('images')
+        $products = Products::with(['images', 'category'])
             ->where('status', 'published')
             ->whereHas('subcategory', function ($query) {
                 $query->whereIn('status', $this->publishedCollectionStatuses());
@@ -34,6 +34,7 @@ class ProductSearchService
                 'hover_image',
                 'description',
                 'online_store_description',
+                'category_id',
                 'subcategory_id'
             )
             ->orderBy('name')
@@ -77,7 +78,7 @@ class ProductSearchService
             : [$product->name, $product->slug, strip_tags($product->description ?? '')];
 
         $url = route('product.details', ['slug' => $product->slug]);
-        if ($forStore) {
+        if ($forStore && !$product->isWatchProduct()) {
             $url .= '?store=1';
         }
 
