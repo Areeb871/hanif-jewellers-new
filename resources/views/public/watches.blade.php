@@ -252,6 +252,13 @@ section{
 .rolex-carousel .carousel-indicators{
   margin-bottom: 18px;
 }
+
+/* Lower the mobile hero indicators slightly. */
+.sectionOneMobile .carousel-indicators{
+    margin-bottom: 0;
+}
+
+
 /* Hero slide wrapper */
 .hero-slide{
     position: relative;
@@ -693,7 +700,7 @@ section{
                     
 
                     <img
-                        src="{{ asset('assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg') }}"
+                        src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-homepage-banner.avif') }}"
                         alt="Franck Muller"
                         class="hero-bg-img">
 
@@ -709,8 +716,8 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.png') }}"
-                        alt="Nagar"
+                        src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.webp') }}"
+                        alt="bovet"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -724,10 +731,8 @@ section{
 
                     <img
                         src="{{ asset('assets/f_assets/image/watches/ML-banner-index.jpeg') }}"
-                        alt="Nagar"
+                        alt="ML"
                         class="hero-bg-img">
-
-
 
                 </div>
             </div>
@@ -737,7 +742,7 @@ section{
 
                     <img
                         src="{{ asset('assets/f_assets/image/watches/perrelet_banner_image.jpeg') }}"
-                        alt="Nagar"
+                        alt="perrelet"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -790,13 +795,13 @@ section{
 
          
             <div class="carousel-item active">
-                <img src="{{ asset('assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg') }}"
+                <img src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-mob-homepage.avif') }}"
                      class="w-100 h-100 object-fit-cover"
                      alt="Franck Muller Mobile">
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/bovet_static.png') }}"
+                <img src="{{ asset('assets/f_assets/image/watches mobile view/bovet-mob-homepage.webp') }}"
                      class="w-100 h-100 object-fit-cover"
                      alt="Bovet Mobile">
             </div>
@@ -820,7 +825,7 @@ section{
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="1"></button>
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="2"></button>
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="3"></button>
-            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button>
+            <!-- <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button> -->
 
         </div>
     </div>

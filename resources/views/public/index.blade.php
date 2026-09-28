@@ -924,9 +924,9 @@ towering peaks</div>
 
     @php
     $brandBannerSlides = [
-        ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet Web Banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet_mobile.avif'],
+        ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet-homepage-banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet-mob-homepage.webp'],
         ['alt' => 'Favre-leuba', 'desktop' => 'assets/f_assets/image/watches/Hompage_favre.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_mobile_favre.jpeg'],
-        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg'],
+        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
         ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
 

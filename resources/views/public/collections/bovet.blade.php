@@ -67,9 +67,7 @@
     $desktopAsset = $bovetSubcategory->banner_url ?? null;
 
     // Mobile asset (custom Bovet mobile video fallback)
-    $mobileAsset = ($bovetSubcategory->slug === 'bovet')
-        ? 'assets/f_assets/image/watches mobile view/bovet_st.jpg'
-        : $desktopAsset;
+    $mobileAsset = 'assets/f_assets/image/watches mobile view/Bovet-mob-view.avif';
 
     // Detect types
     $desktopIsVideo = $desktopAsset && Str::endsWith($desktopAsset, ['.mp4', '.webm', '.ogg']);
@@ -455,6 +453,23 @@
 /* Desktop */
 @media (min-width: 992px){
     .bovet-hero{ height: 120vh; }
+}
+
+@media (max-width: 767px){
+    .bovet-hero{
+        height:auto;
+        overflow:visible;
+    }
+
+    .bovet-hero .bovet-hero__media{
+        position:relative;
+        inset:auto;
+        top:auto;
+        left:auto;
+        width:100%;
+        height:auto;
+        object-fit:contain;
+    }
 }
 
 .bovet-hero__media{
