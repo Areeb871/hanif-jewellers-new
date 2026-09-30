@@ -929,6 +929,7 @@ towering peaks</div>
         ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
         ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
+        ['alt' => 'Louis Moinet', 'desktop' => 'assets/f_assets/image/watches/LM-homepage.webp', 'mobile' => 'assets/f_assets/image/homepage_2_banner/LM-mob-homepage.webp'],
 
     ];
     @endphp

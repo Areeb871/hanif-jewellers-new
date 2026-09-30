@@ -67,7 +67,7 @@ img{
         $desktopIsVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
 
         /* Dedicated mobile banner */
-        $mobileBanner = 'assets/f_assets/image/watches mobile view/LM-mobile-view.mp4';
+        $mobileBanner = 'assets/f_assets/image/watches mobile view/LM-mob.webp';
 
 
         $mobileIsVideo = \Illuminate\Support\Str::endsWith(strtolower($mobileBanner), ['.mp4', '.webm', '.ogg']);

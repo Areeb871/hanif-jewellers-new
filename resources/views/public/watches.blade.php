@@ -741,8 +741,8 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/perrelet_banner_image.jpeg') }}"
-                        alt="perrelet"
+                        src="{{ asset('assets/f_assets/image/watches/LM-homepage.webp') }}"
+                        alt="Louis Moinet"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -750,6 +750,22 @@ section{
 
                 </div>
             </div>
+
+             <div class="carousel-item">
+                <div class="hero-slide">
+
+                    <img
+                        src="{{ asset('assets/f_assets/image/watches/FL-Homepage.webp') }}"
+                        alt="Favre Leuba"
+                        class="hero-bg-img">
+
+                    <div class="hero-content">
+                    </div>
+
+                </div>
+            </div>
+
+            
         </div>
 
 
@@ -813,9 +829,14 @@ section{
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/perrelee_mobile.jpg') }}"
+                <img src="{{ asset('assets/f_assets/image/watches mobile view/LM-mob-homepage.webp') }}"
                      class="w-100 h-100 object-fit-cover"
-                     alt="Perrelet Mobile">
+                     alt="Louis Moinet Mobile">
+            </div>
+              <div class="carousel-item">
+                <img src="{{ asset('assets/f_assets/image/watches mobile view/FL-Mob-View.jpeg') }}"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Favre Leuba Mobile">
             </div>
 
         </div>
@@ -825,7 +846,7 @@ section{
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="1"></button>
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="2"></button>
             <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="3"></button>
-            <!-- <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button> -->
+            <button type="button" data-bs-target="#rolexCarouselMobile" data-bs-slide-to="4"></button>
 
         </div>
     </div>
