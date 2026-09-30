@@ -31,8 +31,6 @@
   display: inline-block;
   z-index: 10;
 }
-
-} */
 /* remove any spacing around the section */
 .carousel-section {
   padding: 0 !important;
@@ -106,7 +104,7 @@
 }
 
 @media (min-width: 768px) {
-  section.bespoke-collections.d-none.d-md-block {
+  section.bespoke-collections.d-none.d-md-block:not(.bespoke-showcase) {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
@@ -158,27 +156,25 @@
 
 .mobileStackImgWrap{
   width: 100%;
+  height: 100%;
   overflow: hidden;
   background: #000;
-  height: auto !important;
-  min-height: 0;
-  max-height: none;
 }
 
 .mobileStackImg{
   width: 100%;
-  height: auto !important;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   object-position: center;
   display: block;
 }
 .mobileStackVideo{
   width: 100%;
-  height: auto !important;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   object-position: center center;
   display: block;
-  margin-top:52px;
+  margin: 0;
 }
 /* =========================
    Overlay Content (Haphazard + Discover + Location)
@@ -244,18 +240,78 @@
     color: #ffffff;
 }
 /*latest */
-/* Remove any container restriction */
+/* Hero fills the viewport under the header so Discover More stays on screen */
 .custom-banner {
+    position: relative;
     width: 100%;
+    height: calc(100dvh - var(--hj-header-h, 0px));
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    background: #000;
 }
 
-/* Full width image */
 .custom-banner-video {
-    width: 100%;
-    height: auto;
     display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.home-hero-mobile {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - var(--hj-header-h, 0px));
+    overflow: hidden;
+    background: #000;
+}
+
+/* Video stays pinned until the product cards have covered the whole frame */
+.home-hero-scroll {
+    position: relative;
+}
+
+.home-hero-runway {
+    height: var(--hero-scroll, 70vh);
+    pointer-events: none;
+}
+
+.home-hero-scroll > .custom-banner,
+.home-hero-scroll > .home-hero-mobile {
+    position: sticky;
+    top: var(--hj-header-h, 0px);
+    z-index: 1;
+    backface-visibility: hidden;
+}
+
+.home-hero-scroll .custom-banner-video,
+.home-hero-scroll .mobileStackVideo {
+    transform: translateZ(0);
+}
+
+/* Discover More scrolls up with the page/cards — not pinned to sticky video */
+.home-hero-scroll > .custom-banner-btn,
+.home-hero-scroll > .custom-banner-btn-new {
+    position: absolute;
+    top: calc(var(--hero-scroll, 70vh) - 70px);
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.home-hero-scroll + .watch,
+.home-hero-scroll ~ section {
+    position: relative;
+    z-index: 3;
+}
+
+.home-hero-scroll + .watch {
+    margin-top: calc(var(--hero-scroll, 70vh) * -1);
+    background-color: #f6f3ee;
 }
 .custom-banner-btn-new
 {
@@ -607,7 +663,7 @@ section.watch .watch-scroller-arrow:disabled,
     .bespoke-collections.d-md-none .watch-progress {
         display: flex;
         justify-content: center;
-        padding: 22px 24px 14px;
+        padding: 22px 16px 14px;
     }
 
     .bespoke-collections.d-md-none .watch-progress.is-hidden {
@@ -615,22 +671,17 @@ section.watch .watch-scroller-arrow:disabled,
     }
 
     .bespoke-collections.d-md-none .watch-progress__track {
-        position: relative;
-        width: 88px;
-        height: 2px;
-        background: rgba(0, 0, 0, 0.12);
-        overflow: hidden;
-        border-radius: 1px;
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
+        height: 3px;
+        background: #e5e7eb;
+        border-radius: 999px;
     }
 
     .bespoke-collections.d-md-none .watch-progress__fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        transition: left 0.2s ease-out, width 0.2s ease-out;
-        will-change: left, width;
+        background: #0d2a39;
+        border-radius: 999px;
     }
 }
 
@@ -682,8 +733,8 @@ section.watch .watch-scroller-arrow:disabled,
 
 section.watch .addToCartProductDetailsTop .carousel .carousel-item img,
 section.watch .addToCartProductDetailsTop .product-image {
-    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
     object-fit: contain;
@@ -812,34 +863,69 @@ section.watch .addToCartProductDetailsTop:hover .product-image {
         max-width: 100%;
     }
 
-    /* Minimal scroll progress — mobile only, no dots */
     section.watch .watch-progress {
         display: flex;
         justify-content: center;
-        padding: 22px 24px 14px;
-    }
-
-    section.watch .watch-progress.is-hidden {
-        visibility: hidden;
+        padding: 22px 16px 14px;
     }
 
     section.watch .watch-progress__track {
-        position: relative;
-        width: 88px;
-        height: 2px;
-        background: rgba(0, 0, 0, 0.12);
-        overflow: hidden;
-        border-radius: 1px;
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
     }
+}
 
-    section.watch .watch-progress__fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        transition: left 0.2s ease-out, width 0.2s ease-out;
-        will-change: left, width;
+section.watch .watch-progress,
+.bespoke-collections .watch-progress {
+    display: flex;
+    justify-content: center;
+    padding: 28px 16px 22px;
+}
+
+section.watch .watch-progress.is-hidden,
+.bespoke-collections .watch-progress.is-hidden {
+    visibility: hidden;
+}
+
+section.watch .watch-progress__track,
+.bespoke-collections .watch-progress__track {
+    position: relative;
+    width: 25%;
+    min-width: 160px;
+    max-width: 280px;
+    height: 3px;
+    background: #e5e7eb;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+section.watch .watch-progress__fill,
+.bespoke-collections .watch-progress__fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: #0d2a39;
+    border-radius: 999px;
+    transition: none;
+    will-change: left, width;
+}
+
+@media (max-width: 767.98px) {
+    section.watch .watch-progress__track,
+    .bespoke-collections .watch-progress__track {
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    section.watch .watch-progress__track,
+    .bespoke-collections .watch-progress__track {
+        width: 34%;
+        min-width: 180px;
+        max-width: 240px;
     }
 }
 
@@ -852,9 +938,6 @@ section.watch .addToCartProductDetailsTop:hover .product-image {
         min-width: 300px;
     }
 
-    section.watch .watch-progress {
-        display: none !important;
-    }
 }
 
 /* Migrated from legacy desktopStyle injection */
@@ -1039,13 +1122,14 @@ culminating in a true resemblance of experience pure art.</div>
 
 
 
-<section class="custom-banner d-none d-md-block position-relative">
+<div class="home-hero-scroll">
+<section class="custom-banner d-none d-md-block">
     <video class="custom-banner-video" autoplay muted loop playsinline>
         <source src="{{ asset('assets/f_assets/image/miras/miras_desktop.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-            <a href="/collections/miras" class="custom-banner-btn">DISCOVER MORE</a>
 </section>
+<a href="/collections/miras" class="custom-banner-btn d-none d-md-inline-block">DISCOVER MORE</a>
 
 <!-- <section class="custom-banner d-none d-md-block position-relative">
      @php
@@ -1079,7 +1163,7 @@ towering peaks</div>
 
 
 </section> -->
-<section class="d-block d-md-none position-relative">
+<section class="home-hero-mobile d-block d-md-none">
   <div class="mobileStackImgWrap">
   <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
     <source src="{{ asset('assets/f_assets/image/miras/miras_mob.webm') }}" type="video/mp4">
@@ -1101,8 +1185,10 @@ towering peaks</div>
 /> -->
 
   </div>
-<a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
+<a href="/collections/franck-muller" class="custom-banner-btn-new d-inline-block d-md-none">DISCOVER MORE</a>
+    <div class="home-hero-runway" aria-hidden="true"></div>
+</div>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
         <div class="watch-slider-viewport">
@@ -1134,7 +1220,7 @@ towering peaks</div>
             </button>
         </div>
         @if (count($products) > 1)
-        <div class="watch-progress d-lg-none" aria-hidden="true">
+        <div class="watch-progress" aria-hidden="true">
             <div class="watch-progress__track">
                 <div class="watch-progress__fill"></div>
             </div>
@@ -1144,9 +1230,9 @@ towering peaks</div>
 
     @php
     $brandBannerSlides = [
-        ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet Web Banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet_mobile.avif'],
+        ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet-homepage-banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet-mob-homepage.webp'],
         ['alt' => 'Favre-leuba', 'desktop' => 'assets/f_assets/image/watches/Hompage_favre.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_mobile_favre.jpeg'],
-        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/fm-mob-view.jpg'],
+ ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
         ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
 
@@ -1191,87 +1277,50 @@ towering peaks</div>
     ];
     @endphp
 
-    <section class="onlineStore bespoke-collections d-none d-md-block" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title">
-        Bespoke Collections
-    </h2>
-
-    <div class="watch-slider-viewport">
-        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous" disabled>
-            <span aria-hidden="true" class="arrow-icon arrow-left">
-                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
-                </svg>
-            </span>
-        </button>
-        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
-            <div class="scroller-container">
-                @foreach ($products_new as $key => $product)
-                <div class="scroller-item">
-                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-                        <div class="lux-card">
-                            <span class="lux-ratio"></span>
-                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
-                            <div class="lux-hover">
-                                <div class="lux-box">
-                                    @if(!empty($product->hover_image))
-                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
+    <section class="bespoke-collections bespoke-showcase">
+        <div class="bespoke-showcase__info">
+            <div class="bespoke-showcase__copy">
+                <h2 class="bespoke-showcase__title">Bespoke Collection</h2>
+                <p class="bespoke-showcase__text">Jewellery becomes special when it feels like it was made with someone in mind.</p>
+                <p class="bespoke-showcase__text">This collection brings together thoughtful design, fine craftsmanship and distinctive details to create pieces that feel personal, refined and full of character.</p>
+                <p class="bespoke-showcase__text">Made to be worn and treasured, each one is designed to become part of your story.</p>
             </div>
+            @if (count($products_new) > 1)
+            <div class="bespoke-showcase__dots bespoke-showcase__dots--side" role="tablist" aria-label="Bespoke collection pages"></div>
+            @endif
         </div>
-        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next">
-            <span aria-hidden="true" class="arrow-icon">
-                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+
+        <div class="watch-slider-viewport bespoke-showcase__stage">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous collections" disabled>
+                <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
+                    <path d="M8.4 1.25L1.7 8.38C1.51 8.61 1.37 8.89 1.37 9.13C1.37 9.36 1.51 9.64 1.7 9.87L8.4 17" stroke="currentColor" stroke-width="1.2"/>
                 </svg>
-            </span>
-        </button>
-    </div>
-</section>
-
-<!-- ========================= MOBILE SECTION ========================= -->
-<section class="mobile-jewelry-section bespoke-collections d-md-none" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title">
-        Bespoke Collection
-    </h2>
-
-    <div class="watch-slider-viewport">
-        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
-            <div class="scroller-container">
-                @foreach ($products_new as $key => $product)
-                <div class="scroller-item">
-                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-                        <div class="lux-card">
-                            <span class="lux-ratio"></span>
-                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
-                            <div class="lux-hover">
-                                <div class="lux-box">
-                                    @if(!empty($product->hover_image))
-                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+            </button>
+            <div class="mobile-product-scroller">
+                <div class="scroller-container">
+                    @foreach ($products_new as $key => $product)
+                    <div class="scroller-item">
+                        <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="bespoke-showcase__card">
+                            <span class="bespoke-showcase__media">
+                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy">
+                            </span>
+                            <span class="bespoke-showcase__name">{{ $product->name }}</span>
+                        </a>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next collections">
+                <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
+                    <path d="M1.6 1.25L8.3 8.38C8.49 8.61 8.63 8.89 8.63 9.13C8.63 9.36 8.49 9.64 8.3 9.87L1.6 17" stroke="currentColor" stroke-width="1.2"/>
+                </svg>
+            </button>
         </div>
-    </div>
-    @if (count($products_new) > 1)
-    <div class="watch-progress" aria-hidden="true">
-        <div class="watch-progress__track">
-            <div class="watch-progress__fill"></div>
-        </div>
-    </div>
-    @endif
-</section>
+
+        @if (count($products_new) > 1)
+        <div class="bespoke-showcase__dots bespoke-showcase__dots--bottom" role="tablist" aria-label="Bespoke collection pages"></div>
+        @endif
+    </section>
 
 <style>
 /* Bespoke collections scroller (same scroll pattern as watch) */
@@ -1302,43 +1351,318 @@ towering peaks</div>
     scroll-snap-align: none;
 }
 
-@media (min-width: 768px) {
-    .bespoke-collections.d-none.d-md-block .watch-slider-viewport {
-        padding: 0 20px;
+.bespoke-showcase {
+    background: #fff;
+    color: #0d2a39;
+    padding: 56px 0 48px;
+}
+
+.bespoke-showcase__info {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 0 36px 0 40px;
+}
+
+.bespoke-showcase__copy {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.bespoke-showcase__title {
+    margin: 0 0 48px;
+    padding: 0;
+    width: max-content;
+    max-width: none;
+    font-family: "Argent CF", Georgia, serif;
+    font-size: 41px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    text-transform: none;
+    white-space: nowrap;
+    color: #0d2a39;
+    text-align: left;
+}
+
+.bespoke-showcase__text {
+    margin: 0;
+    width: 0;
+    min-width: 100%;
+    max-width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.55;
+    letter-spacing: normal;
+    color: #868686;
+    text-align: justify;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.bespoke-showcase__text + .bespoke-showcase__text {
+    margin-top: 14px;
+}
+
+.bespoke-showcase__dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 18px;
+}
+
+.bespoke-showcase__dots--side {
+    display: none;
+}
+
+.bespoke-showcase__dots--bottom {
+    display: none;
+}
+
+.bespoke-showcase__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #d5d5d5;
+    cursor: pointer;
+}
+
+.bespoke-showcase__dot.is-active {
+    background: #0d2a39;
+}
+
+.bespoke-showcase__stage {
+    position: relative;
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.bespoke-showcase .mobile-product-scroller {
+    width: 100%;
+    background: #fff;
+    container-type: inline-size;
+}
+
+.bespoke-showcase .scroller-container {
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+}
+
+.bespoke-showcase .scroller-item {
+    flex: 0 0 calc((100cqi - 30px) / 2);
+    width: calc((100cqi - 30px) / 2);
+    max-width: none;
+    min-width: 0;
+}
+
+.bespoke-showcase__card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.bespoke-showcase__media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    overflow: hidden;
+}
+
+.bespoke-showcase__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.bespoke-showcase__name {
+    display: block;
+    margin-top: 18px;
+    font-family: "Argent CF", Georgia, serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #0d2a39;
+}
+
+.bespoke-showcase .watch-scroller-arrow {
+    top: 34%;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    opacity: 1;
+    pointer-events: auto;
+    color: #0d2a39;
+    background: transparent;
+}
+
+.bespoke-showcase .watch-scroller-arrow::before,
+.bespoke-showcase .watch-scroller-arrow::after {
+    display: none;
+}
+
+.bespoke-showcase .watch-scroller-arrow--prev {
+    left: 0;
+}
+
+.bespoke-showcase .watch-scroller-arrow--next {
+    right: 0;
+}
+
+.bespoke-showcase .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled) {
+    opacity: 1;
+}
+
+@media (min-width: 1100px) {
+    .bespoke-showcase {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
     }
 
-    .bespoke-collections.d-none.d-md-block .scroller-item {
-        flex: 0 0 calc((100vw - 120px) / 4);
-        width: calc((100vw - 120px) / 4);
-        max-width: calc((100vw - 120px) / 4);
-        min-width: calc((100vw - 120px) / 4);
+    .bespoke-showcase__info {
+        flex: 0 0 460px;
+        width: 460px;
+        padding: 0 28px 0 48px;
+    }
+
+    .bespoke-showcase__stage {
+        flex: 1 1 0;
+        width: calc(100% - 460px);
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 60px) / 3);
+        width: calc((100cqi - 60px) / 3);
+        min-width: 0;
+    }
+
+    .bespoke-showcase__dots--side {
+        display: flex;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        display: none;
+    }
+}
+
+@media (min-width: 1600px) {
+    .bespoke-showcase__info {
+        flex-basis: 480px;
+        width: 480px;
+        padding: 0 28px 0 48px;
+    }
+
+    .bespoke-showcase__stage {
+        width: calc(100% - 480px);
+    }
+}
+
+@media (max-width: 1099.98px) {
+    .bespoke-showcase {
+        display: flex;
+        flex-direction: column;
+        padding: 40px 0 36px;
+    }
+
+    .bespoke-showcase__info {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 24px 28px;
+        gap: 0;
+    }
+
+    .bespoke-showcase__title {
+        font-size: 28px;
+        margin-bottom: 40px;
+    }
+
+    .bespoke-showcase__dots--side {
+        display: none;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 28px;
+        padding: 0 24px;
+    }
+
+    .bespoke-showcase__stage {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 16px;
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 30px) / 2);
+        width: calc((100cqi - 30px) / 2);
+        min-width: 0;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow {
+        opacity: 1;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow--prev {
+        left: 8px;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow--next {
+        right: 8px;
     }
 }
 
 @media (max-width: 767.98px) {
     .carousel-section {
         margin-bottom: 0 !important;
-        /* padding-top:20px !important; */
     }
 
-    .bespoke-collections.d-md-none {
-        margin-top: 0;
-        padding-top: 0;
+    .bespoke-showcase {
+        padding: 32px 0 28px;
     }
 
-    .bespoke-collections.d-md-none .watch-slider-viewport {
-        padding: 0 10px;
+    .bespoke-showcase__info {
+        padding: 0 20px 22px;
     }
 
-    .bespoke-collections.d-md-none .scroller-container {
-        gap: 14px;
+    .bespoke-showcase__title {
+        font-size: 24px;
+        margin-bottom: 32px;
     }
 
-    .bespoke-collections.d-md-none .scroller-item {
-        flex: 0 0 86vw;
-        width: 86vw;
-        max-width: 86vw;
-        min-width: 86vw;
+    .bespoke-showcase__stage {
+        padding: 0 12px;
+    }
+
+    .bespoke-showcase .scroller-container {
+        gap: 20px;
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 20px) / 2);
+        width: calc((100cqi - 20px) / 2);
+    }
+
+    .bespoke-showcase__name {
+        font-size: 12px;
+        margin-top: 14px;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        margin-top: 22px;
+        padding: 0 20px;
     }
 }
 </style>
@@ -1552,6 +1876,150 @@ $brands = [
 </div>
 
 <script>
+(function () {
+    function syncHeroStickyTop() {
+        var header = window.innerWidth < 992
+            ? document.querySelector('header.mobile-header-main')
+            : document.querySelector('.luxury-header');
+        var height = header ? header.offsetHeight : 0;
+        document.documentElement.style.setProperty('--hj-header-h', height + 'px');
+    }
+
+    function syncHeroScroll() {
+        syncHeroStickyTop();
+        var scene = document.querySelector('.home-hero-scroll');
+        if (!scene) return;
+        var banner = window.innerWidth >= 768
+            ? scene.querySelector('.custom-banner')
+            : scene.querySelector('.home-hero-mobile');
+        if (!banner) return;
+        var height = Math.round(banner.getBoundingClientRect().height);
+        if (height < 1) return;
+        scene.style.setProperty('--hero-scroll', height + 'px');
+        document.documentElement.style.setProperty('--hero-scroll', height + 'px');
+    }
+
+    syncHeroScroll();
+    window.addEventListener('resize', syncHeroScroll);
+    window.addEventListener('load', syncHeroScroll);
+    document.querySelectorAll('.home-hero-scroll video').forEach(function (video) {
+        video.addEventListener('loadedmetadata', syncHeroScroll);
+        video.addEventListener('loadeddata', syncHeroScroll);
+    });
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (reduceMotion || !finePointer) return;
+
+    document.documentElement.style.scrollBehavior = 'auto';
+
+    var current = window.scrollY;
+    var target = window.scrollY;
+    var frame = 0;
+    var driving = false;
+    var ease = 0.08;
+
+    function maxScroll() {
+        var scrolling = document.scrollingElement || document.documentElement;
+        return Math.max(0, scrolling.scrollHeight - window.innerHeight);
+    }
+
+    function clampScroll(value) {
+        return Math.max(0, Math.min(maxScroll(), value));
+    }
+
+    function canScrollInside(node, delta) {
+        var el = node;
+        while (el && el !== document.body && el !== document.documentElement) {
+            if (el.nodeType === 1) {
+                var style = window.getComputedStyle(el);
+                var overflowY = style.overflowY;
+                if ((overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') && el.scrollHeight > el.clientHeight + 2) {
+                    var atTop = el.scrollTop <= 0;
+                    var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+                    if ((delta < 0 && !atTop) || (delta > 0 && !atBottom)) return true;
+                }
+            }
+            el = el.parentElement;
+        }
+        return false;
+    }
+
+    function tick() {
+        var delta = target - current;
+        if (Math.abs(delta) < 0.5) {
+            current = target;
+            frame = 0;
+        } else {
+            current += delta * ease;
+            frame = window.requestAnimationFrame(tick);
+        }
+        var y = Math.round(current);
+        if (Math.abs(window.scrollY - y) >= 1) {
+            driving = true;
+            window.scrollTo(0, y);
+            driving = false;
+        }
+    }
+
+    function glideTo(nextTarget) {
+        target = clampScroll(nextTarget);
+        if (!frame) frame = window.requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', function () {
+        if (driving) return;
+        if (Math.abs(window.scrollY - Math.round(current)) < 3) return;
+        current = window.scrollY;
+        target = window.scrollY;
+        if (frame) {
+            window.cancelAnimationFrame(frame);
+            frame = 0;
+        }
+    }, { passive: true });
+
+    window.addEventListener('wheel', function (event) {
+        if (event.ctrlKey || event.metaKey) return;
+        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+        var delta = event.deltaY;
+        if (event.deltaMode === 1) delta *= 16;
+        else if (event.deltaMode === 2) delta *= window.innerHeight;
+        if (canScrollInside(event.target, delta)) return;
+
+        event.preventDefault();
+        glideTo(target + delta);
+    }, { passive: false });
+
+    window.addEventListener('keydown', function (event) {
+        var tag = event.target && event.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (event.target && event.target.isContentEditable)) return;
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+
+        var delta = 0;
+        if (event.key === 'ArrowDown') delta = 90;
+        else if (event.key === 'ArrowUp') delta = -90;
+        else if (event.key === 'PageDown') delta = window.innerHeight * 0.9;
+        else if (event.key === 'PageUp') delta = window.innerHeight * -0.9;
+        else if (event.key === ' ') delta = (event.shiftKey ? -1 : 1) * window.innerHeight * 0.9;
+        else if (event.key === 'Home') {
+            event.preventDefault();
+            glideTo(0);
+            return;
+        } else if (event.key === 'End') {
+            event.preventDefault();
+            glideTo(maxScroll());
+            return;
+        } else {
+            return;
+        }
+
+        event.preventDefault();
+        glideTo(target + delta);
+    });
+})();
+</script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
     const selector = '.home-brands .brand-item';
     const items = document.querySelectorAll(selector);
@@ -1757,10 +2225,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            let isAnimating = false;
+            let logicalIndex = 0;
+            let animRaf = 0;
+            let animating = false;
             let isMouseDown = false;
             let mouseStartX = 0;
             let mouseStartScrollLeft = 0;
+            let dragDistance = 0;
+            let pointerVelocity = 0;
+            let lastPointerX = 0;
+            let lastPointerT = 0;
             let startX = 0;
             let startY = 0;
             let isInteractingWithCarousel = false;
@@ -1771,57 +2245,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const watchProgressFill = section.querySelector('.watch-progress__fill');
 
             function isDesktopScrollerSection() {
-                const isDesktopBespoke = scroller.closest('section.bespoke-collections.d-none.d-md-block');
+                const isDesktopBespoke = scroller.closest('section.bespoke-showcase');
                 const isDesktopWatches = scroller.closest('section.watch');
                 return !!(isDesktopBespoke || isDesktopWatches);
             }
 
-            function getItemScrollTarget(item) {
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                const itemIndex = Array.from(items).indexOf(item);
-                if (itemIndex === 0) {
-                    return 0;
-                }
-                if (itemIndex === items.length - 1) {
-                    const endAligned = item.offsetLeft + item.offsetWidth - scroller.clientWidth;
-                    return Math.max(0, Math.min(maxScroll, endAligned));
-                }
-                return Math.max(0, Math.min(maxScroll, item.offsetLeft));
-            }
-
-            function smoothScrollTo(element, target) {
-                isAnimating = true;
-                const startLeft = element.scrollLeft;
-                const distance = target - startLeft;
-                const duration = 500;
-                let startTime = null;
-
-                function easeInOutCubic(t) {
-                    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                }
-
-                function step(timestamp) {
-                    if (startTime === null) startTime = timestamp;
-                    const elapsed = timestamp - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const eased = easeInOutCubic(progress);
-                    element.scrollLeft = startLeft + distance * eased;
-                    if (elapsed < duration) {
-                        requestAnimationFrame(step);
-                    } else {
-                        element.scrollLeft = target;
-                        isAnimating = false;
-                        updateArrowButtons();
-                        updateWatchProgress();
-                    }
-                }
-
-                requestAnimationFrame(step);
-            }
-
-            function scrollWatchTo(target) {
-                if (isAnimating) return;
-                smoothScrollTo(scroller, target);
+            function getScrollLimit() {
+                return Math.max(0, scroller.scrollWidth - scroller.clientWidth);
             }
 
             function getItemStep() {
@@ -1832,76 +2262,178 @@ document.addEventListener('DOMContentLoaded', function() {
                 return items[0].getBoundingClientRect().width;
             }
 
+            function getMaxIndex() {
+                const step = getItemStep();
+                const limit = getScrollLimit();
+                if (!step || step <= 0 || limit <= 2) return 0;
+                return Math.max(0, Math.min(items.length - 1, Math.ceil(limit / step - 0.001)));
+            }
+
+            function indexToScroll(index) {
+                const step = getItemStep();
+                const limit = getScrollLimit();
+                const bounded = Math.max(0, Math.min(getMaxIndex(), index));
+                return Math.max(0, Math.min(limit, Math.round(bounded * step)));
+            }
+
             function getNearestIndex() {
                 const step = getItemStep();
                 if (!step || step <= 0) return 0;
                 const rawIndex = Math.round(scroller.scrollLeft / step);
-                return Math.max(0, Math.min(items.length - 1, rawIndex));
+                return Math.max(0, Math.min(getMaxIndex(), rawIndex));
+            }
+
+            function stopAnimation() {
+                if (animRaf) cancelAnimationFrame(animRaf);
+                animRaf = 0;
+                animating = false;
+            }
+
+            function smoothScrollTo(target) {
+                const destination = Math.max(0, Math.min(getScrollLimit(), target));
+                stopAnimation();
+                const startLeft = scroller.scrollLeft;
+                const distance = destination - startLeft;
+                if (Math.abs(distance) < 1) {
+                    scroller.scrollLeft = destination;
+                    refreshScrollerUi();
+                    return;
+                }
+
+                animating = true;
+                const duration = Math.min(680, Math.max(340, 280 + Math.abs(distance) * 0.35));
+                let startTime = null;
+
+                function easeOutCubic(t) {
+                    return 1 - Math.pow(1 - t, 3);
+                }
+
+                function step(timestamp) {
+                    if (startTime === null) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    scroller.scrollLeft = startLeft + distance * easeOutCubic(progress);
+                    updateWatchProgress();
+                    if (progress < 1) {
+                        animRaf = requestAnimationFrame(step);
+                    } else {
+                        scroller.scrollLeft = destination;
+                        animRaf = 0;
+                        animating = false;
+                        refreshScrollerUi();
+                    }
+                }
+
+                animRaf = requestAnimationFrame(step);
             }
 
             function updateWatchProgress() {
                 if (!watchProgressFill || !watchProgressEl) return;
 
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                if (maxScroll <= 2 || items.length <= 1) {
+                const limit = getScrollLimit();
+                const total = scroller.scrollWidth;
+                if (limit <= 2 || items.length <= 1 || total <= 0) {
                     watchProgressEl.classList.add('is-hidden');
                     return;
                 }
 
                 watchProgressEl.classList.remove('is-hidden');
-                const segmentPct = 100 / items.length;
-                const progress = scroller.scrollLeft / maxScroll;
-                watchProgressFill.style.width = segmentPct + '%';
-                watchProgressFill.style.left = (progress * (100 - segmentPct)) + '%';
+                const thumb = Math.max(12, (scroller.clientWidth / total) * 100);
+                const left = (scroller.scrollLeft / limit) * (100 - thumb);
+                watchProgressFill.style.width = thumb + '%';
+                watchProgressFill.style.left = left + '%';
             }
 
             function updateArrowButtons() {
                 if (!arrowPrevBtn || !arrowNextBtn || !items.length) return;
 
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                const noScroll = maxScroll <= 2 || items.length <= 1;
+                const limit = getScrollLimit();
+                const noScroll = limit <= 2 || items.length <= 1;
 
                 arrowPrevBtn.disabled = noScroll || scroller.scrollLeft <= 5;
-                arrowNextBtn.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+                arrowNextBtn.disabled = noScroll || scroller.scrollLeft >= limit - 5;
             }
 
             function scrollToItemByIndex(itemIndex) {
-                const bounded = Math.max(0, Math.min(items.length - 1, itemIndex));
-                const targetItem = items[bounded];
-                if (!targetItem) return;
-
-                scrollWatchTo(getItemScrollTarget(targetItem));
-
-                setTimeout(() => {
-                    updateArrowButtons();
-                    updateWatchProgress();
-                }, 520);
+                const bounded = Math.max(0, Math.min(getMaxIndex(), itemIndex));
+                logicalIndex = bounded;
+                smoothScrollTo(indexToScroll(bounded));
             }
 
             function resetScrollerPosition() {
+                stopAnimation();
+                logicalIndex = 0;
                 scroller.scrollLeft = 0;
+            }
+
+            const dotsEls = section.querySelectorAll('.bespoke-showcase__dots');
+
+            function updateDots() {
+                if (!dotsEls.length) return;
+                const pages = getMaxIndex() + 1;
+                dotsEls.forEach(function(dotsEl) {
+                    if (dotsEl.childElementCount !== pages) {
+                        dotsEl.innerHTML = '';
+                        for (let i = 0; i < pages; i++) {
+                            const dot = document.createElement('button');
+                            dot.type = 'button';
+                            dot.className = 'bespoke-showcase__dot';
+                            dot.setAttribute('aria-label', 'Show collections ' + (i + 1));
+                            (function(pageIndex) {
+                                dot.addEventListener('click', function() {
+                                    scrollToItemByIndex(pageIndex);
+                                });
+                            })(i);
+                            dotsEl.appendChild(dot);
+                        }
+                    }
+                    Array.from(dotsEl.children).forEach(function(dot, index) {
+                        dot.classList.toggle('is-active', index === logicalIndex);
+                        dot.setAttribute('aria-current', index === logicalIndex ? 'true' : 'false');
+                    });
+                });
             }
 
             function refreshScrollerUi() {
                 updateArrowButtons();
                 updateWatchProgress();
+                updateDots();
             }
 
             if (arrowPrevBtn && arrowNextBtn) {
                 arrowPrevBtn.addEventListener('click', function() {
-                    scrollToItemByIndex(getNearestIndex() - 1);
+                    scrollToItemByIndex(logicalIndex - 1);
                 });
                 arrowNextBtn.addEventListener('click', function() {
-                    scrollToItemByIndex(getNearestIndex() + 1);
+                    scrollToItemByIndex(logicalIndex + 1);
                 });
             }
 
-            scroller.addEventListener('mousedown', function(e) {
-                if (!isDesktopScrollerSection()) return;
+            function endDrag() {
+                if (!isMouseDown) return;
+                isMouseDown = false;
+                if (isDesktopScrollerSection()) scroller.style.cursor = 'grab';
+                if (dragDistance < 8) {
+                    logicalIndex = getNearestIndex();
+                    refreshScrollerUi();
+                    return;
+                }
+                let index = getNearestIndex();
+                if (pointerVelocity <= -0.45) index += 1;
+                else if (pointerVelocity >= 0.45) index -= 1;
+                scrollToItemByIndex(index);
+            }
 
+            scroller.addEventListener('mousedown', function(e) {
+                if (!isDesktopScrollerSection() || e.button !== 0) return;
+
+                stopAnimation();
                 isMouseDown = true;
+                dragDistance = 0;
+                pointerVelocity = 0;
                 mouseStartX = e.clientX;
                 mouseStartScrollLeft = scroller.scrollLeft;
+                lastPointerX = e.clientX;
+                lastPointerT = performance.now();
                 scroller.style.cursor = 'grabbing';
                 e.preventDefault();
             });
@@ -1909,17 +2441,21 @@ document.addEventListener('DOMContentLoaded', function() {
             scroller.addEventListener('mousemove', function(e) {
                 if (!isMouseDown) return;
                 e.preventDefault();
-                scroller.scrollLeft = mouseStartScrollLeft + (mouseStartX - e.clientX) * 2;
+                const now = performance.now();
+                const dt = now - lastPointerT;
+                if (dt > 0) pointerVelocity = (e.clientX - lastPointerX) / dt;
+                lastPointerX = e.clientX;
+                lastPointerT = now;
+                const dx = e.clientX - mouseStartX;
+                dragDistance = Math.abs(dx);
+                scroller.scrollLeft = mouseStartScrollLeft - dx;
             });
 
-            scroller.addEventListener('mouseup', function() {
-                isMouseDown = false;
-                scroller.style.cursor = 'grab';
-            });
+            scroller.addEventListener('mouseup', endDrag);
 
             scroller.addEventListener('mouseleave', function() {
-                isMouseDown = false;
-                scroller.style.cursor = 'grab';
+                if (!isMouseDown) return;
+                endDrag();
             });
 
             if (isDesktopScrollerSection()) {
@@ -1955,6 +2491,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (scrollRAF) cancelAnimationFrame(scrollRAF);
                 scrollRAF = requestAnimationFrame(() => {
                     refreshScrollerUi();
+                    if (!animating && !isMouseDown) logicalIndex = getNearestIndex();
                     scrollRAF = null;
                 });
             });
@@ -1966,14 +2503,12 @@ document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('resize', function() {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
-                    resetScrollerPosition();
+                    const keep = logicalIndex;
+                    stopAnimation();
+                    logicalIndex = Math.max(0, Math.min(getMaxIndex(), keep));
+                    scroller.scrollLeft = indexToScroll(logicalIndex);
                     refreshScrollerUi();
                 }, 150);
-            });
-
-            window.addEventListener('load', function() {
-                resetScrollerPosition();
-                refreshScrollerUi();
             });
         });
     }

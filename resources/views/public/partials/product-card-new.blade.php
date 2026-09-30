@@ -62,12 +62,17 @@
         transform: none !important;
     }
     
-    /* Consistent spacing for name and price */
+    /* Consistent spacing for name and price — keep Discover More aligned with or without price */
     .addToCartProductDetailsTop .card-body .product-name-fixed {
         margin-bottom: 0.35rem;
     }
     .addToCartProductDetailsTop .card-body .card-text {
         margin-bottom: 0.35rem;
+        min-height: 1.4em;
+        line-height: 1.4;
+    }
+    .addToCartProductDetailsTop .card-body .card-text--empty {
+        visibility: hidden;
     }
     
     .addToCartProductDetailsTop .carousel .carousel-item img,
@@ -264,10 +269,52 @@
 /* Image sizing + center */
 .product-image {
   max-width: 100%;
+  max-height: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
   object-fit: contain;
+}
+
+.addToCartProductDetailsTop .card-img .carousel .carousel-item img,
+.addToCartProductDetailsTop .card-img .img-fluid {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Desktop: keep image box square so max-height can constrain the photo */
+@media (min-width: 768px) {
+    .addToCartProductDetailsTop .card-img .carousel,
+    .addToCartProductDetailsTop .card-img .carousel-inner,
+    .addToCartProductDetailsTop .card-img > .position-relative {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+    }
+
+    /* Do not set display on .carousel-item — Bootstrap needs display:none for inactive slides */
+    .addToCartProductDetailsTop .card-img .carousel-item {
+        height: 100%;
+    }
+
+    .addToCartProductDetailsTop .card-img .carousel-item > a,
+    .addToCartProductDetailsTop .card-img .product-image-link {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .addToCartProductDetailsTop .card-img img,
+    .addToCartProductDetailsTop .card-img .product-image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
 }
 /* Mobile: keep dot area same as card color */
 @media (max-width: 767.98px) {
@@ -358,11 +405,11 @@
                         </li>
                     @endforeach
                 </ul> -->
-                <button class="carousel-control-prev pe-none" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next pe-none" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -381,6 +428,10 @@
         @endif
     </div>
     <!-- <div class="card-img-overlay pe-none">New</div> -->
+    @php
+        $roundedPrice = round($livePrice, -3);
+        $showCardPrice = $roundedPrice > 0;
+    @endphp
     <div class="card-body text-center" style="background-color: #F6F4F2;">
           <h5 class="card-title product-name-fixed">
     @php
@@ -390,27 +441,13 @@
     {{ trim($nameParts[0]) }}
 </h5>
 
-        <!-- @if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
-            <p class="card-text">
-                PKR {{ number_format($product->price, 0, '.', ',') }}
-            </p>
-        @endif -->
-
-<!-- Commented the price for data entry -->
- 
- <!-- <p class="card-text">
-@php
-    $roundedPrice = round($livePrice, -3);
-@endphp
-
-@if($roundedPrice > 0)
-    <p class="card-text">
-        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
-    </p>
-@endif
-
-        </p>  -->
-   
+        <p class="card-text{{ $showCardPrice ? '' : ' card-text--empty' }}">
+            @if($showCardPrice)
+                PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+            @else
+                &nbsp;
+            @endif
+        </p>
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
             <a href="{{ $detailUrl }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">Discover More</a>
