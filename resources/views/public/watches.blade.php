@@ -1,4 +1,5 @@
 @extends('public.layouts.header_black_white_fixed')
+@section('content')
 <style>
 html,
 body{
@@ -278,6 +279,11 @@ section{
     z-index: 0;
     display: block;
 }
+.hero-slide picture,
+.sectionOneMobile picture {
+    display: block;
+    width: 100%;
+}
 
 /* Text overlay */
 .hero-content{
@@ -338,7 +344,6 @@ section{
     }
 }
 
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
     .ehed-hero-section {
         display: flex;
         align-items: center;
@@ -667,7 +672,6 @@ section{
     }
 }
 </style>
-@section('content')
 <!-- <section class="watches-video-hero d-none d-md-block" data-header-hero>
         <video autoplay loop muted playsinline>
             <source src="{{ asset('assets/f_assets/image/watches/hero.webm') }}" type="video/mp4">
@@ -689,8 +693,7 @@ section{
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarousel"
-         class="carousel slide rolex-carousel"
-         data-bs-ride="carousel">
+         class="carousel slide rolex-carousel">
 
         <div class="carousel-inner">
 
@@ -699,10 +702,18 @@ section{
                 <div class="hero-slide">
                     
 
-                    <img
-                        src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-homepage-banner.avif') }}"
-                        alt="Franck Muller"
-                        class="hero-bg-img">
+                    <picture>
+                        <source media="(max-width: 767.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
+                        <img
+                            src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-homepage-banner.avif') }}"
+                            alt="Franck Muller"
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="async"
+                            width="1935"
+                            height="1080"
+                            class="hero-bg-img">
+                    </picture>
 
                     <div class="hero-content">
 
@@ -716,8 +727,12 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.webp') }}"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        data-src="{{ asset('assets/f_assets/image/watches/Bovet Web Banner.webp') }}"
                         alt="bovet"
+                        decoding="async"
+                        width="1935"
+                        height="1080"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -730,8 +745,12 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/ML-banner-index.jpeg') }}"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        data-src="{{ asset('assets/f_assets/image/watches/ML-banner-index.jpeg') }}"
                         alt="ML"
+                        decoding="async"
+                        width="3840"
+                        height="2160"
                         class="hero-bg-img">
 
                 </div>
@@ -741,8 +760,12 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/LM-homepage.webp') }}"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        data-src="{{ asset('assets/f_assets/image/watches/LM-homepage.webp') }}"
                         alt="Louis Moinet"
+                        decoding="async"
+                        width="1935"
+                        height="1080"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -755,8 +778,12 @@ section{
                 <div class="hero-slide">
 
                     <img
-                        src="{{ asset('assets/f_assets/image/watches/FL-Homepage.webp') }}"
+                        src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                        data-src="{{ asset('assets/f_assets/image/watches/FL-Homepage.webp') }}"
                         alt="Favre Leuba"
+                        decoding="async"
+                        width="1935"
+                        height="1080"
                         class="hero-bg-img">
 
                     <div class="hero-content">
@@ -804,38 +831,61 @@ section{
     style="position: relative; overflow: hidden;">
 
     <div id="rolexCarouselMobile"
-         class="carousel slide"
-         data-bs-ride="carousel">
+         class="carousel slide">
 
         <div class="carousel-inner">
 
          
             <div class="carousel-item active">
-                <img src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-mob-homepage.avif') }}"
-                     class="w-100 h-100 object-fit-cover"
-                     alt="Franck Muller Mobile">
+                <picture>
+                    <source media="(min-width: 768px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
+                    <img src="{{ asset('assets/f_assets/image/homepage_2_banner/FM-mob-homepage.avif') }}"
+                         class="w-100 h-100 object-fit-cover"
+                         loading="eager"
+                         fetchpriority="high"
+                         decoding="async"
+                         width="1080"
+                         height="1920"
+                         alt="Franck Muller Mobile">
+                </picture>
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/bovet-mob-homepage.webp') }}"
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                     data-src="{{ asset('assets/f_assets/image/watches mobile view/bovet-mob-homepage.webp') }}"
                      class="w-100 h-100 object-fit-cover"
+                     decoding="async"
+                     width="1080"
+                     height="1920"
                      alt="Bovet Mobile">
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches/ML-mobile-index.avif') }}"
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                     data-src="{{ asset('assets/f_assets/image/watches/ML-mobile-index.avif') }}"
                      class="w-100 h-100 object-fit-cover"
+                     decoding="async"
+                     width="1080"
+                     height="1920"
                      alt="ML Mobile">
             </div>
 
             <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/LM-mob-homepage.webp') }}"
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                     data-src="{{ asset('assets/f_assets/image/watches mobile view/LM-mob-homepage.webp') }}"
                      class="w-100 h-100 object-fit-cover"
+                     decoding="async"
+                     width="1080"
+                     height="1920"
                      alt="Louis Moinet Mobile">
             </div>
               <div class="carousel-item">
-                <img src="{{ asset('assets/f_assets/image/watches mobile view/FL-Mob-View.jpeg') }}"
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+                     data-src="{{ asset('assets/f_assets/image/watches mobile view/FL-Mob-View.jpeg') }}"
                      class="w-100 h-100 object-fit-cover"
+                     decoding="async"
+                     width="1080"
+                     height="1920"
                      alt="Favre Leuba Mobile">
             </div>
 
@@ -863,10 +913,10 @@ section{
             <a href="{{ route('subcategory', ['subcategory' => 'bovet']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
-                    <img src="{{ asset('assets/f_assets/image/Watch-3.png') }}" alt="Bovet" loading="lazy" class="lux-img">
+                    <img src="{{ asset('assets/f_assets/image/Watch-3.png') }}" alt="Bovet" loading="lazy" decoding="async" class="lux-img">
                     <div class="lux-hover">
                         <div class="lux-box">
-                            <img src="{{ asset('assets/f_assets/image/watch logo/Bovet.png') }}" alt="Bovet Logo" class="lux-logo">
+                            <img src="{{ asset('assets/f_assets/image/watch logo/Bovet.png') }}" alt="Bovet Logo" loading="lazy" decoding="async" class="lux-logo">
                         </div>
                     </div>
                 </div>
@@ -877,10 +927,10 @@ section{
             <a href="{{ route('subcategory', ['subcategory' => 'louis-moinet']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
-                    <img src="{{ asset('assets/f_assets/image/lious_monet111.png') }}" alt="Louis Moinet" loading="lazy" class="lux-img">
+                    <img src="{{ asset('assets/f_assets/image/lious_monet111.png') }}" alt="Louis Moinet" loading="lazy" decoding="async" class="lux-img">
                     <div class="lux-hover">
                         <div class="lux-box">
-                            <img src="{{ asset('assets/f_assets/image/watch logo/lm.png') }}" alt="Louis Moinet Logo" class="lux-logo">
+                            <img src="{{ asset('assets/f_assets/image/watch logo/lm.png') }}" alt="Louis Moinet Logo" loading="lazy" decoding="async" class="lux-logo">
                         </div>
                     </div>
                 </div>
@@ -891,10 +941,10 @@ section{
             <a href="{{ route('subcategory', ['subcategory' => 'franck-muller']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
-                    <img src="{{ asset('assets/f_assets/image/fm.png') }}" alt="Franck Muller" loading="lazy" class="lux-img">
+                    <img src="{{ asset('assets/f_assets/image/fm.png') }}" alt="Franck Muller" loading="lazy" decoding="async" class="lux-img">
                     <div class="lux-hover">
                         <div class="lux-box">
-                            <img src="{{ asset('assets/f_assets/image/watch logo/fm.png') }}" alt="Franck Muller Logo" class="lux-logo">
+                            <img src="{{ asset('assets/f_assets/image/watch logo/fm.png') }}" alt="Franck Muller Logo" loading="lazy" decoding="async" class="lux-logo">
                         </div>
                     </div>
                 </div>
@@ -904,10 +954,10 @@ section{
             <a href="{{ route('subcategory', ['subcategory' => 'corum']) }}" class="text-decoration-none d-block">
                 <div class="lux-card">
                     <span class="lux-ratio"></span>
-                    <img src="{{ asset('assets/f_assets/image/corum_back.jpeg') }}" alt="Corum" loading="lazy" class="lux-img">
+                    <img src="{{ asset('assets/f_assets/image/corum_back.jpeg') }}" alt="Corum" loading="lazy" decoding="async" class="lux-img">
                     <div class="lux-hover">
                         <div class="lux-box">
-                            <img src="{{ asset('assets/f_assets/image/watch logo/Corum.png') }}" alt="Corum Logo" class="lux-logo">
+                            <img src="{{ asset('assets/f_assets/image/watch logo/Corum.png') }}" alt="Corum Logo" loading="lazy" decoding="async" class="lux-logo">
                         </div>
                     </div>
                 </div>
@@ -920,11 +970,11 @@ section{
                     <span class="lux-ratio"></span>
                     <picture>
                         <source media="(max-width: 767px)" srcset="{{ asset('assets/f_assets/image/artya-mobile.png') }}">
-                        <img src="{{ asset('assets/f_assets/image/artya.png') }}" alt="Artya" loading="lazy" class="lux-img">
+                        <img src="{{ asset('assets/f_assets/image/artya.png') }}" alt="Artya" loading="lazy" decoding="async" class="lux-img">
                     </picture>
                     <div class="lux-hover">
                         <div class="lux-box">
-                            <img src="{{ asset('assets/f_assets/image/watch logo/Artya.png') }}" alt="Artya Logo" class="lux-logo">
+                            <img src="{{ asset('assets/f_assets/image/watch logo/Artya.png') }}" alt="Artya Logo" loading="lazy" decoding="async" class="lux-logo">
                         </div>
                     </div>
                 </div>
@@ -1164,7 +1214,8 @@ $brands = [
 src="{{ asset('assets/f_assets/image/watch logo new/'.$brand['img']) }}"
 data-hover="{{ asset('assets/f_assets/image/watch logo new/hover/'.$brand['img']) }}"
 alt="{{ $brand['name'] }} logo"
-loading="lazy">
+loading="lazy"
+decoding="async">
 
 </a>
 
@@ -1177,8 +1228,8 @@ loading="lazy">
 @php
     use Illuminate\Support\Str;
 
-    $desktopBanner = 'assets/f_assets/image/watches/Bovet Web Banner.png';
-    $mobileBanner  = 'assets/f_assets/image/watches/Bovet Web Banner.png';
+    $desktopBanner = 'assets/f_assets/image/watches/Bovet Web Banner.webp';
+    $mobileBanner  = 'assets/f_assets/image/watches/Bovet Web Banner.webp';
 
     $desktopIsVideo = Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
     $mobileIsVideo  = Str::endsWith(strtolower($mobileBanner),  ['.mp4', '.webm', '.ogg']);
@@ -1200,7 +1251,7 @@ loading="lazy">
                 Your browser does not support the video tag.
             </video>
         @else
-            <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover">
+            <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" loading="lazy" decoding="async" class="ehed-media-cover">
         @endif
     </div>
 
@@ -1212,7 +1263,7 @@ loading="lazy">
                 Your browser does not support the video tag.
             </video>
         @else
-            <img src="{{ asset($mobileBanner) }}" alt="Ehed Banner Mobile" class="ehed-media-cover">
+            <img src="{{ asset($mobileBanner) }}" alt="Ehed Banner Mobile" loading="lazy" decoding="async" class="ehed-media-cover">
         @endif
     </div>
 
@@ -1258,7 +1309,7 @@ The Récital 30 focuses on the innovative roller system from the award winning R
                     <source src="{{ asset($desktopBanner) }}" @if($desktopType) type="{{ $desktopType }}" @endif>
                 </video>
             @else
-                <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" class="ehed-media-cover">
+                <img src="{{ asset($desktopBanner) }}" alt="Ehed Banner" loading="lazy" decoding="async" class="ehed-media-cover">
             @endif
         </div>
 
@@ -1269,7 +1320,7 @@ The Récital 30 focuses on the innovative roller system from the award winning R
                     <source src="{{ asset($mobileBanner) }}" @if($mobileType) type="{{ $mobileType }}" @endif>
                 </video>
             @else
-                <img src="{{ asset($mobileBanner) }}" alt="Ehed Banner Mobile" class="ehed-media-cover">
+                <img src="{{ asset($mobileBanner) }}" alt="Ehed Banner Mobile" loading="lazy" decoding="async" class="ehed-media-cover">
             @endif
         </div>
     </div>
@@ -1339,37 +1390,76 @@ document.addEventListener('DOMContentLoaded', function () {
     <section class="bannerWrap">
         <video
             class="bannerVideo"
-            autoplay
             loop
             muted
             playsinline
+            preload="none"
+            data-lazy-video
         >
-            <source src="{{ asset('assets/f_assets/image/watches/Aikon.mp4') }}" type="video/mp4">
+            <source data-src="{{ asset('assets/f_assets/image/watches/Aikon.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </section>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const desktopCarousel = document.getElementById('rolexCarousel');
-  if (desktopCarousel) {
-    const desktopInstance = bootstrap.Carousel.getOrCreateInstance(desktopCarousel, {
-      interval: 3000,
-      pause: false,
-      ride: 'carousel',
-      wrap: true
-    });
-    desktopInstance.cycle();
-  }
+  const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+  const carousel = document.getElementById(isMobile ? 'rolexCarouselMobile' : 'rolexCarousel');
+  if (!carousel || !window.bootstrap) return;
 
-  const el = document.getElementById('rolexCarouselMobile');
-  if (!el) return;
+  const loadSlide = slide => {
+    const image = slide && slide.querySelector('img[data-src]');
+    if (!image) return;
+    image.src = image.dataset.src;
+    image.removeAttribute('data-src');
+  };
 
-  new bootstrap.Carousel(el, {
-    interval: 2000,   // change speed
-    pause: false,     // keep moving
-    ride: 'carousel'
+  const loadNextSlide = () => {
+    const active = carousel.querySelector('.carousel-item.active');
+    const next = active && (active.nextElementSibling || carousel.querySelector('.carousel-item'));
+    loadSlide(next);
+  };
+
+  carousel.addEventListener('slide.bs.carousel', event => loadSlide(event.relatedTarget));
+  carousel.addEventListener('slid.bs.carousel', loadNextSlide);
+  loadNextSlide();
+
+  const instance = bootstrap.Carousel.getOrCreateInstance(carousel, {
+    interval: isMobile ? 2000 : 3000,
+    pause: false,
+    ride: false,
+    wrap: true
   });
+
+  // Start rotation after the visitor interacts. This keeps the hero stable
+  // during initial rendering, so later slides do not keep resetting LCP.
+  const startCarousel = () => instance.cycle();
+  ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(eventName => {
+    window.addEventListener(eventName, startCarousel, { once: true, passive: true });
+  });
+
+  const lazyVideo = document.querySelector('video[data-lazy-video]');
+  if (lazyVideo) {
+    const loadVideo = () => {
+      const source = lazyVideo.querySelector('source[data-src]');
+      if (!source) return;
+      source.src = source.dataset.src;
+      source.removeAttribute('data-src');
+      lazyVideo.load();
+      lazyVideo.play().catch(() => {});
+    };
+
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        loadVideo();
+        videoObserver.disconnect();
+      }, { rootMargin: '300px 0px' });
+      videoObserver.observe(lazyVideo);
+    } else {
+      loadVideo();
+    }
+  }
 });
 </script>
 <script>
@@ -1472,6 +1562,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const nextBtn = document.getElementById('nextBtn');
   const prevBtn = document.getElementById('prevBtn');
   const groupA = document.getElementById('groupA');
+
+  // This page currently has no marquee markup; avoid running its animation code.
+  if (!track || !container || !nextBtn || !prevBtn || !groupA) return;
 
   let position = 0;
   let speed = 2;
