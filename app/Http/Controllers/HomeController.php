@@ -2346,6 +2346,14 @@ public function Online_Shopping_Store(Request $request)
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
         return view('public.hanif-vault', compact('categories', 'watchCategories'));
     }
+
+        public function hanifGoldExchange()
+        {
+            $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
+            $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
+
+            return view('public.hanif-gold-exchange', compact('categories', 'watchCategories'));
+        }
     public function bovet()
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
