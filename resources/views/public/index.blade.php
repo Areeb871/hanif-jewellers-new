@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-
 .custom-banner {
     width: 100%;
     margin: 0;
@@ -32,8 +31,6 @@
   display: inline-block;
   z-index: 10;
 }
-
-} */
 /* remove any spacing around the section */
 .carousel-section {
   padding: 0 !important;
@@ -70,11 +67,13 @@
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
 }
 
-/* Banner scales with screen — no crop on any breakpoint */
+/* Banner fills the screen under the header. Extra image is cropped equally from top and bottom. */
 #carouselExampleRide {
+  --brand-banner-height: calc(100dvh - var(--megaTop, 72px));
   padding: 0;
   width: 100%;
-  height: auto;
+  height: var(--brand-banner-height);
+  max-height: var(--brand-banner-height);
   background: #000;
   overflow: hidden;
 }
@@ -83,31 +82,41 @@
 #carouselExampleRide .carousel-item,
 #carouselExampleRide .hero-slide,
 #carouselExampleRide .hero-slide picture {
-  height: auto;
+  width: 100%;
+  height: 100%;
 }
 
 #carouselExampleRide .carousel-inner {
   position: relative;
+  height: var(--brand-banner-height);
+}
+
+#carouselExampleRide .carousel-item {
+  height: var(--brand-banner-height);
 }
 
 #carouselExampleRide .hero-slide {
   width: 100%;
+  height: 100%;
   background: #000;
 }
 
 #carouselExampleRide .hero-slide picture {
   width: 100%;
+  height: 100%;
   display: block;
 }
 
 #carouselExampleRide .hero-slide img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
   display: block;
 }
 
 @media (min-width: 768px) {
-  section.bespoke-collections.d-none.d-md-block {
+  section.bespoke-collections.d-none.d-md-block:not(.bespoke-showcase) {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
@@ -159,27 +168,25 @@
 
 .mobileStackImgWrap{
   width: 100%;
+  height: 100%;
   overflow: hidden;
   background: #000;
-  height: auto !important;
-  min-height: 0;
-  max-height: none;
 }
 
 .mobileStackImg{
   width: 100%;
-  height: auto !important;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   object-position: center;
   display: block;
 }
 .mobileStackVideo{
   width: 100%;
-  height: auto !important;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   object-position: center center;
   display: block;
-  margin-top:52px;
+  margin: 0;
 }
 /* =========================
    Overlay Content (Haphazard + Discover + Location)
@@ -245,18 +252,78 @@
     color: #ffffff;
 }
 /*latest */
-/* Remove any container restriction */
+/* Hero fills the viewport under the header so Discover More stays on screen */
 .custom-banner {
+    position: relative;
     width: 100%;
+    height: calc(100dvh - var(--hj-header-h, 0px));
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    background: #000;
 }
 
-/* Full width image */
 .custom-banner-video {
-    width: 100%;
-    height: auto;
     display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.home-hero-mobile {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - var(--hj-header-h, 0px));
+    overflow: hidden;
+    background: #000;
+}
+
+/* Video stays pinned until the product cards have covered the whole frame */
+.home-hero-scroll {
+    position: relative;
+}
+
+.home-hero-runway {
+    height: var(--hero-scroll, 70vh);
+    pointer-events: none;
+}
+
+.home-hero-scroll > .custom-banner,
+.home-hero-scroll > .home-hero-mobile {
+    position: sticky;
+    top: var(--hj-header-h, 0px);
+    z-index: 1;
+    backface-visibility: hidden;
+}
+
+.home-hero-scroll .custom-banner-video,
+.home-hero-scroll .mobileStackVideo {
+    transform: translateZ(0);
+}
+
+/* Discover More scrolls up with the page/cards — not pinned to sticky video */
+.home-hero-scroll > .custom-banner-btn,
+.home-hero-scroll > .custom-banner-btn-new {
+    position: absolute;
+    top: calc(var(--hero-scroll, 70vh) - 70px);
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.home-hero-scroll + .watch,
+.home-hero-scroll ~ section {
+    position: relative;
+    z-index: 3;
+}
+
+.home-hero-scroll + .watch {
+    margin-top: calc(var(--hero-scroll, 70vh) * -1);
+    background-color: #f6f3ee;
 }
 .custom-banner-btn-new
 {
@@ -338,12 +405,14 @@
   transition: transform .45s ease;
 }
 
+/* Logo ALWAYS inside box */
 .lux-logo{
+  width: 100%;
+  height: 100%;
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
   object-fit: contain;
+  object-position: center;
   display: block;
 }
 /* Border animation (safe) */
@@ -382,6 +451,7 @@
 .lux-card:hover::before{ transform: scaleX(1); }
 .lux-card:hover::after{ transform: scaleY(1); }
 
+/* Mobile: overlay stays visible so logo + tagline can be read without hover */
 @media (max-width: 767px){
   .lux-hover{ opacity: .85; }
   .lux-box{
@@ -445,46 +515,148 @@ section.watch .watch-slider-viewport,
 section.watch .watch-scroller-arrow,
 .bespoke-collections .watch-scroller-arrow {
     position: absolute;
-    top: 47%;
-    transform: translateY(-50%);
+    top: 0;
+    bottom: 0;
     z-index: 30;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
+    width: 66px;
+    height: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: #2a2a2a;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     padding: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, background 0.3s ease;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: visible;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 0.22s ease-out;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    isolation: isolate;
+}
+
+/* Frosted control matched to the supplied Apple UI reference. */
+section.watch .watch-scroller-arrow::before,
+.bespoke-collections .watch-scroller-arrow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-50%);
+    z-index: 0;
+    box-sizing: border-box;
+    background: rgba(151, 181, 196, 0.1);
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(12px) saturate(112%);
+    -webkit-backdrop-filter: blur(12px) saturate(112%);
+    pointer-events: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease,
+                transform 0.3s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Soft glass sheen; intentionally restrained like the reference. */
+section.watch .watch-scroller-arrow::after,
+.bespoke-collections .watch-scroller-arrow::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 50%;
+    width: calc(100% - 2px);
+    height: auto;
+    z-index: 1;
+    border-radius: 23px;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.07),
+        rgba(255, 255, 255, 0) 58%);
+    opacity: .65;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Fade the inner edge into the card so the glass has no visible seam. */
+section.watch .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::after,
+section.watch .watch-scroller-arrow--prev::after {
+    border-radius: 0 24px 24px 0;
+}
+
+section.watch .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::after,
+section.watch .watch-scroller-arrow--next::after {
+    border-radius: 24px 0 0 24px;
+}
+
+section.watch .watch-scroller-arrow--prev::before,
+section.watch .watch-scroller-arrow--prev::after,
+.bespoke-collections .watch-scroller-arrow--prev::before,
+.bespoke-collections .watch-scroller-arrow--prev::after {
+    -webkit-mask-image: linear-gradient(to right,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+    mask-image: linear-gradient(to right,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+}
+
+section.watch .watch-scroller-arrow--next::before,
+section.watch .watch-scroller-arrow--next::after,
+.bespoke-collections .watch-scroller-arrow--next::before,
+.bespoke-collections .watch-scroller-arrow--next::after {
+    -webkit-mask-image: linear-gradient(to left,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+    mask-image: linear-gradient(to left,
+        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
+}
+
+section.watch .watch-scroller-arrow .arrow-icon,
+.bespoke-collections .watch-scroller-arrow .arrow-icon {
+    position: relative;
+    z-index: 2;
+    color: rgba(0, 0, 0, 0.86);
+    filter: none;
+    transform: scale(1.08);
+    transition: none;
+}
+
+section.watch .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
+section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled),
+.bespoke-collections .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
+.bespoke-collections .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* The watch cards have 16px vertical margins inside their viewport. */
+section.watch .watch-scroller-arrow {
+    top: 16px;
+    bottom: 16px;
 }
 
 section.watch .watch-scroller-arrow--prev,
 .bespoke-collections .watch-scroller-arrow--prev {
-    left: 6px;
+    left: 0;
 }
 
 section.watch .watch-scroller-arrow--next,
 .bespoke-collections .watch-scroller-arrow--next {
-    right: 6px;
+    right: 0;
 }
 
 section.watch .watch-scroller-arrow .arrow-left svg,
 .bespoke-collections .watch-scroller-arrow .arrow-left svg {
     transform: rotate(180deg);
-}
-
-section.watch .watch-scroller-arrow:hover:not(:disabled),
-.bespoke-collections .watch-scroller-arrow:hover:not(:disabled) {
-    transform: translateY(-50%) scale(1.04);
-    background: #fff;
-    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
 }
 
 section.watch .watch-scroller-arrow:disabled,
@@ -503,7 +675,7 @@ section.watch .watch-scroller-arrow:disabled,
     .bespoke-collections.d-md-none .watch-progress {
         display: flex;
         justify-content: center;
-        padding: 22px 24px 14px;
+        padding: 22px 16px 14px;
     }
 
     .bespoke-collections.d-md-none .watch-progress.is-hidden {
@@ -511,47 +683,70 @@ section.watch .watch-scroller-arrow:disabled,
     }
 
     .bespoke-collections.d-md-none .watch-progress__track {
-        position: relative;
-        width: 88px;
-        height: 2px;
-        background: rgba(0, 0, 0, 0.12);
-        overflow: hidden;
-        border-radius: 1px;
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
+        height: 3px;
+        background: #e5e7eb;
+        border-radius: 999px;
     }
 
     .bespoke-collections.d-md-none .watch-progress__fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        transition: left 0.2s ease-out, width 0.2s ease-out;
-        will-change: left, width;
+        background: #0d2a39;
+        border-radius: 999px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .bespoke-collections .watch-scroller-arrow {
+        width: calc((100vw - 120px) / 18);
     }
 }
 
 @media (min-width: 992px) {
-    section.watch .watch-scroller-arrow,
+    section.watch .watch-scroller-arrow {
+        width: 75px;
+        height: auto;
+    }
+
     .bespoke-collections .watch-scroller-arrow {
-        width: 46px;
-        height: 46px;
+        width: calc((100vw - 120px) / 18);
+        height: auto;
     }
 
     section.watch .watch-scroller-arrow--prev,
     .bespoke-collections .watch-scroller-arrow--prev {
-        left: 10px;
+        left: 0;
     }
 
     section.watch .watch-scroller-arrow--next,
     .bespoke-collections .watch-scroller-arrow--next {
-        right: 10px;
+        right: 0;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1365.98px) {
+    section.watch .watch-scroller-arrow {
+        width: 80px;
+    }
+}
+
+@media (min-width: 1366px) and (max-width: 1919.98px) {
+    section.watch .watch-scroller-arrow {
+        width: 84px;
+    }
+}
+
+@media (min-width: 1920px) {
+    section.watch .watch-scroller-arrow {
+        width: 88px;
     }
 }
 
 section.watch .addToCartProductDetailsTop .carousel .carousel-item img,
 section.watch .addToCartProductDetailsTop .product-image {
-    width: 100%;
     max-width: 100%;
+    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
     object-fit: contain;
@@ -569,7 +764,95 @@ section.watch .addToCartProductDetailsTop .carousel-item {
     width: 100%;
 }
 
+/* Homepage product-card arrows: readable on light or dark artwork. */
+section.watch .addToCartProductDetailsTop .carousel-control-prev,
+section.watch .addToCartProductDetailsTop .carousel-control-next {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    bottom: auto;
+    width: 38px;
+    height: 96px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    visibility: hidden;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-50%);
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+section.watch .addToCartProductDetailsTop:hover .carousel-control-prev,
+section.watch .addToCartProductDetailsTop:hover .carousel-control-next,
+section.watch .addToCartProductDetailsTop:focus-within .carousel-control-prev,
+section.watch .addToCartProductDetailsTop:focus-within .carousel-control-next {
+    display: flex !important;
+    visibility: visible;
+    opacity: 0.92 !important;
+    pointer-events: auto !important;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev {
+    left: 8px;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-next {
+    right: 8px;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev:hover,
+section.watch .addToCartProductDetailsTop .carousel-control-next:hover {
+    background: transparent;
+    opacity: 1 !important;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev-icon,
+section.watch .addToCartProductDetailsTop .carousel-control-next-icon {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-prev-icon {
+    border-right: 1.5px solid #9a9a9a;
+    border-bottom: 1.5px solid #9a9a9a;
+    transform: rotate(135deg);
+}
+
+section.watch .addToCartProductDetailsTop .carousel-control-next-icon {
+    border-right: 1.5px solid #9a9a9a;
+    border-bottom: 1.5px solid #9a9a9a;
+    transform: rotate(-45deg);
+}
+
+/* Keep the complete product artwork visible, including on hover. */
+section.watch .addToCartProductDetailsTop .carousel-item img,
+section.watch .addToCartProductDetailsTop:hover .carousel-item img,
+section.watch .addToCartProductDetailsTop .product-image,
+section.watch .addToCartProductDetailsTop:hover .product-image {
+    object-fit: contain !important;
+    object-position: center !important;
+    transform: none !important;
+}
+
 @media (max-width: 767.98px) {
+    section.watch .addToCartProductDetailsTop .carousel-control-prev,
+    section.watch .addToCartProductDetailsTop .carousel-control-next {
+        width: 34px;
+        height: 82px;
+    }
+
     section.watch .mobile-product-scroller {
         touch-action: pan-x pan-y;
         overscroll-behavior-x: contain;
@@ -592,34 +875,69 @@ section.watch .addToCartProductDetailsTop .carousel-item {
         max-width: 100%;
     }
 
-    /* Minimal scroll progress — mobile only, no dots */
     section.watch .watch-progress {
         display: flex;
         justify-content: center;
-        padding: 22px 24px 14px;
-    }
-
-    section.watch .watch-progress.is-hidden {
-        visibility: hidden;
+        padding: 22px 16px 14px;
     }
 
     section.watch .watch-progress__track {
-        position: relative;
-        width: 88px;
-        height: 2px;
-        background: rgba(0, 0, 0, 0.12);
-        overflow: hidden;
-        border-radius: 1px;
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
     }
+}
 
-    section.watch .watch-progress__fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        transition: left 0.2s ease-out, width 0.2s ease-out;
-        will-change: left, width;
+section.watch .watch-progress,
+.bespoke-collections .watch-progress {
+    display: flex;
+    justify-content: center;
+    padding: 28px 16px 22px;
+}
+
+section.watch .watch-progress.is-hidden,
+.bespoke-collections .watch-progress.is-hidden {
+    visibility: hidden;
+}
+
+section.watch .watch-progress__track,
+.bespoke-collections .watch-progress__track {
+    position: relative;
+    width: 25%;
+    min-width: 160px;
+    max-width: 280px;
+    height: 3px;
+    background: #e5e7eb;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+section.watch .watch-progress__fill,
+.bespoke-collections .watch-progress__fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: #0d2a39;
+    border-radius: 999px;
+    transition: none;
+    will-change: left, width;
+}
+
+@media (max-width: 767.98px) {
+    section.watch .watch-progress__track,
+    .bespoke-collections .watch-progress__track {
+        width: 46%;
+        min-width: 140px;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    section.watch .watch-progress__track,
+    .bespoke-collections .watch-progress__track {
+        width: 34%;
+        min-width: 180px;
+        max-width: 240px;
     }
 }
 
@@ -632,9 +950,6 @@ section.watch .addToCartProductDetailsTop .carousel-item {
         min-width: 300px;
     }
 
-    section.watch .watch-progress {
-        display: none !important;
-    }
 }
 
 /* Migrated from legacy desktopStyle injection */
@@ -715,56 +1030,24 @@ section.watch .card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Section headings — equal space above & below */
+/* Same space above and below every section heading */
 .section-title,
 .bespoke-collections__title {
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(28px, 1.3vw, 44px);
-    font-weight: 600;
-    padding: 1.5rem 0;
-    /* padding: 0; */
+    font-family: "Argent CF", serif;
+    font-size: clamp(28px, 3.3vw, 45px);
+    font-weight: 300;
+    margin: 0;
+    padding: 80px 0;
     color: #111;
 }
 
-@media (min-width: 768px) {
-    .section-title,
-    .bespoke-collections__title {
-        padding: 2rem 0;
-    }
-}
-
-@media (min-width: 1366px) {
-    .section-title,
-    .bespoke-collections__title {
-        padding: 2.5rem 0;
-    }
-}
-
-/*.watch-brands-section {*/
-/*    padding: 0;*/
-/*}*/
-
-
 .watch-brands-section {
-    padding: 0 0 2rem;
+    padding: 0;
 }
 
-/* Keep the total gap between the jewellery section, heading and logos equal. */
 .watch-brands-section > .section-title {
     margin: 0;
-    padding-top: calc(1.5rem + 0.5rem);
-}
-
-@media (min-width: 768px) {
-    .watch-brands-section > .section-title {
-        padding-top: calc(2rem + 0.5rem);
-    }
-}
-
-@media (min-width: 1366px) {
-    .watch-brands-section > .section-title {
-        padding-top: calc(2.5rem + 0.5rem);
-    }
+    padding: 80px 0;
 }
 
 
@@ -819,13 +1102,14 @@ culminating in a true resemblance of experience pure art.</div>
 
 
 
-<section class="custom-banner d-none d-md-block position-relative">
+<div class="home-hero-scroll">
+<section class="custom-banner d-none d-md-block">
     <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{ asset('assets/f_assets/image/miras/miras_desktop.mp4') }}" type="video/mp4">
+        <source src="{{ asset('assets/f_assets/image/homepage video/desktop ayeza.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-            <a href="/collections/miras" class="custom-banner-btn">DISCOVER MORE</a>
 </section>
+<a href="/collections/nagar" class="custom-banner-btn d-none d-md-inline-block">{{ __('site.discover_more') }}</a>
 
 <!-- <section class="custom-banner d-none d-md-block position-relative">
      @php
@@ -853,16 +1137,16 @@ culminating in a true resemblance of experience pure art.</div>
         <!-- <div class="banner-title">Divine Treasures</div> -->
         <!-- <div class="banner-location">Crafted in the heart of the world’s
 towering peaks</div> 
-        <a href="/collections/eid-par-sony-ki-choriyan" class="custom-banner-btn">DISCOVER MORE</a>
+        <a href="/collections/eid-par-sony-ki-choriyan" class="custom-banner-btn">{{ __('site.discover_more') }}</a>
 
 </div>
 
 
 </section> -->
-<section class="d-block d-md-none position-relative">
+<section class="home-hero-mobile d-block d-md-none">
   <div class="mobileStackImgWrap">
   <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
-    <source src="{{ asset('assets/f_assets/image/miras/miras_mob.webm') }}" type="video/mp4">
+    <source src="{{ asset('assets/f_assets/image/homepage video/mobile ayeza.mp4') }}" type="video/mp4">
   </video>
   
   
@@ -881,12 +1165,14 @@ towering peaks</div>
 /> -->
 
   </div>
-<a href="/collections/franck-muller" class="custom-banner-btn-new">DISCOVER MORE</a>
 </section>
+<a href="/collections/nagar" class="custom-banner-btn-new d-inline-block d-md-none">{{ __('site.discover_more') }}</a>
+    <div class="home-hero-runway" aria-hidden="true"></div>
+</div>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
         <div class="watch-slider-viewport">
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous products" disabled>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="{{ __('site.prev_products') }}" disabled>
                 <span aria-hidden="true" class="arrow-icon arrow-left">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                         <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
@@ -905,7 +1191,7 @@ towering peaks</div>
                     @endforeach
                 </div>
             </div>
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next products">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="{{ __('site.next_products') }}">
                 <span aria-hidden="true" class="arrow-icon">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                         <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
@@ -914,7 +1200,7 @@ towering peaks</div>
             </button>
         </div>
         @if (count($products) > 1)
-        <div class="watch-progress d-lg-none" aria-hidden="true">
+        <div class="watch-progress" aria-hidden="true">
             <div class="watch-progress__track">
                 <div class="watch-progress__fill"></div>
             </div>
@@ -925,11 +1211,10 @@ towering peaks</div>
     @php
     $brandBannerSlides = [
         ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet-homepage-banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet-mob-homepage.webp'],
-        ['alt' => 'Favre-leuba', 'desktop' => 'assets/f_assets/image/watches/Hompage_favre.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_mobile_favre.jpeg'],
-        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
-        ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
+
+ ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
+        ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/watches/ML-banner-index.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ML-mobile-view.webp'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
-        ['alt' => 'Louis Moinet', 'desktop' => 'assets/f_assets/image/watches/LM-homepage.webp', 'mobile' => 'assets/f_assets/image/homepage_2_banner/LM-mob-homepage.webp'],
 
     ];
     @endphp
@@ -951,11 +1236,11 @@ towering peaks</div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">{{ __('site.previous') }}</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">{{ __('site.next') }}</span>
             </button>
         </div>
     </section>
@@ -972,91 +1257,50 @@ towering peaks</div>
     ];
     @endphp
 
-    <section class="onlineStore bespoke-collections d-none d-md-block" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title">
-        Bespoke Collections
-    </h2>
-
-    <div class="watch-slider-viewport">
-        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous" disabled>
-            <span aria-hidden="true" class="arrow-icon arrow-left">
-                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
-                </svg>
-            </span>
-        </button>
-        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
-            <div class="scroller-container">
-                @foreach ($products_new as $key => $product)
-                <div class="scroller-item">
-                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-                        <div class="lux-card">
-                            <span class="lux-ratio"></span>
-                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
-                            <div class="lux-hover">
-                                <div class="lux-box">
-                                    @if(!empty($product->hover_image))
-                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @else
-                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                @endforeach
+    <section class="bespoke-collections bespoke-showcase">
+        <div class="bespoke-showcase__info">
+            <div class="bespoke-showcase__copy">
+                <h2 class="bespoke-showcase__title">{{ __('site.bespoke_title') }}</h2>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_1') }}</p>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_2') }}</p>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_3') }}</p>
             </div>
+            @if (count($products_new) > 1)
+            <div class="bespoke-showcase__dots bespoke-showcase__dots--side" role="tablist" aria-label="{{ __('site.bespoke_pages') }}"></div>
+            @endif
         </div>
-        <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next">
-            <span aria-hidden="true" class="arrow-icon">
-                <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
-                    <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
+
+        <div class="watch-slider-viewport bespoke-showcase__stage">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="{{ __('site.prev_collections') }}" disabled>
+                <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
+                    <path d="M8.4 1.25L1.7 8.38C1.51 8.61 1.37 8.89 1.37 9.13C1.37 9.36 1.51 9.64 1.7 9.87L8.4 17" stroke="currentColor" stroke-width="1.2"/>
                 </svg>
-            </span>
-        </button>
-    </div>
-</section>
-
-<!-- ========================= MOBILE SECTION ========================= -->
-<section class="mobile-jewelry-section bespoke-collections d-md-none" style="background-color:#f6f3ee;">
-    <h2 class="text-center bespoke-collections__title">
-        Bespoke Collection
-    </h2>
-
-    <div class="watch-slider-viewport">
-        <div class="mobile-product-scroller" style="background-color:#f6f3ee;">
-            <div class="scroller-container">
-                @foreach ($products_new as $key => $product)
-                <div class="scroller-item">
-                    <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="text-decoration-none d-block">
-                        <div class="lux-card">
-                            <span class="lux-ratio"></span>
-                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="lux-img" loading="lazy">
-                            <div class="lux-hover">
-                                <div class="lux-box">
-                                    @if(!empty($product->hover_image))
-                                        <img src="{{ asset($product->hover_image) }}" alt="{{ $product->name }}" class="lux-logo">
-                                    @else
-                                        <span class="text-dark fw-semibold text-center px-2">{{ $product->name }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+            </button>
+            <div class="mobile-product-scroller">
+                <div class="scroller-container">
+                    @foreach ($products_new as $key => $product)
+                    <div class="scroller-item">
+                        <a href="{{ url('collections/' . ($bespokeCollectionLinks[$loop->index] ?? $product->slug)) }}" class="bespoke-showcase__card">
+                            <span class="bespoke-showcase__media">
+                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy">
+                            </span>
+                            <span class="bespoke-showcase__name">{{ $product->name }}</span>
+                        </a>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="{{ __('site.next_collections') }}">
+                <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
+                    <path d="M1.6 1.25L8.3 8.38C8.49 8.61 8.63 8.89 8.63 9.13C8.63 9.36 8.49 9.64 8.3 9.87L1.6 17" stroke="currentColor" stroke-width="1.2"/>
+                </svg>
+            </button>
         </div>
-    </div>
-    @if (count($products_new) > 1)
-    <div class="watch-progress" aria-hidden="true">
-        <div class="watch-progress__track">
-            <div class="watch-progress__fill"></div>
-        </div>
-    </div>
-    @endif
-</section>
+
+        @if (count($products_new) > 1)
+        <div class="bespoke-showcase__dots bespoke-showcase__dots--bottom" role="tablist" aria-label="{{ __('site.bespoke_pages') }}"></div>
+        @endif
+    </section>
 
 <style>
 /* Bespoke collections scroller (same scroll pattern as watch) */
@@ -1087,43 +1331,415 @@ towering peaks</div>
     scroll-snap-align: none;
 }
 
-@media (min-width: 768px) {
-    .bespoke-collections.d-none.d-md-block .watch-slider-viewport {
-        padding: 0 20px;
+.bespoke-showcase {
+    background: #fff;
+    color: #0d2a39;
+    padding: 80px 0 0;
+}
+
+.bespoke-showcase__info {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 0 36px 0 40px;
+}
+
+.bespoke-showcase__copy {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.bespoke-showcase__title {
+    margin: 0 0 48px;
+    padding: 0;
+    width: max-content;
+    max-width: none;
+    font-family: "Argent CF", Georgia, serif;
+    font-size: 41px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    text-transform: none;
+    white-space: nowrap;
+    color: #0d2a39;
+    text-align: left;
+}
+
+.bespoke-showcase__text {
+    margin: 0;
+    width: 0;
+    min-width: 100%;
+    max-width: 100%;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.55;
+    letter-spacing: normal;
+    color: #868686;
+    text-align: justify;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.bespoke-showcase__text + .bespoke-showcase__text {
+    margin-top: 14px;
+}
+
+.bespoke-showcase__dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 18px;
+}
+
+.bespoke-showcase__dots--side {
+    display: none;
+}
+
+.bespoke-showcase__dots--bottom {
+    display: none;
+}
+
+.bespoke-showcase__dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #d5d5d5;
+    cursor: pointer;
+}
+
+.bespoke-showcase__dot.is-active {
+    background: #0d2a39;
+}
+
+.bespoke-showcase__stage {
+    position: relative;
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.bespoke-showcase .mobile-product-scroller {
+    width: 100%;
+    background: #fff;
+    container-type: inline-size;
+}
+
+.bespoke-showcase .scroller-container {
+    gap: 30px;
+    padding: 0;
+    margin: 0;
+}
+
+.bespoke-showcase .scroller-item {
+    flex: 0 0 calc((100cqi - 30px) / 2);
+    width: calc((100cqi - 30px) / 2);
+    max-width: none;
+    min-width: 0;
+}
+
+.bespoke-showcase__card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.bespoke-showcase__media {
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    overflow: hidden;
+}
+
+.bespoke-showcase__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.bespoke-showcase__name {
+    display: block;
+    margin-top: 18px;
+    font-family: "Argent CF", Georgia, serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #0d2a39;
+}
+
+.bespoke-showcase .watch-scroller-arrow {
+    top: 34%;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    opacity: 1;
+    pointer-events: auto;
+    color: #0d2a39;
+    background: transparent;
+}
+
+.bespoke-showcase .watch-scroller-arrow::before,
+.bespoke-showcase .watch-scroller-arrow::after {
+    display: none;
+}
+
+.bespoke-showcase .watch-scroller-arrow--prev {
+    left: 0;
+}
+
+.bespoke-showcase .watch-scroller-arrow--next {
+    right: 0;
+}
+
+.bespoke-showcase .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled) {
+    opacity: 1;
+}
+
+/* Emirati Arabic: text on the right, products on the left, scroller stays LTR */
+html[dir="rtl"] .bespoke-showcase {
+    direction: ltr;
+}
+html[dir="rtl"] .bespoke-showcase__info,
+html[dir="rtl"] .bespoke-showcase__copy,
+html[dir="rtl"] .bespoke-showcase__title,
+html[dir="rtl"] .bespoke-showcase__text {
+    direction: rtl;
+    text-align: right;
+}
+html[dir="rtl"] .bespoke-showcase__title {
+    font-family: "Cairo", "Argent CF", Georgia, serif;
+    letter-spacing: 0;
+    white-space: normal;
+}
+html[dir="rtl"] .bespoke-showcase__text {
+    font-family: "Cairo", "Poppins", sans-serif;
+    text-align: right;
+}
+html[dir="rtl"] .bespoke-showcase .mobile-product-scroller,
+html[dir="rtl"] .bespoke-showcase .scroller-container {
+    direction: ltr;
+}
+html[dir="rtl"] .bespoke-showcase__dots {
+    direction: ltr;
+    justify-content: flex-start;
+}
+@media (min-width: 1100px) {
+    html[dir="rtl"] .bespoke-showcase {
+        flex-direction: row-reverse;
+    }
+    html[dir="rtl"] .bespoke-showcase__info {
+        padding: 0 48px 0 28px;
+    }
+    /* Arabic: next on the left, previous on the right */
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--prev {
+        left: auto !important;
+        right: 0 !important;
+        transform: scaleX(-1) !important;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--next {
+        right: auto !important;
+        left: 0 !important;
+        transform: scaleX(-1) !important;
+    }
+}
+@media (max-width: 1099.98px) {
+    html[dir="rtl"] .bespoke-showcase__info {
+        padding: 0 24px 28px;
+    }
+    html[dir="rtl"] .bespoke-showcase__dots--bottom {
+        justify-content: center;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--prev {
+        left: auto !important;
+        right: 8px !important;
+        transform: scaleX(-1) !important;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--next {
+        right: auto !important;
+        left: 8px !important;
+        transform: scaleX(-1) !important;
+    }
+}
+
+html[dir="rtl"] section.watch {
+    direction: ltr;
+}
+
+@media (min-width: 1100px) {
+    .bespoke-showcase {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
     }
 
-    .bespoke-collections.d-none.d-md-block .scroller-item {
-        flex: 0 0 calc((100vw - 120px) / 4);
-        width: calc((100vw - 120px) / 4);
-        max-width: calc((100vw - 120px) / 4);
-        min-width: calc((100vw - 120px) / 4);
+    .bespoke-showcase__info {
+        flex: 0 0 460px;
+        width: 460px;
+        padding: 0 28px 0 48px;
+    }
+
+    .bespoke-showcase__stage {
+        flex: 1 1 0;
+        width: calc(100% - 460px);
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 60px) / 3);
+        width: calc((100cqi - 60px) / 3);
+        min-width: 0;
+    }
+
+    .bespoke-showcase__dots--side {
+        display: flex;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        display: none;
+    }
+}
+
+@media (min-width: 1600px) {
+    .bespoke-showcase__info {
+        flex-basis: 480px;
+        width: 480px;
+        padding: 0 28px 0 48px;
+    }
+
+    .bespoke-showcase__stage {
+        width: calc(100% - 480px);
+    }
+}
+
+@media (max-width: 1099.98px) {
+    .bespoke-showcase {
+        display: flex;
+        flex-direction: column;
+        padding: 80px 0 0;
+    }
+
+    .bespoke-showcase__info {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 24px 28px;
+        gap: 0;
+    }
+
+    .bespoke-showcase__title {
+        font-size: 28px;
+        margin-bottom: 40px;
+    }
+
+    .bespoke-showcase__dots--side {
+        display: none;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 28px;
+        padding: 0 24px;
+    }
+
+    .bespoke-showcase__stage {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 16px;
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 30px) / 2);
+        width: calc((100cqi - 30px) / 2);
+        min-width: 0;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow {
+        opacity: 1;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow--prev {
+        left: 8px;
+    }
+
+    .bespoke-showcase .watch-scroller-arrow--next {
+        right: 8px;
     }
 }
 
 @media (max-width: 767.98px) {
     .carousel-section {
         margin-bottom: 0 !important;
-        /* padding-top:20px !important; */
     }
 
-    .bespoke-collections.d-md-none {
-        margin-top: 0;
-        padding-top: 0;
+    .bespoke-showcase {
+        padding: 80px 0 0;
     }
 
-    .bespoke-collections.d-md-none .watch-slider-viewport {
-        padding: 0 10px;
+    .bespoke-showcase__info {
+        align-items: center;
+        padding: 0 20px 22px;
+        text-align: center;
     }
 
-    .bespoke-collections.d-md-none .scroller-container {
-        gap: 14px;
+    .bespoke-showcase__copy {
+        width: 100%;
+        margin-inline: auto;
+        text-align: center;
     }
 
-    .bespoke-collections.d-md-none .scroller-item {
-        flex: 0 0 86vw;
-        width: 86vw;
-        max-width: 86vw;
-        min-width: 86vw;
+    .bespoke-showcase__title {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        font-size: 24px;
+        margin-bottom: 32px;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .bespoke-showcase__text {
+        width: 100%;
+        min-width: 0;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    html[dir="rtl"] .bespoke-showcase__info,
+    html[dir="rtl"] .bespoke-showcase__copy,
+    html[dir="rtl"] .bespoke-showcase__title,
+    html[dir="rtl"] .bespoke-showcase__text {
+        text-align: center;
+    }
+
+    .bespoke-showcase__stage {
+        padding: 0 12px;
+    }
+
+    .bespoke-showcase .scroller-container {
+        gap: 20px;
+    }
+
+    .bespoke-showcase .scroller-item {
+        flex: 0 0 calc((100cqi - 20px) / 2);
+        width: calc((100cqi - 20px) / 2);
+    }
+
+    .bespoke-showcase__name {
+        font-size: 12px;
+        margin-top: 14px;
+    }
+
+    .bespoke-showcase__dots--bottom {
+        margin-top: 22px;
+        padding: 0 20px;
     }
 }
 </style>
@@ -1131,51 +1747,29 @@ towering peaks</div>
 <h4 class="section-title text-center">
   INTERNATIONAL JEWELLERY BRAND
 </h4>
-  <!-- ROW 1: Image Left | Content Right -->
-  <div class="row align-items-center g-4 mb-5">
-    <div class="col-md-6 text-center">
-      <div class="fixed-media mx-auto">
-        <img src="{{ asset('assets/f_assets/image/forever.jpg') }}"
-             alt="Hasht Collection" class="fixed-media__img">
-      </div>
-    </div>
+</section>
+<section class="brand-editorial">
+  <article class="brand-editorial__item">
+    <a href="{{ url('/forevermark') }}" class="brand-editorial__media">
+      <img src="{{ asset('assets/f_assets/image/forever.png') }}" alt="Forevermark">
+    </a>
+    <h2 class="brand-editorial__title">FOREVERMARK</h2>
+    <p class="brand-editorial__text">
+      Every De Beers Forevermark diamond undergoes a journey of rigorous selection. Our unique inscription is an assurance that every De Beers Forevermark diamond meets the exceptional standards of beauty, rarity and is responsibly sourced.
+    </p>
+    <a href="{{ url('/forevermark') }}" class="brand-editorial__link brand-editorial__link--box">{{ __('site.shop_collection') }}</a>
+  </article>
 
-    <div class="col-md-6">
-      <div class="hero-card">
-        <div class="hero-content">
-          <h2 class="hero-title">FOREVERMARK</h2>
-          <p class="hero-subtitle">
-           Every De Beers Forevermark diamond undergoes a journey of rigorous selection. Our unique inscription is an assurance that every De Beers Forevermark diamond meets the exceptional standards of beauty, rarity and is responsibly sourced
-          </p>
-          <!-- <a href="#" class="hero-btn">DISCOVER</a> -->
-          <a href="{{ url('/forevermark') }}" class="hero-btn">DISCOVER</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROW 2: Content Left | Image Right -->
-  <div class="row align-items-center g-4">
-    <div class="col-md-6 order-2 order-md-1">
-      <div class="hero-card hero-card--alt">
-        <div class="hero-content">
-          <h2 class="hero-title">FARAH KHAN</h2>
-          <p class="hero-subtitle">
-            “I see myself as an alchemist that captures the moments in my life and transforms them into beautiful objects of art.”
-FARAH KHAN
-          </p>
-          <a href="/collections/farah-khan" class="hero-btn">DISCOVER</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 text-center order-1 order-md-2">
-      <div class="fixed-media mx-auto">
-        <img src="{{ asset('assets/f_assets/image/farah.jpg') }}"
-             alt="Hasht Collection" class="fixed-media__img">
-      </div>
-    </div>
-  </div>
+  <article class="brand-editorial__item">
+    <a href="/collections/farah-khan" class="brand-editorial__media">
+      <img src="{{ asset('assets/f_assets/image/farah.png') }}" alt="Farah Khan">
+    </a>
+    <h2 class="brand-editorial__title">FARAH KHAN</h2>
+    <p class="brand-editorial__text">
+      “I see myself as an alchemist that captures the moments in my life and transforms them into beautiful objects of art.”
+    </p>
+    <a href="/collections/farah-khan" class="brand-editorial__link brand-editorial__link--box">{{ __('site.shop_collection') }}</a>
+  </article>
 </section>
 <section class="home-brands watch-brands-section">
   <h4 class="section-title text-center">
@@ -1191,7 +1785,7 @@ FARAH KHAN
     gap: 40px;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 12px 16px;
 }
 
 .home-brands .brand-item {
@@ -1336,6 +1930,150 @@ $brands = [
 @endforeach
 </div>
 
+<script>
+(function () {
+    function syncHeroStickyTop() {
+        var header = window.innerWidth < 992
+            ? document.querySelector('header.mobile-header-main')
+            : document.querySelector('.luxury-header');
+        var height = header ? header.offsetHeight : 0;
+        document.documentElement.style.setProperty('--hj-header-h', height + 'px');
+    }
+
+    function syncHeroScroll() {
+        syncHeroStickyTop();
+        var scene = document.querySelector('.home-hero-scroll');
+        if (!scene) return;
+        var banner = window.innerWidth >= 768
+            ? scene.querySelector('.custom-banner')
+            : scene.querySelector('.home-hero-mobile');
+        if (!banner) return;
+        var height = Math.round(banner.getBoundingClientRect().height);
+        if (height < 1) return;
+        scene.style.setProperty('--hero-scroll', height + 'px');
+        document.documentElement.style.setProperty('--hero-scroll', height + 'px');
+    }
+
+    syncHeroScroll();
+    window.addEventListener('resize', syncHeroScroll);
+    window.addEventListener('load', syncHeroScroll);
+    document.querySelectorAll('.home-hero-scroll video').forEach(function (video) {
+        video.addEventListener('loadedmetadata', syncHeroScroll);
+        video.addEventListener('loadeddata', syncHeroScroll);
+    });
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finePointer = window.matchMedia('(pointer: fine)').matches;
+    if (reduceMotion || !finePointer) return;
+
+    document.documentElement.style.scrollBehavior = 'auto';
+
+    var current = window.scrollY;
+    var target = window.scrollY;
+    var frame = 0;
+    var driving = false;
+    var ease = 0.08;
+
+    function maxScroll() {
+        var scrolling = document.scrollingElement || document.documentElement;
+        return Math.max(0, scrolling.scrollHeight - window.innerHeight);
+    }
+
+    function clampScroll(value) {
+        return Math.max(0, Math.min(maxScroll(), value));
+    }
+
+    function canScrollInside(node, delta) {
+        var el = node;
+        while (el && el !== document.body && el !== document.documentElement) {
+            if (el.nodeType === 1) {
+                var style = window.getComputedStyle(el);
+                var overflowY = style.overflowY;
+                if ((overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') && el.scrollHeight > el.clientHeight + 2) {
+                    var atTop = el.scrollTop <= 0;
+                    var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+                    if ((delta < 0 && !atTop) || (delta > 0 && !atBottom)) return true;
+                }
+            }
+            el = el.parentElement;
+        }
+        return false;
+    }
+
+    function tick() {
+        var delta = target - current;
+        if (Math.abs(delta) < 0.5) {
+            current = target;
+            frame = 0;
+        } else {
+            current += delta * ease;
+            frame = window.requestAnimationFrame(tick);
+        }
+        var y = Math.round(current);
+        if (Math.abs(window.scrollY - y) >= 1) {
+            driving = true;
+            window.scrollTo(0, y);
+            driving = false;
+        }
+    }
+
+    function glideTo(nextTarget) {
+        target = clampScroll(nextTarget);
+        if (!frame) frame = window.requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', function () {
+        if (driving) return;
+        if (Math.abs(window.scrollY - Math.round(current)) < 3) return;
+        current = window.scrollY;
+        target = window.scrollY;
+        if (frame) {
+            window.cancelAnimationFrame(frame);
+            frame = 0;
+        }
+    }, { passive: true });
+
+    window.addEventListener('wheel', function (event) {
+        if (event.ctrlKey || event.metaKey) return;
+        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+        var delta = event.deltaY;
+        if (event.deltaMode === 1) delta *= 16;
+        else if (event.deltaMode === 2) delta *= window.innerHeight;
+        if (canScrollInside(event.target, delta)) return;
+
+        event.preventDefault();
+        glideTo(target + delta);
+    }, { passive: false });
+
+    window.addEventListener('keydown', function (event) {
+        var tag = event.target && event.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (event.target && event.target.isContentEditable)) return;
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+
+        var delta = 0;
+        if (event.key === 'ArrowDown') delta = 90;
+        else if (event.key === 'ArrowUp') delta = -90;
+        else if (event.key === 'PageDown') delta = window.innerHeight * 0.9;
+        else if (event.key === 'PageUp') delta = window.innerHeight * -0.9;
+        else if (event.key === ' ') delta = (event.shiftKey ? -1 : 1) * window.innerHeight * 0.9;
+        else if (event.key === 'Home') {
+            event.preventDefault();
+            glideTo(0);
+            return;
+        } else if (event.key === 'End') {
+            event.preventDefault();
+            glideTo(maxScroll());
+            return;
+        } else {
+            return;
+        }
+
+        event.preventDefault();
+        glideTo(target + delta);
+    });
+})();
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const selector = '.home-brands .brand-item';
@@ -1506,6 +2244,104 @@ document.addEventListener('DOMContentLoaded', () => {
   transform: translateY(-1px);
 }
 
+.brand-editorial{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0 12px;
+  background: #fff;
+}
+
+.brand-editorial__item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.brand-editorial__media{
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4f1ec;
+}
+
+.brand-editorial__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.brand-editorial__title{
+  margin: 32px 0 16px;
+  padding: 0 16px;
+  font-family: "poppins", sans-serif;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.brand-editorial__text{
+  max-width: 420px;
+  margin: 0 0 14px;
+  padding: 0 29px;
+  font-family: "poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: center;
+  color: #6d6d6d;
+}
+
+.brand-editorial__link{
+  color: #111;
+  font-family: "poppins", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.brand-editorial__link:hover{
+  color: #111;
+}
+
+.brand-editorial__link--box{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  padding: 12px 22px;
+  border: 1px solid #111;
+  text-decoration: none;
+}
+
+.brand-editorial__link--box:hover{
+  background: #111;
+  color: #fff;
+}
+
+@media (max-width: 767.98px){
+  .brand-editorial{
+    grid-template-columns: 1fr;
+    gap: 80px;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .brand-editorial__title{
+    margin-top: 22px;
+    letter-spacing: 0.16em;
+  }
+}
+
 /* Responsive */
 @media (max-width: 992px){
   .fixed-media{
@@ -1542,10 +2378,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            let isAnimating = false;
+            let logicalIndex = 0;
+            let animRaf = 0;
+            let animating = false;
             let isMouseDown = false;
             let mouseStartX = 0;
             let mouseStartScrollLeft = 0;
+            let dragDistance = 0;
+            let pointerVelocity = 0;
+            let lastPointerX = 0;
+            let lastPointerT = 0;
             let startX = 0;
             let startY = 0;
             let isInteractingWithCarousel = false;
@@ -1556,57 +2398,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const watchProgressFill = section.querySelector('.watch-progress__fill');
 
             function isDesktopScrollerSection() {
-                const isDesktopBespoke = scroller.closest('section.bespoke-collections.d-none.d-md-block');
+                const isDesktopBespoke = scroller.closest('section.bespoke-showcase');
                 const isDesktopWatches = scroller.closest('section.watch');
                 return !!(isDesktopBespoke || isDesktopWatches);
             }
 
-            function getItemScrollTarget(item) {
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                const itemIndex = Array.from(items).indexOf(item);
-                if (itemIndex === 0) {
-                    return 0;
-                }
-                if (itemIndex === items.length - 1) {
-                    const endAligned = item.offsetLeft + item.offsetWidth - scroller.clientWidth;
-                    return Math.max(0, Math.min(maxScroll, endAligned));
-                }
-                return Math.max(0, Math.min(maxScroll, item.offsetLeft));
-            }
-
-            function smoothScrollTo(element, target) {
-                isAnimating = true;
-                const startLeft = element.scrollLeft;
-                const distance = target - startLeft;
-                const duration = 500;
-                let startTime = null;
-
-                function easeInOutCubic(t) {
-                    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                }
-
-                function step(timestamp) {
-                    if (startTime === null) startTime = timestamp;
-                    const elapsed = timestamp - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const eased = easeInOutCubic(progress);
-                    element.scrollLeft = startLeft + distance * eased;
-                    if (elapsed < duration) {
-                        requestAnimationFrame(step);
-                    } else {
-                        element.scrollLeft = target;
-                        isAnimating = false;
-                        updateArrowButtons();
-                        updateWatchProgress();
-                    }
-                }
-
-                requestAnimationFrame(step);
-            }
-
-            function scrollWatchTo(target) {
-                if (isAnimating) return;
-                smoothScrollTo(scroller, target);
+            function getScrollLimit() {
+                return Math.max(0, scroller.scrollWidth - scroller.clientWidth);
             }
 
             function getItemStep() {
@@ -1617,76 +2415,187 @@ document.addEventListener('DOMContentLoaded', function() {
                 return items[0].getBoundingClientRect().width;
             }
 
+            function getMaxIndex() {
+                const step = getItemStep();
+                const limit = getScrollLimit();
+                if (!step || step <= 0 || limit <= 2) return 0;
+
+                let max = 0;
+                for (let i = 1; i < items.length; i++) {
+                    const pos = Math.min(limit, Math.round(i * step));
+                    const prev = Math.min(limit, Math.round((i - 1) * step));
+                    if (pos - prev < 8) break;
+                    max = i;
+                    if (pos >= limit - 2) break;
+                }
+                return max;
+            }
+
+            function indexToScroll(index) {
+                const step = getItemStep();
+                const limit = getScrollLimit();
+                const bounded = Math.max(0, Math.min(getMaxIndex(), index));
+                return Math.max(0, Math.min(limit, Math.round(bounded * step)));
+            }
+
             function getNearestIndex() {
                 const step = getItemStep();
                 if (!step || step <= 0) return 0;
                 const rawIndex = Math.round(scroller.scrollLeft / step);
-                return Math.max(0, Math.min(items.length - 1, rawIndex));
+                return Math.max(0, Math.min(getMaxIndex(), rawIndex));
+            }
+
+            function stopAnimation() {
+                if (animRaf) cancelAnimationFrame(animRaf);
+                animRaf = 0;
+                animating = false;
+            }
+
+            function smoothScrollTo(target) {
+                const destination = Math.max(0, Math.min(getScrollLimit(), target));
+                stopAnimation();
+                const startLeft = scroller.scrollLeft;
+                const distance = destination - startLeft;
+                if (Math.abs(distance) < 1) {
+                    scroller.scrollLeft = destination;
+                    refreshScrollerUi();
+                    return;
+                }
+
+                animating = true;
+                const duration = Math.min(680, Math.max(340, 280 + Math.abs(distance) * 0.35));
+                let startTime = null;
+
+                function easeOutCubic(t) {
+                    return 1 - Math.pow(1 - t, 3);
+                }
+
+                function step(timestamp) {
+                    if (startTime === null) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    scroller.scrollLeft = startLeft + distance * easeOutCubic(progress);
+                    updateWatchProgress();
+                    if (progress < 1) {
+                        animRaf = requestAnimationFrame(step);
+                    } else {
+                        scroller.scrollLeft = destination;
+                        animRaf = 0;
+                        animating = false;
+                        refreshScrollerUi();
+                    }
+                }
+
+                animRaf = requestAnimationFrame(step);
             }
 
             function updateWatchProgress() {
                 if (!watchProgressFill || !watchProgressEl) return;
 
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                if (maxScroll <= 2 || items.length <= 1) {
+                const limit = getScrollLimit();
+                const total = scroller.scrollWidth;
+                if (limit <= 2 || items.length <= 1 || total <= 0) {
                     watchProgressEl.classList.add('is-hidden');
                     return;
                 }
 
                 watchProgressEl.classList.remove('is-hidden');
-                const segmentPct = 100 / items.length;
-                const progress = scroller.scrollLeft / maxScroll;
-                watchProgressFill.style.width = segmentPct + '%';
-                watchProgressFill.style.left = (progress * (100 - segmentPct)) + '%';
+                const thumb = Math.max(12, (scroller.clientWidth / total) * 100);
+                const left = (scroller.scrollLeft / limit) * (100 - thumb);
+                watchProgressFill.style.width = thumb + '%';
+                watchProgressFill.style.left = left + '%';
             }
 
             function updateArrowButtons() {
                 if (!arrowPrevBtn || !arrowNextBtn || !items.length) return;
 
-                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
-                const noScroll = maxScroll <= 2 || items.length <= 1;
+                const limit = getScrollLimit();
+                const noScroll = limit <= 2 || items.length <= 1;
 
                 arrowPrevBtn.disabled = noScroll || scroller.scrollLeft <= 5;
-                arrowNextBtn.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+                arrowNextBtn.disabled = noScroll || scroller.scrollLeft >= limit - 5;
             }
 
             function scrollToItemByIndex(itemIndex) {
-                const bounded = Math.max(0, Math.min(items.length - 1, itemIndex));
-                const targetItem = items[bounded];
-                if (!targetItem) return;
-
-                scrollWatchTo(getItemScrollTarget(targetItem));
-
-                setTimeout(() => {
-                    updateArrowButtons();
-                    updateWatchProgress();
-                }, 520);
+                const bounded = Math.max(0, Math.min(getMaxIndex(), itemIndex));
+                logicalIndex = bounded;
+                smoothScrollTo(indexToScroll(bounded));
             }
 
             function resetScrollerPosition() {
+                stopAnimation();
+                logicalIndex = 0;
                 scroller.scrollLeft = 0;
+            }
+
+            const dotsEls = section.querySelectorAll('.bespoke-showcase__dots');
+
+            function updateDots() {
+                if (!dotsEls.length) return;
+                const pages = getMaxIndex() + 1;
+                dotsEls.forEach(function(dotsEl) {
+                    if (dotsEl.childElementCount !== pages) {
+                        dotsEl.innerHTML = '';
+                        for (let i = 0; i < pages; i++) {
+                            const dot = document.createElement('button');
+                            dot.type = 'button';
+                            dot.className = 'bespoke-showcase__dot';
+                            dot.setAttribute('aria-label', 'Show collections ' + (i + 1));
+                            (function(pageIndex) {
+                                dot.addEventListener('click', function() {
+                                    scrollToItemByIndex(pageIndex);
+                                });
+                            })(i);
+                            dotsEl.appendChild(dot);
+                        }
+                    }
+                    Array.from(dotsEl.children).forEach(function(dot, index) {
+                        dot.classList.toggle('is-active', index === logicalIndex);
+                        dot.setAttribute('aria-current', index === logicalIndex ? 'true' : 'false');
+                    });
+                });
             }
 
             function refreshScrollerUi() {
                 updateArrowButtons();
                 updateWatchProgress();
+                updateDots();
             }
 
             if (arrowPrevBtn && arrowNextBtn) {
                 arrowPrevBtn.addEventListener('click', function() {
-                    scrollToItemByIndex(getNearestIndex() - 1);
+                    scrollToItemByIndex(logicalIndex - 1);
                 });
                 arrowNextBtn.addEventListener('click', function() {
-                    scrollToItemByIndex(getNearestIndex() + 1);
+                    scrollToItemByIndex(logicalIndex + 1);
                 });
             }
 
-            scroller.addEventListener('mousedown', function(e) {
-                if (!isDesktopScrollerSection()) return;
+            function endDrag() {
+                if (!isMouseDown) return;
+                isMouseDown = false;
+                if (isDesktopScrollerSection()) scroller.style.cursor = 'grab';
+                if (dragDistance < 8) {
+                    logicalIndex = getNearestIndex();
+                    refreshScrollerUi();
+                    return;
+                }
+                let index = getNearestIndex();
+                if (pointerVelocity <= -0.45) index += 1;
+                else if (pointerVelocity >= 0.45) index -= 1;
+                scrollToItemByIndex(index);
+            }
 
+            scroller.addEventListener('mousedown', function(e) {
+                if (!isDesktopScrollerSection() || e.button !== 0) return;
+
+                stopAnimation();
                 isMouseDown = true;
+                dragDistance = 0;
+                pointerVelocity = 0;
                 mouseStartX = e.clientX;
                 mouseStartScrollLeft = scroller.scrollLeft;
+                lastPointerX = e.clientX;
+                lastPointerT = performance.now();
                 scroller.style.cursor = 'grabbing';
                 e.preventDefault();
             });
@@ -1694,17 +2603,21 @@ document.addEventListener('DOMContentLoaded', function() {
             scroller.addEventListener('mousemove', function(e) {
                 if (!isMouseDown) return;
                 e.preventDefault();
-                scroller.scrollLeft = mouseStartScrollLeft + (mouseStartX - e.clientX) * 2;
+                const now = performance.now();
+                const dt = now - lastPointerT;
+                if (dt > 0) pointerVelocity = (e.clientX - lastPointerX) / dt;
+                lastPointerX = e.clientX;
+                lastPointerT = now;
+                const dx = e.clientX - mouseStartX;
+                dragDistance = Math.abs(dx);
+                scroller.scrollLeft = mouseStartScrollLeft - dx;
             });
 
-            scroller.addEventListener('mouseup', function() {
-                isMouseDown = false;
-                scroller.style.cursor = 'grab';
-            });
+            scroller.addEventListener('mouseup', endDrag);
 
             scroller.addEventListener('mouseleave', function() {
-                isMouseDown = false;
-                scroller.style.cursor = 'grab';
+                if (!isMouseDown) return;
+                endDrag();
             });
 
             if (isDesktopScrollerSection()) {
@@ -1739,6 +2652,7 @@ document.addEventListener('DOMContentLoaded', function() {
             scroller.addEventListener('scroll', function() {
                 if (scrollRAF) cancelAnimationFrame(scrollRAF);
                 scrollRAF = requestAnimationFrame(() => {
+                    if (!animating && !isMouseDown) logicalIndex = getNearestIndex();
                     refreshScrollerUi();
                     scrollRAF = null;
                 });
@@ -1751,14 +2665,12 @@ document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('resize', function() {
                 if (resizeTimer) clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function() {
-                    resetScrollerPosition();
+                    const keep = logicalIndex;
+                    stopAnimation();
+                    logicalIndex = Math.max(0, Math.min(getMaxIndex(), keep));
+                    scroller.scrollLeft = indexToScroll(logicalIndex);
                     refreshScrollerUi();
                 }, 150);
-            });
-
-            window.addEventListener('load', function() {
-                resetScrollerPosition();
-                refreshScrollerUi();
             });
         });
     }
