@@ -1369,6 +1369,7 @@ document.addEventListener('DOMContentLoaded', function () {
     aspect-ratio: 16 / 9;
     position: relative;
     overflow: hidden;
+    margin-bottom: 40px;
 }
 
 .bannerVideo{
