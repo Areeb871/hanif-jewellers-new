@@ -289,7 +289,7 @@
                                 </div>
                             @endforeach
                             <div class="ferragamo-inline-banner">
-                                <img src="{{ asset('assets/f_assets/image/ferragamo-grid.jpeg') }}" alt="Ferragamo">
+                                <img src="{{ asset('assets/f_assets/image/ferragamo-grid.webp') }}" alt="Ferragamo">
                             </div>
                         </div>
                     </div>

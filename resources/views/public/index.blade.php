@@ -40,14 +40,16 @@
 /* Brand banner carousel */
 .hero-slide {
   width: 100%;
-  height: 100%;
   background: transparent;
-  overflow: hidden;
 }
-.hero-slide picture,
-.hero-slide img {
-  width: 100%;
+.hero-slide picture {
   display: block;
+}
+.hero-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 #carouselExampleRide { width: 100%; }
 #carouselExampleRide .carousel-item { line-height: 0; }
@@ -67,15 +69,9 @@
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
 }
 
-/* Banner fills the screen under the header. Extra image is cropped equally from top and bottom. */
 #carouselExampleRide {
-  --brand-banner-height: calc(100dvh - var(--megaTop, 72px));
   padding: 0;
   width: 100%;
-  height: var(--brand-banner-height);
-  max-height: var(--brand-banner-height);
-  background: #000;
-  overflow: hidden;
 }
 
 #carouselExampleRide .carousel-inner,
@@ -83,36 +79,28 @@
 #carouselExampleRide .hero-slide,
 #carouselExampleRide .hero-slide picture {
   width: 100%;
-  height: 100%;
+  height: auto;
 }
 
-#carouselExampleRide .carousel-inner {
-  position: relative;
-  height: var(--brand-banner-height);
-}
+@media (max-width: 767.98px) {
+  #carouselExampleRide .hero-slide img {
+    max-width: 100%;
+  }
 
-#carouselExampleRide .carousel-item {
-  height: var(--brand-banner-height);
-}
+  #carouselExampleRide .carousel-control-prev,
+  #carouselExampleRide .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+  }
 
-#carouselExampleRide .hero-slide {
-  width: 100%;
-  height: 100%;
-  background: #000;
-}
+  #carouselExampleRide .carousel-control-prev {
+    left: 6px;
+  }
 
-#carouselExampleRide .hero-slide picture {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-#carouselExampleRide .hero-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
+  #carouselExampleRide .carousel-control-next {
+    right: 6px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -512,18 +500,18 @@ section.watch .watch-slider-viewport,
     overflow: visible;
 }
 
-section.watch .watch-scroller-arrow,
-.bespoke-collections .watch-scroller-arrow {
+/* Product scroller only: plain black prev/next icons, no panel/blur. */
+section.watch .watch-scroller-arrow {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 16px;
+    bottom: 16px;
     z-index: 30;
-    width: 66px;
+    width: 40px;
     height: auto;
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: #2a2a2a;
+    color: #000;
     box-shadow: none;
     display: flex !important;
     align-items: center;
@@ -533,213 +521,61 @@ section.watch .watch-scroller-arrow,
     opacity: 0;
     visibility: visible;
     pointer-events: none;
-    overflow: hidden;
+    overflow: visible;
     transition: opacity 0.22s ease-out;
+    filter: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    isolation: isolate;
 }
 
-/* Frosted control matched to the supplied Apple UI reference. */
 section.watch .watch-scroller-arrow::before,
-.bespoke-collections .watch-scroller-arrow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translateX(-50%);
-    z-index: 0;
-    box-sizing: border-box;
-    background: rgba(151, 181, 196, 0.1);
-    border: none;
-    border-radius: 24px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(12px) saturate(112%);
-    -webkit-backdrop-filter: blur(12px) saturate(112%);
-    pointer-events: none;
-    transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease,
-                transform 0.3s cubic-bezier(.2,.8,.2,1);
+section.watch .watch-scroller-arrow::after {
+    content: none;
+    display: none;
 }
 
-/* Soft glass sheen; intentionally restrained like the reference. */
-section.watch .watch-scroller-arrow::after,
-.bespoke-collections .watch-scroller-arrow::after {
-    content: "";
-    position: absolute;
-    top: 1px;
-    bottom: 1px;
-    left: 50%;
-    width: calc(100% - 2px);
-    height: auto;
-    z-index: 1;
-    border-radius: 23px;
-    transform: translateX(-50%);
-    background: linear-gradient(145deg,
-        rgba(255, 255, 255, 0.07),
-        rgba(255, 255, 255, 0) 58%);
-    opacity: .65;
-    pointer-events: none;
-    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
-}
-
-/* Fade the inner edge into the card so the glass has no visible seam. */
-section.watch .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::after,
-section.watch .watch-scroller-arrow--prev::after {
-    border-radius: 0 24px 24px 0;
-}
-
-section.watch .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::after,
-section.watch .watch-scroller-arrow--next::after {
-    border-radius: 24px 0 0 24px;
-}
-
-section.watch .watch-scroller-arrow--prev::before,
-section.watch .watch-scroller-arrow--prev::after,
-.bespoke-collections .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::after {
-    -webkit-mask-image: linear-gradient(to right,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-    mask-image: linear-gradient(to right,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-}
-
-section.watch .watch-scroller-arrow--next::before,
-section.watch .watch-scroller-arrow--next::after,
-.bespoke-collections .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::after {
-    -webkit-mask-image: linear-gradient(to left,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-    mask-image: linear-gradient(to left,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-}
-
-section.watch .watch-scroller-arrow .arrow-icon,
-.bespoke-collections .watch-scroller-arrow .arrow-icon {
+section.watch .watch-scroller-arrow .arrow-icon {
     position: relative;
     z-index: 2;
-    color: rgba(0, 0, 0, 0.86);
+    color: #000;
     filter: none;
-    transform: scale(1.08);
+    transform: none;
     transition: none;
 }
 
+section.watch .watch-scroller-arrow .arrow-left svg {
+    transform: rotate(180deg);
+}
+
 section.watch .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
-section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled),
-.bespoke-collections .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
-.bespoke-collections .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
+section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
     opacity: 1;
     pointer-events: auto;
 }
 
-/* The watch cards have 16px vertical margins inside their viewport. */
-section.watch .watch-scroller-arrow {
-    top: 16px;
-    bottom: 16px;
-}
-
-section.watch .watch-scroller-arrow--prev,
-.bespoke-collections .watch-scroller-arrow--prev {
+section.watch .watch-scroller-arrow--prev {
     left: 0;
 }
 
-section.watch .watch-scroller-arrow--next,
-.bespoke-collections .watch-scroller-arrow--next {
+section.watch .watch-scroller-arrow--next {
     right: 0;
 }
 
-section.watch .watch-scroller-arrow .arrow-left svg,
-.bespoke-collections .watch-scroller-arrow .arrow-left svg {
-    transform: rotate(180deg);
-}
-
-section.watch .watch-scroller-arrow:disabled,
-.bespoke-collections .watch-scroller-arrow:disabled {
+section.watch .watch-scroller-arrow:disabled {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
 @media (max-width: 767.98px) {
-    section.watch .watch-scroller-arrow,
-    .bespoke-collections.d-md-none .watch-scroller-arrow {
+    section.watch .watch-scroller-arrow {
         display: none !important;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress {
-        display: flex;
-        justify-content: center;
-        padding: 22px 16px 14px;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress.is-hidden {
-        visibility: hidden;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress__track {
-        width: 46%;
-        min-width: 140px;
-        max-width: 200px;
-        height: 3px;
-        background: #e5e7eb;
-        border-radius: 999px;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress__fill {
-        background: #0d2a39;
-        border-radius: 999px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .bespoke-collections .watch-scroller-arrow {
-        width: calc((100vw - 120px) / 18);
     }
 }
 
 @media (min-width: 992px) {
     section.watch .watch-scroller-arrow {
-        width: 75px;
-        height: auto;
-    }
-
-    .bespoke-collections .watch-scroller-arrow {
-        width: calc((100vw - 120px) / 18);
-        height: auto;
-    }
-
-    section.watch .watch-scroller-arrow--prev,
-    .bespoke-collections .watch-scroller-arrow--prev {
-        left: 0;
-    }
-
-    section.watch .watch-scroller-arrow--next,
-    .bespoke-collections .watch-scroller-arrow--next {
-        right: 0;
-    }
-}
-
-@media (min-width: 1200px) and (max-width: 1365.98px) {
-    section.watch .watch-scroller-arrow {
-        width: 80px;
-    }
-}
-
-@media (min-width: 1366px) and (max-width: 1919.98px) {
-    section.watch .watch-scroller-arrow {
-        width: 84px;
-    }
-}
-
-@media (min-width: 1920px) {
-    section.watch .watch-scroller-arrow {
-        width: 88px;
+        width: 44px;
     }
 }
 
@@ -1166,7 +1002,7 @@ towering peaks</div>
 
   </div>
 </section>
-<a href="/collections/nagar" class="custom-banner-btn-new d-inline-block d-md-none">{{ __('site.discover_more') }}</a>
+<a href="/collections/franck-muller" class="custom-banner-btn-new d-inline-block d-md-none">{{ __('site.discover_more') }}</a>
     <div class="home-hero-runway" aria-hidden="true"></div>
 </div>
     <!-- Watches / Featured Products Scroller (unified responsive) -->
@@ -1211,13 +1047,13 @@ towering peaks</div>
     @php
     $brandBannerSlides = [
         ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet-homepage-banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet-mob-homepage.webp'],
-
- ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
+        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-homepage-mob.webp'],
         ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/watches/ML-banner-index.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ML-mobile-view.webp'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
 
     ];
     @endphp
+ 
 
     <!-- Brand Banner Carousel (unified responsive) -->
     <section class="carousel-section p-0 m-0">
@@ -1476,18 +1312,38 @@ towering peaks</div>
 }
 
 .bespoke-showcase .watch-scroller-arrow {
+    position: absolute;
     top: 34%;
     bottom: auto;
+    z-index: 30;
     width: 44px;
     height: 44px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #0d2a39;
+    box-shadow: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
     opacity: 1;
     pointer-events: auto;
+    filter: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.bespoke-showcase .watch-scroller-arrow svg {
+    fill: none;
     color: #0d2a39;
-    background: transparent;
+    stroke: currentColor;
 }
 
 .bespoke-showcase .watch-scroller-arrow::before,
 .bespoke-showcase .watch-scroller-arrow::after {
+    content: none;
     display: none;
 }
 
@@ -2279,7 +2135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 
 .brand-editorial__title{
-  margin: 32px 0 16px;
+  margin: 64px 0 32px;
   padding: 0 16px;
   font-family: "poppins", sans-serif;
   font-size: 21px;
