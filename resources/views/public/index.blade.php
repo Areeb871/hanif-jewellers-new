@@ -898,6 +898,52 @@ section.watch .card:hover {
     border: none !important;
 }
 
+/* Homepage-only moving background below the hero. */
+.homepage-background-video {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    filter: brightness(0.68);
+    background: #130f0c;
+}
+
+.homepage-background-video ~ section,
+.homepage-background-video ~ .hj-footer {
+    position: relative;
+    z-index: 1;
+}
+
+.homepage-background-video ~ section.onlineStore,
+.homepage-background-video ~ section.bespoke-showcase,
+.homepage-background-video ~ section.container,
+.homepage-background-video ~ section.brand-editorial,
+.homepage-background-video ~ section.home-brands {
+    /* background: rgba(246, 243, 238, 0.78) !important; */
+}
+
+.homepage-background-video ~ .bespoke-showcase .mobile-product-scroller {
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.homepage-background-video ~ .hj-footer {
+    background: rgba(230, 222, 211, 0.82) !important;
+}
+
+/* .homepage-background-video ~ .hj-footer .hj-bottom {
+    background-color: rgba(60, 35, 13, 0.9) !important;
+} */
+
+@media (prefers-reduced-motion: reduce) {
+    .homepage-background-video {
+        display: none;
+    }
+}
+
 </style>
 
 <div style="display:flex;justify-content:center;width:100%;">
@@ -1005,6 +1051,11 @@ towering peaks</div>
 <a href="/collections/franck-muller" class="custom-banner-btn-new d-inline-block d-md-none">{{ __('site.discover_more') }}</a>
     <div class="home-hero-runway" aria-hidden="true"></div>
 </div>
+
+<video class="homepage-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+    <source src="{{ asset('assets/f_assets/image/Background.mp4') }}" type="video/mp4">
+</video>
+
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
         <div class="watch-slider-viewport">

@@ -2,9 +2,9 @@
 <style>
 /* ===== CARTIER-LIKE FOOTER ===== */
 .hj-footer{
-  background:#e6ded3;
+  background:white;
   color:white;
-  padding: 60px 0 0;
+  /*padding: 60px 0 0;*/
 }
 footer h4 {
   font-size: 12px;
@@ -95,7 +95,7 @@ footer h4 {
 
 /* Column headings */
 .hj-footer .hj-title{
-  font-family: "Montserrat", Almarai, Helvetica, Arial, sans-serif;
+  font-family: "Argent CF", Almarai, Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: .14em;
@@ -173,14 +173,19 @@ footer h4 {
 }
 
 .hj-footer .hj-bottom{
-  padding: 18px 0;
+  padding: 10px 0;
   text-align:center;
-  font-family: "Montserrat", Almarai, Helvetica, Arial, sans-serif;
+  font-family: "poppins", Almarai, Helvetica, Arial, sans-serif;
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
-  background-color:#3c230d;
+  background-color:#B95124;
 
+}
+
+.registered-mark{
+  font-size:24px;
+  vertical-align:middle;
 }
 
 /* Responsive (keep desktop same) */
@@ -347,42 +352,43 @@ footer h4 {
 
       <!-- CUSTOMER CARE (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">CUSTOMER CARE</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">CUSTOMER CARE</button>
+        <h4 class="hj-title">{{ __('site.customer_care') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.customer_care') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ url('contact-us') }}">Contact Us</a></li>
-          <li><a href="{{ url('locator') }}">Stores</a></li>
-          <li><a href="{{ url('after-sale-services') }}">After Sale Services</a></li>
-          <li><a href="{{ url('care-instructions') }}">Care Instructions</a></li>
+          <li><a href="{{ url('contact-us') }}">{{ __('site.contact_us') }}</a></li>
+          <li><a href="{{ url('locator') }}">{{ __('site.stores') }}</a></li>
+          <li><a href="{{ url('after-sale-services') }}">{{ __('site.after_sale') }}</a></li>
+          <li><a href="{{ url('care-instructions') }}">{{ __('site.care') }}</a></li>
         </ul>
       </div>
 
       <!-- OUR COMPANY (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">OUR COMPANY</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">OUR COMPANY</button>
+        <h4 class="hj-title">{{ __('site.our_company') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.our_company') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ url('locator') }}">Find a Boutique ↗</a></li>
-          <li><a href="{{ url('about-us') }}">About Us</a></li>
-          <li><a href="{{ url('assurance') }}">Assurance</a></li>
+          <li><a href="{{ url('locator') }}">{{ __('site.find_boutique') }} ↗</a></li>
+          <li><a href="{{ url('about-us') }}">{{ __('site.about_us') }}</a></li>
+
+          <li><a href="{{ url('assurance') }}">{{ __('site.assurance') }}</a></li>
         </ul>
       </div>
 
       <!-- LEGAL AREA (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">LEGAL AREA</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">LEGAL AREA</button>
+        <h4 class="hj-title">{{ __('site.legal') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.legal') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ route('terms-of-service') }}">Terms of Service</a></li>
-          <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>
-          <li><a href="{{ route('shipping-policy') }}">Shipping Policy</a></li>
-          <li><a href="{{ route('refund-policy') }}">Refund Policy</a></li>
+          <li><a href="{{ route('terms-of-service') }}">{{ __('site.terms') }}</a></li>
+          <li><a href="{{ route('privacy-policy') }}">{{ __('site.privacy') }}</a></li>
+          <li><a href="{{ route('shipping-policy') }}">{{ __('site.shipping_policy') }}</a></li>
+          <li><a href="{{ route('refund-policy') }}">{{ __('site.refund') }}</a></li>
         </ul>
       </div>
 
       <!-- FOLLOW US (Centered on mobile) -->
       <div class="hj-follow">
-        <h4 class="hj-title">FOLLOW US</h4>
+        <h4 class="hj-title">{{ __('site.follow_us') }}</h4>
         <div class="hj-social">
           <a target="_blank" rel="noopener" href="https://www.instagram.com/hanifjewellers" aria-label="Instagram">
             <i class="fa-brands fa-instagram"></i>
@@ -405,11 +411,13 @@ footer h4 {
     </div>
   </div>
 
-  <div class="hj-divider-bottom"></div>
 
+  <!--<div class="hj-bottom">-->
+  <!--  © <?= date("Y"); ?> Hanif ® | {{ __('site.rights') }}-->
+  <!--</div>-->
   <div class="hj-bottom">
-    © <?= date("Y"); ?> Hanif | All rights reserved.
-  </div>
+  © <?= date("Y"); ?> Hanif <span class="registered-mark">®</span> | All rights reserved.
+</div>
 </footer>
 
 <!-- Accordion JS (Mobile only, 1 open at a time, smooth height) -->
@@ -545,7 +553,7 @@ footer h4 {
     </svg>
 
 
-    <img src="{{ asset('assets/f_assets/image/emb1.png') }}" alt="HANIF Logo" class="hanif-inner-logo">
+    <img src="{{ asset('assets/f_assets/image/emb1.png') }}" alt="HANIF Logo" class="hanif-inner-logo" width="178" height="181" loading="lazy" decoding="async">
 </a> -->
 
 <style>
@@ -698,7 +706,7 @@ footer h4 {
                         <circle cx="12" cy="11" r="2.2" fill="white" stroke="#fdfdfd" stroke-width="1.8"/>
                     </svg>
                 </span>
-                <span class="hanif-action-label">Find a boutique</span>
+                <span class="hanif-action-label">{{ __('site.find_boutique_btn') }}</span>
             </a>
 
             <a href="/track-order" class="hanif-action-btn">
@@ -708,7 +716,7 @@ footer h4 {
                         <path d="M9 9V7a3 3 0 016 0v2" fill="white" stroke="#fdfdfd" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
                 </span>
-                <span class="hanif-action-label">Track your order</span>
+                <span class="hanif-action-label">{{ __('site.track_order') }}</span>
             </a>
 
             <a href="/service-request" class="hanif-action-btn hanif-action-btn-wide">
@@ -719,12 +727,12 @@ footer h4 {
                         <rect x="2.5" y="14" width="3" height="5.5" rx="1" fill="white" stroke="#fdfdfd" stroke-width="1.8"/>
                     </svg>
                 </span>
-                <span class="hanif-action-label">Request or track a service</span>
+                <span class="hanif-action-label">{{ __('site.request_service') }}</span>
             </a>
         </div>
 
         <p class="hanif-popup-footer">
-            For more information on how to Contact Us, <a href="/pages/contact-us">click here</a>.
+            {{ __('site.more_info') }} <a href="/pages/contact-us">{{ __('site.click_here') }}</a>.
         </p>
     </div>
 </div> -->
