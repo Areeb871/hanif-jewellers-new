@@ -89,7 +89,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   --text:#000000;
   --border:#e5e5e5;
 
-  /* Controls how “close” icons/left links feel to HANIF */
+  /* Controls how “close” icons/left links feel to HA`NIF */
   --shellMax: 1320px;   /* 1200 / 1280 / 1320 / 1360 */
   --shellPad: 24px;     /* 18–32 */
 }
