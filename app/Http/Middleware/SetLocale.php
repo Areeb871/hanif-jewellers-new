@@ -17,26 +17,23 @@ class SetLocale
             $locale = 'en';
         }
 
-        [$publicIp, $detectedMarket] = $this->detectRegion($request);
-        $sessionIp = (string) $request->session()->get('market_ip', '');
         $market = $request->session()->get('market');
+        $publicIp = $this->clientIp($request);
 
-        // A locator/language choice stays until the visitor's IP changes.
-        // An automatic guess is replaced whenever we can read the country again,
-        // so a Dubai visitor who was saved as Pakistan is not stuck on PKR.
-        $manualChoice = $request->session()->get('market_source') === 'manual'
-            && $sessionIp === $publicIp
-            && in_array($market, ['pk', 'uae'], true);
-
-        if (! $manualChoice && in_array($detectedMarket, ['pk', 'uae'], true)) {
-            $market = $detectedMarket;
-            $request->session()->put('market_source', 'geo');
-            if ($market === 'pk') {
-                $locale = 'en';
-            }
+        // Header buttons send ?region= so production caches of "/" cannot keep
+        // showing the Pakistan homepage after UAE / عربي is selected.
+        $region = strtolower((string) $request->query('region', ''));
+        if (in_array($region, ['pk', 'uae', 'ar'], true)) {
+            [$locale, $market] = match ($region) {
+                'uae' => ['en', 'uae'],
+                'ar' => ['ar', 'uae'],
+                default => ['en', 'pk'],
+            };
+            $request->session()->put('market_source', 'manual');
         } elseif (! in_array($market, ['pk', 'uae'], true)) {
-            $market = 'pk';
-            $locale = 'en';
+            [, $detectedMarket] = $this->detectRegion($request);
+            $market = in_array($detectedMarket, ['pk', 'uae'], true) ? $detectedMarket : 'pk';
+            $request->session()->put('market_source', 'geo');
         }
 
         if ($locale === 'ar') {

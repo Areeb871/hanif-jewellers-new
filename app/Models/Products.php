@@ -63,6 +63,14 @@ class Products extends Model
 
     public static function currentMarket(): string
     {
+        $region = request()?->query('region');
+        if ($region === 'uae' || $region === 'ar') {
+            return 'uae';
+        }
+        if ($region === 'pk') {
+            return 'pk';
+        }
+
         $market = session('market');
 
         if (in_array($market, ['pk', 'uae'], true)) {

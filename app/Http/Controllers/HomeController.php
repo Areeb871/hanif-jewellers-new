@@ -684,7 +684,9 @@ public function index()
             ->take($perCategory)
             ->get();
 
-        $isUae = Products::currentMarket() === 'uae';
+        $isUae = Products::currentMarket() === 'uae'
+            || app()->getLocale() === 'ar'
+            || in_array(request()->query('region'), ['uae', 'ar'], true);
 
         // UAE: jewellery only (no watches). PK: interleave jewellery + watches.
         if ($isUae) {
@@ -719,13 +721,17 @@ public function index()
             ? 'public.index_dubai'
             : 'public.index';
 
-        return view($homeView, compact(
-            'categories',
-            'products',
-            'watchCategories',
-            'watches',
-            'products_new'
-        ));
+        return response()
+            ->view($homeView, compact(
+                'categories',
+                'products',
+                'watchCategories',
+                'watches',
+                'products_new'
+            ))
+            ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Vary', 'Cookie');
 
     } catch (\Throwable $th) {
         return response()->json([
@@ -1296,7 +1302,7 @@ public function Online_Shopping_Store(Request $request)
 
     // Default page: featured collections only (backend-only; not tied to filter buttons).
     if ($activeTags === '' && $useDefaults) {
-        $activeTags = 'Hania Amir,breathtaking,monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
+        $activeTags = 'Hania Amir,miras,breathtaking,monalisa,purelook,jewelphabets,ehed,selene,hasht,onlinestoreeid';
     }
 
     // Featured collections: subcategory slugs (primary) + tag aliases (fallback for ordering/filters).

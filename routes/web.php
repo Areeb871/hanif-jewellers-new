@@ -58,14 +58,26 @@ Route::post('/locale', function (Request $request) {
     $request->session()->put('locale', $locale);
     $request->session()->put('market', $market);
     $request->session()->put('market_source', 'manual');
+    $request->session()->save();
 
+    $region = $choice === 'ar' ? 'ar' : ($choice === 'uae' ? 'uae' : 'pk');
     $referer = (string) $request->headers->get('referer', '');
-    // When switching region from locator / social links, refresh that page for region stores.
+
+    // Always land on a region URL so live/CDN caches of "/" cannot keep
+    // serving the Pakistan homepage after UAE or Arabic is selected.
     if (str_contains($referer, '/locator') || str_contains($referer, '/social-links')) {
-        return redirect()->to($referer);
+        $target = $referer;
+        $separator = str_contains($target, '?') ? '&' : '?';
+        if (! str_contains($target, 'region=')) {
+            $target .= $separator.'region='.$region;
+        } else {
+            $target = preg_replace('/([?&])region=[^&]*/', '${1}region='.$region, $target) ?: $target;
+        }
+
+        return redirect()->to($target);
     }
 
-    return back(fallback: url('/'));
+    return redirect()->to(url('/').'?region='.$region);
 })->name('locale.set');
 Route::get('/collections/online-shopping-store', [HomeController::class, 'Online_Shopping_Store']);
 Route::get('/pages/contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
