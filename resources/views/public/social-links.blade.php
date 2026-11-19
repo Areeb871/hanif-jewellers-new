@@ -29,17 +29,22 @@
         ],
     ];
 
-    $reviewLinks = [
-        ['name' => 'MM Alam Flagship Store, Lahore', 'slug' => 'mm-alam'],
-        ['name' => 'DHA Premium Store, Lahore', 'slug' => 'dha'],
-        ['name' => 'Dolmen Premium Store, Lahore', 'slug' => 'dolmen-mall'],
-        ['name' => 'Franck Muller Boutique, Lahore', 'slug' => 'franck-muller'],
-        ['name' => 'F6 Flagship Store, Islamabad', 'slug' => 'f6-islamabad'],
-        ['name' => 'Serena Exclusive Store, Islamabad', 'slug' => 'serena-islamabad'],
-        ['name' => 'Marriott Lifestyle Store, Islamabad', 'slug' => 'marriott-islamabad'],
-        ['name' => 'Flagship Store, Dubai', 'slug' => 'dubai'],
-        ['name' => 'ZARTASH Couture , Lahore ', 'slug' => 'zartash-couture']
+    $market = $market ?? \App\Models\Products::currentMarket();
+    $allReviewLinks = [
+        ['name' => 'MM Alam Flagship Store, Lahore', 'slug' => 'mm-alam', 'market' => 'pk'],
+        ['name' => 'DHA Premium Store, Lahore', 'slug' => 'dha', 'market' => 'pk'],
+        ['name' => 'Dolmen Premium Store, Lahore', 'slug' => 'dolmen-mall', 'market' => 'pk'],
+        ['name' => 'Franck Muller Boutique, Lahore', 'slug' => 'franck-muller', 'market' => 'pk'],
+        ['name' => 'F6 Flagship Store, Islamabad', 'slug' => 'f6-islamabad', 'market' => 'pk'],
+        ['name' => 'Serena Exclusive Store, Islamabad', 'slug' => 'serena-islamabad', 'market' => 'pk'],
+        ['name' => 'Marriott Lifestyle Store, Islamabad', 'slug' => 'marriott-islamabad', 'market' => 'pk'],
+        ['name' => 'Flagship Store, Dubai', 'slug' => 'dubai', 'market' => 'uae'],
+        ['name' => 'ZARTASH Couture , Lahore ', 'slug' => 'zartash-couture', 'market' => 'pk'],
     ];
+    $reviewLinks = array_values(array_filter(
+        $allReviewLinks,
+        static fn ($link) => ($link['market'] ?? 'pk') === $market
+    ));
 @endphp
 
 <style>

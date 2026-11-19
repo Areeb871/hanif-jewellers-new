@@ -9,7 +9,10 @@
         ? asset($product->images->first()->image)
         : ($product->image ? asset($product->image) : asset('default.jpg'));
 
-    $watchDisplayPrice = round($product->displayPrice($storeContext ?? false), -3);
+    $watchCurrency = $product->displayCurrency($storeContext ?? false);
+    $watchDisplayPrice = \App\Models\Products::roundDisplayPrice(
+        $product->displayPrice($storeContext ?? false)
+    );
 @endphp
  <style>
     /*desktop 2000px*/
@@ -673,14 +676,14 @@
 
         @if($watchDisplayPrice > 0 && !empty($product->show_price))
             <p class="card-text">
-                PKR {{ number_format($watchDisplayPrice, 0, '.', ',') }}
+                {{ $watchCurrency }} {{ number_format($watchDisplayPrice, 0, '.', ',') }}
             </p>
         @endif
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
             <a href="{{ route('product.details', $product->slug) }}"
                class="btn text-white bg-black addToCartProductDetails discover-more-btn">
-                Discover More
+                {{ __('site.discover_more') }}
             </a>
         @endif
     </div>

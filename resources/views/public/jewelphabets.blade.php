@@ -289,10 +289,10 @@
         @endif
     </div>
     <div class="ehed-content-container">
-        <div class="ehed-category-label">WOMEN</div>
-        <h1 class="ehed-main-title">JEWELPHABETS</h1>
+        <div class="ehed-category-label">{{ __('site.women') }}</div>
+        <h1 class="ehed-main-title">{{ __('site.col_jewelphabets') }}</h1>
         <p class="ehed-body-text hero__description font-family--serif">
-            Reviving the charm of personalized jewellery. Your favorite letter close to your heart, reimagined and more exquisite than ever!
+            {{ __('site.jewelphabets_copy') }}
 </p>
     </div>
 </section>
@@ -305,7 +305,7 @@
                     </div>
                 @endforeach
             @else
-                <div class="col-12"><div class="text-center py-5 text-muted">Collections Revealed Soon!.</div></div>
+                <div class="col-12"><div class="text-center py-5 text-muted">{{ __('site.col_revealed_soon') }}</div></div>
             @endif
         </div>
         </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() === 'ar' ? 'ar-AE' : 'en' }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
 <link rel="canonical" href="{{ request()->url() }}">
@@ -75,7 +75,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <title>Hanif Jewellers</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ asset('assets/f_assets/image/favicon_hanif_32x32.jpg') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @include('public.partials.locale-assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -888,7 +888,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="header-row top-header">
       <div class="header-left">
         <!-- <a href="#">United States</a> -->
-        <a href="{{ url('/pages/contact-us')}}">Contact Us</a>
+        <a href="{{ url('/pages/contact-us')}}">{{ __('site.contact_us') }}</a>
         <!-- <a href="#">Services</a> -->
       </div>
 
@@ -907,12 +907,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ✅ ROW 2: nav -->
     <nav class="main-nav" aria-label="Main navigation">
-                            <a href="{{ url('/highend-jewellery') }}">HIGH END</a>
+                            <a href="{{ url('/highend-jewellery') }}">{{ __('site.high_end') }}</a>
 
     <div class="dropdown hj-mega position-static">
   <a class="dropdown-toggle" href="#" id="JEWELLERYDropdown"
      role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Jewellery
+    {{ __('site.jewellery') }}
   </a>
 
   <div class="dropdown-menu mega-menu p-0 border-0 rounded-0 w-100"
@@ -922,7 +922,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="row py-4">
 
         <div class="col-md-2 border-end d-flex flex-column align-items-center justify-content-center">
-          <a href="#" class="fw-bold text-dark">House <span class="break-line">Collections</span></a>
+          <a href="#" class="fw-bold text-dark">{{ __('site.house') }} <span class="break-line">{{ __('site.collections_word') }}</span></a>
         </div>
  <div class="col-md-10">
 
@@ -930,21 +930,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 $menus = [
 
     'BRIDAL' => [
-        ['label' => 'GEHNAWA',      'url' => route('gehnawa')],
-        ['label' => 'NAVRATAN',     'url' => route('collections.navratan')],
-        ['label' => 'TAJ MAHAL',    'url' => route('taj-mahal')],
-        ['label' => 'HERITAGE',       'url' => url('collections/heritage')], // ✅ FIXED
-        ['label' => 'CLEOPATRA',    'url' => route('cleopatra')],
-        ['label' => 'MISTERIO',         'url' => route('misterio')],
-
+        ['label' => __('site.col_gehnawa'),      'url' => route('gehnawa')],
+        ['label' => __('site.col_navratan'),     'url' => route('collections.navratan')],
+        ['label' => __('site.col_taj'),    'url' => route('taj-mahal')],
+        ['label' => __('site.col_heritage'),       'url' => url('collections/heritage')], // ✅ FIXED
+        ['label' => __('site.col_cleopatra'),    'url' => route('cleopatra')],
+        ['label' => __('site.col_timeless_menu'), 'url' => route('timeless-jewels')],
     ],
 
     'LIFESTYLE' => [
-        ['label' => 'EHED',         'url' => route('ehed')],
-        ['label' => 'PURE LOCK',    'url' => route('pure-lock')],
-        ['label' => 'SELENE',       'url' => url('collections/selene')], // ✅ FIXED
-        ['label' => 'MARCHISIO',        'url' => route('marchisio')],
-        ['label' => 'DIVINE TREASURES', 'url' => route('divine-treasures')],
+        ['label' => __('site.col_ehed'),         'url' => route('ehed')],
+        ['label' => __('site.col_pure_lock'),    'url' => route('pure-lock')],
+        ['label' => __('site.col_selene'),       'url' => url('collections/selene')], // ✅ FIXED
+        ['label' => __('site.col_marchisio'),        'url' => route('marchisio')],
+        ['label' => __('site.col_divine'), 'url' => route('divine-treasures')],
         ['label' => 'MOMENTU',       'url' => url('/collections/momentu')],
 
     ],
@@ -957,11 +956,9 @@ $menus = [
 
 ];
 
-$card = [
-    'img' => 'assets/f_assets/image/highend/9.png',
-    'btn' => 'EXPLORE COLLECTION',
-    'url' => url('highend-jewellery'),
-];
+'img' => 'assets/f_assets/image/highend/9.png',    
+'btn' => __('site.explore_collection'),
+    'url' => url('collections/nagar'),
 @endphp
 
 
@@ -975,7 +972,7 @@ $card = [
 
             <!-- BRIDAL -->
             <div class="col-md-4">
-                <div class="mega-heading">BRIDAL</div>
+                <div class="mega-heading">{{ __('site.bridal') }}</div>
                 <div class="mega-links">
                     @foreach($menus['BRIDAL'] as $item)
                         <a class="mega-link" href="{{ $item['url'] }}">
@@ -987,7 +984,7 @@ $card = [
 
             <!-- LIFESTYLE -->
             <div class="col-md-4">
-                <div class="mega-heading">LIFESTYLE</div>
+                <div class="mega-heading">{{ __('site.lifestyle') }}</div>
                 <div class="mega-links">
                     @foreach($menus['LIFESTYLE'] as $item)
                         <a class="mega-link" href="{{ $item['url'] }}">
@@ -1021,7 +1018,7 @@ $card = [
         </a>
         <br>
         <div class="hanif-mega-title">
-              HIGH END JEWELLERY
+              {{ __('site.high_end_jewellery') }}
         </div>
         <!-- BUTTON -->
         <a href="{{ $card['url'] }}" class="hanif-mega-card-btn">
@@ -1041,41 +1038,28 @@ $card = [
 
   </div>
 </div>
-      <a href="{{ url('solitaire') }}">Solitaire</a>
-      <a href="{{ url('/collections/online-shopping-store') }}">Online Shopping Store</a>
+      <a href="{{ url('solitaire') }}">{{ __('site.solitaire') }}</a>
+      <a href="{{ url('/collections/online-shopping-store') }}">{{ __('site.online_store') }}</a>
+      @if(($siteMarket ?? \App\Models\Products::currentMarket()) !== 'uae')
       <a href="{{ url('watches') }}">Watches</a>
+      @endif
       <span class="nav-divider" aria-hidden="true"></span>
 <a href="#"
    id="navSearchTrigger"
-   aria-label="Search"
+   aria-label="{{ __('site.search') }}"
    class="d-inline-flex align-items-center">
    <i class="fa-solid fa-magnifying-glass"></i>
 </a>
  </nav>
 
   <div class="header-static-tools">
+    @include('public.partials.gold-prices-menu')
+    @include('public.partials.language-switch')
     {{-- CART SECTION --}}
     <!-- <span id="cartHeader" class="d-inline-flex align-items-center">
       @include('public.partials.cart-header')
     </span> -->
 
-    {{-- SETTINGS DROPDOWN --}}
-    <div class="dropdown position-relative">
-
-      <a href="/checkout" aria-label="Settings">
-        <i class="fa-solid fa-gear"></i>
-      </a>
-
-      <ul class="dropdown-menu dropdown-menu-end px-3 py-2"
-        style="left:-140px; top:40px; background:#ffffff;">
-        <li class="mb-2">
-          <a class="dropdown-item" href="/checkout">
-            <i class="fa fa-check-circle px-2"></i>Check Out
-          </a>
-        </li>
-      </ul>
-
-    </div>
   </div>
 
   </div>
@@ -1233,7 +1217,7 @@ $card = [
                             <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers">
                         </div>
                         <form id="navSearchForm" class="nav-search-form">
-                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="Search collections or products" autocomplete="off">
+                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="{{ __('site.search_placeholder') }}" autocomplete="off">
                             <button type="submit" class="nav-search-btn">SEARCH</button>
                         </form>
                         <div class="nav-search-results">
@@ -1301,19 +1285,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    const settingsDropdown = document.querySelector('header .header-static-tools .dropdown');
-    if (settingsDropdown) {
-      const settingsToggle = settingsDropdown.querySelector('a[aria-label="Settings"]');
-      if (settingsToggle) {
-        settingsDropdown.addEventListener('mouseenter', function () {
-          bootstrap.Dropdown.getOrCreateInstance(settingsToggle).show();
-        });
-
-        settingsDropdown.addEventListener('mouseleave', function () {
-          bootstrap.Dropdown.getOrCreateInstance(settingsToggle).hide();
-        });
-      }
-    }
   }
 });
 </script>
@@ -1410,7 +1381,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (searchCount) searchCount.textContent = '';
 
     if (!normalized) {
-      searchEmpty.textContent = 'Start typing to search collections or products.';
+      searchEmpty.textContent = @json(__('site.search_start'));
       return;
     }
 
@@ -1420,7 +1391,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ));
 
     if (!matches.length) {
-      searchEmpty.textContent = 'No results found.';
+      searchEmpty.textContent = @json(__('site.no_results'));
       return;
     }
 

@@ -223,7 +223,7 @@ public function processCheckout(Request $request)
             'zipCode'   => 'required|string|max:20',
             'deliveryOption' => 'required|string|in:ship',
             'orderNotes' => 'nullable|string|max:1000',
-            'paymentMethod' => 'required|string|in:bank_transfer,bank_alfalah',
+            'paymentMethod' => 'required|string|in:bank_transfer,bank_alfalah,contact',
             'transactionTypeId' => 'required_if:paymentMethod,bank_alfalah|nullable|string|in:1,2,3',
         ]);
 
@@ -238,6 +238,13 @@ public function processCheckout(Request $request)
         }
 
         $validated = $validator->validated();
+
+        if (Products::currentMarket() === 'uae' && ($validated['paymentMethod'] ?? '') === 'bank_alfalah') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bank Alfalah is not available for UAE orders. Please contact us to complete your order.',
+            ], 422);
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -370,11 +377,8 @@ public function processCheckout(Request $request)
                 $discountAmount = max(0, $originalPrice - $unitPrice);
             }
 
-            $roundedUnitPrice = (int) max(0, round($unitPrice, -3));
-            $roundedOriginalPrice = (int) max(0, round(
-                $originalPrice,
-                $usesWatchPricing ? -3 : 0
-            ));
+            $roundedUnitPrice = (int) max(0, Products::roundDisplayPrice($unitPrice));
+            $roundedOriginalPrice = (int) max(0, Products::roundDisplayPrice($originalPrice));
             $roundedDiscountAmount = $isWatchSale
                 ? max(0, $roundedOriginalPrice - $roundedUnitPrice)
                 : (int) max(0, round($discountAmount));
@@ -400,7 +404,7 @@ public function processCheckout(Request $request)
                 || !empty($item->solitaire_product_id);
 
             if ($isSolitaire) {
-                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0), -3));
+                $unitPrice = (int) max(0, Products::roundDisplayPrice((float) ($item->variant_price ?? 0)));
             } else {
                 $forStore = $this->cartUsesStorefront((int) $item->product->id, $item->size);
                 $priceData = $calcNormalProductPrice($item->product, $forStore);
@@ -439,6 +443,7 @@ public function processCheckout(Request $request)
             'shipping_cost' => $shipping,
             'total_amount' => $total,
             'payment_method' => $validated['paymentMethod'],
+            'currency' => Products::currentMarket() === 'uae' ? 'AED' : 'PKR',
         ]);
 
         /*
@@ -453,7 +458,7 @@ public function processCheckout(Request $request)
             if ($isSolitaire) {
                 $product = $item->solitaireProduct;
 
-                $unitPrice = (int) max(0, round((float) ($item->variant_price ?? 0), -3));
+                $unitPrice = (int) max(0, Products::roundDisplayPrice((float) ($item->variant_price ?? 0)));
                 $originalPrice = (int) max(0, round((float) ($item->old_price ?? $unitPrice)));
                 $discountAmount = max(0, $originalPrice - $unitPrice);
                 $qty = (int) $item->quantity;
@@ -1019,15 +1024,17 @@ public function add(Request $request)
                 && number_format((float) data_get($variant, 'diamond_carat', 0), 2, '.', '') === $diamondCaratFormatted;
         });
 
-        if (!$selectedVariant || empty(data_get($selectedVariant, 'price'))) {
+        $presentedVariant = $product->presentVariant($selectedVariant);
+
+        if (!$presentedVariant || empty($presentedVariant['price'])) {
             return response()->json([
                 'success' => false,
                 'message' => 'Selected metal and carat price is unavailable.'
             ], 422);
         }
 
-        $price = (float) data_get($selectedVariant, 'price');
-        $oldPrice = !empty(data_get($selectedVariant, 'old_price')) ? (float) data_get($selectedVariant, 'old_price') : null;
+        $price = (float) $presentedVariant['price'];
+        $oldPrice = !empty($presentedVariant['old_price']) ? (float) $presentedVariant['old_price'] : null;
         $discount = !empty(data_get($selectedVariant, 'discount_percent')) ? (float) data_get($selectedVariant, 'discount_percent') : null;
 
         $selectedImage = $getSolitaireMetalImage(

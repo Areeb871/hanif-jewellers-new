@@ -108,7 +108,7 @@ html, body{
             </div> 
               <div class="col-md-6 justify-content-center d-flex align-items-center">
                 <div class="text-center my-5">
-                    <p class="p-5"> Exquisite masterpieces crafted with high-quality tourmaline, prized for its unparalleled depth and vibrant hues, paired with precious metal, expertly calibrated to radiate warmth and sophistication. Showcasing timeless artisanal craftsmanship and uniqueness, culminating in a true resemblance of experience pure art.</p>
+                    <p class="p-5"> {{ __('site.misterio_copy') }}</p>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@ html, body{
     <div class="col-md-6 d-flex align-items-center justify-content-center order-2 order-md-1">
         <div class="text-center my-5">
             <p class="p-5">
-               Exquisite masterpieces crafted with high-quality diamonds of unreachable purity and depth, expertly calibrated to radiate brilliance, showcasing timeless artisanal craftsmanship and uniqueness, culminating in a true resemblance of <br>experience pure art.
+               {{ __('site.misterio_diamond_copy') }}
             </p>
         </div>
     </div>
@@ -222,7 +222,7 @@ html, body{
      <div class="col-md-6 d-flex align-items-center justify-content-center order-2 order-md-1">
         <div class="text-center my-5">
             <p class="p-5">
-               Exquisite masterpieces crafted with beautiful Sapphire and Diamonds, prized for its unparalleled depth and vibrant hues, paired with precious metal, expertly calibrated to radiate warmth and sophistication. Showcasing timeless artisanal craftsmanship and uniqueness, culminating in a true resemblance of Experience pure art.
+               {{ __('site.misterio_sapphire_copy') }}
             </p>
         </div>
     </div>
@@ -284,7 +284,7 @@ html, body{
     <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="text-center my-5">
             <p class="p-5">
-                Long chain adorned with vibrant corals, expertly crafted with high-quality Stones and Precious metal. This exquisite piece radiates warmth, sophistication, and timeless artisanal craftsmanship.
+                {{ __('site.misterio_coral_copy') }}
             </p>
         </div>
     </div>

@@ -40,28 +40,28 @@
     }
     .ehed-hero-section {
         display: flex;
+        flex-direction: column;
         align-items: stretch;
     }
     .ehed-video-container {
-        width: 50%;
+        width: 100%;
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
-        aspect-ratio: 746 / 430;
-        background: #fff;
+        height: auto;
+        background: #000;
     }
     .ehed-video-container video,
     .ehed-media-cover {
-        position: absolute;
-        inset: 0;
+        position: static;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center center;
         display: block;
     }
     .ehed-content-container {
-        width: 50%;
+        width: 100%;
         min-width: 0;
         box-sizing: border-box;
         padding: 8px 24px;
@@ -191,7 +191,6 @@
         .ehed-video-container {
             width: 100%;
             height: auto;
-            aspect-ratio: 746 / 430;
         }
         .ehed-content-container {
             width: 100%;
@@ -301,9 +300,117 @@
         display: block;
         object-fit: cover;
     }
+    .selene-banners {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .selene-banners img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .selene-banner {
+        position: relative;
+    }
+    .selene-banner__panel {
+        position: absolute;
+        left: clamp(24px, 4vw, 72px);
+        top: 50%;
+        right: auto;
+        bottom: auto;
+        transform: translateY(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: clamp(260px, 30vw, 420px);
+        max-width: calc(50% - 32px);
+        box-sizing: border-box;
+        padding: 0;
+        background: transparent;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        text-align: start;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, .35);
+    }
+    .selene-banner__title {
+        margin: 0;
+        color: inherit;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(20px, 1.6vw, 26px);
+        font-weight: 500;
+        letter-spacing: .18em;
+        line-height: 1.2;
+    }
+    .selene-banner__copy {
+        width: 100%;
+        max-width: 40em;
+        margin: 10px 0 18px;
+        color: inherit;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, .78vw, 14px);
+        font-weight: 400;
+        letter-spacing: .02em;
+        line-height: 1.7;
+    }
+    .selene-banner__button {
+        display: inline-block;
+        padding: clamp(10px, .72vw, 13px) clamp(16px, 1.4vw, 26px);
+        background: #fff;
+        color: #111;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(10px, .58vw, 11px);
+        letter-spacing: .16em;
+        line-height: 1.4;
+        text-decoration: none;
+        text-shadow: none;
+        text-transform: uppercase;
+    }
+    .selene-banner__button:hover,
+    .selene-banner__button:focus {
+        background: #e7e7e7;
+        color: #111;
+    }
+    .selene-banner__mobile-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 32px 24px 36px;
+        background: #fff;
+        color: #111;
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+    }
+    .selene-banner__mobile-panel .selene-banner__title {
+        width: 100%;
+        font-size: 22px;
+        text-align: center;
+    }
+    .selene-banner__mobile-panel .selene-banner__copy {
+        max-width: 34em;
+        margin: 12px auto 20px;
+        font-size: 13px;
+        text-align: center;
+    }
+    .selene-banner__mobile-panel .selene-banner__button {
+        background: #111;
+        color: #fff;
+    }
+    .selene-banner__mobile-panel .selene-banner__button:hover,
+    .selene-banner__mobile-panel .selene-banner__button:focus {
+        background: #2b2b2b;
+        color: #fff;
+    }
     .selene-gallery {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: var(--selene-gap);
         margin: var(--selene-gap) 0;
         padding: 0;
@@ -311,14 +418,12 @@
     }
     .selene-gallery__item {
         display: block;
+        width: calc((100% - (3 * var(--selene-gap))) / 4);
         min-width: 0;
         margin: 0;
         padding: 0;
         line-height: 0;
         overflow: hidden;
-    }
-    .selene-gallery__item--center-start {
-        grid-column: 2;
     }
     .selene-gallery .gallery-image {
         display: block;
@@ -327,11 +432,8 @@
         object-fit: cover;
     }
     @media (max-width: 767.98px) {
-        .selene-gallery {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .selene-gallery__item--center-start {
-            grid-column: auto;
+        .selene-gallery__item {
+            width: calc((100% - var(--selene-gap)) / 2);
         }
     }
     .selene-appointment-spacing {
@@ -368,30 +470,51 @@
             <img src="{{ $mobileBannerUrl }}" alt="Pure Lock Banner Mobile" class="ehed-media-cover">
         @endif
     </div>
-    <div class="ehed-content-container">
-        <div class="ehed-category-label">WOMEN</div>
-        <h1 class="ehed-main-title">SELENE</h1>
-        <p class="ehed-body-text hero__description font-family--serif">
-A Pure Gold Series in 24k Gold as it was meant to be — raw, regal, alive. Celebrating heritage through radiant texture and timeless design, SELENE is wearable wealth for those who treasure elegance.        </p>
-    </div>
 </section>
+
+<div class="selene-banners">
+    @foreach([1, 2, 3] as $banner)
+        <div class="selene-banner">
+            <img src="{{ asset('assets/f_assets/image/selene/Selene Banner-' . $banner . '.png') }}"
+                 alt="Selene Banner {{ $banner }}"
+                 width="1920"
+                 height="1080"
+                 @if($banner > 1) loading="lazy" @endif
+                 decoding="async">
+            @if($banner === 1)
+                <div class="selene-banner__panel d-none d-lg-flex">
+                    <h1 class="selene-banner__title">{{ __('site.col_selene') }}</h1>
+                    <p class="selene-banner__copy">{{ __('site.selene_copy') }}</p>
+                    <a class="selene-banner__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
+                </div>
+                <div class="selene-banner__mobile-panel d-lg-none">
+                    <h1 class="selene-banner__title">{{ __('site.col_selene') }}</h1>
+                    <p class="selene-banner__copy">{{ __('site.selene_copy') }}</p>
+                    <a class="selene-banner__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
+                </div>
+            @endif
+        </div>
+    @endforeach
+</div>
 
 @php
     $seleneImages = [
-        'assets/f_assets/image/selene/selene_1.png',
-        'assets/f_assets/image/selene/selene_2.png',
         'assets/f_assets/image/selene/selene_3.png',
         'assets/f_assets/image/selene/selene_4.png',
-        'assets/f_assets/image/selene/selene_5.png',
         'assets/f_assets/image/selene/selene.jpg',
     ];
 @endphp
 <div class="selene-gallery">
     @foreach($seleneImages as $index => $imagePath)
-        @if(isset($products[$index]))
-            <a href="{{ route('product.details', $products[$index]->slug) }}" class="selene-gallery__item{{ $index === 4 ? ' selene-gallery__item--center-start' : '' }}">
-                <img src="{{ asset($imagePath) }}" class="gallery-image">
+        @php $seleneProduct = $products[$index] ?? null; @endphp
+        @if($seleneProduct)
+            <a href="{{ route('product.details', $seleneProduct->slug) }}" class="selene-gallery__item">
+                <img src="{{ asset($imagePath) }}" class="gallery-image" alt="Selene">
             </a>
+        @else
+            <div class="selene-gallery__item">
+                <img src="{{ asset($imagePath) }}" class="gallery-image" alt="Selene">
+            </div>
         @endif
     @endforeach
 </div>

@@ -43,10 +43,13 @@ class SolitaireProductAdminController extends Controller
 
         $product = SolitaireProduct::create([
             'name' => $request->name,
+            'uae_name' => $request->uae_name,
             'slug' => $this->makeUniqueSlug($request->name, $request->slug),
             'sku' => $request->sku,
             'tag_label' => $request->tag_label,
+            'uae_tag_label' => $request->uae_tag_label,
             'short_description' => $request->short_description,
+            'uae_short_description' => $request->uae_short_description,
             'currency' => $request->currency ?? 'PKR',
             'shape' => $request->shape,
 
@@ -137,10 +140,13 @@ class SolitaireProductAdminController extends Controller
 
         $product->update([
             'name' => $request->name,
+            'uae_name' => $request->uae_name,
             'slug' => $this->makeUniqueSlug($request->name, $request->slug, $product->id),
             'sku' => $request->sku,
             'tag_label' => $request->tag_label,
+            'uae_tag_label' => $request->uae_tag_label,
             'short_description' => $request->short_description,
+            'uae_short_description' => $request->uae_short_description,
             'currency' => $request->currency ?? 'PKR',
             'shape' => $request->shape,
             'gallery_images' => $finalGalleryImages,
@@ -445,6 +451,7 @@ class SolitaireProductAdminController extends Controller
                 return [
                     'code' => Str::slug($metal['code'], '_'),
                     'name' => $metal['name'] ?? '',
+                    'name_ar' => $metal['name_ar'] ?? '',
                     'short_label' => $metal['short_label'] ?? '',
                     'purity' => $metal['purity'] ?? '',
                     'tone' => $metal['tone'] ?? '',
@@ -486,6 +493,8 @@ class SolitaireProductAdminController extends Controller
                     'variant_sku' => $variant['variant_sku'] ?? null,
                     'old_price' => $variant['old_price'] ?? null,
                     'price' => $variant['price'] ?? 0,
+                    'old_price_aed' => $variant['old_price_aed'] ?? null,
+                    'price_aed' => $variant['price_aed'] ?? null,
                     'discount_percent' => $variant['discount_percent'] ?? null,
                     'stock' => $variant['stock'] ?? 0,
                     'is_default' => !empty($variant['is_default']),

@@ -7,7 +7,7 @@
         ? \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg'])
         : false;
     $mobileBanner = 'assets/f_assets/image/heritage_mobile.mp4';
-    $heritageCopy = "An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.";
+    $heritageCopy = __('site.heritage_copy');
 @endphp
 
 @if($desktopBanner)
@@ -44,12 +44,12 @@
 
             @if($index === 1)
                 <div class="heritage-campaign__content d-none d-md-flex">
-                    <h2 class="heritage-campaign__title">HERITAGE</h2>
+                    <h2 class="heritage-campaign__title">{{ __('site.col_heritage') }}</h2>
                     <p class="heritage-campaign__copy">{{ $heritageCopy }}</p>
                     <x-book-appointment class="heritage-campaign__button" />
                 </div>
                 <div class="heritage-campaign__mobile-content d-md-none">
-                    <h2 class="heritage-campaign__mobile-title">HERITAGE</h2>
+                    <h2 class="heritage-campaign__mobile-title">{{ __('site.col_heritage') }}</h2>
                     <p class="heritage-campaign__mobile-copy">{{ $heritageCopy }}</p>
                     <x-book-appointment />
                 </div>

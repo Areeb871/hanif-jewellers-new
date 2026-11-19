@@ -40,14 +40,16 @@
 /* Brand banner carousel */
 .hero-slide {
   width: 100%;
-  height: 100%;
   background: transparent;
-  overflow: hidden;
 }
-.hero-slide picture,
-.hero-slide img {
-  width: 100%;
+.hero-slide picture {
   display: block;
+}
+.hero-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 #carouselExampleRide { width: 100%; }
 #carouselExampleRide .carousel-item { line-height: 0; }
@@ -67,40 +69,38 @@
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.55));
 }
 
-/* Banner scales with screen — no crop on any breakpoint */
 #carouselExampleRide {
   padding: 0;
   width: 100%;
-  height: auto;
-  background: #000;
-  overflow: hidden;
 }
 
 #carouselExampleRide .carousel-inner,
 #carouselExampleRide .carousel-item,
 #carouselExampleRide .hero-slide,
 #carouselExampleRide .hero-slide picture {
-  height: auto;
-}
-
-#carouselExampleRide .carousel-inner {
-  position: relative;
-}
-
-#carouselExampleRide .hero-slide {
-  width: 100%;
-  background: #000;
-}
-
-#carouselExampleRide .hero-slide picture {
-  width: 100%;
-  display: block;
-}
-
-#carouselExampleRide .hero-slide img {
   width: 100%;
   height: auto;
-  display: block;
+}
+
+@media (max-width: 767.98px) {
+  #carouselExampleRide .hero-slide img {
+    max-width: 100%;
+  }
+
+  #carouselExampleRide .carousel-control-prev,
+  #carouselExampleRide .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+  }
+
+  #carouselExampleRide .carousel-control-prev {
+    left: 6px;
+  }
+
+  #carouselExampleRide .carousel-control-next {
+    right: 6px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -309,7 +309,7 @@
     z-index: 3;
 }
 
-.home-hero-scroll + .watch {
+.home-hero-scroll ~ .homepage-background-video + .watch {
     margin-top: calc(var(--hero-scroll, 70vh) * -1);
     background-color: #f6f3ee;
 }
@@ -500,18 +500,18 @@ section.watch .watch-slider-viewport,
     overflow: visible;
 }
 
-section.watch .watch-scroller-arrow,
-.bespoke-collections .watch-scroller-arrow {
+/* Product scroller only: plain black prev/next icons, no panel/blur. */
+section.watch .watch-scroller-arrow {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 16px;
+    bottom: 16px;
     z-index: 30;
-    width: 66px;
+    width: 40px;
     height: auto;
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: #2a2a2a;
+    color: #000;
     box-shadow: none;
     display: flex !important;
     align-items: center;
@@ -521,213 +521,61 @@ section.watch .watch-scroller-arrow,
     opacity: 0;
     visibility: visible;
     pointer-events: none;
-    overflow: hidden;
+    overflow: visible;
     transition: opacity 0.22s ease-out;
+    filter: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    isolation: isolate;
 }
 
-/* Frosted control matched to the supplied Apple UI reference. */
 section.watch .watch-scroller-arrow::before,
-.bespoke-collections .watch-scroller-arrow::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translateX(-50%);
-    z-index: 0;
-    box-sizing: border-box;
-    background: rgba(151, 181, 196, 0.1);
-    border: none;
-    border-radius: 24px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(12px) saturate(112%);
-    -webkit-backdrop-filter: blur(12px) saturate(112%);
-    pointer-events: none;
-    transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease,
-                transform 0.3s cubic-bezier(.2,.8,.2,1);
+section.watch .watch-scroller-arrow::after {
+    content: none;
+    display: none;
 }
 
-/* Soft glass sheen; intentionally restrained like the reference. */
-section.watch .watch-scroller-arrow::after,
-.bespoke-collections .watch-scroller-arrow::after {
-    content: "";
-    position: absolute;
-    top: 1px;
-    bottom: 1px;
-    left: 50%;
-    width: calc(100% - 2px);
-    height: auto;
-    z-index: 1;
-    border-radius: 23px;
-    transform: translateX(-50%);
-    background: linear-gradient(145deg,
-        rgba(255, 255, 255, 0.07),
-        rgba(255, 255, 255, 0) 58%);
-    opacity: .65;
-    pointer-events: none;
-    transition: opacity .3s ease, transform .3s cubic-bezier(.2,.8,.2,1);
-}
-
-/* Fade the inner edge into the card so the glass has no visible seam. */
-section.watch .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::after,
-section.watch .watch-scroller-arrow--prev::after {
-    border-radius: 0 24px 24px 0;
-}
-
-section.watch .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::after,
-section.watch .watch-scroller-arrow--next::after {
-    border-radius: 24px 0 0 24px;
-}
-
-section.watch .watch-scroller-arrow--prev::before,
-section.watch .watch-scroller-arrow--prev::after,
-.bespoke-collections .watch-scroller-arrow--prev::before,
-.bespoke-collections .watch-scroller-arrow--prev::after {
-    -webkit-mask-image: linear-gradient(to right,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-    mask-image: linear-gradient(to right,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-}
-
-section.watch .watch-scroller-arrow--next::before,
-section.watch .watch-scroller-arrow--next::after,
-.bespoke-collections .watch-scroller-arrow--next::before,
-.bespoke-collections .watch-scroller-arrow--next::after {
-    -webkit-mask-image: linear-gradient(to left,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-    mask-image: linear-gradient(to left,
-        #000 0%, #000 38%, rgba(0,0,0,.72) 68%, transparent 100%);
-}
-
-section.watch .watch-scroller-arrow .arrow-icon,
-.bespoke-collections .watch-scroller-arrow .arrow-icon {
+section.watch .watch-scroller-arrow .arrow-icon {
     position: relative;
     z-index: 2;
-    color: rgba(0, 0, 0, 0.86);
+    color: #000;
     filter: none;
-    transform: scale(1.08);
+    transform: none;
     transition: none;
 }
 
+section.watch .watch-scroller-arrow .arrow-left svg {
+    transform: rotate(180deg);
+}
+
 section.watch .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
-section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled),
-.bespoke-collections .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled),
-.bespoke-collections .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
+section.watch .watch-slider-viewport:focus-within .watch-scroller-arrow:not(:disabled) {
     opacity: 1;
     pointer-events: auto;
 }
 
-/* The watch cards have 16px vertical margins inside their viewport. */
-section.watch .watch-scroller-arrow {
-    top: 16px;
-    bottom: 16px;
-}
-
-section.watch .watch-scroller-arrow--prev,
-.bespoke-collections .watch-scroller-arrow--prev {
+section.watch .watch-scroller-arrow--prev {
     left: 0;
 }
 
-section.watch .watch-scroller-arrow--next,
-.bespoke-collections .watch-scroller-arrow--next {
+section.watch .watch-scroller-arrow--next {
     right: 0;
 }
 
-section.watch .watch-scroller-arrow .arrow-left svg,
-.bespoke-collections .watch-scroller-arrow .arrow-left svg {
-    transform: rotate(180deg);
-}
-
-section.watch .watch-scroller-arrow:disabled,
-.bespoke-collections .watch-scroller-arrow:disabled {
+section.watch .watch-scroller-arrow:disabled {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
 @media (max-width: 767.98px) {
-    section.watch .watch-scroller-arrow,
-    .bespoke-collections.d-md-none .watch-scroller-arrow {
+    section.watch .watch-scroller-arrow {
         display: none !important;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress {
-        display: flex;
-        justify-content: center;
-        padding: 22px 16px 14px;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress.is-hidden {
-        visibility: hidden;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress__track {
-        width: 46%;
-        min-width: 140px;
-        max-width: 200px;
-        height: 3px;
-        background: #e5e7eb;
-        border-radius: 999px;
-    }
-
-    .bespoke-collections.d-md-none .watch-progress__fill {
-        background: #0d2a39;
-        border-radius: 999px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .bespoke-collections .watch-scroller-arrow {
-        width: calc((100vw - 120px) / 18);
     }
 }
 
 @media (min-width: 992px) {
     section.watch .watch-scroller-arrow {
-        width: 75px;
-        height: auto;
-    }
-
-    .bespoke-collections .watch-scroller-arrow {
-        width: calc((100vw - 120px) / 18);
-        height: auto;
-    }
-
-    section.watch .watch-scroller-arrow--prev,
-    .bespoke-collections .watch-scroller-arrow--prev {
-        left: 0;
-    }
-
-    section.watch .watch-scroller-arrow--next,
-    .bespoke-collections .watch-scroller-arrow--next {
-        right: 0;
-    }
-}
-
-@media (min-width: 1200px) and (max-width: 1365.98px) {
-    section.watch .watch-scroller-arrow {
-        width: 80px;
-    }
-}
-
-@media (min-width: 1366px) and (max-width: 1919.98px) {
-    section.watch .watch-scroller-arrow {
-        width: 84px;
-    }
-}
-
-@media (min-width: 1920px) {
-    section.watch .watch-scroller-arrow {
-        width: 88px;
+        width: 44px;
     }
 }
 
@@ -1018,56 +866,24 @@ section.watch .card:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Section headings — equal space above & below */
+/* Same space above and below every section heading */
 .section-title,
 .bespoke-collections__title {
-    font-family: "Cormorant Garamond", serif;
-    font-size: clamp(28px, 1.3vw, 44px);
-    font-weight: 600;
-    padding: 1.5rem 0;
-    /* padding: 0; */
-    color: #111;
+    font-family: "Argent CF", serif;
+    font-size: clamp(28px, 3.3vw, 45px);
+    font-weight: 300;
+    margin: 0;
+    padding: 80px 0;
+    color: white;
 }
-
-@media (min-width: 768px) {
-    .section-title,
-    .bespoke-collections__title {
-        padding: 2rem 0;
-    }
-}
-
-@media (min-width: 1366px) {
-    .section-title,
-    .bespoke-collections__title {
-        padding: 2.5rem 0;
-    }
-}
-
-/*.watch-brands-section {*/
-/*    padding: 0;*/
-/*}*/
-
 
 .watch-brands-section {
-    padding: 0 0 2rem;
+    padding: 0;
 }
 
-/* Keep the total gap between the jewellery section, heading and logos equal. */
 .watch-brands-section > .section-title {
     margin: 0;
-    padding-top: calc(1.5rem + 0.5rem);
-}
-
-@media (min-width: 768px) {
-    .watch-brands-section > .section-title {
-        padding-top: calc(2rem + 0.5rem);
-    }
-}
-
-@media (min-width: 1366px) {
-    .watch-brands-section > .section-title {
-        padding-top: calc(2.5rem + 0.5rem);
-    }
+    padding: 80px 0;
 }
 
 
@@ -1080,6 +896,52 @@ section.watch .card:hover {
     background: none !important;
     background-color: transparent !important;
     border: none !important;
+}
+
+/* Homepage-only moving background below the hero. */
+.homepage-background-video {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    filter: brightness(0.68);
+    background: #130f0c;
+}
+
+.homepage-background-video ~ section,
+.homepage-background-video ~ .hj-footer {
+    position: relative;
+    z-index: 1;
+}
+
+.homepage-background-video ~ section.onlineStore,
+.homepage-background-video ~ section.bespoke-showcase,
+.homepage-background-video ~ section.container,
+.homepage-background-video ~ section.brand-editorial,
+.homepage-background-video ~ section.home-brands {
+    /* background: rgba(246, 243, 238, 0.78) !important; */
+}
+
+.homepage-background-video ~ .bespoke-showcase .mobile-product-scroller {
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.homepage-background-video ~ .hj-footer {
+    background: rgba(230, 222, 211, 0.82) !important;
+}
+
+/* .homepage-background-video ~ .hj-footer .hj-bottom {
+    background-color: rgba(60, 35, 13, 0.9) !important;
+} */
+
+@media (prefers-reduced-motion: reduce) {
+    .homepage-background-video {
+        display: none;
+    }
 }
 
 </style>
@@ -1125,11 +987,11 @@ culminating in a true resemblance of experience pure art.</div>
 <div class="home-hero-scroll">
 <section class="custom-banner d-none d-md-block">
     <video class="custom-banner-video" autoplay muted loop playsinline>
-        <source src="{{ asset('assets/f_assets/image/miras/miras_desktop.mp4') }}" type="video/mp4">
+        <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </section>
-<a href="/collections/miras" class="custom-banner-btn d-none d-md-inline-block">DISCOVER MORE</a>
+<a href="/collections/nagar" class="custom-banner-btn d-none d-md-inline-block">{{ __('site.discover_more') }}</a>
 
 <!-- <section class="custom-banner d-none d-md-block position-relative">
      @php
@@ -1157,7 +1019,7 @@ culminating in a true resemblance of experience pure art.</div>
         <!-- <div class="banner-title">Divine Treasures</div> -->
         <!-- <div class="banner-location">Crafted in the heart of the world’s
 towering peaks</div> 
-        <a href="/collections/eid-par-sony-ki-choriyan" class="custom-banner-btn">DISCOVER MORE</a>
+        <a href="/collections/eid-par-sony-ki-choriyan" class="custom-banner-btn">{{ __('site.discover_more') }}</a>
 
 </div>
 
@@ -1166,7 +1028,7 @@ towering peaks</div>
 <section class="home-hero-mobile d-block d-md-none">
   <div class="mobileStackImgWrap">
   <video class="mobileStackVideo" autoplay muted loop playsinline preload="metadata">
-    <source src="{{ asset('assets/f_assets/image/miras/miras_mob.webm') }}" type="video/mp4">
+    <source src="{{ asset('assets/f_assets/image/watches/FMPK-banner.mp4') }}" type="video/mp4">
   </video>
   
   
@@ -1186,13 +1048,18 @@ towering peaks</div>
 
   </div>
 </section>
-<a href="/collections/franck-muller" class="custom-banner-btn-new d-inline-block d-md-none">DISCOVER MORE</a>
+<a href="/collections/franck-muller" class="custom-banner-btn-new d-inline-block d-md-none">{{ __('site.discover_more') }}</a>
     <div class="home-hero-runway" aria-hidden="true"></div>
 </div>
+
+<video class="homepage-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+    <source src="{{ asset('assets/f_assets/image/Background.webm') }}" type="video/mp4">
+</video>
+
     <!-- Watches / Featured Products Scroller (unified responsive) -->
     <section class="onlineStore watch" style="background-color:#f6f3ee;">
         <div class="watch-slider-viewport">
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous products" disabled>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="{{ __('site.prev_products') }}" disabled>
                 <span aria-hidden="true" class="arrow-icon arrow-left">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                         <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
@@ -1211,7 +1078,7 @@ towering peaks</div>
                     @endforeach
                 </div>
             </div>
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next products">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="{{ __('site.next_products') }}">
                 <span aria-hidden="true" class="arrow-icon">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor">
                         <path d="M12.6 12L8.7 8.1C8.52 7.92 8.42 7.68 8.42 7.4C8.42 7.12 8.52 6.88 8.7 6.7C8.88 6.52 9.12 6.42 9.4 6.42C9.68 6.42 9.92 6.52 10.1 6.7L14.7 11.3C14.8 11.4 14.87 11.51 14.91 11.62C14.95 11.74 14.97 11.87 14.97 12C14.97 12.13 14.95 12.26 14.91 12.38C14.87 12.49 14.8 12.6 14.7 12.7L10.1 17.3C9.92 17.48 9.68 17.57 9.4 17.57C9.12 17.57 8.88 17.48 8.7 17.3C8.52 17.12 8.42 16.88 8.42 16.6C8.42 16.32 8.52 16.08 8.7 15.9L12.6 12Z"/>
@@ -1231,13 +1098,13 @@ towering peaks</div>
     @php
     $brandBannerSlides = [
         ['alt' => 'Bovet', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Bovet-homepage-banner.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/Bovet-mob-homepage.webp'],
-        ['alt' => 'Favre-leuba', 'desktop' => 'assets/f_assets/image/watches/Hompage_favre.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_mobile_favre.jpeg'],
- ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-mob-homepage.webp'],
-        ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/homepage_2_banner/ml_new.avif', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ml_new_mobile.avif'],
+        ['alt' => 'Franck Muller', 'desktop' => 'assets/f_assets/image/homepage_2_banner/Home Page FM BAnner.jpg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/FM-homepage-mob.webp'],
+        ['alt' => 'Maurice Lacroix', 'desktop' => 'assets/f_assets/image/watches/ML-banner-index.jpeg', 'mobile' => 'assets/f_assets/image/homepage_2_banner/ML-mobile-view.webp'],
         ['alt' => 'Artya', 'desktop' => 'assets/f_assets/image/watches/homepageArtya.jpeg', 'mobile' => 'assets/f_assets/image/watches/homepage_artya_mobile.jpeg'],
 
     ];
     @endphp
+ 
 
     <!-- Brand Banner Carousel (unified responsive) -->
     <section class="carousel-section p-0 m-0">
@@ -1256,11 +1123,11 @@ towering peaks</div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">{{ __('site.previous') }}</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">{{ __('site.next') }}</span>
             </button>
         </div>
     </section>
@@ -1280,18 +1147,18 @@ towering peaks</div>
     <section class="bespoke-collections bespoke-showcase">
         <div class="bespoke-showcase__info">
             <div class="bespoke-showcase__copy">
-                <h2 class="bespoke-showcase__title">Bespoke Collection</h2>
-                <p class="bespoke-showcase__text">Jewellery becomes special when it feels like it was made with someone in mind.</p>
-                <p class="bespoke-showcase__text">This collection brings together thoughtful design, fine craftsmanship and distinctive details to create pieces that feel personal, refined and full of character.</p>
-                <p class="bespoke-showcase__text">Made to be worn and treasured, each one is designed to become part of your story.</p>
+                <h2 class="bespoke-showcase__title">{{ __('site.bespoke_title') }}</h2>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_1') }}</p>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_2') }}</p>
+                <p class="bespoke-showcase__text">{{ __('site.bespoke_text_3') }}</p>
             </div>
             @if (count($products_new) > 1)
-            <div class="bespoke-showcase__dots bespoke-showcase__dots--side" role="tablist" aria-label="Bespoke collection pages"></div>
+            <div class="bespoke-showcase__dots bespoke-showcase__dots--side" role="tablist" aria-label="{{ __('site.bespoke_pages') }}"></div>
             @endif
         </div>
 
         <div class="watch-slider-viewport bespoke-showcase__stage">
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="Previous collections" disabled>
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--prev" aria-label="{{ __('site.prev_collections') }}" disabled>
                 <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
                     <path d="M8.4 1.25L1.7 8.38C1.51 8.61 1.37 8.89 1.37 9.13C1.37 9.36 1.51 9.64 1.7 9.87L8.4 17" stroke="currentColor" stroke-width="1.2"/>
                 </svg>
@@ -1310,7 +1177,7 @@ towering peaks</div>
                     @endforeach
                 </div>
             </div>
-            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="Next collections">
+            <button type="button" class="watch-scroller-arrow watch-scroller-arrow--next" aria-label="{{ __('site.next_collections') }}">
                 <svg viewBox="0 0 10 18" width="10" height="18" fill="none" aria-hidden="true">
                     <path d="M1.6 1.25L8.3 8.38C8.49 8.61 8.63 8.89 8.63 9.13C8.63 9.36 8.49 9.64 8.3 9.87L1.6 17" stroke="currentColor" stroke-width="1.2"/>
                 </svg>
@@ -1318,7 +1185,7 @@ towering peaks</div>
         </div>
 
         @if (count($products_new) > 1)
-        <div class="bespoke-showcase__dots bespoke-showcase__dots--bottom" role="tablist" aria-label="Bespoke collection pages"></div>
+        <div class="bespoke-showcase__dots bespoke-showcase__dots--bottom" role="tablist" aria-label="{{ __('site.bespoke_pages') }}"></div>
         @endif
     </section>
 
@@ -1354,7 +1221,7 @@ towering peaks</div>
 .bespoke-showcase {
     background: #fff;
     color: #0d2a39;
-    padding: 56px 0 48px;
+    padding: 80px 0 0;
 }
 
 .bespoke-showcase__info {
@@ -1496,18 +1363,38 @@ towering peaks</div>
 }
 
 .bespoke-showcase .watch-scroller-arrow {
+    position: absolute;
     top: 34%;
     bottom: auto;
+    z-index: 30;
     width: 44px;
     height: 44px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #0d2a39;
+    box-shadow: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
     opacity: 1;
     pointer-events: auto;
+    filter: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.bespoke-showcase .watch-scroller-arrow svg {
+    fill: none;
     color: #0d2a39;
-    background: transparent;
+    stroke: currentColor;
 }
 
 .bespoke-showcase .watch-scroller-arrow::before,
 .bespoke-showcase .watch-scroller-arrow::after {
+    content: none;
     display: none;
 }
 
@@ -1521,6 +1408,76 @@ towering peaks</div>
 
 .bespoke-showcase .watch-slider-viewport:hover .watch-scroller-arrow:not(:disabled) {
     opacity: 1;
+}
+
+/* Emirati Arabic: text on the right, products on the left, scroller stays LTR */
+html[dir="rtl"] .bespoke-showcase {
+    direction: ltr;
+}
+html[dir="rtl"] .bespoke-showcase__info,
+html[dir="rtl"] .bespoke-showcase__copy,
+html[dir="rtl"] .bespoke-showcase__title,
+html[dir="rtl"] .bespoke-showcase__text {
+    direction: rtl;
+    text-align: right;
+}
+html[dir="rtl"] .bespoke-showcase__title {
+    font-family: "Cairo", "Argent CF", Georgia, serif;
+    letter-spacing: 0;
+    white-space: normal;
+}
+html[dir="rtl"] .bespoke-showcase__text {
+    font-family: "Cairo", "Poppins", sans-serif;
+    text-align: right;
+}
+html[dir="rtl"] .bespoke-showcase .mobile-product-scroller,
+html[dir="rtl"] .bespoke-showcase .scroller-container {
+    direction: ltr;
+}
+html[dir="rtl"] .bespoke-showcase__dots {
+    direction: ltr;
+    justify-content: flex-start;
+}
+@media (min-width: 1100px) {
+    html[dir="rtl"] .bespoke-showcase {
+        flex-direction: row-reverse;
+    }
+    html[dir="rtl"] .bespoke-showcase__info {
+        padding: 0 48px 0 28px;
+    }
+    /* Arabic: next on the left, previous on the right */
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--prev {
+        left: auto !important;
+        right: 0 !important;
+        transform: scaleX(-1) !important;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--next {
+        right: auto !important;
+        left: 0 !important;
+        transform: scaleX(-1) !important;
+    }
+}
+@media (max-width: 1099.98px) {
+    html[dir="rtl"] .bespoke-showcase__info {
+        padding: 0 24px 28px;
+    }
+    html[dir="rtl"] .bespoke-showcase__dots--bottom {
+        justify-content: center;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--prev {
+        left: auto !important;
+        right: 8px !important;
+        transform: scaleX(-1) !important;
+    }
+    html[dir="rtl"] .bespoke-showcase .watch-scroller-arrow--next {
+        right: auto !important;
+        left: 8px !important;
+        transform: scaleX(-1) !important;
+    }
+}
+
+html[dir="rtl"] section.watch {
+    direction: ltr;
 }
 
 @media (min-width: 1100px) {
@@ -1572,7 +1529,7 @@ towering peaks</div>
     .bespoke-showcase {
         display: flex;
         flex-direction: column;
-        padding: 40px 0 36px;
+        padding: 80px 0 0;
     }
 
     .bespoke-showcase__info {
@@ -1630,16 +1587,43 @@ towering peaks</div>
     }
 
     .bespoke-showcase {
-        padding: 32px 0 28px;
+        padding: 80px 0 0;
     }
 
     .bespoke-showcase__info {
+        align-items: center;
         padding: 0 20px 22px;
+        text-align: center;
+    }
+
+    .bespoke-showcase__copy {
+        width: 100%;
+        margin-inline: auto;
+        text-align: center;
     }
 
     .bespoke-showcase__title {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
         font-size: 24px;
         margin-bottom: 32px;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .bespoke-showcase__text {
+        width: 100%;
+        min-width: 0;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    html[dir="rtl"] .bespoke-showcase__info,
+    html[dir="rtl"] .bespoke-showcase__copy,
+    html[dir="rtl"] .bespoke-showcase__title,
+    html[dir="rtl"] .bespoke-showcase__text {
+        text-align: center;
     }
 
     .bespoke-showcase__stage {
@@ -1670,51 +1654,29 @@ towering peaks</div>
 <h4 class="section-title text-center">
   INTERNATIONAL JEWELLERY BRAND
 </h4>
-  <!-- ROW 1: Image Left | Content Right -->
-  <div class="row align-items-center g-4 mb-5">
-    <div class="col-md-6 text-center">
-      <div class="fixed-media mx-auto">
-        <img src="{{ asset('assets/f_assets/image/forever.jpg') }}"
-             alt="Hasht Collection" class="fixed-media__img">
-      </div>
-    </div>
+</section>
+<section class="brand-editorial">
+  <article class="brand-editorial__item">
+    <a href="{{ url('/forevermark') }}" class="brand-editorial__media">
+      <img src="{{ asset('assets/f_assets/image/forever.png') }}" alt="Forevermark">
+    </a>
+    <h2 class="brand-editorial__title">FOREVERMARK</h2>
+    <p class="brand-editorial__text">
+      Every De Beers Forevermark diamond undergoes a journey of rigorous selection. Our unique inscription is an assurance that every De Beers Forevermark diamond meets the exceptional standards of beauty, rarity and is responsibly sourced.
+    </p>
+    <a href="{{ url('/forevermark') }}" class="brand-editorial__link brand-editorial__link--box">{{ __('site.shop_collection') }}</a>
+  </article>
 
-    <div class="col-md-6">
-      <div class="hero-card">
-        <div class="hero-content">
-          <h2 class="hero-title">FOREVERMARK</h2>
-          <p class="hero-subtitle">
-           Every De Beers Forevermark diamond undergoes a journey of rigorous selection. Our unique inscription is an assurance that every De Beers Forevermark diamond meets the exceptional standards of beauty, rarity and is responsibly sourced
-          </p>
-          <!-- <a href="#" class="hero-btn">DISCOVER</a> -->
-          <a href="{{ url('/forevermark') }}" class="hero-btn">DISCOVER</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ROW 2: Content Left | Image Right -->
-  <div class="row align-items-center g-4">
-    <div class="col-md-6 order-2 order-md-1">
-      <div class="hero-card hero-card--alt">
-        <div class="hero-content">
-          <h2 class="hero-title">FARAH KHAN</h2>
-          <p class="hero-subtitle">
-            “I see myself as an alchemist that captures the moments in my life and transforms them into beautiful objects of art.”
-FARAH KHAN
-          </p>
-          <a href="/collections/farah-khan" class="hero-btn">DISCOVER</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 text-center order-1 order-md-2">
-      <div class="fixed-media mx-auto">
-        <img src="{{ asset('assets/f_assets/image/farah.jpg') }}"
-             alt="Hasht Collection" class="fixed-media__img">
-      </div>
-    </div>
-  </div>
+  <article class="brand-editorial__item">
+    <a href="/collections/farah-khan" class="brand-editorial__media">
+      <img src="{{ asset('assets/f_assets/image/farah.png') }}" alt="Farah Khan">
+    </a>
+    <h2 class="brand-editorial__title">FARAH KHAN</h2>
+    <p class="brand-editorial__text">
+      “I see myself as an alchemist that captures the moments in my life and transforms them into beautiful objects of art.”
+    </p>
+    <a href="/collections/farah-khan" class="brand-editorial__link brand-editorial__link--box">{{ __('site.shop_collection') }}</a>
+  </article>
 </section>
 <section class="home-brands watch-brands-section">
   <h4 class="section-title text-center">
@@ -1730,7 +1692,7 @@ FARAH KHAN
     gap: 40px;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 12px 16px;
 }
 
 .home-brands .brand-item {
@@ -2189,6 +2151,104 @@ document.addEventListener('DOMContentLoaded', () => {
   transform: translateY(-1px);
 }
 
+.brand-editorial{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0 12px;
+  /* background: #fff; */
+}
+
+.brand-editorial__item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.brand-editorial__media{
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4f1ec;
+}
+
+.brand-editorial__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.brand-editorial__title{
+  margin: 64px 0 32px;
+  padding: 0 16px;
+  font-family: "poppins", sans-serif;
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: white;
+}
+
+.brand-editorial__text{
+  max-width: 420px;
+  margin: 0 0 14px;
+  padding: 0 29px;
+  font-family: "poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: center;
+  color: white;
+}
+
+.brand-editorial__link{
+  color: white;
+  font-family: "poppins", sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.brand-editorial__link:hover{
+  color: #111;
+}
+
+.brand-editorial__link--box{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  padding: 12px 22px;
+  border: 1px solid white;
+  text-decoration: none;
+}
+
+.brand-editorial__link--box:hover{
+  background: #111;
+  color: #fff;
+}
+
+@media (max-width: 767.98px){
+  .brand-editorial{
+    grid-template-columns: 1fr;
+    gap: 80px;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .brand-editorial__title{
+    margin-top: 22px;
+    letter-spacing: 0.16em;
+  }
+}
+
 /* Responsive */
 @media (max-width: 992px){
   .fixed-media{
@@ -2266,7 +2326,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 const step = getItemStep();
                 const limit = getScrollLimit();
                 if (!step || step <= 0 || limit <= 2) return 0;
-                return Math.max(0, Math.min(items.length - 1, Math.ceil(limit / step - 0.001)));
+
+                let max = 0;
+                for (let i = 1; i < items.length; i++) {
+                    const pos = Math.min(limit, Math.round(i * step));
+                    const prev = Math.min(limit, Math.round((i - 1) * step));
+                    if (pos - prev < 8) break;
+                    max = i;
+                    if (pos >= limit - 2) break;
+                }
+                return max;
             }
 
             function indexToScroll(index) {
@@ -2490,8 +2559,8 @@ document.addEventListener('DOMContentLoaded', function() {
             scroller.addEventListener('scroll', function() {
                 if (scrollRAF) cancelAnimationFrame(scrollRAF);
                 scrollRAF = requestAnimationFrame(() => {
-                    refreshScrollerUi();
                     if (!animating && !isMouseDown) logicalIndex = getNearestIndex();
+                    refreshScrollerUi();
                     scrollRAF = null;
                 });
             });

@@ -36,6 +36,37 @@ Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-us
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::post('/set-currency', [CurrencyController::class, 'set'])->name('set.currency');
+Route::post('/locale', function (Request $request) {
+    // Presets: PK (default English/PKR), UAE (English/AED), عربي (Arabic/UAE).
+    $choice = $request->input('choice');
+
+    if ($choice === null) {
+        // Backward compatible: old EN/AR buttons
+        $locale = $request->input('locale', 'en');
+        abort_unless(in_array($locale, ['en', 'ar'], true), 422);
+        $choice = $locale === 'ar' ? 'ar' : 'pk';
+    }
+
+    abort_unless(in_array($choice, ['pk', 'uae', 'ar'], true), 422);
+
+    [$locale, $market] = match ($choice) {
+        'uae' => ['en', 'uae'],
+        'ar' => ['ar', 'uae'],
+        default => ['en', 'pk'],
+    };
+
+    $request->session()->put('locale', $locale);
+    $request->session()->put('market', $market);
+    $request->session()->put('market_source', 'manual');
+
+    $referer = (string) $request->headers->get('referer', '');
+    // When switching region from locator / social links, refresh that page for region stores.
+    if (str_contains($referer, '/locator') || str_contains($referer, '/social-links')) {
+        return redirect()->to($referer);
+    }
+
+    return back(fallback: url('/'));
+})->name('locale.set');
 Route::get('/collections/online-shopping-store', [HomeController::class, 'Online_Shopping_Store']);
 Route::get('/pages/contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
 Route::get('/pages/locator', [HomeController::class, 'locator']);
@@ -68,6 +99,7 @@ Route::get('collections/miras', [HomeController::class, 'miras'])->name('miras')
 Route::redirect('collections/Miras', '/collections/miras', 301);
 Route::get('collections/misterio', [HomeController::class, 'misterio'])->name('misterio');
 Route::get('collections/momentu', [HomeController::class, 'momentu'])->name('collections.momentu');
+Route::get('collections/timeless-jewels', [HomeController::class, 'timeless_jewels'])->name('timeless-jewels');
 Route::get('collections/gohar', [HomeController::class, 'gohar'])->name('gohar');
 Route::get('collections/qaws-al-matar', [HomeController::class, 'qaws_al_matar'])->name('qaws-al-matar');
 Route::get('collections/marchisio', [HomeController::class, 'marchisio'])->name('marchisio');
@@ -267,10 +299,14 @@ Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
     // Gold rate settings
     Route::get('/gold-rates', [GoldRateController::class, 'index'])->name('admin.gold-rates.index');
     Route::post('/gold-rates', [GoldRateController::class, 'update'])->name('admin.gold-rates.update');
+    Route::get('/gold-rates-uae', [GoldRateController::class, 'indexUae'])->name('admin.gold-rates-uae.index');
+    Route::post('/gold-rates-uae', [GoldRateController::class, 'updateUae'])->name('admin.gold-rates-uae.update');
 
-    // Diamond rate settings (admin storage only; does not change product pricing yet)
+    // Diamond rate settings — Pakistan (PKR) and Dubai / UAE (AED)
     Route::get('/diamond-rates', [DiamondRateController::class, 'index'])->name('admin.diamond-rates.index');
     Route::post('/diamond-rates', [DiamondRateController::class, 'update'])->name('admin.diamond-rates.update');
+    Route::get('/diamond-rates-uae', [DiamondRateController::class, 'indexUae'])->name('admin.diamond-rates-uae.index');
+    Route::post('/diamond-rates-uae', [DiamondRateController::class, 'updateUae'])->name('admin.diamond-rates-uae.update');
 
     // Watch pricing settings by watch subcategory
     Route::get('/watch-pricing', [WatchPricingController::class, 'index'])->name('admin.watch-pricing.index');

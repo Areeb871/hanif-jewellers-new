@@ -384,7 +384,7 @@ towering peaks</div> -->
          @if(isset($products[0]))
             <!-- Button INSIDE video -->
             <a href="{{ route('product.details', $products[0]->slug) }}" class="custom-banner-btn">
-                DISCOVER MORE
+                {{ __('site.discover_more') }}
             </a>
         @endif
         </div>
@@ -398,7 +398,7 @@ towering peaks</div> -->
          @if(isset($products[0]))
             <!-- Button INSIDE video -->
             <a href="{{ route('product.details', $products[0]->slug) }}" class="custom-banner-btn">
-                DISCOVER MORE
+                {{ __('site.discover_more') }}
             </a>
         @endif
         </div>
@@ -407,8 +407,8 @@ towering peaks</div> -->
     <!-- WRITE-UP + CTA -->
     <div class="writeup text-center">
         <p class="hj-card__text">
-            HANIF hearts, Together We are One..<br>
-            <span>One design. One meaning. One love.</span>
+            {{ __('site.valentine_copy') }}<br>
+            <span>{{ __('site.valentine_copy_sub') }}</span>
         </p>
     </div>
 </section>
@@ -459,8 +459,8 @@ towering peaks</div> -->
                  {{-- TEXT BELOW IMAGE --}}
         <div class="hj-card__content">
             <p class="hj-card__text">
-     HANIF hearts, Together as One..
-<span>One design. One meaning. One love.</span>
+     {{ __('site.valentine_copy') }}
+<span>{{ __('site.valentine_copy_sub') }}</span>
 </p>
         </div>
 

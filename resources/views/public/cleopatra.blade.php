@@ -7,7 +7,7 @@
     $mobileBanner = $mobileBackgroundFile ?? 'assets/f_assets/image/colection-design-images/mobile.mp4';
     $isDesktopVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
     $desktopBannerSrc = filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner);
-    $cleopatraCopy = "An ode to contemporary beauty. Woven in sweeping gold, this necklace whispers secrets of the past with a discreet charm that's effortlessly modern.";
+    $cleopatraCopy = __('site.cleopatra_copy');
     $stories = [
         [
             'image' => 'assets/f_assets/image/Cleopatra 1 Ratio 1/desktop1.png',
@@ -69,11 +69,11 @@
         <img class="cleopatra-story__image" src="{{ asset($story['image']) }}" alt="Cleopatra collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
         @if($index === 0)
             <div class="cleopatra-story__panel">
-                <h2 class="cleopatra-story__title">CLEOPATRA</h2>
+                <h2 class="cleopatra-story__title">{{ __('site.col_cleopatra') }}</h2>
                 @if($story['copy'])
                     <p class="cleopatra-story__copy">{{ $story['copy'] }}</p>
                 @endif
-                <a class="cleopatra-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="cleopatra-story__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>
@@ -84,11 +84,11 @@
         <img class="cleopatra-mobile__image" src="{{ asset($story['mobile_image']) }}" alt="Cleopatra collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
         @if($index === 0)
             <div class="cleopatra-mobile__content">
-                <h2 class="cleopatra-mobile__title">CLEOPATRA</h2>
+                <h2 class="cleopatra-mobile__title">{{ __('site.col_cleopatra') }}</h2>
                 @if($story['copy'])
                     <p class="cleopatra-mobile__copy">{{ $story['copy'] }}</p>
                 @endif
-                <a class="cleopatra-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="cleopatra-mobile__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>
@@ -105,7 +105,7 @@
     </div>
 </section>
 
-<section class="cleopatra-ending-appointment" aria-label="Book an appointment">
+<section class="cleopatra-ending-appointment" aria-label="{{ __('site.book_appointment') }}">
     <x-book-appointment />
 </section>
 @endsection

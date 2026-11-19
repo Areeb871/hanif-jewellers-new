@@ -513,7 +513,7 @@
                 <button class="mobile-menu-toggle" type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#mobileOffcanvas"
-                        aria-label="Open menu">
+                        aria-label="{{ __('site.open_menu') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -533,12 +533,15 @@
             <div class="col-3">
                 <div class="mobile-nav-icons d-flex justify-content-end align-items-center gap-3">
 
+                    @include('public.partials.gold-prices-menu')
+                    @include('public.partials.language-switch')
+
                     <!-- Search (same modal as desktop) -->
                     <a href="#"
                        class="mobile-nav-icon"
                        data-bs-toggle="modal"
                        data-bs-target="#navSearchModal"
-                       aria-label="Search">
+                       aria-label="{{ __('site.search') }}">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </a>
 
@@ -592,7 +595,7 @@
     $jewelryCollections = \App\Models\Subcategory::where([['status', 'active'],['category_id', 1]])->get();
     
     $highEndCollections =  ['HASHT', 'QAWS-AL-MATAR','NAGAR', 'GULPOSH','GOHAR','HAPHAZARD'];
-    $bridalCollections = [ 'GEHNAWA', 'NAVRATAN', 'TAJ MAHAL', 'HERITAGE','BREATHTAKING','CLEOPATRA','DIVINE TREASURES','MISTERIO','MARCHISIO'];
+    $bridalCollections = [ 'GEHNAWA', 'NAVRATAN', 'TAJ MAHAL', 'HERITAGE','BREATHTAKING','CLEOPATRA','DIVINE TREASURES','MARCHISIO','TIMLESS JEWELS'];
     $seasonalCollections = ['EID PAR SONY KI CHORIYAN', 'VALENTINE JEWELS', 'WINTER JEWELS'];
     $lifestyleCollections = ['EHED', 'JEWELPHABETS', 'MONA LISA', 'PURE LOCK', 'SELENE', 'MOMENTU'];
 @endphp
@@ -603,6 +606,9 @@
     <div class="offcanvas-body d-flex flex-column">
         <nav class="mobile-nav">
             <ul class="list-unstyled mb-4">
+                <li class="mobile-nav-item hj-lang-mobile">
+                    @include('public.partials.language-switch')
+                </li>
                 <!-- Collections -->
                 <!-- <li class="mobile-nav-item">
                     <a class="mobile-nav-link collections-link" href="#">
@@ -611,7 +617,7 @@
                     </a>
                 </li> -->
                  <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/highend-jewellery">HIGH END</a>
+                    <a class="mobile-nav-link" href="/highend-jewellery">{{ __('site.high_end') }}</a>
                 </li>
               <li class="mobile-nav-item">
 
@@ -620,7 +626,7 @@
      href="#jewelryMenu"
      role="button">
 
-     JEWELRY
+     {{ __('site.jewelry') }}
      <span class="mobile-arrow">▲</span>
 
   </a>
@@ -629,31 +635,29 @@
     <div class="mobile-submenu">
 
     <div class="menu-section-title">
-BRIDALS
+{{ __('site.bridals') }}
 </div>
     <ul>
-<li><a href="{{ url('/collections/gehnawa') }}">GEHNAWA</a></li>
-<li><a href="{{ url('/collections/navratan') }}">NAVRATAN</a></li>
-<li><a href="{{ url('/collections/taj-mahal') }}">TAJ MAHAL</a></li>
-<li><a href="{{ url('/collections/heritage') }}">HERITAGE</a></li>
-<li><a href="{{ url('/collections/cleopatra') }}">CLEOPATRA</a></li>
-<li><a href="{{ url('/collections/misterio') }}">MISTERIO</a></li>
-
+<li><a href="{{ url('/collections/gehnawa') }}">{{ __('site.col_gehnawa') }}</a></li>
+<li><a href="{{ url('/collections/navratan') }}">{{ __('site.col_navratan') }}</a></li>
+<li><a href="{{ url('/collections/taj-mahal') }}">{{ __('site.col_taj') }}</a></li>
+<li><a href="{{ url('/collections/heritage') }}">{{ __('site.col_heritage') }}</a></li>
+<li><a href="{{ url('/collections/cleopatra') }}">{{ __('site.col_cleopatra') }}</a></li>
+<li><a href="{{ url('/collections/timeless-jewels') }}">{{ __('site.col_timeless_menu') }}</a></li>
 
     </ul>
       <div class="menu-section-title">
-        LIFESTYLE
+        {{ __('site.lifestyle') }}
     </div>
     
     <ul>
-        <li><a href="/collections/ehed">EHED</a></li>
-<!-- <li><a href="/collections/jewelphabets">JEWELPHABETS</a></li> -->
-<!-- <li><a href="/collections/mona-lisa">MONA LISA</a></li> -->
-<li><a href="/collections/pure-lock">PURE LOCK</a></li>
-<li><a href="/collections/selene">SELENE</a></li>
-<li><a href="{{ url('/collections/divine-treasures') }}">DIVINE TREASURES</a></li>
-<li><a href="{{ url('/collections/marchisio') }}">MARCHISIO</a></li>
-<li><a href="{{ url('/collections/momentu') }}">MOMENTU</a></li>
+        <li><a href="/ehed">{{ __('site.col_ehed') }}</a></li>
+<!-- <li><a href="/collections/jewelphabets">{{ __('site.col_jewelphabets') }}</a></li> -->
+<!-- <li><a href="/collections/mona-lisa">{{ __('site.col_mona') }}</a></li> -->
+<li><a href="/collections/pure-lock">{{ __('site.col_pure_lock') }}</a></li>
+<li><a href="/collections/selene">{{ __('site.col_selene') }}</a></li>
+<li><a href="{{ url('/collections/divine-treasures') }}">{{ __('site.col_divine') }}</a></li>
+<li><a href="{{ url('/collections/marchisio') }}">{{ __('site.col_marchisio') }}</a></li>
     </ul>
     
      <!-- <div class="menu-section-title">
@@ -670,27 +674,29 @@ BRIDALS
 
 </li>
                 <!-- Watches -->
+                @if(($siteMarket ?? \App\Models\Products::currentMarket()) !== 'uae')
                 <li class="mobile-nav-item">
                     <a class="mobile-nav-link" href="/watches">WATCHES</a>
                 </li>
+                @endif
                 
                 <!-- Online Shopping -->
                 <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/collections/online-shopping-store">ONLINE SHOPPING STORE</a>
+                    <a class="mobile-nav-link" href="/collections/online-shopping-store">{{ __('site.online_store') }}</a>
                 </li>
 
                 <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/solitaire-old">SOLITAIRE</a>
+                    <a class="mobile-nav-link" href="/solitaire-old">{{ __('site.solitaire') }}</a>
                 </li>
                 
                 <!-- About Us -->
                 <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/about-us">ABOUT US</a>
+                    <a class="mobile-nav-link" href="/about-us">{{ __('site.about_us') }}</a>
                 </li>
                 
                 <!-- Contact -->
                 <li class="mobile-nav-item">
-                    <a class="mobile-nav-link" href="/contact-us">CONTACT</a>
+                    <a class="mobile-nav-link" href="/contact-us">{{ __('site.contact_us') }}</a>
                 </li>
                 
             </ul>
@@ -708,7 +714,7 @@ BRIDALS
         <div class="mobile-back-button">
             <button type="button" class="btn-back" data-bs-dismiss="offcanvas">
                 <i class="fa-solid fa-arrow-left"></i>
-                <span>Collections</span>
+                <span>{{ __('site.collections_word') }}</span>
             </button>
         </div>
         
@@ -716,13 +722,13 @@ BRIDALS
             <ul class="list-unstyled mb-0">
                 <li class="mobile-nav-item">
                     <a class="mobile-nav-link collection-item" href="#" data-collection="high-end">
-                        <span>HIGH END | BESPOKE</span>
+                        <span>{{ __('site.high_end_bespoke') }}</span>
                         <i class="fa fa-chevron-right"></i>
                     </a>
                 </li>
                 <li class="mobile-nav-item">
                     <a class="mobile-nav-link collection-item" href="#" data-collection="bridal">
-                        <span>BRIDAL</span>
+                        <span>{{ __('site.bridal') }}</span>
                         <i class="fa fa-chevron-right"></i>
                     </a>
                 </li>
@@ -734,7 +740,7 @@ BRIDALS
                 </li> -->
                 <li class="mobile-nav-item">
                     <a class="mobile-nav-link collection-item" href="#" data-collection="lifestyle">
-                        <span>LIFESTYLE</span>
+                        <span>{{ __('site.lifestyle') }}</span>
                         <i class="fa fa-chevron-right"></i>
                     </a>
                 </li>
@@ -748,7 +754,7 @@ BRIDALS
 <!-- Collection Offcanvas Menus -->
 @include('public.partials.collection-offcanvas', [
     'id' => 'highEndOffcanvas',
-    'title' => 'HIGH END | BESPOKE',
+    'title' => __('site.high_end_bespoke'),
     'collections' => $highEndCollections,
     'customRoutes' => $customRoutes,
     'jewelryCollections' => $jewelryCollections
@@ -756,7 +762,7 @@ BRIDALS
 
 @include('public.partials.collection-offcanvas', [
     'id' => 'bridalOffcanvas',
-    'title' => 'BRIDAL',
+    'title' => __('site.bridal'),
     'collections' => $bridalCollections,
     'customRoutes' => $customRoutes,
     'jewelryCollections' => $jewelryCollections
@@ -772,7 +778,7 @@ BRIDALS
 
 @include('public.partials.collection-offcanvas', [
     'id' => 'lifestyleOffcanvas',
-    'title' => 'LIFESTYLE',
+    'title' => __('site.lifestyle'),
     'collections' => $lifestyleCollections,
     'customRoutes' => $customRoutes,
     'jewelryCollections' => $jewelryCollections

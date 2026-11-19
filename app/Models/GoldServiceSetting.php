@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class GoldServiceSetting extends Model
 {
     protected $fillable = [
+        'market',
         'name',
         'slug',
         'weight_threshold',
@@ -15,6 +17,8 @@ class GoldServiceSetting extends Model
         'sale_light_oc_final_per_article',
         'heavy_oc_final_per_gram',
         'sale_heavy_oc_final_per_gram',
+        'selling_percent',
+        'sale_selling_percent',
         'sort_order',
         'is_active',
         'is_sale',
@@ -27,7 +31,14 @@ class GoldServiceSetting extends Model
         'sale_light_oc_final_per_article' => 'float',
         'heavy_oc_final_per_gram' => 'float',
         'sale_heavy_oc_final_per_gram' => 'float',
+        'selling_percent' => 'float',
+        'sale_selling_percent' => 'float',
         'is_active' => 'boolean',
         'is_sale' => 'boolean',
     ];
+
+    public function scopeForMarket(Builder $query, string $market = 'pk'): Builder
+    {
+        return $query->where('market', $market);
+    }
 }

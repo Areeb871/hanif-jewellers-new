@@ -40,23 +40,23 @@
     }
     .ehed-hero-section {
         display: flex;
+        flex-direction: column;
         align-items: stretch;
     }
     .ehed-video-container {
-        width: 50%;
+        width: 100%;
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
-        aspect-ratio: 746 / 430;
-        background: #fff;
+        height: auto;
+        background: #000;
     }
     .ehed-video-container video,
     .ehed-media-cover {
-        position: absolute;
-        inset: 0;
+        position: static;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         object-position: center center;
         display: block;
     }
@@ -191,7 +191,6 @@
         .ehed-video-container {
             width: 100%;
             height: auto;
-            aspect-ratio: 746 / 430;
         }
         .ehed-content-container {
             width: 100%;
@@ -394,6 +393,17 @@
             justify-content: center;
         }
     }
+    .pure-lock-banners { display: flex; flex-direction: column; width: 100%; margin: 0; padding: 0; }
+    .pure-lock-banners img { display: block; width: 100%; height: auto; }
+    .pure-lock-banner { position: relative; }
+    .pure-lock-banner__panel { position: absolute; left: auto; right: clamp(24px, 4vw, 72px); top: 50%; transform: translateY(-50%); z-index: 2; display: flex; flex-direction: column; align-items: flex-start; width: clamp(260px, 30vw, 420px); max-width: calc(50% - 32px); box-sizing: border-box; color: #111; font-family: 'Poppins', sans-serif; text-align: start; }
+    .pure-lock-banner__title { margin: 0; color: inherit; font-family: 'Poppins', sans-serif; font-size: clamp(20px, 1.6vw, 26px); font-weight: 500; letter-spacing: .18em; line-height: 1.2; }
+    .pure-lock-banner__copy { width: 100%; max-width: 40em; margin: 10px 0 18px; color: inherit; font-family: 'Poppins', sans-serif; font-size: clamp(12px, .78vw, 14px); font-weight: 400; letter-spacing: .02em; line-height: 1.7; }
+    .pure-lock-banner__button { display: inline-block; padding: clamp(10px, .72vw, 13px) clamp(16px, 1.4vw, 26px); background: #111; color: #fff; font-family: 'Poppins', sans-serif; font-size: clamp(10px, .58vw, 11px); letter-spacing: .16em; line-height: 1.4; text-decoration: none; text-transform: uppercase; }
+    .pure-lock-banner__button:hover, .pure-lock-banner__button:focus { background: #2b2b2b; color: #fff; }
+    .pure-lock-banner__mobile-panel { display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; padding: 32px 24px 36px; background: #fff; color: #111; font-family: 'Poppins', sans-serif; text-align: center; }
+    .pure-lock-banner__mobile-panel .pure-lock-banner__title { width: 100%; font-size: 22px; text-align: center; }
+    .pure-lock-banner__mobile-panel .pure-lock-banner__copy { max-width: 34em; margin: 12px auto 20px; font-size: 13px; text-align: center; }
     .pure-lock-shop-spacing {
         display: flex;
         align-items: center;
@@ -428,98 +438,37 @@
             <img src="{{ $mobileBannerUrl }}" alt="Pure Lock Banner Mobile" class="ehed-media-cover">
         @endif
     </div>
-    <div class="ehed-content-container">
-        <div class="ehed-category-label">MEN & WOMEN</div>
-        <h1 class="ehed-main-title">PURE LOCK</h1>
-        <p class="ehed-body-text hero__description font-family--serif">
-            Pure Lock by Hanif celebrates the strength of unbreakable bonds. Discover refined silhouettes and bold statement pieces, meticulously crafted to bring contemporary elegance to every occasion.
-        </p>
-    </div>
 </section>
 
-@if(isset($galleryImages) && $galleryImages->count() > 0)
-<div class="pure-lock-gallery" id="pureLockTopGallery">
-    @foreach($galleryImages as $index => $image)
-        <div class="col-md-3 {{ $index > 0 ? 'justify-content-center d-flex align-items-center' : '' }}">
-            <img src="{{ asset($image->image) }}" class="img-fluid gallery-image" alt="Pure Lock Gallery Image" data-gallery="pureLockTopGallery" data-index="{{ $index }}" style="cursor: pointer;" onclick="openImageModal('pureLockTopGallery', {{ $index }})">
+<div class="pure-lock-banners">
+    @foreach([1, 2, 3] as $banner)
+        <div class="pure-lock-banner">
+            <img src="{{ asset('assets/f_assets/image/pure-lock/' . $banner . '.png') }}"
+                 alt="Pure Lock Banner {{ $banner }}"
+                 width="1920"
+                 height="1080"
+                 @if($banner > 1) loading="lazy" @endif
+                 decoding="async">
+            @if($banner === 1)
+                <div class="pure-lock-banner__panel d-none d-lg-flex">
+                    <h1 class="pure-lock-banner__title">{{ __('site.col_pure_lock') }}</h1>
+                    <p class="pure-lock-banner__copy">{{ __('site.pure_lock_copy') }}</p>
+                    <x-shop-now href="https://www.hanifjewellers.com/products/pure-lock-p233590?store=1" class="pure-lock-banner__button" />
+                </div>
+                <div class="pure-lock-banner__mobile-panel d-lg-none">
+                    <h1 class="pure-lock-banner__title">{{ __('site.col_pure_lock') }}</h1>
+                    <p class="pure-lock-banner__copy">{{ __('site.pure_lock_copy') }}</p>
+                    <x-shop-now href="https://www.hanifjewellers.com/products/pure-lock-p233590?store=1" class="pure-lock-banner__button" />
+                </div>
+            @endif
         </div>
     @endforeach
-    @if($galleryImages->count() < 4)
-        @for($i = $galleryImages->count(); $i < 4; $i++)
-            <div class="col-md-3 justify-content-center d-flex align-items-center">
-                <div class="gallery-placeholder d-flex align-items-center justify-content-center" style="background-color: #f5f5f5;">
-                    <span class="text-muted">No image</span>
-                </div>
-            </div>
-        @endfor
-    @endif
-</div>
-@endif
-<div class="d-none d-md-block" style="position: relative; aspect-ratio: 16 / 9; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden;">
-    <video autoplay loop muted playsinline preload="auto" 
-           style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; z-index: 0;">
-        <source src="{{ asset('assets/f_assets/image/pure-lock/purelock.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
 </div>
 
-<!-- Mobile Video Banner -->
-<!-- <div class="d-md-none" style="position: relative; height: 768px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); overflow: hidden;"> 
-    <video autoplay loop muted playsinline preload="auto" 
-           style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 0;">
-        <source src="{{ asset('assets/f_assets/image/pure-lock/purelock.mp4') }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>  -->
-
-@if(isset($products) && $products->isNotEmpty())
-<section class="pure-lock-products">
-    <h2 class="pure-lock-products__title">PURE LOCK JEWELLERY</h2>
-    <div class="swiper pure-lock-product-swiper">
-        <div class="swiper-wrapper">
-            @foreach($products as $product)
-                <div class="swiper-slide">
-                    @include('public.partials.simple-card', ['product' => $product])
-                </div>
-            @endforeach
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-pagination"></div>
-    </div>
-</section>
-
-<script>
-document.querySelectorAll('.pure-lock-product-swiper').forEach((swiperEl) => {
-    new Swiper(swiperEl, {
-        loop: false,
-        grabCursor: true,
-        watchOverflow: true,
-        observer: true,
-        observeParents: true,
-        breakpoints: {
-            0: { slidesPerView: 1, spaceBetween: 8 },
-            576: { slidesPerView: 2, spaceBetween: 8 },
-            768: { slidesPerView: 3, spaceBetween: 8 },
-            1200: { slidesPerView: 4, spaceBetween: 8 }
-        },
-        navigation: {
-            nextEl: swiperEl.querySelector('.swiper-button-next'),
-            prevEl: swiperEl.querySelector('.swiper-button-prev')
-        },
-        pagination: {
-            el: swiperEl.querySelector('.swiper-pagination'),
-            clickable: true
-        }
-    });
-});
-</script>
-@endif
 <div class="pure-lock-shop-spacing">
     <x-shop-now
         href="https://www.hanifjewellers.com/products/pure-lock-p233590?store=1"
         class="btn border btn-outline-dark px-5 py-2"
     />
 </div>
-@include('public.partials.image-gallery-modal')
 @endsection

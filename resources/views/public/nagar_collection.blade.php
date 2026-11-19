@@ -268,19 +268,18 @@
   
     {{-- Overlay Content --}}
     <div class="banner-content">
-        <div class="banner-title">NAGAR</div>
-        <div class="banner-location">Crafted in the heart of the world’s
-towering peaks</div>
+        <div class="banner-title">{{ __('site.col_nagar') }}</div>
+        <div class="banner-location">{{ __('site.nagar_banner') }}</div>
         <!-- <a href="{{ url('collections/haphazard') }}" class="banner-btn">Discover</a> -->
     </div>
 <!-- 
   <div class="heroOverlay">
-    <h2 class="heroTitle">NAGAR</h2>
+    <h2 class="heroTitle">{{ __('site.col_nagar') }}</h2>
     <p class="heroText">
       A legacy carved from stone and peak; these rubies carry the deep, royal weight of the mountains in a design that breathes with life and power.
     </p>
     <a href="#" class="heroBtn">
-      DISCOVER NAGAR<br>CREATIONS
+      {{ __('site.discover_nagar') }}
     </a>
   </div> -->
 
@@ -298,13 +297,13 @@ towering peaks</div>
   >
 
   <div class="heroOverlay">
-    <h2 class="heroTitle">NAGAR</h2>
+    <h2 class="heroTitle">{{ __('site.col_nagar') }}</h2>
     <p class="heroText">
-      A legacy carved from stone and peak; these rubies carry the deep royal weight of the mountains in a design that breathes with life and power.
+      {{ __('site.nagar_hero_1') }}
     </p>
     @if(isset($products[7]))
 <a href="{{ route('product.details', $products[7]->slug) }}" class="heroBtn">
-  DISCOVER NAGAR<br>CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -322,13 +321,13 @@ towering peaks</div>
   >
 
   <div class="heroOverlay">
-    <h2 class="heroTitle">NAGAR</h2>
+    <h2 class="heroTitle">{{ __('site.col_nagar') }}</h2>
     <p class="heroText">
-      Inspired by royal regalia, this necklace unites precision set diamonds and vivid colour into a commanding modern statement.
+      {{ __('site.nagar_hero_2') }}
     </p>
     @if(isset($products[8]))
 <a href="{{ route('product.details', $products[8]->slug) }}" class="heroBtn">
-  DISCOVER NAGAR<br>CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -342,13 +341,13 @@ towering peaks</div>
   >
 
   <div class="heroOverlay">
-    <h2 class="heroTitle">NAGAR</h2>
+    <h2 class="heroTitle">{{ __('site.col_nagar') }}</h2>
     <p class="heroText">
-        The way the green is "cradled" by gold and diamonds, mirrors the way valuable life is protected by the rugged mountain terrain.   
+        {{ __('site.nagar_hero_3') }}
     </p>
     @if(isset($products[9]))
 <a href="{{ route('product.details', $products[9]->slug) }}" class="heroBtn">
-  DISCOVER NAGAR<br>CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -362,14 +361,13 @@ towering peaks</div>
   >
 
   <div class="heroOverlay">
-    <h2 class="heroTitle">NAGAR</h2>
+    <h2 class="heroTitle">{{ __('site.col_nagar') }}</h2>
     <p class="heroText">
-     Emeralds once reserved for royal courts, drawn from Pakistan’s Nagar valleys, admired for their colour and character, 
-     are shaped into jewellery that carries history with quiet confidence.  
+      {{ __('site.nagar_hero_4') }}
       </p>
     @if(isset($products[10]))
 <a href="{{ route('product.details', $products[10]->slug) }}" class="heroBtn">
-  DISCOVER NAGAR<br>CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -378,9 +376,9 @@ towering peaks</div>
 <section class="d-none d-lg-block">
 <div class="heroTextWrap">
   <div class="triangleText">
-    <span>Nagar draws inspiration from the harmony of light and stone,</span>
-    <span>showcasing handpicked gemstones of rare beauty</span>
-    <span>and exceptional craftsmanship.</span>
+    <span>{{ __('site.nagar_tagline_1') }}</span>
+    <span>{{ __('site.nagar_tagline_2') }}</span>
+    <span>{{ __('site.nagar_tagline_3') }}</span>
   </div>
 </div>
 </section>
@@ -403,13 +401,13 @@ towering peaks</div>
     </video>
   </div>
 <!-- <div class="mobileStackContent">
-    <h2 class="mobileTitle">NAGAR</h2>
-     <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> 
+    <h2 class="mobileTitle">{{ __('site.col_nagar') }}</h2>
+     <p class="mobileSub">{{ __('site.nagar_sub') }}</p> 
     <p class="mobileText">
        Crafted in the heart of the world’s
 towering peaks.
     </p>
-    <a href="#" class="mobileBtn">DISCOVER NAGAR CREATIONS</a> 
+    <a href="#" class="mobileBtn">{{ __('site.discover_nagar') }}</a> 
   </div> -->
   
 </section>
@@ -425,14 +423,14 @@ towering peaks.
   </div>
 
   <div class="mobileStackContent">
-    <h2 class="mobileTitle">NAGAR</h2>
-    <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
+    <h2 class="mobileTitle">{{ __('site.col_nagar') }}</h2>
+    <!-- <p class="mobileSub">{{ __('site.nagar_sub') }}</p> -->
     <p class="mobileText">
-       A legacy carved from stone and peak; these rubies carry the deep royal weight of the mountains in a design that breathes with life and power.
+       {{ __('site.nagar_hero_1') }}
     </p>
     @if(isset($products[7]))
 <a href="{{ route('product.details', $products[7]->slug) }}" class="mobileBtn">
-  DISCOVER NAGAR CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -448,14 +446,14 @@ towering peaks.
   </div>
 
   <div class="mobileStackContent">
-    <h2 class="mobileTitle">NAGAR</h2>
-    <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
+    <h2 class="mobileTitle">{{ __('site.col_nagar') }}</h2>
+    <!-- <p class="mobileSub">{{ __('site.nagar_sub') }}</p> -->
     <p class="mobileText">
-        Inspired by royal regalia, this necklace unites precision set diamonds and vivid colour into a commanding modern statement.
+        {{ __('site.nagar_hero_2') }}
     </p>
      @if(isset($products[8]))
 <a href="{{ route('product.details', $products[8]->slug) }}" class="mobileBtn">
-  DISCOVER NAGAR CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -471,14 +469,14 @@ towering peaks.
   </div>
 
   <div class="mobileStackContent">
-    <h2 class="mobileTitle">NAGAR</h2>
-    <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
+    <h2 class="mobileTitle">{{ __('site.col_nagar') }}</h2>
+    <!-- <p class="mobileSub">{{ __('site.nagar_sub') }}</p> -->
     <p class="mobileText">
-       The way the green is "cradled" by gold and diamonds, mirrors the way valuable life is protected by the rugged mountain terrain.
+       {{ __('site.nagar_hero_3') }}
     </p>
      @if(isset($products[9]))
 <a href="{{ route('product.details', $products[9]->slug) }}" class="mobileBtn">
-  DISCOVER NAGAR CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -494,14 +492,14 @@ towering peaks.
   </div>
 
   <div class="mobileStackContent">
-    <h2 class="mobileTitle">NAGAR</h2>
-    <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
+    <h2 class="mobileTitle">{{ __('site.col_nagar') }}</h2>
+    <!-- <p class="mobileSub">{{ __('site.nagar_sub') }}</p> -->
     <p class="mobileText">
-      Emeralds once reserved for royal courts, drawn from Pakistan’s Nagar valleys, admired for their colour and character, are shaped into jewellery that carries history with quiet confidence.
+      {{ __('site.nagar_hero_4') }}
      </p>
      @if(isset($products[10]))
 <a href="{{ route('product.details', $products[10]->slug) }}" class="mobileBtn">
-  DISCOVER NAGAR CREATIONS
+  {{ __('site.discover_nagar') }}
 </a>
 @endif
   </div>
@@ -509,9 +507,9 @@ towering peaks.
 <section class="d-lg-none mobileStackHero">
 <div class="heroTextWrap">
   <div class="triangleText">
-    <span>Nagar draws inspiration from the harmony of light and stone, 
-    showcasing handpicked gemstones of rare beauty
-    and exceptional craftsmanship.</span>
+    <span>{{ __('site.nagar_tagline_1') }}</span>
+    <span>{{ __('site.nagar_tagline_2') }}</span>
+    <span>{{ __('site.nagar_tagline_3') }}</span>
   </div>
 </div>
 </section>

@@ -12,6 +12,7 @@ use App\Models\SubcatImages;
 use App\Models\Tags;
 use App\Models\GoldServiceSetting;
 use Str;
+use Illuminate\Validation\Rule;
 use App\Services\GoldPriceCalculator;
 use App\Services\DiamondPriceCalculator;
 
@@ -128,8 +129,9 @@ class ProductController extends Controller
         try {
             $categories = Categories::all();
             $subcategories = Subcategory::all();
-            $goldServices = GoldServiceSetting::orderBy('sort_order')->get();
-            return view('admin.product.add_product', compact('categories', 'subcategories', 'goldServices'));
+            $goldServices = GoldServiceSetting::forMarket('pk')->orderBy('sort_order')->get();
+            $uaeGoldServices = GoldServiceSetting::forMarket('uae')->orderBy('sort_order')->get();
+            return view('admin.product.add_product', compact('categories', 'subcategories', 'goldServices', 'uaeGoldServices'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -138,9 +140,10 @@ class ProductController extends Controller
         try {
             $categories = Categories::all();
             $subcategories = Subcategory::all();
-            $goldServices = GoldServiceSetting::orderBy('sort_order')->get();
+            $goldServices = GoldServiceSetting::forMarket('pk')->orderBy('sort_order')->get();
+            $uaeGoldServices = GoldServiceSetting::forMarket('uae')->orderBy('sort_order')->get();
             $product = Products::with('images', 'tags','category')->findOrFail($id); // get product with images and tags
-            return view('admin.product.update_product', compact('categories', 'product', 'subcategories', 'goldServices'));
+            return view('admin.product.update_product', compact('categories', 'product', 'subcategories', 'goldServices', 'uaeGoldServices'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -156,10 +159,27 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'uae_diamond_price' => 'nullable|numeric|min:0',
                 'watch_rate' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
-                'gold_service_id' => 'nullable|exists:gold_service_settings,id',
-                // AED price is optional / nullable
+                'uae_gold_weight' => 'nullable|numeric|min:0',
+                'gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'pk'),
+                ],
+                'uae_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'uae'),
+                ],
+                'online_store_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'pk'),
+                ],
+                'uae_online_store_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'uae'),
+                ],
+                'uae_name' => 'nullable|string|max:255',
                 'price_aed' => 'nullable|numeric|min:0',
             ]);
             $originalSlug = Str::slug($request->name, '-');
@@ -190,23 +210,37 @@ class ProductController extends Controller
             }
 
             $product->name = $request->name;
+            $product->uae_name = $request->uae_name;
             $product->online_store_name = $request->online_store_name;
+            $product->uae_online_store_name = $request->uae_online_store_name;
             $product->slug = $slug;
             $product->sku = $request->sku;
             $product->barcode = $request->barcode;
             $product->description = $request->description;
+            $product->uae_description = $request->uae_description;
             $product->online_store_description = $request->online_store_description;
+            $product->uae_online_store_description = $request->uae_online_store_description;
             $product->price = $request->price;
             // // Try to auto-calculate price from description (weight + karat)
             $calculatedPrice = $this->calculateAutoPrice($request);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
+            $product->online_store_price = $request->filled('online_store_price') ? $request->online_store_price : null;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->online_store_diamond_price = $request->filled('online_store_diamond_price') ? $request->online_store_diamond_price : null;
+            $product->uae_diamond_price = $request->filled('uae_diamond_price') ? $request->uae_diamond_price : null;
+            $product->uae_online_store_diamond_price = $request->filled('uae_online_store_diamond_price') ? $request->uae_online_store_diamond_price : null;
             $product->watch_rate = $request->filled('watch_rate') ? $request->watch_rate : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
+            $product->online_store_gold_weight = $request->filled('online_store_gold_weight') ? $request->online_store_gold_weight : null;
+            $product->uae_gold_weight = $request->filled('uae_gold_weight') ? $request->uae_gold_weight : null;
+            $product->uae_online_store_gold_weight = $request->filled('uae_online_store_gold_weight') ? $request->uae_online_store_gold_weight : null;
             $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
-            // If AED price not provided, keep it null
+            $product->online_store_gold_service_id = $request->filled('online_store_gold_service_id') ? $request->online_store_gold_service_id : null;
+            $product->uae_gold_service_id = $request->filled('uae_gold_service_id') ? $request->uae_gold_service_id : null;
+            $product->uae_online_store_gold_service_id = $request->filled('uae_online_store_gold_service_id') ? $request->uae_online_store_gold_service_id : null;
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
+            $product->online_store_price_aed = $request->filled('online_store_price_aed') ? $request->online_store_price_aed : null;
             $product->discounted_price = $discounted_price??0;
             $product->discount_percentage = $request->discount_percentage??0;
             $product->quantity = $request->filled('quantity') ? $request->quantity : null;  
@@ -271,10 +305,27 @@ class ProductController extends Controller
                 'category_id' => 'required',
                 'price' => 'nullable|numeric|min:0',
                 'diamond_price' => 'nullable|numeric|min:0',
+                'uae_diamond_price' => 'nullable|numeric|min:0',
                 'watch_rate' => 'nullable|numeric|min:0',
                 'gold_weight' => 'nullable|numeric|min:0',
-                'gold_service_id' => 'nullable|exists:gold_service_settings,id',
-                // AED price is optional / nullable
+                'uae_gold_weight' => 'nullable|numeric|min:0',
+                'gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'pk'),
+                ],
+                'uae_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'uae'),
+                ],
+                'online_store_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'pk'),
+                ],
+                'uae_online_store_gold_service_id' => [
+                    'nullable',
+                    Rule::exists('gold_service_settings', 'id')->where('market', 'uae'),
+                ],
+                'uae_name' => 'nullable|string|max:255',
                 'price_aed' => 'nullable|numeric|min:0',
                 'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/avif',
             ]);
@@ -373,22 +424,36 @@ class ProductController extends Controller
 
             // Update product fields
             $product->name = $request->name;
+            $product->uae_name = $request->uae_name;
             $product->online_store_name = $request->online_store_name;
+            $product->uae_online_store_name = $request->uae_online_store_name;
             $product->sku = $request->sku;
             $product->barcode = $request->barcode;
             $product->description = $request->description;
+            $product->uae_description = $request->uae_description;
             $product->online_store_description = $request->online_store_description;
+            $product->uae_online_store_description = $request->uae_online_store_description;
             $product->price = $request->price;
             // Try to auto-calculate price from description (weight + karat)
             $calculatedPrice = $this->calculateAutoPrice($request, $product);
             $basePrice = $calculatedPrice ?? ($request->price ?? 0);
             $product->price = $basePrice;
+            $product->online_store_price = $request->filled('online_store_price') ? $request->online_store_price : null;
             $product->diamond_price = $request->filled('diamond_price') ? $request->diamond_price : null;
+            $product->online_store_diamond_price = $request->filled('online_store_diamond_price') ? $request->online_store_diamond_price : null;
+            $product->uae_diamond_price = $request->filled('uae_diamond_price') ? $request->uae_diamond_price : null;
+            $product->uae_online_store_diamond_price = $request->filled('uae_online_store_diamond_price') ? $request->uae_online_store_diamond_price : null;
             $product->watch_rate = $request->filled('watch_rate') ? $request->watch_rate : null;
             $product->gold_weight = $request->filled('gold_weight') ? $request->gold_weight : null;
+            $product->online_store_gold_weight = $request->filled('online_store_gold_weight') ? $request->online_store_gold_weight : null;
+            $product->uae_gold_weight = $request->filled('uae_gold_weight') ? $request->uae_gold_weight : null;
+            $product->uae_online_store_gold_weight = $request->filled('uae_online_store_gold_weight') ? $request->uae_online_store_gold_weight : null;
             $product->gold_service_id = $request->filled('gold_service_id') ? $request->gold_service_id : null;
-            // If AED price not provided, keep it null
+            $product->online_store_gold_service_id = $request->filled('online_store_gold_service_id') ? $request->online_store_gold_service_id : null;
+            $product->uae_gold_service_id = $request->filled('uae_gold_service_id') ? $request->uae_gold_service_id : null;
+            $product->uae_online_store_gold_service_id = $request->filled('uae_online_store_gold_service_id') ? $request->uae_online_store_gold_service_id : null;
             $product->price_aed = $request->filled('price_aed') ? $request->price_aed : null;
+            $product->online_store_price_aed = $request->filled('online_store_price_aed') ? $request->online_store_price_aed : null;
             $product->discount_type = $request->discount_option ?? 1;
             if($request->discount_option == 1){
                 $product->discounted_price = 0.00;

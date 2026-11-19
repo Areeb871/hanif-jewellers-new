@@ -3,7 +3,7 @@
 @section('content')
 @php
     $assetBase = 'assets/f_assets/image/Gohar';
-    $goharCopy = 'Gohar, Treasures from the Depths of the Oceans an exquisite chapter in the story of Hanif. Pearls collected and carefully curated from the rarest and deepest parts of the oceans, transformed into mesmerizing pieces of natural art that beautifully adorn you and your collections alike.';
+    $goharCopy = __('site.gohar_copy');
     $stories = [
         [
             'image' => $assetBase . '/desktop1.png',
@@ -64,9 +64,9 @@
         <img class="gohar-story__image" src="{{ asset($story['image']) }}" alt="Gohar collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
         @if($index === 0)
             <div class="gohar-story__panel {{ $story['side'] === 'right' ? 'gohar-story__panel--right' : '' }}">
-                <h2 class="gohar-story__title">GOHAR</h2>
+                <h2 class="gohar-story__title">{{ __('site.col_gohar') }}</h2>
                 <p class="gohar-story__copy">{{ $story['copy'] }}</p>
-                <a class="gohar-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="gohar-story__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>
@@ -77,15 +77,15 @@
         <img class="gohar-mobile__image" src="{{ asset($story['mobile_image']) }}" alt="Gohar collection" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
         @if($index === 0)
             <div class="gohar-mobile__content">
-                <h2 class="gohar-mobile__title">GOHAR</h2>
+                <h2 class="gohar-mobile__title">{{ __('site.col_gohar') }}</h2>
                 <p class="gohar-mobile__copy">{{ $story['copy'] }}</p>
-                <a class="gohar-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="gohar-mobile__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>
 @endforeach
 
-<section class="gohar-ending-appointment" aria-label="Book an appointment">
+<section class="gohar-ending-appointment" aria-label="{{ __('site.book_appointment') }}">
     <x-book-appointment />
 </section>
 @endsection

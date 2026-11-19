@@ -1,6 +1,6 @@
 @props([
     'href',
-    'label' => 'SHOP NOW',
+    'label' => null,
 ])
 
 @once
@@ -41,7 +41,7 @@
 
 <a href="{{ $href }}" {{ $attributes->class(['shop-now-btn']) }}>
     @if ($slot->isEmpty())
-        {{ $label }}
+        {{ $label ?: __('site.shop_now') }}
     @else
         {{ $slot }}
     @endif

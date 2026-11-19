@@ -425,15 +425,15 @@
 
         <div class="polychroma-header">
             <!-- <span class="highend-eyebrow">Hanif High Jewellery</span> -->
-            <h2 class="highend-heading">High Jewellery</h2>
+            <h2 class="highend-heading">{{ __('site.high_jewellery') }}</h2>
             <p class="highend-body">
-                Designed as a modern interpretation of a crown, this exceptional high jewellery creation transforms the language of royalty into a necklace of extraordinary brilliance. Layer upon layer of diamonds rise with precision and grace, creating a silhouette that commands attention from every angle.
+                {{ __('site.high_jewellery_intro') }}
             </p>
         </div>
 
         <div class="polychroma-slider-wrapper">
 
-            <button type="button" class="arrow-btn left" id="sliderPrev" aria-label="Previous slide">
+            <button type="button" class="arrow-btn left" id="sliderPrev" aria-label="{{ __('site.previous') }}">
                 <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M14.7 6.3a1 1 0 0 1 0 1.4L10.41 12l4.29 4.3a1 1 0 1 1-1.41 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.41 0z"/>
                 </svg>
@@ -489,7 +489,7 @@
               </div>
             </div>
 
-            <button type="button" class="arrow-btn right" id="sliderNext" aria-label="Next slide">
+            <button type="button" class="arrow-btn right" id="sliderNext" aria-label="{{ __('site.next') }}">
                 <svg class="arrow-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M9.3 17.7a1 1 0 0 1 0-1.4L13.59 12 9.3 7.7a1 1 0 1 1 1.41-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.41 0z"/>
                 </svg>
@@ -607,9 +607,10 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
         <div class="infinite-content">
-            <h2 class="highend-heading highend-heading--left highend-heading--no-line">Jewels of the Crown</h2>
+            <h2 class="highend-heading highend-heading--left highend-heading--no-line">{{ __('site.jewels_of_the_crown') }}</h2>
             <p class="highend-body">
-         Behold the “Jewels of the Crown”—an extraordinary necklace that transcends time, crafted for those who rule not just kingdoms, but generations. At its heart rests a majestic above 100ct emerald, cut with unparalleled precision, cradled in a royal crown-inspired base sculpted like the crescent moon. Every curve of this masterpiece is lavished with glittering diamond baguettes, their brilliance orchestrated to dance under moonlight, as if the stars glisten in admiration of its grandeur.            </p>
+                {{ __('site.jewels_of_the_crown_copy') }}
+            </p>
         </div>
 
     </div>
@@ -619,9 +620,9 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="infinite-wrapper infinite-wrapper--image-first-mobile">
 
         <div class="infinite-content">
-            <h2 class="highend-heading highend-heading--left highend-heading--no-line">Timeless Pieces</h2>
+            <h2 class="highend-heading highend-heading--left highend-heading--no-line">{{ __('site.timeless_pieces') }}</h2>
             <p class="highend-body">
-                A symphony composed with the rarest brilliance and timeless allure. Each stone is selected for its depth of colour and character, brought together through generations of craftsmanship into a piece worthy of becoming an heirloom.
+                {{ __('site.timeless_pieces_copy') }}
             </p>
         </div>
 

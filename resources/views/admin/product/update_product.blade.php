@@ -212,6 +212,10 @@
                                                 <h2>Product Details</h2>
                                             </div>
                                             <div class="card-toolbar d-flex flex-wrap align-items-center gap-5 ms-auto">
+                                                <div class="btn-group" role="group" aria-label="Market selector">
+                                                    <button type="button" class="btn btn-sm btn-primary" id="marketPkBtn" data-market="pk">Pakistan</button>
+                                                    <button type="button" class="btn btn-sm btn-light" id="marketUaeBtn" data-market="uae">UAE</button>
+                                                </div>
                                                 <div class="form-check form-switch form-check-custom form-check-solid mb-0">
                                                     <input class="form-check-input" type="checkbox" id="onlineStoreFieldsToggle">
                                                     <label class="form-check-label" for="onlineStoreFieldsToggle">Online Shopping Store</label>
@@ -228,25 +232,51 @@
                                         </div>
                                         <div class="card-body pt-0">
                                             <div id="collectionsProductFields">
-                                                <div class="mb-10 fv-row">
-                                                    <label class="required form-label">Product Name</label>
-                                                    <input type="text" name="name" id="product_name" class="form-control mb-2" placeholder="Product name" value="{{ $product->name }}" required/>
+                                                <div id="marketPkDetails">
+                                                    <div class="mb-10 fv-row">
+                                                        <label class="required form-label">Product Name (Pakistan)</label>
+                                                        <input type="text" name="name" id="product_name" class="form-control mb-2" placeholder="Product name" value="{{ old('name', $product->name) }}" required/>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Description (Pakistan)</label>
+                                                        <div id="kt_ecommerce_add_product_description" name="description" class="min-h-200px mb-2">{!! old('description', $product->description) !!}</div>
+                                                        <input type="hidden" name="description" id="description">
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <label class="form-label">Description</label>
-                                                    <div id="kt_ecommerce_add_product_description" name="description" class="min-h-200px mb-2">{!! $product['description'] !!}</div>
-                                                    <input type="hidden" name="description" id="description">
+                                                <div id="marketUaeDetails" class="d-none">
+                                                    <div class="mb-10 fv-row">
+                                                        <label class="form-label">Product Name (UAE)</label>
+                                                        <input type="text" name="uae_name" id="uae_product_name" class="form-control mb-2" placeholder="UAE product name" value="{{ old('uae_name', $product->uae_name) }}">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Description (UAE)</label>
+                                                        <div id="kt_ecommerce_uae_description" class="min-h-200px mb-2">{!! old('uae_description', $product->uae_description) !!}</div>
+                                                        <input type="hidden" name="uae_description" id="uae_description">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div id="onlineStoreProductFields" class="d-none">
-                                                <div class="mb-10 fv-row">
-                                                    <label class="form-label">Product Name</label>
-                                                    <input type="text" name="online_store_name" id="online_store_name" class="form-control mb-2" placeholder="Product name for Online Shopping Store" value="{{ old('online_store_name', $product->online_store_name) }}">
+                                                <div id="marketPkOnlineDetails">
+                                                    <div class="mb-10 fv-row">
+                                                        <label class="form-label">Online Store Name (Pakistan)</label>
+                                                        <input type="text" name="online_store_name" id="online_store_name" class="form-control mb-2" placeholder="Pakistan online store name" value="{{ old('online_store_name', $product->online_store_name) }}">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Online Store Description (Pakistan)</label>
+                                                        <div id="kt_ecommerce_online_store_description" class="min-h-200px mb-2">{!! old('online_store_description', $product->online_store_description) !!}</div>
+                                                        <input type="hidden" name="online_store_description" id="online_store_description">
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <label class="form-label">Description</label>
-                                                    <div id="kt_ecommerce_online_store_description" class="min-h-200px mb-2">{!! old('online_store_description', $product->online_store_description) !!}</div>
-                                                    <input type="hidden" name="online_store_description" id="online_store_description">
+                                                <div id="marketUaeOnlineDetails" class="d-none">
+                                                    <div class="mb-10 fv-row">
+                                                        <label class="form-label">Online Store Name (UAE)</label>
+                                                        <input type="text" name="uae_online_store_name" id="uae_online_store_name" class="form-control mb-2" placeholder="UAE online store name" value="{{ old('uae_online_store_name', $product->uae_online_store_name) }}">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Online Store Description (UAE)</label>
+                                                        <div id="kt_ecommerce_uae_online_store_description" class="min-h-200px mb-2">{!! old('uae_online_store_description', $product->uae_online_store_description) !!}</div>
+                                                        <input type="hidden" name="uae_online_store_description" id="uae_online_store_description">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -269,32 +299,27 @@
                                             <div class="card-body pt-0">
                                                 <div class="mb-10 fv-row">
                                                     <label class="form-label">Base Price</label>
-                                                    <div class="row g-5">
+                                                    <div class="row g-5" id="marketPkPricing">
                                                         <div class="col-md-6">
                                                             <label class="form-label required">PKR</label>
                                                             <div class="input-group mb-2">
                                                                 <span class="input-group-text">PKR</span>
                                                                 <input type="number" name="price" class="form-control" placeholder="Amount in PKR" value="{{ old('price', $product->price) }}" min="0" step="0.01" required />
                                                             </div>
-                                                            <div class="text-muted fs-7">Price in Pakistani Rupee.</div>
+                                                            <div class="text-muted fs-7">Pakistan price (PKR).</div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Diamond Price</label>
                                                             <input type="number" name="diamond_price" class="form-control" placeholder="e.g. 97" value="{{ old('diamond_price', $product->diamond_price) }}" min="0" step="0.01" />
-                                                            <div class="text-muted fs-7">For diamond products only (used in auto pricing).</div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label class="form-label">Watch Rate</label>
-                                                            <input type="number" name="watch_rate" class="form-control" placeholder="Watch price in CHF" value="{{ old('watch_rate', $product->watch_rate) }}" min="0" step="0.01" />
-                                                            <div class="text-muted fs-7">For watch products only. CHF, discount and GST are taken from Watch Pricing settings.</div>
+                                                            <div class="text-muted fs-7">Pakistan diamond price (auto pricing).</div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="form-label">Gold Weight (grams)</label>
                                                             <input type="number" name="gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('gold_weight', $product->gold_weight) }}" min="0" step="0.001" />
-                                                            <div class="text-muted fs-7">Weight in grams. Used in auto price calculation (gold &amp; diamond).</div>
+                                                            <div class="text-muted fs-7">Pakistan gold weight in grams.</div>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label class="form-label">Jewellery Service</label>
+                                                            <label class="form-label">Pakistan Jewellery Service</label>
                                                             <select name="gold_service_id" class="form-select">
                                                                 @foreach($goldServices as $service)
                                                                     <option value="{{ $service->id }}" @selected((string) old('gold_service_id', $product->gold_service_id ?? $goldServices->firstWhere('slug', 'fine')?->id) === (string) $service->id)>
@@ -302,16 +327,106 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                            <div class="text-muted fs-7">Controls the weight threshold and OC Final pricing rule.</div>
+                                                            <div class="text-muted fs-7">Pakistan gold services (Manage Gold Rates — Pakistan).</div>
                                                         </div>
-                                                        <!-- <div class="col-md-6">
-                                                            <label class="form-label required">AED</label>
+                                                    </div>
+                                                    <div class="row g-5 d-none" id="marketUaePricing">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">UAE Price (AED)</label>
                                                             <div class="input-group mb-2">
                                                                 <span class="input-group-text">AED</span>
                                                                 <input type="number" name="price_aed" class="form-control" placeholder="Amount in AED" value="{{ old('price_aed', $product->price_aed) }}" min="0" step="0.01" />
                                                             </div>
-                                                            <div class="text-muted fs-7">Price in United Arab Emirates Dirham.</div>
-                                                        </div> -->
+                                                            <div class="text-muted fs-7">Fallback AED if live Dubai gold rate + jewellery service cannot calculate.</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Diamond Price (UAE)</label>
+                                                            <input type="number" name="uae_diamond_price" class="form-control" placeholder="e.g. 97" value="{{ old('uae_diamond_price', $product->uae_diamond_price) }}" min="0" step="0.01" />
+                                                            <div class="text-muted fs-7">UAE diamond price (auto pricing).</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Gold Weight (g) UAE</label>
+                                                            <input type="number" name="uae_gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('uae_gold_weight', $product->uae_gold_weight) }}" min="0" step="0.001" />
+                                                            <div class="text-muted fs-7">UAE gold weight in grams.</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Dubai Jewellery Service</label>
+                                                            <select name="uae_gold_service_id" class="form-select">
+                                                                <option value="">None</option>
+                                                                @foreach(($uaeGoldServices ?? collect()) as $service)
+                                                                    <option value="{{ $service->id }}" @selected((string) old('uae_gold_service_id', $product->uae_gold_service_id) === (string) $service->id)>
+                                                                        {{ $service->name }}{{ $service->is_active ? '' : ' (Inactive)' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="text-muted fs-7">Dubai Classic / Fine / High End services — separate limits from Pakistan (Manage Gold Rates UAE).</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-5 d-none" id="marketPkOnlinePricing">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Store PKR</label>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">PKR</span>
+                                                                <input type="number" name="online_store_price" class="form-control" placeholder="Online store PKR" value="{{ old('online_store_price', $product->online_store_price) }}" min="0" step="0.01" />
+                                                            </div>
+                                                            <div class="text-muted fs-7">Online Shopping Store Pakistan price.</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Diamond Price (PK)</label>
+                                                            <input type="number" name="online_store_diamond_price" class="form-control" placeholder="e.g. 97" value="{{ old('online_store_diamond_price', $product->online_store_diamond_price) }}" min="0" step="0.01" />
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Gold Weight (g) PK</label>
+                                                            <input type="number" name="online_store_gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('online_store_gold_weight', $product->online_store_gold_weight) }}" min="0" step="0.001" />
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Jewellery Service (PK)</label>
+                                                            <select name="online_store_gold_service_id" class="form-select">
+                                                                <option value="">Same as Collections / None</option>
+                                                                @foreach($goldServices as $service)
+                                                                    <option value="{{ $service->id }}" @selected((string) old('online_store_gold_service_id', $product->online_store_gold_service_id) === (string) $service->id)>
+                                                                        {{ $service->name }}{{ $service->is_active ? '' : ' (Inactive)' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-5 d-none" id="marketUaeOnlinePricing">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Store AED</label>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">AED</span>
+                                                                <input type="number" name="online_store_price_aed" class="form-control" placeholder="Online store AED" value="{{ old('online_store_price_aed', $product->online_store_price_aed) }}" min="0" step="0.01" />
+                                                            </div>
+                                                            <div class="text-muted fs-7">Fallback only if live Dubai gold rate + jewellery service cannot calculate. Prefer Online Gold Weight + Dubai Jewellery Service.</div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Diamond Price (UAE)</label>
+                                                            <input type="number" name="uae_online_store_diamond_price" class="form-control" placeholder="e.g. 97" value="{{ old('uae_online_store_diamond_price', $product->uae_online_store_diamond_price) }}" min="0" step="0.01" />
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Gold Weight (g) UAE</label>
+                                                            <input type="number" name="uae_online_store_gold_weight" class="form-control" placeholder="e.g. 5.25" value="{{ old('uae_online_store_gold_weight', $product->uae_online_store_gold_weight) }}" min="0" step="0.001" />
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Online Dubai Jewellery Service</label>
+                                                            <select name="uae_online_store_gold_service_id" class="form-select">
+                                                                <option value="">Same as Collections / None</option>
+                                                                @foreach(($uaeGoldServices ?? collect()) as $service)
+                                                                    <option value="{{ $service->id }}" @selected((string) old('uae_online_store_gold_service_id', $product->uae_online_store_gold_service_id) === (string) $service->id)>
+                                                                        {{ $service->name }}{{ $service->is_active ? '' : ' (Inactive)' }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="text-muted fs-7">Online store uses Dubai jewellery service limits (AED).</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-5 mt-2">
+                                                        <div class="col-md-6">
+                                                            <label class="form-label">Watch Rate</label>
+                                                            <input type="number" name="watch_rate" class="form-control" placeholder="Watch price in CHF" value="{{ old('watch_rate', $product->watch_rate) }}" min="0" step="0.01" />
+                                                            <div class="text-muted fs-7">Shared for watches. CHF, discount and GST from Watch Pricing settings.</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="fv-row mb-10">
@@ -487,11 +602,21 @@
         }
     }
      document.getElementById('kt_ecommerce_add_product_form').addEventListener('submit', function() {
-        var editorContent = document.querySelector('#kt_ecommerce_add_product_description .ql-editor').innerHTML;
-        document.getElementById('description').value = editorContent;
+        var pkContainer = document.querySelector('#kt_ecommerce_add_product_description');
+        var pkEditor = pkContainer && pkContainer.querySelector('.ql-editor');
+        document.getElementById('description').value = pkEditor ? pkEditor.innerHTML : (pkContainer ? pkContainer.innerHTML : '');
 
-        var osEditor = document.querySelector('#kt_ecommerce_online_store_description .ql-editor');
-        document.getElementById('online_store_description').value = osEditor ? osEditor.innerHTML : '';
+        var uaeContainer = document.querySelector('#kt_ecommerce_uae_description');
+        var uaeEditor = uaeContainer && uaeContainer.querySelector('.ql-editor');
+        document.getElementById('uae_description').value = uaeEditor ? uaeEditor.innerHTML : (uaeContainer ? uaeContainer.innerHTML : '');
+
+        var osContainer = document.querySelector('#kt_ecommerce_online_store_description');
+        var osEditor = osContainer && osContainer.querySelector('.ql-editor');
+        document.getElementById('online_store_description').value = osEditor ? osEditor.innerHTML : (osContainer ? osContainer.innerHTML : '');
+
+        var uaeOsContainer = document.querySelector('#kt_ecommerce_uae_online_store_description');
+        var uaeOsEditor = uaeOsContainer && uaeOsContainer.querySelector('.ql-editor');
+        document.getElementById('uae_online_store_description').value = uaeOsEditor ? uaeOsEditor.innerHTML : (uaeOsContainer ? uaeOsContainer.innerHTML : '');
     });
 
     (function () {
@@ -499,6 +624,54 @@
         var collectionsFields = document.getElementById('collectionsProductFields');
         var onlineStoreFields = document.getElementById('onlineStoreProductFields');
         var productName = document.getElementById('product_name');
+        var pkBtn = document.getElementById('marketPkBtn');
+        var uaeBtn = document.getElementById('marketUaeBtn');
+        var pkDetails = document.getElementById('marketPkDetails');
+        var uaeDetails = document.getElementById('marketUaeDetails');
+        var pkOnlineDetails = document.getElementById('marketPkOnlineDetails');
+        var uaeOnlineDetails = document.getElementById('marketUaeOnlineDetails');
+        var pkPricing = document.getElementById('marketPkPricing');
+        var uaePricing = document.getElementById('marketUaePricing');
+        var pkOnlinePricing = document.getElementById('marketPkOnlinePricing');
+        var uaeOnlinePricing = document.getElementById('marketUaeOnlinePricing');
+        var currentMarket = 'pk';
+
+        function focusEditor(selector) {
+            var editor = document.querySelector(selector);
+            if (editor) {
+                editor.setAttribute('contenteditable', 'true');
+                editor.focus();
+            }
+        }
+
+        function setMarket(market) {
+            currentMarket = market;
+            var isUae = market === 'uae';
+            var onlineMode = toggle.checked;
+
+            pkDetails.classList.toggle('d-none', isUae);
+            uaeDetails.classList.toggle('d-none', !isUae);
+            if (pkOnlineDetails) pkOnlineDetails.classList.toggle('d-none', isUae);
+            if (uaeOnlineDetails) uaeOnlineDetails.classList.toggle('d-none', !isUae);
+
+            pkPricing.classList.toggle('d-none', onlineMode || isUae);
+            uaePricing.classList.toggle('d-none', onlineMode || !isUae);
+            if (pkOnlinePricing) pkOnlinePricing.classList.toggle('d-none', !onlineMode || isUae);
+            if (uaeOnlinePricing) uaeOnlinePricing.classList.toggle('d-none', !onlineMode || !isUae);
+
+            pkBtn.classList.toggle('btn-primary', !isUae);
+            pkBtn.classList.toggle('btn-light', isUae);
+            uaeBtn.classList.toggle('btn-primary', isUae);
+            uaeBtn.classList.toggle('btn-light', !isUae);
+
+            if (isUae) {
+                setTimeout(function () {
+                    focusEditor(onlineMode
+                        ? '#kt_ecommerce_uae_online_store_description .ql-editor'
+                        : '#kt_ecommerce_uae_description .ql-editor');
+                }, 50);
+            }
+        }
 
         function syncProductFieldsView() {
             var onlineStoreMode = toggle.checked;
@@ -507,9 +680,13 @@
             if (productName) {
                 productName.required = !onlineStoreMode;
             }
+            setMarket(currentMarket);
         }
 
+        pkBtn.addEventListener('click', function () { setMarket('pk'); });
+        uaeBtn.addEventListener('click', function () { setMarket('uae'); });
         toggle.addEventListener('change', syncProductFieldsView);
+        setMarket('pk');
         syncProductFieldsView();
     })();
     document.querySelectorAll('input[name="discount_option"]').forEach((radio) => {

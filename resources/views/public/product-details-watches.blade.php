@@ -162,6 +162,7 @@
     $storeContext = request()->boolean('store');
     $displayName = $product->displayName($storeContext);
     $displayDescription = $product->displayDescription($storeContext);
+    $displayCurrency = $product->displayCurrency($storeContext);
 @endphp
 
 <h5 class="card-title product-detail-full-name">
@@ -618,9 +619,9 @@
     $livePrice = $breakdownPrice !== null
         ? (float) $breakdownPrice
         : $product->displayPrice($storeContext);
-    $roundedPrice = round($livePrice, -3);
+    $roundedPrice = \App\Models\Products::roundDisplayPrice($livePrice);
     $regularPrice = (float) data_get($watchPriceBreakdown, 'regular_price', $livePrice);
-    $roundedRegularPrice = round($regularPrice, -3);
+    $roundedRegularPrice = \App\Models\Products::roundDisplayPrice($regularPrice);
     $isJewelleryProduct = optional($product->category)->slug !== 'watches';
     $canShowPrice = $storeContext
         ? ($roundedPrice > 0)
@@ -641,14 +642,14 @@
     @if($isWatchSale && $roundedRegularPrice > 0)
         <div class="product-old-price">
             <span class="visually-hidden">Regular price:</span>
-            PKR {{ number_format($roundedRegularPrice, 0, '.', ',') }}
+            {{ $displayCurrency }} {{ number_format($roundedRegularPrice, 0, '.', ',') }}
         </div>
     @endif
     <div class="price-display">
         @if($isWatchSale)
             <span class="visually-hidden">Sale price:</span>
         @endif
-        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+        {{ $displayCurrency }} {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
     @if($isJewelleryProduct)
@@ -2152,7 +2153,7 @@
                     $isFranckMuller = true;
                 }
             @endphp
-            const phoneNumber = @json($isFranckMuller ? '923070222666' : '923070222666');
+            const phoneNumber = @json($appointmentWhatsappPhone);
             const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }

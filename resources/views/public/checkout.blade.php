@@ -1,6 +1,10 @@
 @extends('public.layouts.headerCheckout')
 
 @section('content')
+@php
+    $uaeCheckout = app()->getLocale() === 'ar' || session('market') === 'uae';
+    $checkoutCurrency = $uaeCheckout ? 'AED' : 'PKR';
+@endphp
 <!-- Checkout Progress Indicator -->
 <div class="checkout-progress">
     <div class="container-fluid">
@@ -10,11 +14,11 @@
                     <div class="progress-steps">
                         <div class="step active" id="step1">
                             <span class="step-number">1</span>
-                            <span class="step-label">Shipping</span>
+                            <span class="step-label">{{ __('site.shipping') }}</span>
                         </div>
                         <div class="step" id="step2">
                             <span class="step-number">2</span>
-                            <span class="step-label">Payment</span>
+                            <span class="step-label">{{ __('site.payment') }}</span>
                         </div>
                     </div>
                     <div class="progress-bar">
@@ -34,34 +38,34 @@
                 <!-- Step 1: Shipping Details -->
                 <div class="checkout-step" id="shippingStep">
                     <div class="shipping-section">
-                        <h4 class="mb-4 fw-bold">Shipping Information</h4>
+                        <h4 class="mb-4 fw-bold">{{ __('site.shipping_info') }}</h4>
                         
                         <!-- Delivery Options -->
                         <div class="delivery-options mb-4">
-                            <h5 class="mb-3 fw-bold">Delivery Options</h5>
+                            <h5 class="mb-3 fw-bold">{{ __('site.delivery_options') }}</h5>
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="deliveryOption" id="shipItems" value="ship" checked>
                                 <label class="form-check-label fw-semibold" for="shipItems">
-                                    Ship My Items
+                                    {{ __('site.ship_items') }}
                                 </label>
                             </div>
                         </div>
 
                         <!-- Shipping Address Form -->
                         <div class="shipping-address">
-                            <h5 class="mb-3 fw-bold">Shipping Address</h5>
+                            <h5 class="mb-3 fw-bold">{{ __('site.shipping_address') }}</h5>
                             <form id="shippingForm">
                                 <div class="row">
                                     <div class="col-12 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Title (optional)</label>
+                                            <label class="field-label">{{ __('site.title_optional') }}</label>
                                             <div class="field-container">
                                                 <select class="underline-input" id="title" name="title">
-                                                    <option value="">Select Title</option>
-                                                    <option value="Mr">Mr</option>
-                                                    <option value="Mrs">Mrs</option>
-                                                    <option value="Ms">Ms</option>
-                                                    <option value="Dr">Dr</option>
+                                                    <option value="">{{ __('site.select_title') }}</option>
+                                                    <option value="Mr">{{ __('site.mr') }}</option>
+                                                    <option value="Mrs">{{ __('site.mrs') }}</option>
+                                                    <option value="Ms">{{ __('site.ms') }}</option>
+                                                    <option value="Dr">{{ __('site.dr') }}</option>
                                                 </select>
                                                 <div class="dropdown-arrow">▼</div>
                                             </div>
@@ -69,25 +73,25 @@
                                     </div>
                                     <div class="col-md-6 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">First Name</label>
+                                            <label class="field-label">{{ __('site.first_name') }}</label>
                                             <input type="text" class="underline-input" id="firstName" name="firstName" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Last Name</label>
+                                            <label class="field-label">{{ __('site.last_name') }}</label>
                                             <input type="text" class="underline-input" id="lastName" name="lastName" required>
                                         </div>
                                     </div>
                                     <div class="col-12 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Email Address</label>
+                                            <label class="field-label">{{ __('site.email') }}</label>
                                             <input type="email" class="underline-input" id="email" name="email" required>
                                         </div>
                                     </div>
      <div class="col-12 mb-1">
     <div class="underline-field">
-        <label class="field-label">Phone Number</label>
+        <label class="field-label">{{ __('site.phone') }}</label>
         <input 
             type="tel" 
             class="underline-input" 
@@ -104,38 +108,48 @@
 </div>
                                     <div class="col-12 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Address 1</label>
+                                            <label class="field-label">{{ __('site.address_1') }}</label>
                                             <input type="text" class="underline-input" id="address1" name="address1" required>
                                         </div>
                                     </div>
                                     <div class="col-12 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Address 2 (optional)</label>
+                                            <label class="field-label">{{ __('site.address_2') }}</label>
                                             <input type="text" class="underline-input" id="address2" name="address2">
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">Zip Code</label>
+                                            <label class="field-label">{{ __('site.zip') }}</label>
                                             <input type="text" class="underline-input" id="zipCode" name="zipCode" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">City</label>
+                                            <label class="field-label">{{ __('site.city') }}</label>
                                             <input type="text" class="underline-input" id="city" name="city" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-1">
                                         <div class="underline-field">
-                                            <label class="field-label">State</label>
+                                            <label class="field-label">{{ __('site.state') }}</label>
                                             <div class="field-container">
                                                 <select class="underline-input" id="state" name="state" required>
-                                                    <option value="">Select State</option>
-                                                    <option value="Punjab">Punjab</option>
-                                                    <option value="Sindh">Sindh</option>
-                                                    <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
-                                                    <option value="Balochistan">Balochistan</option>
+                                                    <option value="">{{ __('site.select_state') }}</option>
+                                                    @if(app()->getLocale() === 'ar' || session('market') === 'uae')
+                                                        <option value="Abu Dhabi">{{ __('site.emirate_abu_dhabi') }}</option>
+                                                        <option value="Dubai">{{ __('site.emirate_dubai') }}</option>
+                                                        <option value="Sharjah">{{ __('site.emirate_sharjah') }}</option>
+                                                        <option value="Ras Al Khaimah">{{ __('site.emirate_ras_al_khaimah') }}</option>
+                                                        <option value="Fujairah">{{ __('site.emirate_fujairah') }}</option>
+                                                        <option value="Umm Al Quwain">{{ __('site.emirate_umm_al_quwain') }}</option>
+                                                        <option value="Ajman">{{ __('site.emirate_ajman') }}</option>
+                                                    @else
+                                                        <option value="Punjab">Punjab</option>
+                                                        <option value="Sindh">Sindh</option>
+                                                        <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
+                                                        <option value="Balochistan">Balochistan</option>
+                                                    @endif
                                                 </select>
                                                 <div class="dropdown-arrow">▼</div>
                                             </div>
@@ -148,7 +162,7 @@
                     
                     <div class="step-actions mt-4">
                         <button type="button" class="btn btn-dark px-5 py-3 fw-bold" onclick="nextStep()">
-                            Continue to Payment <i class="fas fa-arrow-right ms-2"></i>
+                            {{ __('site.continue_payment') }} <i class="fas fa-arrow-right ms-2"></i>
                         </button>
                     </div>
                 </div>
@@ -156,33 +170,51 @@
                 <!-- Step 2: Payment Details -->
                 <div class="checkout-step" id="paymentStep" style="display: none;">
                     <div class="payment-section">
-                        <h4 class="mb-4 fw-bold">Payment Information</h4>
+                        <h4 class="mb-4 fw-bold">{{ __('site.payment_info') }}</h4>
                         
+                        @if($uaeCheckout)
+                            <div class="payment-method mb-4">
+                                <h5 class="mb-3 fw-bold">{{ __('site.checkout_contact_title') }}</h5>
+                                <div class="payment-option p-3" style="background:#f7f7f7;border-radius:8px;">
+                                    <p class="mb-2">{{ __('site.checkout_contact_note') }}</p>
+                                    <a href="tel:+971501752234" dir="ltr" style="unicode-bidi:isolate;font-weight:600;color:#111;text-decoration:none;">
+                                        {{ $appointmentPhoneDisplay ?? '+971 50 175 2234' }}
+                                    </a>
+                                    <div class="mt-3">
+                                        <a href="{{ $appointmentWhatsappUrl }}" class="btn btn-dark px-4 py-2" target="_blank" rel="noopener">
+                                            {{ __('site.checkout_contact_title') }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="paymentMethod" value="contact">
+                            </div>
+                        @else
                         <div class="payment-method mb-4">
-                            <h5 class="mb-3 fw-bold">Payment Gateway</h5>
+                            <h5 class="mb-3 fw-bold">{{ __('site.payment_gateway') }}</h5>
                             <div class="payment-option">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="paymentMethod" id="bankAlfalah" value="bank_alfalah" checked>
                                     <label class="form-check-label fw-semibold" for="bankAlfalah">
-                                        Pay Online with Bank Alfalah
+                                        {{ __('site.pay_alfalah') }}
                                     </label>
                                 </div>
-                                <p class="text-muted mt-2">You will be redirected to Bank Alfalah's secure payment page.</p>
+                                <p class="text-muted mt-2">{{ __('site.alfalah_note') }}</p>
                             </div>
 
                             <div id="alfalahTransactionOptions" class="mt-3">
-                                <label for="transactionTypeId" class="form-label fw-semibold">Payment Type</label>
+                                <label for="transactionTypeId" class="form-label fw-semibold">{{ __('site.payment_type') }}</label>
                                 <select id="transactionTypeId" name="transactionTypeId" class="form-select">
-                                    <option value="">Select payment type</option>
-                                    <option value="1">Alfa Wallet</option>
-                                    <option value="2">Alfalah Bank Account</option>
-                                    <option value="3">Credit/Debit Card</option>
+                                    <option value="">{{ __('site.select_payment_type') }}</option>
+                                    <option value="1">{{ __('site.alfa_wallet') }}</option>
+                                    <option value="2">{{ __('site.alfalah_account') }}</option>
+                                    <option value="3">{{ __('site.card') }}</option>
 
 
 
                                 </select>
                             </div>
                         </div>
+                        @endif
 
                         <!-- Payment Receipt Upload -->
                         <!-- <div class="payment-receipt mb-4">
@@ -219,10 +251,10 @@
                     
                     <div class="step-actions mt-4">
                         <button type="button" class="btn btn-outline-dark px-4 py-3 fw-bold me-3" onclick="previousStep()">
-                            <i class="fas fa-arrow-left me-2"></i> Back to Shipping
+                            <i class="fas fa-arrow-left me-2"></i> {{ __('site.back_shipping') }}
                         </button>
                         <button type="button" class="btn btn-dark px-5 py-3 fw-bold" id="completeOrderButton" onclick="processCheckout()">
-                            Complete Order <i class="fas fa-check ms-2"></i>
+                            {{ __('site.complete_order') }} <i class="fas fa-check ms-2"></i>
                         </button>
                     </div>
                 </div>
@@ -258,7 +290,7 @@
                 : null;
 
             if ($watchPriceBreakdown !== null) {
-                return max(0, round((float) $watchPriceBreakdown['final_price'], -3));
+                return max(0, \App\Models\Products::roundDisplayPrice((float) $watchPriceBreakdown['final_price']));
             }
 
             $price = (float) $product->displayPrice($forStore);
@@ -272,7 +304,7 @@
             // Use the same rounded unit price that is shown to the customer.
             // Otherwise a displayed PKR 107,000 price such as 106,714 would
             // incorrectly total PKR 747,000 for a quantity of seven.
-            return max(0, round($price, -3));
+            return max(0, \App\Models\Products::roundDisplayPrice($price));
         };
 
         $makeImageUrl = function ($imagePath) {
@@ -305,7 +337,7 @@
                 || !empty($cartItem->solitaire_product_id);
 
             if ($isSolitaire) {
-                $price = (float) round((float) ($cartItem->variant_price ?? 0), -3);
+                $price = (float) \App\Models\Products::roundDisplayPrice((float) ($cartItem->variant_price ?? 0));
             } else {
                 $cartKey = $cartItem->product_id . '_' . ($cartItem->size ?: 'default');
                 $forStore = (bool) data_get(session('cart_store_context', []), $cartKey, false);
@@ -321,7 +353,7 @@
     @endphp
 
     <div class="order-summary" id="checkoutOrderSummary" data-cart-count="{{ $cartItems->count() }}">
-        <h5 class="mb-4 fw-bold">Order Summary</h5>
+        <h5 class="mb-4 fw-bold">{{ __('site.order_summary') }}</h5>
         @if($cartItems->count() > 0)
 
             @foreach($cartItems as $item)
@@ -409,14 +441,14 @@
                     |--------------------------------------------------------------------------
                     */
                     if ($isSolitaire) {
-                        $price = (float) round((float) ($item->variant_price ?? 0), -3);
+                        $price = (float) \App\Models\Products::roundDisplayPrice((float) ($item->variant_price ?? 0));
                         $basePrice = (float) ($item->old_price ?? $price);
                         $discountPercent = $item->discount_percent ?? null;
 
                         $hasDiscount = $basePrice > $price;
                         $discountText = $discountPercent
                             ? $discountPercent . '% OFF'
-                            : ($hasDiscount ? 'PKR ' . number_format(($basePrice - $price), 0, '.', ',') . ' OFF' : '');
+                            : ($hasDiscount ? $checkoutCurrency . ' ' . number_format(($basePrice - $price), 0, '.', ',') . ' OFF' : '');
 
                     } else {
                         $watchPriceBreakdown = $product && $product->isWatchProduct()
@@ -424,9 +456,9 @@
                             : null;
 
                         if ($watchPriceBreakdown !== null) {
-                            $price = max(0, round((float) $watchPriceBreakdown['final_price'], -3));
+                            $price = max(0, \App\Models\Products::roundDisplayPrice((float) $watchPriceBreakdown['final_price']));
                             $basePrice = !empty($watchPriceBreakdown['is_sale'])
-                                ? max(0, round((float) $watchPriceBreakdown['regular_price'], -3))
+                                ? max(0, \App\Models\Products::roundDisplayPrice((float) $watchPriceBreakdown['regular_price']))
                                 : $price;
                             $hasDiscount = !empty($watchPriceBreakdown['is_sale'])
                                 && $basePrice > $price;
@@ -443,7 +475,7 @@
                             } elseif ((int) ($product->discount_type ?? 0) === 3 && (float) ($product->discounted_price ?? 0) > 0) {
                                 $hasDiscount = true;
                                 $diff = max(0, ($basePrice - $product->discounted_price));
-                                $discountText = $diff > 0 ? 'PKR ' . number_format($diff, 0, '.', ',') . ' OFF' : '';
+                                $discountText = $diff > 0 ? $checkoutCurrency . ' ' . number_format($diff, 0, '.', ',') . ' OFF' : '';
                             }
                         }
                     }
@@ -484,14 +516,14 @@
 
                                 @if($item->inscription_text)
                                     <div class="item-size mb-1" style="font-size: 0.85rem; color: #666666;">
-                                        Inscription: {{ $item->inscription_text }}
+                                        {{ __('site.inscription') }}: {{ $item->inscription_text }}
                                     </div>
                                 @endif
                             @else
                                 @if($requiresAsianRingSize)
                                     <div class="checkout-ring-size mb-2">
                                         <label for="checkout-ring-size-{{ $item->id }}" class="checkout-ring-size-label">
-                                            Asian Ring Size
+                                            {{ __('site.asian_ring_size') }}
                                         </label>
                                         <select id="checkout-ring-size-{{ $item->id }}"
                                                 class="checkout-ring-size-select"
@@ -499,7 +531,7 @@
                                                 data-original-size="{{ $item->size }}"
                                                 aria-label="Asian ring size for {{ $productName }}"
                                                 required>
-                                            <option value="" disabled @selected(!$item->size)>Select size</option>
+                                            <option value="" disabled @selected(!$item->size)>{{ __('site.select_size') }}</option>
                                             @foreach($asianRingSizes as $ringSize)
                                                 <option value="{{ $ringSize }}" @selected((string) $item->size === (string) $ringSize)>
                                                     {{ $ringSize }}
@@ -519,12 +551,12 @@
                                 @if($showStrike)
                                     <span class="original-price"
                                           style="text-decoration: line-through; color: #6c757d; font-size: 0.9rem; margin-right: 0.5rem;">
-                                        PKR {{ number_format(round($basePrice, -3), 0, '.', ',') }}
+                                        {{ $checkoutCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($basePrice), 0, '.', ',') }}
                                     </span>
                                 @endif
 
                                 <span class="current-price fw-bold">
-                                    PKR {{ number_format(round($price, -3), 0, '.', ',') }}
+                                    {{ $checkoutCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($price), 0, '.', ',') }}
                                 </span>
 
                                 @if($hasDiscount && $discountText)
@@ -535,9 +567,9 @@
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="text-muted">Quantity</span>
+                                <span class="text-muted">{{ __('site.quantity') }}</span>
                                 <span class="fw-bold checkout-item-subtotal">
-                                    PKR {{ number_format(round($itemSubtotal, -3), 0, '.', ',') }}
+                                    {{ $checkoutCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($itemSubtotal), 0, '.', ',') }}
                                 </span>
                             </div>
 
@@ -562,7 +594,7 @@
                                 </div>
                                 <button type="button" class="checkout-remove-item" aria-label="Remove {{ $productName }} from order">
                                     <i class="fas fa-trash-alt" aria-hidden="true"></i>
-                                    <span>Remove</span>
+                                    <span>{{ __('site.remove') }}</span>
                                 </button>
                                 <small class="checkout-item-action-status" aria-live="polite"></small>
                             </div>
@@ -573,8 +605,8 @@
 
         @else
             <div class="text-center py-4">
-                <p class="text-muted">Your cart is empty</p>
-                <a href="{{ route('cart') }}" class="btn btn-outline-dark">Continue Shopping</a>
+                <p class="text-muted">{{ __('site.empty_cart') }}</p>
+                <a href="{{ route('cart') }}" class="btn btn-outline-dark">{{ __('site.continue_shopping') }}</a>
             </div>
         @endif
 
@@ -584,25 +616,25 @@
 
             <div class="order-totals">
                 <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal:</span>
+                    <span>{{ __('site.subtotal') }}:</span>
                     <span class="fw-bold" id="checkoutSubtotalValue">
-                        PKR {{ number_format(round($subtotal, -3), 0, '.', ',') }}
+                        {{ $checkoutCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($subtotal), 0, '.', ',') }}
                     </span>
                 </div>
 
                 <!-- <div class="d-flex justify-content-between mb-2">
                     <span>Express Delivery with Signature:</span>
                     <span class="fw-bold" id="checkoutShippingValue" data-shipping="{{ $shipping }}">
-                        PKR {{ number_format($shipping, 0, '.', ',') }}
+                        {{ $checkoutCurrency }} {{ number_format($shipping, 0, '.', ',') }}
                     </span>
                 </div> -->
 
                 <hr class="my-3">
 
                 <div class="d-flex justify-content-between">
-                    <span class="fw-bold">Total Amount:</span>
+                    <span class="fw-bold">{{ __('site.total_amount') }}:</span>
                     <span class="fw-bold fs-5" id="checkoutTotalValue">
-                        PKR {{ number_format(round($total, -3), 0, '.', ',') }}
+                        {{ $checkoutCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($total), 0, '.', ',') }}
                     </span>
                 </div>
             </div>
@@ -1742,7 +1774,7 @@ function setCheckoutItemControlsDisabled(actions, disabled) {
 
 function formatCheckoutMoney(amount) {
     const roundedAmount = Math.round(Number(amount || 0) / 1000) * 1000;
-    return `PKR ${roundedAmount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    return @json($checkoutCurrency) + ' ' + roundedAmount.toLocaleString('en-US', { maximumFractionDigits: 0 });
 }
 
 function flashCheckoutValue(element) {
@@ -1783,8 +1815,8 @@ function showCheckoutEmptyState() {
     if (orderSummary && !orderSummary.querySelector('.checkout-empty-state')) {
         orderSummary.insertAdjacentHTML('beforeend', `
             <div class="checkout-empty-state text-center py-4">
-                <p class="text-muted">Your cart is empty</p>
-                <a href="{{ route('cart') }}" class="btn btn-outline-dark">Continue Shopping</a>
+                <p class="text-muted">{{ __('site.empty_cart') }}</p>
+                <a href="{{ route('cart') }}" class="btn btn-outline-dark">{{ __('site.continue_shopping') }}</a>
             </div>
         `);
         orderSummary.dataset.cartCount = '0';
@@ -1941,7 +1973,8 @@ function processCheckout() {
     if (deliveryOption) {
         formData.set('deliveryOption', deliveryOption.value || deliveryOption.id);
     }
-    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')
+        || document.querySelector('input[type="hidden"][name="paymentMethod"]');
     if (!paymentMethod) {
         alert('Please select a payment method.');
         return;
@@ -1963,7 +1996,7 @@ function processCheckout() {
     checkoutSubmissionInProgress = true;
     if (completeOrderButton) {
         completeOrderButton.disabled = true;
-        completeOrderButton.textContent = 'Processing...';
+        completeOrderButton.textContent = @json(__('site.processing'));
     }
 
     fetch("{{ route('checkout.process') }}", {
@@ -1997,7 +2030,7 @@ function processCheckout() {
         checkoutSubmissionInProgress = false;
         if (completeOrderButton) {
             completeOrderButton.disabled = false;
-            completeOrderButton.innerHTML = 'Complete Order <i class="fas fa-check ms-2"></i>';
+            completeOrderButton.innerHTML = '{{ __('site.complete_order') }} <i class="fas fa-check ms-2"></i>';
         }
 
         if (error.errors) {
@@ -2113,25 +2146,38 @@ const errorMsg = document.getElementById('phoneError');
 phoneInput.addEventListener('input', function () {
     let value = this.value.replace(/\D/g, ''); // remove non-digits
 
-    // Auto convert 03 → +92
-    if (value.startsWith('03')) {
-        value = '92' + value.substring(1);
-    }
+    const isUae = @json(($siteMarket ?? 'pk') === 'uae');
 
-    // Auto convert 042 / 021 → +92
-    if (value.startsWith('0') && !value.startsWith('03')) {
-        value = '92' + value.substring(1);
-    }
+    if (isUae) {
+        // Auto convert 05… → +971
+        if (value.startsWith('0')) {
+            value = '971' + value.substring(1);
+        }
+        if (value.startsWith('971')) {
+            value = '+' + value;
+        }
+    } else {
+        // Auto convert 03 → +92
+        if (value.startsWith('03')) {
+            value = '92' + value.substring(1);
+        }
 
-    // Add + sign
-    if (value.startsWith('92')) {
-        value = '+' + value;
+        // Auto convert 042 / 021 → +92
+        if (value.startsWith('0') && !value.startsWith('03')) {
+            value = '92' + value.substring(1);
+        }
+
+        if (value.startsWith('92')) {
+            value = '+' + value;
+        }
     }
 
     this.value = value;
 
     // Validation
-    const regex = /^(?:\+92)(?:3\d{9}|[1-9]\d{8,10})$/;
+    const regex = isUae
+        ? /^(?:\+971)(?:5\d{8}|[2-9]\d{7,8})$/
+        : /^(?:\+92)(?:3\d{9}|[1-9]\d{8,10})$/;
 
     if (!regex.test(this.value)) {
         errorMsg.style.display = 'block';

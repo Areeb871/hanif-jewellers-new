@@ -7,8 +7,8 @@
         ['desktop' => 'assets/f_assets/image/Gehwana/desktop3.png', 'mobile' => 'assets/f_assets/image/Gehwana/mob3.png', 'show_copy' => false],
     ];
 
-    $gehnawaCopy = "Gehnawa fuses modern day bridals with their heritage jewels. Rooting from 'Gehna' (meaning jewels) and 'Pehnawa' meaning 'clothes', gehnawa is the latest essence table to be dressed in gold, head to toe; which is every bridal's dream attire!";
-    $appointmentUrl = 'https://api.whatsapp.com/send?phone=923070222666&text=' . rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.');
+    $gehnawaCopy = __('site.gehnawa_copy');
+    $appointmentUrl = $appointmentWhatsappUrl;
 
     $lookGroups = [
         ['id' => 'gehnawaCarousel-6', 'column' => 'col-md-6', 'directory' => 'Look 6', 'pattern' => 'Gehwana %d.jpg', 'alt' => 'Gehnawa look 6'],
@@ -84,15 +84,15 @@
 
             @if($slide['show_copy'])
                 <div class="gehnawa-campaign__panel d-none d-lg-flex">
-                    <h2 class="gehnawa-campaign__title">GEHNAWA</h2>
+                    <h2 class="gehnawa-campaign__title">{{ __('site.col_gehnawa') }}</h2>
                     <p class="gehnawa-campaign__copy">{{ $gehnawaCopy }}</p>
-                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
 
                 <div class="gehnawa-campaign__mobile-panel d-lg-none">
-                    <h2 class="gehnawa-campaign__title">GEHNAWA</h2>
+                    <h2 class="gehnawa-campaign__title">{{ __('site.col_gehnawa') }}</h2>
                     <p class="gehnawa-campaign__copy">{{ $gehnawaCopy }}</p>
-                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                    <a class="gehnawa-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
             @endif
         </div>
@@ -120,7 +120,7 @@
     </div>
 </section>
 
-<section class="gehnawa-ending-appointment" aria-label="Book an appointment">
+<section class="gehnawa-ending-appointment" aria-label="{{ __('site.book_appointment') }}">
     <x-book-appointment />
 </section>
 

@@ -1,22 +1,67 @@
 @extends('public.layouts.header_latest')
 
+@php
+    $market = $market ?? \App\Models\Products::currentMarket();
+    $isUae = $market === 'uae';
+    $dubaiMap = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14431.92745836418!2d55.2970309!3d25.2711955!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe577102cc48998b7!2sHanif%20Jewellery%20%26%20Watches%20LLC!5e0!3m2!1sen!2sae!4v1668697188869!5m2!1sen!2sae';
+    $lahoreMap = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6466.438102655719!2d74.350692!3d31.509776!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190451c8bbf6b5%3A0x1323e5523eee96d8!2sHanif%20Jewellery%20and%20Watches!5e1!3m2!1sen!2us!4v1746935949665!5m2!1sen!2us';
+    $defaultMap = $isUae ? $dubaiMap : $lahoreMap;
+    $defaultCity = $isUae ? 'dubai' : 'lahore';
+    $defaultCityLabel = $isUae ? __('site.city_dubai') : __('site.city_lahore');
+    $storeCards = [
+        ['image' => 'assets/f_assets/image/store_images/MMA LHR.jpg', 'title' => __('site.card_flagship_lahore')],
+        ['image' => 'assets/f_assets/image/store_images/F6 ISB.jpg', 'title' => __('site.card_flagship_islamabad')],
+        ['image' => 'assets/f_assets/image/store_images/Dubai.jpg', 'title' => __('site.card_flagship_dubai')],
+        ['image' => 'assets/f_assets/image/store_images/DHA LHR.jpg', 'title' => __('site.card_premium_lahore')],
+        ['image' => 'assets/f_assets/image/store_images/Dolmen.png', 'title' => __('site.card_dolmen')],
+        ['image' => 'assets/f_assets/image/store_images/Serena.jpg', 'title' => __('site.card_exclusive_islamabad')],
+        ['image' => 'assets/f_assets/image/store_images/Merriot.jpg', 'title' => __('site.card_lifestyle_islamabad')],
+        ['image' => 'assets/f_assets/image/store_images/FM Pace.jpg', 'title' => __('site.card_franck_muller')],
+    ];
+    $locationData = [
+        'lahore' => [
+            ['name' => __('site.store_mm_alam'), 'map' => $lahoreMap],
+            ['name' => __('site.store_dha'), 'map' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6469.01293641384!2d74.377992!3d31.472541!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190715cb842efd%3A0x4fa6cc0a02e21627!2sHanif%20Jewellers%20Y%20Block!5e1!3m2!1sen!2sus!4v1746937029778!5m2!1sen!2sus'],
+            ['name' => __('site.store_franck_muller'), 'map' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6466.008686618933!2d74.352009!3d31.515982!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919073c2a5977cb%3A0xf233059a915c8858!2sFranck%20Muller%20Boutique!5e1!3m2!1sen!2sus!4v1746940330291!5m2!1sen!2sus'],
+            ['name' => __('site.store_dolmen'), 'map' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13640.48652379273!2d74.3470166!3d31.5077711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190900372d5c97%3A0x13adaf745e607f8a!2sDolmen%20Mall%20Lahore!5e0!3m2!1sen!2spk!4v1746940330291'],
+        ],
+        'islamabad' => [
+            ['name' => __('site.store_f6'), 'map' => 'https://maps.google.com/maps?q=Hanif%20Jewellery%20F6%20Islamabad&t=&z=13&ie=UTF8&iwloc=&output=embed'],
+            ['name' => __('site.store_serena'), 'map' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6309.097781911657!2d73.101929!3d33.715203!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfc1062db7201b%3A0xea2a999c57fa3ac4!2sHanif%20Jewellery%20%26%20Watches%20Serena%20Hotel!5e1!3m2!1sen!2sus!4v1746940664880!5m2!1sen!2sus'],
+            ['name' => __('site.store_marriott'), 'map' => 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6307.757784579137!2d73.087097!3d33.733435!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfc1a69a7861ff%3A0x93c656193ea86422!2sHanif%20Jewellery%20%26%20Watches%20Marriot%20Hotel%20Islamabad!5e1!3m2!1sen!2sus!4v1746940778895!5m2!1sen!2sus'],
+        ],
+        'dubai' => [[
+            'name' => __('site.store_dubai_flagship'),
+            'map' => $dubaiMap,
+        ]],
+    ];
+@endphp
+
 @section('content')
     <section class="container pt-5">
-        <h2 class="py-4 text-center title text-black text-uppercase">STORE LOCATIONS</h2>
+        <h2 class="py-4 text-center title text-black text-uppercase">{{ __('site.store_locations') }}</h2>
+        <div class="text-center mb-3">
+            <form action="{{ route('locale.set') }}" method="POST" class="d-inline-flex align-items-center gap-2 hj-lang-switch justify-content-center">
+                @csrf
+                @if($isUae)
+                    <button type="submit" name="choice" value="pk" class="btn btn-sm btn-outline-dark rounded-0">{{ __('site.switch_to_pakistan') }}</button>
+                @else
+                    <button type="submit" name="choice" value="uae" class="btn btn-sm btn-outline-dark rounded-0">{{ __('site.switch_to_uae') }}</button>
+                @endif
+            </form>
+        </div>
 
         <div class="row align-items-center justify-content-center g-3">
             <div class="col-md-7">
                 <iframe id="mapFrame"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6466.438102655719!2d74.350692!3d31.509776!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190451c8bbf6b5%3A0x1323e5523eee96d8!2sHanif%20Jewellery%20and%20Watches!5e1!3m2!1sen!2us!4v1746935949665!5m2!1sen!2us"
+                    src="{{ $defaultMap }}"
                     class="map-1" width="100%" height="397" style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
             <div class="col-md-5">
                 <p class="">
-                    Hanif proudly showcases four distinct retail experiences across Lahore, Islamabad, and Dubai Gold District -
-                    Flagship, Exclusive, Premium, and Lifestyle - each curate unique collections, embodying refined
-                    luxury and the brand’s signature excellence.
+                    {{ __('site.locator_intro_all') }}
                 </p>
 
                 <!-- <label for="citySelect" class="form-label">Choose City</label> -->
@@ -24,7 +69,7 @@
                     <button class="btn w-100 text-start bg-white border-0 rounded-0 py-3 px-4 shadow-sm d-flex align-items-center justify-content-between"
                         type="button" id="cityDropdownBtn" aria-expanded="false"
                         style="font-size: 0.85rem; letter-spacing: 0.12em; color: #6c6e7e;">
-                        <span id="cityDropdownLabel">Choose City</span>
+                        <span id="cityDropdownLabel">{{ $defaultCityLabel }}</span>
                         <span>
                             <svg width="24" height="24" fill="none" stroke="#6c6e7e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -39,25 +84,25 @@
                             <button class="dropdown-item py-3 d-flex align-items-center" type="button" data-value="lahore" style="background: #fafafa;">
                                 <span class="me-3 d-inline-block rounded-circle" style="width:25px;height:25px;background:#fff;border:1px solid #eee;">
                                 </span>
-                                <span style="letter-spacing:0.12em;color:#0a1744;">Lahore</span>
+                                <span style="letter-spacing:0.12em;color:#0a1744;">{{ __('site.city_lahore') }}</span>
                             </button>
                         </li>
                         <li>
                             <button class="dropdown-item py-2 d-flex align-items-center" type="button" data-value="islamabad" style="background: #fafafa; height: 44px;">
                                 <span class="me-3 d-inline-block rounded-circle" style="width:25px;height:25px;background:#fff;border:1px solid #eee;">
                                 </span>
-                                <span style="letter-spacing:0.12em;color:#0a1744;">Islamabad</span>
+                                <span style="letter-spacing:0.12em;color:#0a1744;">{{ __('site.city_islamabad') }}</span>
                             </button>
                         </li>
                         <li>
                             <button class="dropdown-item py-3 d-flex align-items-center" type="button" data-value="dubai" style="background: #fafafa;">
                                 <span class="me-3 d-inline-block rounded-circle" style="width:25px;height:25px;background:#fff;border:1px solid #eee;">
                                 </span>
-                                <span style="letter-spacing:0.12em;color:#0a1744;">Dubai</span>
+                                <span style="letter-spacing:0.12em;color:#0a1744;">{{ __('site.city_dubai') }}</span>
                             </button>
                         </li>
                     </ul>
-                    <input type="hidden" id="citySelect" value="">
+                    <input type="hidden" id="citySelect" value="{{ $defaultCity }}">
                 </div>
                 <style>
                     #cityDropdownMenu {
@@ -124,7 +169,7 @@
                     <button class="btn w-100 text-start bg-white border-0 rounded-0 py-3 px-4 shadow-sm d-flex align-items-center justify-content-between"
                         type="button" id="locationSelect" aria-expanded="false"
                         style="font-size: 0.85rem; letter-spacing: 0.12em; color: #6c6e7e;" disabled>
-                        <span id="locationDropdownLabel" style="font-size: 0.85rem;">Select Location</span>
+                        <span id="locationDropdownLabel" style="font-size: 0.85rem;">{{ __('site.select_location') }}</span>
                         <span>
                             <svg width="24" height="24" fill="none" stroke="#6c6e7e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -188,47 +233,7 @@
                     });
                 </script>
                 <script>
-                    // Define locationData before using it
-                    const locationData = {
-                    lahore: [{
-                            name: 'M.M. Alam - Flagship Store',
-                            map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6466.438102655719!2d74.350692!3d31.509776!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190451c8bbf6b5%3A0x1323e5523eee96d8!2sHanif%20Jewellery%20and%20Watches!5e1!3m2!1sen!2us!4v1746935949665!5m2!1sen!2us'
-                        },
-                        {
-                            name: 'D.H.A - Premium Store',
-                            map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6469.01293641384!2d74.377992!3d31.472541!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190715cb842efd%3A0x4fa6cc0a02e21627!2sHanif%20Jewellers%20Y%20Block!5e1!3m2!1sen!2sus!4v1746937029778!5m2!1sen!2sus'
-                        },
-                        // {
-                        //     name: 'Pearl Continental - Lifestyle Store',
-                        //     map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6463.4550508001685!2d74.338639!3d31.552865!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391905d202041e23%3A0x86a11ca49420dfd6!2sHanif%20Jewellery%20%26%20Watches%20PC%20Hotel!5e1!3m2!1sen!2sus!4v1746937093744!5m2!1sen!2sus'
-                        // },
-                        {
-                            name: 'M.M. Alam - Franck Muller Boutique',
-                            map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6466.008686618933!2d74.352009!3d31.515982!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919073c2a5977cb%3A0xf233059a915c8858!2sFranck%20Muller%20Boutique!5e1!3m2!1sen!2sus!4v1746940330291!5m2!1sen!2sus'
-                        },
-                        {
-                           name: 'Dolmen - Premium Store ',
-                           map: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13640.48652379273!2d74.3470166!3d31.5077711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39190900372d5c97%3A0x13adaf745e607f8a!2sDolmen%20Mall%20Lahore!5e0!3m2!1sen!2spk!4v1746940330291'
-                        }
-                    ],
-                    islamabad: [{
-                            name: 'F-6 Supermarket - Flagship Store',
-                            map: 'https://maps.google.com/maps?q=Hanif%20Jewellery%20F6%20Islamabad&t=&z=13&ie=UTF8&iwloc=&output=embed'
-                        },
-                        {
-                            name: 'Serena Hotel - Exclusive Store',
-                            map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6309.097781911657!2d73.101929!3d33.715203!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfc1062db7201b%3A0xea2a999c57fa3ac4!2sHanif%20Jewellery%20%26%20Watches%20Serena%20Hotel!5e1!3m2!1sen!2sus!4v1746940664880!5m2!1sen!2sus'
-                        },
-                        {
-                            name: 'Marriott Hotel - Lifestyle Store',
-                            map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6307.757784579137!2d73.087097!3d33.733435!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfc1a69a7861ff%3A0x93c656193ea86422!2sHanif%20Jewellery%20%26%20Watches%20Marriot%20Hotel%20Islamabad!5e1!3m2!1sen!2sus!4v1746940778895!5m2!1sen!2sus'
-                        },
-                    ],
-                    dubai: [{
-                        name: 'Dubai Gold District - Flagship Store',
-                        map: 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14431.92745836418!2d55.2970309!3d25.2711955!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe577102cc48998b7!2sHanif%20Jewellery%20%26%20Watches%20LLC!5e0!3m2!1sen!2sae!4v1668697188869!5m2!1sen!2sae'
-                    }]
-                };
+                    const locationData = @json($locationData);
 
                     const citySelect = document.getElementById('citySelect');
                     const mapFrame = document.getElementById('mapFrame');
@@ -238,7 +243,7 @@
 
                     function updateLocationDropdown(city) {
                         locationDropdownMenu.innerHTML = '';
-                        locationDropdownLabel.textContent = 'Select Location'; // Always reset to default label
+                        locationDropdownLabel.textContent = @json(__('site.select_location'));
                         locationDropdownBtn.value = ''; // Reset value
                         if (locationData[city]) {
                             locationData[city].forEach((loc, idx) => {
@@ -283,6 +288,20 @@
                             mapFrame.src = locationData[city][idx].map;
                         }
                     });
+
+                    // Open locations for the active region (Pakistan or UAE) on load.
+                    (function initRegionLocations() {
+                        const defaultCity = citySelect.value || '{{ $defaultCity }}';
+                        if (!locationData[defaultCity]) {
+                            return;
+                        }
+                        updateLocationDropdown(defaultCity);
+                        if (locationData[defaultCity][0]) {
+                            locationDropdownLabel.textContent = locationData[defaultCity][0].name;
+                            locationDropdownBtn.value = 0;
+                            mapFrame.src = locationData[defaultCity][0].map;
+                        }
+                    })();
                 </script>
             </div>
         </div>
@@ -379,88 +398,18 @@
     </section> -->
 
     <section class="container pb-5 pt-5">
-        <h2 class="py-4 text-center title text-black text-uppercase">OUR STORES</h2>
+        <h2 class="py-4 text-center title text-black text-uppercase">{{ __('site.our_stores') }}</h2>
         <div class="row g-4">
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/MMA LHR.jpg') }}" class="card-img-top rounded-0" alt="Flagship Store Lahore">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Flagship Store, Lahore</h6>
+            @foreach($storeCards as $store)
+                <div class="col-md-4 col-12">
+                    <div class="card border-0 rounded-0 h-100">
+                        <img src="{{ asset($store['image']) }}" class="card-img-top rounded-0" alt="{{ $store['title'] }}" style="width:100%;height:280px;object-fit:cover;">
+                        <div class="card-body text-center">
+                            <h6 class="card-title mb-0" style="font-size: 1rem;">{{ $store['title'] }}</h6>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/F6 ISB.jpg') }}" class="card-img-top rounded-0" alt="Flagship Store Islamabad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Flagship Store, Islamabad</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/Dubai.jpg') }}" class="card-img-top rounded-0" alt="Flagship Store Dubai">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Flagship Store, Dubai</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/DHA LHR.jpg') }}" class="card-img-top rounded-0" alt="Premium Store Lahore">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Premium Store, Lahore</h6>
-                    </div>
-                </div>
-            </div>
-              <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/Dolmen.png') }}" class="card-img-top rounded-0" alt="Premium Store Lahore">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Premium Store, Dolmen Lahore</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/Serena.jpg') }}" class="card-img-top rounded-0" alt="Exclusive Store Islamabad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Exclusive Store, Islamabad</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/Merriot.jpg') }}" class="card-img-top rounded-0" alt="Lifestyle Store Islamabad">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Lifestyle Store, Islamabad</h6>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/PC LHR.jpg') }}" class="card-img-top rounded-0" alt="Lifestyle Store Lahore">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Lifestyle Store, Lahore</h6>
-                    </div>
-                </div>
-            </div> -->
-            <!--<div class="col-md-4 col-12">-->
-            <!--    <div class="card border-0 rounded-0 h-100">-->
-            <!--        <img src="{{ asset('assets/f_assets/image/store_images/Beverly.jpg') }}" class="card-img-top rounded-0" alt="Hanif Watches Islamabad">-->
-            <!--        <div class="card-body text-center">-->
-            <!--            <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Hanif Watches, Islamabad</h6>-->
-            <!--        </div>-->
-            <!--    </div>-->
-            <!--</div>-->
-            <div class="col-md-4 col-12">
-                <div class="card border-0 rounded-0 h-100">
-                    <img src="{{ asset('assets/f_assets/image/store_images/FM Pace.jpg') }}" class="card-img-top rounded-0" alt="Franck Muller Boutique Lahore">
-                    <div class="card-body text-center">
-                        <h6 class="card-title text-uppercase mb-0" style="font-size: 1rem;">Franck Muller Boutique, Lahore</h6>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
 @endsection

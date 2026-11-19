@@ -1,8 +1,8 @@
 @extends('public.layouts.header_new')
 
 @section('content')
-    <!-- GULPOSH VIDEO BANNER -->
-<!-- GULPOSH VIDEO BANNER -->
+    <!-- {{ __('site.col_gulposh') }} VIDEO BANNER -->
+<!-- {{ __('site.col_gulposh') }} VIDEO BANNER -->
 @php
     $desktopBanner = $subcategory->banner_url ?? null;
 
@@ -81,17 +81,17 @@ html, body{
         <div class="fullBanner gulposh-story d-none d-lg-block">
             <img src="{{ asset('assets/f_assets/image/gulposh/desktop1.png') }}" class="gulposh-story__image" alt="Gulposh collection">
             <div class="gulposh-story__panel">
-                <h2 class="gulposh-story__title">GULPOSH</h2>
-                <p class="gulposh-story__copy">A garden of nature's beauty and luxury's refinement. Inspired by the earth's splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.</p>
-                <a class="gulposh-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <h2 class="gulposh-story__title">{{ __('site.col_gulposh') }}</h2>
+                <p class="gulposh-story__copy">{{ __('site.gulposh_copy') }}</p>
+                <a class="gulposh-story__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         </div>
         <div class="fullBanner gulposh-mobile d-lg-none">
             <img src="{{ asset('assets/f_assets/image/gulposh/mob1.png') }}" class="gulposh-mobile__image" alt="Gulposh collection">
             <div class="gulposh-mobile__content">
-                <h2 class="gulposh-mobile__title">GULPOSH</h2>
-                <p class="gulposh-mobile__copy">A garden of nature's beauty and luxury's refinement. Inspired by the earth's splendor, crafted with meticulous care, each piece is a masterpiece of elegance, sophistication, and timeless allure.</p>
-                <a class="gulposh-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <h2 class="gulposh-mobile__title">{{ __('site.col_gulposh') }}</h2>
+                <p class="gulposh-mobile__copy">{{ __('site.gulposh_copy') }}</p>
+                <a class="gulposh-mobile__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         </div>
         <div class="d-none">

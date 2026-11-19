@@ -123,12 +123,17 @@
             @endif
         </h5>
         <p class="card-text">
-@if(!empty($product->price) && $product->price > 0 && !empty($product->show_price))
-    PKR {{ number_format($product->price, 0, '.', ',') }}
+@php
+    $card1Currency = $product->displayCurrency(false);
+    $card1Price = $product->final_price ?? 0;
+    $card1Rounded = \App\Models\Products::roundDisplayPrice($card1Price);
+@endphp
+@if($card1Rounded > 0 && !empty($product->show_price))
+    {{ $card1Currency }} {{ number_format($card1Rounded, 0, '.', ',') }}
 @endif
         </p>
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
-            <a href="{{ route('product.details', $product->slug) }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">Discover More</a>
+            <a href="{{ route('product.details', $product->slug) }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">{{ __('site.discover_more') }}</a>
         @endif
     </div>
 </div>

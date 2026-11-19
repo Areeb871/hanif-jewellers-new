@@ -27,11 +27,13 @@ class ProductSearchService
                 'category_id',
                 'name',
                 'online_store_name',
+                'uae_online_store_name',
                 'slug',
                 'image',
                 'hover_image',
                 'description',
                 'online_store_description',
+                'uae_online_store_description',
                 'subcategory_id'
             )
             ->orderBy('name')
@@ -69,7 +71,17 @@ class ProductSearchService
         $label = $isStoreProduct ? $product->storefrontName() : ($product->name ?? '');
         $description = $isStoreProduct ? $product->storefrontDescription() : ($product->description ?? '');
 
-        $searchParts = [$product->name, $product->online_store_name, $product->slug, strip_tags($product->description ?? ''), strip_tags($product->online_store_description ?? '')];
+        $searchParts = [
+            $product->name,
+            $product->uae_name,
+            $product->online_store_name,
+            $product->uae_online_store_name,
+            $product->slug,
+            strip_tags($product->description ?? ''),
+            strip_tags($product->uae_description ?? ''),
+            strip_tags($product->online_store_description ?? ''),
+            strip_tags($product->uae_online_store_description ?? ''),
+        ];
 
         $url = route('product.details', ['slug' => $product->slug]);
         if ($isStoreProduct) {

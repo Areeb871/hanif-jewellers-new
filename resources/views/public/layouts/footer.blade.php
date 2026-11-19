@@ -333,43 +333,43 @@
 
       <!-- CUSTOMER CARE (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">CUSTOMER CARE</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">CUSTOMER CARE</button>
+        <h4 class="hj-title">{{ __('site.customer_care') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.customer_care') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ url('contact-us') }}">Contact Us</a></li>
-          <li><a href="{{ url('locator') }}">Stores</a></li>
-          <li><a href="{{ url('after-sale-services') }}">After Sale Services</a></li>
-          <li><a href="{{ url('care-instructions') }}">Care Instructions</a></li>
+          <li><a href="{{ url('contact-us') }}">{{ __('site.contact_us') }}</a></li>
+          <li><a href="{{ url('locator') }}">{{ __('site.stores') }}</a></li>
+          <li><a href="{{ url('after-sale-services') }}">{{ __('site.after_sale') }}</a></li>
+          <li><a href="{{ url('care-instructions') }}">{{ __('site.care') }}</a></li>
         </ul>
       </div>
 
       <!-- OUR COMPANY (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">OUR COMPANY</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">OUR COMPANY</button>
+        <h4 class="hj-title">{{ __('site.our_company') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.our_company') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ url('locator') }}">Find a Boutique ↗</a></li>
-          <li><a href="{{ url('about-us') }}">About Us</a></li>
-          <li><a href="{{ url('assurance') }}">Assurance</a></li>
+          <li><a href="{{ url('locator') }}">{{ __('site.find_boutique') }} ↗</a></li>
+          <li><a href="{{ url('about-us') }}">{{ __('site.about_us') }}</a></li>
+          <li><a href="{{ url('assurance') }}">{{ __('site.assurance') }}</a></li>
         </ul>
       </div>
 
       <!-- LEGAL AREA (Accordion on mobile) -->
       <div class="hj-acc">
-        <h4 class="hj-title">LEGAL AREA</h4>
-        <button class="hj-acc-btn" type="button" aria-expanded="false">LEGAL AREA</button>
+        <h4 class="hj-title">{{ __('site.legal') }}</h4>
+        <button class="hj-acc-btn" type="button" aria-expanded="false">{{ __('site.legal') }}</button>
         <ul class="hj-links">
-          <li><a href="{{ route('terms-of-service') }}">Terms of Service</a></li>
-          <li><a href="{{ route('privacy-policy') }}">Privacy Policy</a></li>       
-          <li><a href="{{ route('blogs.index') }}">Blogs</a></li>
-          <li><a href="{{ route('shipping-policy') }}">Shipping Policy</a></li>
-          <li><a href="{{ route('refund-policy') }}">Refund Policy</a></li>
+          <li><a href="{{ route('terms-of-service') }}">{{ __('site.terms') }}</a></li>
+          <li><a href="{{ route('privacy-policy') }}">{{ __('site.privacy') }}</a></li>       
+          <li><a href="{{ route('blogs.index') }}">{{ __('site.blogs') }}</a></li>
+          <li><a href="{{ route('shipping-policy') }}">{{ __('site.shipping_policy') }}</a></li>
+          <li><a href="{{ route('refund-policy') }}">{{ __('site.refund') }}</a></li>
         </ul>
       </div>
 
       <!-- FOLLOW US (Centered on mobile) -->
       <div class="hj-follow">
-        <h4 class="hj-title">FOLLOW US</h4>
+        <h4 class="hj-title">{{ __('site.follow_us') }}</h4>
         <div class="hj-social">
           <a target="_blank" rel="noopener" href="https://www.instagram.com/hanifjewellers" aria-label="Instagram">
             <i class="fa-brands fa-instagram"></i>
@@ -395,7 +395,7 @@
   <div class="hj-divider-bottom"></div>
 
   <div class="hj-bottom">
-    © <?= date("Y"); ?> Hanif | All rights reserved.
+    © <?= date("Y"); ?> Hanif | {{ __('site.rights') }}
   </div>
 </footer>
 

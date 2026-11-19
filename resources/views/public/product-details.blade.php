@@ -7,9 +7,9 @@
     <section class="product-details-main-section">
         <div class="">
             {{-- Product Details Layout --}}
-            <div class="row gy-4 product-details-layout">
+            <div class="row gy-4 product-details-layout" dir="ltr">
                 {{-- Left Side - Product Image Gallery (Desktop) --}}
-                <div class="col-md-8 col-lg-8 d-none d-md-block" style="padding-right: 30px; padding-left:40px;">
+                <div class="col-md-8 col-lg-8 d-none d-md-block product-details-gallery-col" style="padding-right: 30px; padding-left:40px;">
                     <div class="product-gallery">
                         {{-- Main Product Image - Full Width --}}
                         <div class="mb-2">
@@ -155,24 +155,33 @@
                 </div>
 
                 {{-- Right Side - Product Information (Sticky) --}}
-                <div class="col-md-4 col-lg-4 mt-0" style="padding-right: 40px; margin: unset;">
+                <div class="col-md-4 col-lg-4 mt-0 product-details-info-col" style="padding-right: 40px; margin: unset;" @if(app()->getLocale() === 'ar') dir="rtl" @endif>
                     <div class="product-info sticky-sidebar">
 
 @php
     $storeContext = request()->boolean('store');
     $displayName = $product->displayName($storeContext);
     $displayDescription = $product->displayDescription($storeContext);
+    $displayCurrency = $product->displayCurrency($storeContext);
 @endphp
 
 <h5 class="card-title product-detail-full-name">
     @php
         $nameParts = explode('-', $displayName, 2);
+        $formatProductLabel = static function ($value) {
+            $value = trim((string) $value);
+            if ($value === '') {
+                return '';
+            }
+
+            return app()->getLocale() === 'ar' ? $value : strtoupper($value);
+        };
     @endphp
     @if(count($nameParts) > 1)
-        {{ strtoupper($nameParts[0]) }}<br>
-        <div class="text-muted product-detail-reference">{{ strtoupper($nameParts[1]) }}</div>
+        {{ $formatProductLabel($nameParts[0]) }}<br>
+        <div class="text-muted product-detail-reference">{{ $formatProductLabel($nameParts[1]) }}</div>
     @else
-        {{ strtoupper($displayName) }}
+        {{ $formatProductLabel($displayName) }}
     @endif
 </h5>
 
@@ -593,7 +602,7 @@
 @if(filled($displayDescription))
 <div class="product-features-panel">
     <h3 class="product-section-label">
-        Main Features:
+        {{ __('site.main_features') }}
     </h3>
     <div class="product-description">
         {!! $displayDescription !!}
@@ -615,9 +624,9 @@
     $livePrice = $goldPriceBreakdown !== null
         ? (float) $goldPriceBreakdown['final_price']
         : $product->displayPrice($storeContext);
-    $roundedPrice = round($livePrice, -3);
+    $roundedPrice = \App\Models\Products::roundDisplayPrice($livePrice);
     $regularPrice = (float) data_get($goldPriceBreakdown, 'regular_price', $livePrice);
-    $roundedRegularPrice = round($regularPrice, -3);
+    $roundedRegularPrice = \App\Models\Products::roundDisplayPrice($regularPrice);
     $isJewelleryProduct = optional($product->category)->slug !== 'watches';
     $canShowPrice = !$product->isSeleneProduct() && ($storeContext
         ? ($roundedPrice > 0)
@@ -638,19 +647,19 @@
     @if($isGoldSale && $roundedRegularPrice > 0)
         <div class="product-old-price">
             <span class="visually-hidden">Regular price:</span>
-            PKR {{ number_format($roundedRegularPrice, 0, '.', ',') }}
+            {{ $displayCurrency }} {{ number_format($roundedRegularPrice, 0, '.', ',') }}
         </div>
     @endif
     <div class="price-display">
         @if($isGoldSale)
             <span class="visually-hidden">Sale price:</span>
         @endif
-        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+        {{ $displayCurrency }} {{ number_format($roundedPrice, 0, '.', ',') }}
     </div>
 
     @if($isJewelleryProduct)
         <p class="product-price-note">
-            All prices are subject to change without prior notice due to fluctuations in gold prices, size, weight variations, handcrafted production, and customization requirements.
+            {{ __('site.price_disclaimer') }}
         </p>
     @endif
 </div>
@@ -660,27 +669,41 @@
                             $isRingSizeProduct = $product->requiresAsianRingSize();
                             $asianRingSizes = range(4, 27);
                             $showRingSizeSelector = $isRingSizeProduct && $canShowPrice;
+                            $toEasternArabic = static function ($value): string {
+                                return strtr((string) $value, [
+                                    '0' => '٠', '1' => '١', '2' => '٢', '3' => '٣', '4' => '٤',
+                                    '5' => '٥', '6' => '٦', '7' => '٧', '8' => '٨', '9' => '٩',
+                                ]);
+                            };
+                            $useEasternSizes = app()->getLocale() === 'ar';
                         @endphp
                         @if($showRingSizeSelector)
                             <div class="ring-size-panel" id="productSizePanel">
                                 <div class="ring-size-heading">
-                                    <label for="productSizeToggle">Select - Asian Ring Size</label>
+                                    <label for="productSizeToggle">{{ __('site.select_asian_ring_size') }}</label>
                                     <button type="button" class="ring-size-chart-link" data-bs-toggle="modal" data-bs-target="#asianRingSizeChart">
-                                        View Size Chart
+                                        {{ __('site.view_size_chart') }}
                                     </button>
                                 </div>
                                 <button type="button" class="ring-size-toggle" id="productSizeToggle" aria-expanded="false" aria-haspopup="listbox" aria-controls="productSizeDropdown">
-                                    <span id="productSizeSelected">Choose a size</span>
+                                    <span id="productSizeSelected">{{ __('site.choose_a_size') }}</span>
                                     <span class="ring-size-arrow" aria-hidden="true">
                                         <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.08 1.04l-4.25 4.25a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
                                         </svg>
                                     </span>
                                 </button>
-                                <div class="ring-size-dropdown" id="productSizeDropdown" role="listbox" aria-label="Asian ring sizes">
+                                <div class="ring-size-dropdown" id="productSizeDropdown" role="listbox" aria-label="{{ __('site.select_asian_ring_size') }}">
                                     @foreach($asianRingSizes as $ringSize)
-                                        <button type="button" class="ring-size-option" data-size="{{ $ringSize }}" role="option" aria-selected="false">
-                                            {{ $ringSize }}
+                                        <button
+                                            type="button"
+                                            class="ring-size-option"
+                                            data-size="{{ $ringSize }}"
+                                            data-size-label="{{ $useEasternSizes ? $toEasternArabic($ringSize) : $ringSize }}"
+                                            role="option"
+                                            aria-selected="false"
+                                        >
+                                            {{ $useEasternSizes ? $toEasternArabic($ringSize) : $ringSize }}
                                         </button>
                                     @endforeach
                                 </div>
@@ -695,7 +718,7 @@
                                         </button>
                                         <div class="modal-body">
                                             <p class="asian-size-note mb-3">
-                                                Measure the inside diameter of a ring that fits comfortably, then select the closest Asian size.
+                                                {{ __('site.asian_size_note') }}
                                             </p>
                                             <div class="asian-size-chart-scroll">
                                                 <img
@@ -714,7 +737,7 @@
                         <div class="cta-buttons">
                             @if($canShowPrice)
                                 @if($isOutOfStock)
-                                    <p class="text-danger text-center fw-semibold mb-3">This is out of stock</p>
+                                    <p class="text-danger text-center fw-semibold mb-3">{{ __('site.out_of_stock') }}</p>
                                 @else
                                     {{-- First Row - Add to Cart and Buy Now --}}
                                     <div class="row g-2 mb-3">
@@ -726,7 +749,7 @@
                                         </div> -->
                                         <div class="">
                                             <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="buyNow()">
-                                                BUY NOW
+                                                {{ __('site.buy_now') }}
                                             </button>
                                         </div>
                                     </div>
@@ -734,20 +757,20 @@
                                 {{-- Talk to Expert when price is available --}}
                                 <div class="text-center">
                                     <button type="button" class="product-action-btn product-action-btn-secondary btn btn-dark w-100 py-2" onclick="talkToExpert()">
-                                        TALK TO AN EXPERT
+                                        {{ __('site.talk_to_an_expert') }}
                                     </button>
                                 </div>
                             @else
                                 {{-- Only Talk to Expert when no price --}}
                                 <div class="text-center">
                                     <button type="button" class="product-action-btn product-action-btn-primary btn btn-dark w-100 py-2" onclick="talkToExpert()">
-                                        TALK TO AN EXPERT
+                                        {{ __('site.talk_to_an_expert') }}
                                     </button>
                                 </div>
                             @endif
                         </div>
                           <p class="mt-2 mb-0" style="font-size: 12px; color: #666; line-height: 1;"  >
-                            Estimated delivery time is 7 to 10 business days.
+                            {{ __('site.estimated_delivery') }}
             </p>
 
                         {{-- Success Message --}}
@@ -770,7 +793,7 @@
     <section class="py-5 you-may-like-section">
         <div class="">
             <div class="text-center mb-5">
-                <h3 class="section-luxury-heading">YOU MAY ALSO LIKE</h3>
+                <h3 class="section-luxury-heading">{{ __('site.you_may_also_like') }}</h3>
             </div>
 
             <!-- Desktop: homepage-style single-row scroller -->
@@ -842,31 +865,68 @@
             const nextButton = document.querySelector(`${sectionSelector} .yml-scroller-arrow--next`);
             if (!scroller || !container || !items.length) return;
 
+            let rtlScrollType = 'ltr';
+
+            function detectRtlScroll() {
+                if (getComputedStyle(scroller).direction !== 'rtl') {
+                    rtlScrollType = 'ltr';
+                    return;
+                }
+                const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                if (max < 2) {
+                    rtlScrollType = 'negative';
+                    return;
+                }
+                scroller.scrollLeft = 0;
+                const box = scroller.getBoundingClientRect();
+                const first = items[0].getBoundingClientRect();
+                const atStart = Math.abs(box.right - first.right) <= Math.abs(box.left - first.left);
+                scroller.scrollLeft = -2;
+                if (scroller.scrollLeft < 0) {
+                    rtlScrollType = 'negative';
+                    return;
+                }
+                rtlScrollType = atStart ? 'positive' : 'reverse';
+            }
+
+            function toRaw(logical) {
+                const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const value = Math.max(0, Math.min(max, logical));
+                if (rtlScrollType === 'negative') return -value;
+                if (rtlScrollType === 'reverse') return max - value;
+                return value;
+            }
+
+            function fromRaw(raw) {
+                const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                if (rtlScrollType === 'negative') return Math.min(max, Math.abs(Math.min(0, raw)));
+                if (rtlScrollType === 'reverse') return Math.max(0, Math.min(max, max - raw));
+                return Math.max(0, Math.min(max, raw));
+            }
+
+            function logicalScroll() {
+                return fromRaw(scroller.scrollLeft);
+            }
+
+            detectRtlScroll();
+            scroller.scrollLeft = toRaw(0);
+
             function getLastScrollableIndex() {
                 return Math.max(0, items.length - 1);
             }
 
             function getStep() {
                 if (items.length < 2) return items[0].getBoundingClientRect().width;
-                const base = items[0].offsetLeft;
-                for (let i = 1; i < items.length; i++) {
-                    const d = items[i].offsetLeft - base;
-                    if (d > 0) return d;
-                }
-                return items[0].getBoundingClientRect().width;
+                const first = items[0].getBoundingClientRect();
+                const second = items[1].getBoundingClientRect();
+                const step = Math.abs(second.left - first.left);
+                return step > 0 ? step : items[0].getBoundingClientRect().width;
             }
 
             function nearestIndex() {
-                let idx = 0;
-                let best = Infinity;
-                items.forEach((item, i) => {
-                    const dist = Math.abs(item.offsetLeft - scroller.scrollLeft);
-                    if (dist < best) {
-                        best = dist;
-                        idx = i;
-                    }
-                });
-                return Math.min(idx, getLastScrollableIndex());
+                const step = getStep();
+                if (!step) return 0;
+                return Math.max(0, Math.min(getLastScrollableIndex(), Math.round(logicalScroll() / step)));
             }
 
             function paintDot(dot, isActive) {
@@ -887,21 +947,54 @@
 
                 const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
                 const noScroll = maxScroll <= 2;
+                const logical = logicalScroll();
                 if (progressFill) {
                     const segment = 100 / items.length;
-                    const progress = noScroll ? 0 : scroller.scrollLeft / maxScroll;
+                    const progress = noScroll ? 0 : logical / maxScroll;
+                    const offset = `${progress * (100 - segment)}%`;
                     progressFill.style.width = `${segment}%`;
-                    progressFill.style.left = `${progress * (100 - segment)}%`;
+                    if (rtlScrollType === 'ltr') {
+                        progressFill.style.right = 'auto';
+                        progressFill.style.left = offset;
+                    } else {
+                        progressFill.style.left = 'auto';
+                        progressFill.style.right = offset;
+                    }
                 }
-                if (prevButton) prevButton.disabled = noScroll || scroller.scrollLeft <= 5;
-                if (nextButton) nextButton.disabled = noScroll || scroller.scrollLeft >= maxScroll - 5;
+                if (prevButton) prevButton.disabled = noScroll || logical <= 5;
+                if (nextButton) nextButton.disabled = noScroll || logical >= maxScroll - 5;
             }
 
             function itemTarget(index) {
                 const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const step = getStep();
                 if (index <= 0) return 0;
                 if (index >= getLastScrollableIndex()) return maxScroll;
-                return Math.max(0, Math.min(maxScroll, items[index].offsetLeft));
+                return Math.max(0, Math.min(maxScroll, Math.round(index * step)));
+            }
+
+            function scrollToLogical(logical, duration = 450) {
+                const maxScroll = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+                const destination = Math.max(0, Math.min(maxScroll, logical));
+                const startLogical = logicalScroll();
+                const distance = destination - startLogical;
+                if (Math.abs(distance) < 1) {
+                    scroller.scrollLeft = toRaw(destination);
+                    updateDots();
+                    return;
+                }
+                const startTime = performance.now();
+                function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+                function step(now) {
+                    const progress = Math.min(1, (now - startTime) / duration);
+                    scroller.scrollLeft = toRaw(startLogical + distance * easeInOutQuad(progress));
+                    if (progress < 1) requestAnimationFrame(step);
+                    else {
+                        scroller.scrollLeft = toRaw(destination);
+                        updateDots();
+                    }
+                }
+                requestAnimationFrame(step);
             }
 
             let isMouseDown = false, startX = 0, startLeft = 0;
@@ -909,13 +1002,15 @@
                 if (e.target.closest('a, button')) return;
                 isMouseDown = true;
                 startX = e.clientX;
-                startLeft = scroller.scrollLeft;
+                startLeft = logicalScroll();
                 scroller.style.cursor = 'grabbing';
                 e.preventDefault();
             });
             scroller.addEventListener('mousemove', (e) => {
                 if (!isMouseDown) return;
-                scroller.scrollLeft = startLeft - (e.clientX - startX);
+                const dx = e.clientX - startX;
+                const delta = rtlScrollType === 'ltr' ? -dx : dx;
+                scroller.scrollLeft = toRaw(startLeft + delta);
             });
             ['mouseleave','mouseup'].forEach(evt => scroller.addEventListener(evt, () => {
                 if (!isMouseDown) return;
@@ -928,20 +1023,20 @@
                     const indexAttr = dot.getAttribute('data-index');
                     const targetIdx = indexAttr ? parseInt(indexAttr, 10) : 0;
                     const bounded = Math.max(0, Math.min(getLastScrollableIndex(), targetIdx));
-                    smoothScrollTo(scroller, itemTarget(bounded), 450);
+                    scrollToLogical(itemTarget(bounded), 450);
                 });
             });
 
             if (prevButton) {
                 prevButton.addEventListener('click', () => {
                     const targetIndex = Math.max(0, nearestIndex() - 1);
-                    smoothScrollTo(scroller, itemTarget(targetIndex), 450);
+                    scrollToLogical(itemTarget(targetIndex), 450);
                 });
             }
             if (nextButton) {
                 nextButton.addEventListener('click', () => {
                     const targetIndex = Math.min(getLastScrollableIndex(), nearestIndex() + 1);
-                    smoothScrollTo(scroller, itemTarget(targetIndex), 450);
+                    scrollToLogical(itemTarget(targetIndex), 450);
                 });
             }
 
@@ -951,10 +1046,7 @@
                 rafId = requestAnimationFrame(() => { updateDots(); rafId = null; });
             });
 
-            // initial state
-            if (window.matchMedia('(max-width: 767.98px)').matches) {
-                scroller.scrollLeft = 0;
-            }
+            scroller.scrollLeft = toRaw(0);
             updateDots();
             window.addEventListener('resize', updateDots);
             if (getComputedStyle(scroller).cursor === 'auto') scroller.style.cursor = 'grab';
@@ -1052,7 +1144,7 @@
                                 <div class="spinner-border text-muted" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
-                                <p class="mt-3 text-muted">Loading recently viewed products...</p>
+                                <p class="mt-3 text-muted">{{ __('site.loading_recently_viewed') }}</p>
                             </div>
                     </div>
                 </div>
@@ -1652,6 +1744,10 @@
         #ymlDesktop .yml-scroller-arrow--prev { left: 10px; }
         #ymlDesktop .yml-scroller-arrow--next { right: 10px; }
         #ymlDesktop .yml-arrow-left svg { transform: rotate(180deg); }
+        html[dir="rtl"] #ymlDesktop .yml-scroller-arrow--prev { left: auto; right: 10px; }
+        html[dir="rtl"] #ymlDesktop .yml-scroller-arrow--next { right: auto; left: 10px; }
+        html[dir="rtl"] #ymlDesktop .yml-arrow-left svg { transform: none; }
+        html[dir="rtl"] #ymlDesktop .yml-scroller-arrow--next svg { transform: scaleX(-1); }
         #ymlDesktop .yml-scroller-arrow:hover:not(:disabled) {
             transform: translateY(-50%) scale(1.04);
             background: #fff;
@@ -1976,6 +2072,19 @@
 
     {{-- JavaScript Functionality --}}
                             <script>
+        window.HJ_I18N = Object.assign({}, window.HJ_I18N || {}, {
+            please_select_size_cart: @json(__('site.please_select_size_cart')),
+            please_select_size_checkout: @json(__('site.please_select_size_checkout')),
+            could_not_add_to_cart: @json(__('site.could_not_add_to_cart')),
+            error_adding_to_cart: @json(__('site.error_adding_to_cart')),
+            discover_more: @json(__('site.discover_more')),
+            loading_recently_viewed: @json(__('site.loading_recently_viewed')),
+            no_recently_viewed: @json(__('site.no_recently_viewed')),
+            recently_viewed_hint: @json(__('site.recently_viewed_hint')),
+            error_loading_recently_viewed: @json(__('site.error_loading_recently_viewed')),
+            choose_a_size: @json(__('site.choose_a_size')),
+        });
+
         // ===== QUANTITY MANAGEMENT =====
         function updateQuantity(change) {
             const quantityInput = document.getElementById('quantity');
@@ -2032,7 +2141,7 @@
                 const selectedSize = option.dataset.size;
 
                 productSizeInput.value = selectedSize;
-                productSizeSelected.textContent = selectedSize;
+                productSizeSelected.textContent = option.getAttribute('data-size-label') || selectedSize;
                 productSizeOptions.forEach(function (item) {
                     const isSelected = item === option;
                     item.classList.toggle('is-selected', isSelected);
@@ -2055,7 +2164,7 @@
             const selectedSize = sizeSelect ? sizeSelect.value : '';
             
            if (requiresSizeSelection && !selectedSize) {
-                showToast('error', 'Please select a size before adding to cart.');
+                showToast('error', window.HJ_I18N?.please_select_size_cart || 'Please select a size before adding to cart.');
                 setProductSizeOpen(true);
                 productSizeToggle?.focus();
                 return;
@@ -2084,11 +2193,11 @@
                     showToast('success', data.message);
                     location.reload();
                 } else {
-                    showToast('error', data.message || 'Could not add to cart');
+                    showToast('error', data.message || (window.HJ_I18N.could_not_add_to_cart || 'Could not add to cart'));
                 }
             })
             .catch(() => {
-                showToast('error', 'Error adding to cart.');
+                showToast('error', window.HJ_I18N.error_adding_to_cart || 'Error adding to cart.');
             });
         }
 
@@ -2099,7 +2208,7 @@
             const selectedSize = sizeSelect ? sizeSelect.value : '';
             
              if (requiresSizeSelection && !selectedSize) {
-                showToast('error', 'Please select a size before proceeding to checkout.');
+                showToast('error', window.HJ_I18N.please_select_size_checkout || 'Please select a size before proceeding to checkout.');
                 setProductSizeOpen(true);
                 productSizeToggle?.focus();
                 return;
@@ -2128,11 +2237,11 @@
                     // Redirect to checkout
                     window.location.href = "{{ route('checkout') }}";
                 } else {
-                    showToast('error', data.message || 'Could not add to cart');
+                    showToast('error', data.message || (window.HJ_I18N.could_not_add_to_cart || 'Could not add to cart'));
                 }
             })
             .catch(() => {
-                showToast('error', 'Error adding to cart.');
+                showToast('error', window.HJ_I18N.error_adding_to_cart || 'Error adding to cart.');
             });
         }
 
@@ -2146,7 +2255,7 @@
                     $isFranckMuller = true;
                 }
             @endphp
-            const phoneNumber = @json($isFranckMuller ? '923070222666' : '923070222666');
+            const phoneNumber = @json($appointmentWhatsappPhone);
             const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
@@ -2918,13 +3027,13 @@
                                     <div class="card-img">
                                         <img src="${product.image}" class="img-fluid d-block" loading="lazy" alt="${product.name} image" width="400" height="400">
                                     </div>
-                                    <div class="card-img-overlay pe-none">New</div>
+                                    <div class="card-img-overlay pe-none">{{ __('site.new_badge') }}</div>
                                     <div class="card-body text-center" style="background-color: #F6F4F2;">
                                         <h5 class="card-title">${product.name}</h5>
                                         <p class="card-text">
                                          ${product.show_price ? `PKR ${this.formatPrice(product.price)}` : ''}
                                         </p>
-                                        <a href="/products/${product.slug}" class="btn text-white bg-black addToCartProductDetails">Discover More</a>
+                                        <a href="/products/${product.slug}" class="btn text-white bg-black addToCartProductDetails">${window.HJ_I18N.discover_more || 'Discover More'}</a>
                     </div>
                                 </div>
                             </div>`;
@@ -2959,8 +3068,8 @@
                         <div class="card text-center py-5" style="background-color: #F6F4F2; border: 2px dashed #dee2e6;">
                             <div class="card-body">
                                 <i class="fas fa-eye-slash text-muted" style="font-size: 3rem;"></i>
-                                <p class="mt-3 text-muted">No recently viewed products yet</p>
-                                <p class="text-muted small">Products you view will appear here</p>
+                                <p class="mt-3 text-muted">${window.HJ_I18N.no_recently_viewed || 'No recently viewed products yet'}</p>
+                                <p class="text-muted small">${window.HJ_I18N.recently_viewed_hint || 'Products you view will appear here'}</p>
                     </div>
                 </div>
             </div>
@@ -2973,7 +3082,7 @@
                         <div class="card text-center py-5" style="background-color: #F6F4F2; border: 2px dashed #dee2e6;">
                             <div class="card-body">
                                 <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
-                                <p class="mt-3 text-muted">Error loading recently viewed products</p>
+                                <p class="mt-3 text-muted">${window.HJ_I18N.error_loading_recently_viewed || 'Error loading recently viewed products'}</p>
         </div>
                         </div>
                     </div>

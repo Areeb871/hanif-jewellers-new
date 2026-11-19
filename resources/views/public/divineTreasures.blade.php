@@ -68,16 +68,16 @@
 
 
 <section class="container">
-    <div style="width: 100vw; margin-left: calc(-50vw + 50%); background: #fff; position: relative; overflow: hidden;">
+    <div class="divine-slider-wrap">
         <!-- Arrows -->
-        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider', -1)">
+        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider', -1)" aria-label="Previous">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider', 1)">
+        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider', 1)" aria-label="Next">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
 
-        <div id="imageSlider"
+        <div id="imageSlider" class="divine-image-slider"
              style="display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 20px;">
             
             <style>
@@ -180,23 +180,23 @@
 <div class="row g-3 justify-content-center"> 
     <div class="col-md-8 col-lg-6 mx-auto"> 
         <div class="text-center"> 
-            <p class="m-0 px-3" style="padding-top: 1.5rem !important;"> Jewels with a deeply spiritual meaning, Divine Treasures by Hanif is a collection for the believers and collectors alike, exquisitely crafted to perfection.
+            <p class="m-0 px-3" style="padding-top: 1.5rem !important;"> {{ __('site.divine_copy') }}
     </p> 
     </div> 
         </div> 
 </div>
 
 <section class="container mt-5">
-    <div style="width: 100vw; margin-left: calc(-50vw + 50%); background: #fff; position: relative; overflow: hidden;">
+    <div class="divine-slider-wrap">
         <!-- Arrows -->
-        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider2', -1)">
+        <button type="button" class="slider-arrow prev" onclick="DivineGallery.scroll('imageSlider2', -1)" aria-label="Previous">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider2', 1)">
+        <button type="button" class="slider-arrow next" onclick="DivineGallery.scroll('imageSlider2', 1)" aria-label="Next">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
 
-        <div id="imageSlider2"
+        <div id="imageSlider2" class="divine-image-slider"
              style="display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;">
 
             @php
@@ -341,6 +341,19 @@ body.divine-modal-open {
 
 <!-- 🧠 JS + CSS -->
 <style>
+    .divine-slider-wrap {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+    .divine-image-slider {
+        direction: ltr;
+        scrollbar-width: none;
+    }
+    #imageSlider::-webkit-scrollbar,
     #imageSlider2::-webkit-scrollbar { display: none; }
     .slider-arrow {
         position: absolute;
@@ -360,6 +373,8 @@ body.divine-modal-open {
     }
     .slider-arrow.prev { left: 10px; }
     .slider-arrow.next { right: 10px; }
+    html[dir="rtl"] .slider-arrow.prev { left: 10px; right: auto; }
+    html[dir="rtl"] .slider-arrow.next { right: 10px; left: auto; }
 
     /* From your shared code */
     .position-absolute.bottom-0.start-50.translate-middle-x {
@@ -526,7 +541,10 @@ window.DivineGallery = (() => {
         const firstImage = slider.querySelector('img');
         const gap = parseFloat(getComputedStyle(slider).gap) || 0;
         const distance = firstImage ? firstImage.getBoundingClientRect().width + gap : 400;
-        slider.scrollBy({ left: direction * distance, behavior: 'smooth' });
+        // Keep galleries LTR even on Arabic pages; Chrome RTL inverts scrollLeft.
+        const isRtl = getComputedStyle(slider).direction === 'rtl';
+        const delta = (isRtl ? -direction : direction) * distance;
+        slider.scrollBy({ left: delta, behavior: 'smooth' });
     }
 
     function touchDistance(touches) {

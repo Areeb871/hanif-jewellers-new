@@ -390,6 +390,21 @@
                     min-width: 320px;
                     max-width: 380px;
                 }
+                /* Always open Sort & Filter from the physical right (RTL-safe) */
+                html[dir="rtl"] #offcanvasFilter.offcanvas-end {
+                    right: 0 !important;
+                    left: auto !important;
+                    border-left: var(--bs-offcanvas-border-width) solid var(--bs-offcanvas-border-color);
+                    border-right: 0 !important;
+                    transform: translateX(100%);
+                }
+                html[dir="rtl"] #offcanvasFilter.offcanvas-end.showing,
+                html[dir="rtl"] #offcanvasFilter.offcanvas-end.show:not(.hiding) {
+                    transform: none;
+                }
+                html[dir="rtl"] #offcanvasFilter.offcanvas-end.hiding {
+                    transform: translateX(100%);
+                }
                 
                 /* Mobile full width offcanvas */
                 @media (max-width: 767px) {
@@ -446,6 +461,51 @@
                     border-bottom: 1px solid #ecebe7;
                     padding-bottom: 0.4rem;
                     cursor: pointer;
+                }
+                html[dir="rtl"] .offcanvas-modern .filter-section-title,
+                html[dir="rtl"] .os-sort-filter-label,
+                html[dir="rtl"] .filter-tag-btn,
+                html[dir="rtl"] .offcanvas-modern .offcanvas-title {
+                    letter-spacing: 0;
+                    text-transform: none;
+                    font-family: "Cairo", "Helvetica Neue", Arial, sans-serif;
+                }
+                html[dir="rtl"] .sort-list,
+                html[dir="rtl"] .category-list,
+                html[dir="rtl"] .subcategory-list {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+                html[dir="rtl"] .filter-tag-checkbox,
+                html[dir="rtl"] .filter-wedding-checkbox,
+                html[dir="rtl"] .filter-subcat-checkbox {
+                    margin-right: 0;
+                    margin-left: 8px;
+                }
+                html[dir="rtl"] .os-sort-filter-lines span:nth-child(2) {
+                    margin-left: 0;
+                    margin-right: auto;
+                }
+                /* Keep Sort & Filter on the physical right in Arabic */
+                html[dir="rtl"] .os-filter-bar-inner {
+                    direction: ltr;
+                }
+                html[dir="rtl"] .os-sub-filters,
+                html[dir="rtl"] .os-sort-filter-btn {
+                    direction: rtl;
+                }
+                html[dir="rtl"] .os-sort-filter-btn {
+                    grid-column: 3;
+                    justify-self: end;
+                }
+                @media (max-width: 767.98px) {
+                    html[dir="rtl"] .os-sort-filter-btn {
+                        grid-column: 2;
+                        justify-self: end;
+                    }
+                    html[dir="rtl"] .os-sub-filters-wrap {
+                        grid-column: 1;
+                    }
                 }
                 .offcanvas-modern .filter-section + .filter-section {
                     margin-top: 1rem;
@@ -553,13 +613,23 @@
                 .form-check-input.filter-subcat-checkbox:checked { background-color: #111; border-color: #111; }
                 .form-check-input.filter-subcat-checkbox { border-color: #bbb; }
                 /* Add a little gap between tag checkboxes and their labels */
-                .filter-tag-checkbox { margin-right: 8px; }
-                /* Make tag checkboxes shadow-free and black */
-                .form-check-input.filter-tag-checkbox { accent-color: #111; border-color: #bbb; box-shadow: none !important; outline: none !important; }
+                .filter-tag-checkbox,
+                .filter-wedding-checkbox { margin-right: 8px; }
+                /* Make tag / wedding checkboxes shadow-free and black */
+                .form-check-input.filter-tag-checkbox,
+                .form-check-input.filter-wedding-checkbox { accent-color: #111; border-color: #bbb; box-shadow: none !important; outline: none !important; }
                 .form-check-input.filter-tag-checkbox:focus,
                 .form-check-input.filter-tag-checkbox:active,
-                .form-check-input.filter-tag-checkbox:hover { box-shadow: none !important; outline: none !important; }
-                .form-check-input.filter-tag-checkbox:checked { background-color: #111; border-color: #111; }
+                .form-check-input.filter-tag-checkbox:hover,
+                .form-check-input.filter-wedding-checkbox:focus,
+                .form-check-input.filter-wedding-checkbox:active,
+                .form-check-input.filter-wedding-checkbox:hover { box-shadow: none !important; outline: none !important; }
+                .form-check-input.filter-tag-checkbox:checked,
+                .form-check-input.filter-wedding-checkbox:checked {
+                    background-color: #111 !important;
+                    border-color: #111 !important;
+                    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+                }
                 .category-list .subcategory-list li .subcat-label { margin-left: 2px; }
                 .category-list .subcategory-list li .diamond {
                     margin-right: 0.7em;
@@ -830,28 +900,28 @@
             <div class="os-filter-bar filter">
                 <div class="os-filter-bar-inner">
                     <div class="os-sub-filters-wrap">
-                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="Scroll filters left">&#8249;</button>
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-prev" aria-label="{{ __('site.scroll_filters_left') }}">&#8249;</button>
                         <div id="osSubFilters" class="os-sub-filters">
-                        <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings,ehed">Rings</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_rings,diamond_rings,ehed">{{ __('site.rings') }}</button>
 
                 
-                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">Earrings</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_earrings,diamond_earrings,gold_tops">{{ __('site.earrings') }}</button>
 
-                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">Pendants</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_pendants,diamond_pendants,gold_chains">{{ __('site.pendants') }}</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="gold_bangles">BANGLES</button> -->
-                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">Bracelets</button>
+                        <button type="button" class="filter-tag-btn" data-tags="gold_bracelets,gold_bangles">{{ __('site.bracelets') }}</button>
                         <!-- <button type="button" class="filter-tag-btn" data-tags="diamond_bands">BANDS</button> -->
-                        <button type="button" class="filter-tag-btn" data-tags="mens_rings,ehed">Wedding Bands</button>
+                        <button type="button" class="filter-tag-btn" id="osWeddingBandsBtn" data-tags="mens_rings,ehed">{{ __('site.wedding_bands') }}</button>
 
                         </div>
-                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="Scroll filters right">&#8250;</button>
+                        <button type="button" class="os-filter-scroll-btn os-filter-scroll-next" aria-label="{{ __('site.scroll_filters_right') }}">&#8250;</button>
                     </div>
                     <button type="button" class="os-sort-filter-btn" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="Sort and filter">
+                        data-bs-target="#offcanvasFilter" aria-controls="offcanvasFilter" aria-label="{{ __('site.sort_filter') }}">
                         <span class="os-sort-filter-lines" aria-hidden="true">
                             <span></span><span></span><span></span>
                         </span>
-                        <span class="os-sort-filter-label">Sort &amp; Filter</span>
+                        <span class="os-sort-filter-label">{{ __('site.sort_filter') }}</span>
                     </button>
                 </div>
                 <!-- <div style="display:flex;justify-content:center;width:100%;margin-top:4px;">
@@ -863,9 +933,9 @@
             <div class="offcanvas offcanvas-end offcanvas-modern" tabindex="-1" id="offcanvasFilter"
                 aria-labelledby="offcanvasFilterLabel" data-bs-backdrop="true" data-bs-scroll="false">
                 <div class="offcanvas-header">
-                    <span class="offcanvas-title" id="offcanvasFilterLabel">SORT & FILTER</span>
+                    <span class="offcanvas-title" id="offcanvasFilterLabel">{{ __('site.sort_filter_upper') }}</span>
                     <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
+                        aria-label="{{ __('site.close') }}"></button>
                 </div>
                 <div class="offcanvas-body">
                     <form method="GET" action="{{ url('online-shopping-store') }}" id="filterForm">
@@ -876,54 +946,67 @@
                         <input type="hidden" name="tags" id="tagsInput" value="{{ request('tags') }}">
                         <div class="filter-section">
                             <div class="filter-section-title" onclick="toggleCategory('sortList', this.querySelector('.category-toggle'))">
-                                Sort By
+                                {{ __('site.sort_by') }}
                                 <span class="category-toggle">+</span>
                             </div>
                             <ul class="sort-list" id="sortList">
                                 <li data-value="" class="{{ !request('sort') ? 'selected' : '' }}">
-                                    <span class="diamond">◆</span> Best Selling
+                                    <span class="diamond">◆</span> {{ __('site.best_selling') }}
                                 </li>
                                 <li data-value="az" class="{{ request('sort')=='az' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Alphabetically, A-Z
+                                    <span class="diamond">◇</span> {{ __('site.alpha_az') }}
                                 </li>
                                 <li data-value="za" class="{{ request('sort')=='za' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Alphabetically, Z-A
+                                    <span class="diamond">◇</span> {{ __('site.alpha_za') }}
                                 </li>
                                 <li data-value="price_low_high" class="{{ request('sort')=='price_low_high' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Price, low to high
+                                    <span class="diamond">◇</span> {{ __('site.price_low_high') }}
                                 </li>
                                 <li data-value="price_high_low" class="{{ request('sort')=='price_high_low' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Price, high to low
+                                    <span class="diamond">◇</span> {{ __('site.price_high_low') }}
                                 </li>
                                 <li data-value="new_old" class="{{ request('sort')=='new_old' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Date, new to old
+                                    <span class="diamond">◇</span> {{ __('site.date_new_old') }}
                                 </li>
                                 <li data-value="old_new" class="{{ request('sort')=='old_new' ? 'selected' : '' }}">
-                                    <span class="diamond">◇</span> Date, old to new
+                                    <span class="diamond">◇</span> {{ __('site.date_old_new') }}
                                 </li>
                             </ul>
                             <input type="hidden" name="sort" id="sortInput" value="{{ request('sort') }}">
                         </div>
-                        <div class="filter-section">
-                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))">GOLD <span class="category-toggle">+</span></div>
-                            <ul class="category-list collapsible" id="tagListGold">
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();"><span class="subcat-label">Mens Rings</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_tops" onclick="event.stopPropagation();"> <span class="subcat-label">Tops</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_chains" onclick="event.stopPropagation();"> <span class="subcat-label">Chains</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">Pendants</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_bangles" onclick="event.stopPropagation();"> <span class="subcat-label">Bangles</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_bracelets" onclick="event.stopPropagation();"> <span class="subcat-label">Bracelets</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">Earrings</span></li>
+                        <div class="filter-section" id="filterSectionWedding" style="display:none;">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListWedding', this.querySelector('.category-toggle'))">{{ __('site.wedding_bands') }} <span class="category-toggle">−</span></div>
+                            <ul class="category-list collapsible show" id="tagListWedding">
+                                <li>
+                                    <input type="checkbox" class="form-check-input filter-wedding-checkbox" value="his" data-tags="mens_rings,ehed" onclick="event.stopPropagation();">
+                                    <span class="subcat-label">{{ __('site.his') }}</span>
+                                </li>
+                                <li>
+                                    <input type="checkbox" class="form-check-input filter-wedding-checkbox" value="her" data-tags="ehed" onclick="event.stopPropagation();">
+                                    <span class="subcat-label">{{ __('site.her') }}</span>
+                                </li>
                             </ul>
                         </div>
-                        <div class="filter-section">
-                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))">DIAMONDS <span class="category-toggle">+</span></div>
+                        <div class="filter-section" id="filterSectionGold">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListGold', this.querySelector('.category-toggle'))">{{ __('site.gold') }} <span class="category-toggle">+</span></div>
+                            <ul class="category-list collapsible" id="tagListGold">
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="mens_rings" onclick="event.stopPropagation();"><span class="subcat-label">{{ __('site.mens_rings') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_rings" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.rings') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_tops" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.tops') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_chains" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.chains') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.pendants') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_bangles" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.bangles') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_bracelets" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.bracelets') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="gold_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.earrings') }}</span></li>
+                            </ul>
+                        </div>
+                        <div class="filter-section" id="filterSectionDiamonds">
+                            <div class="filter-section-title" onclick="toggleCategory('tagListDiamonds', this.querySelector('.category-toggle'))">{{ __('site.diamonds') }} <span class="category-toggle">+</span></div>
                             <ul class="category-list collapsible" id="tagListDiamonds">
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_rings" onclick="event.stopPropagation();"> <span class="subcat-label">Rings</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">Pendants</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">Earrings</span></li>
-                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_bands" onclick="event.stopPropagation();"> <span class="subcat-label">Bands</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_rings" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.rings') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_pendants" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.pendants') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_earrings" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.earrings') }}</span></li>
+                                <li><input type="checkbox" class="form-check-input filter-tag-checkbox" value="diamond_bands" onclick="event.stopPropagation();"> <span class="subcat-label">{{ __('site.bands') }}</span></li>
                             </ul>
                         </div>
                         </form>
@@ -1101,6 +1184,54 @@
                             return (btn.dataset.tags || '').split(',').map(s => s.trim()).filter(Boolean);
                         }
 
+                        const weddingCheckboxes = document.querySelectorAll('.filter-wedding-checkbox');
+                        const weddingBandsBtn = document.getElementById('osWeddingBandsBtn');
+                        const filterSectionGold = document.getElementById('filterSectionGold');
+                        const filterSectionDiamonds = document.getElementById('filterSectionDiamonds');
+                        const filterSectionWedding = document.getElementById('filterSectionWedding');
+                        const HIS_TAGS = ['mens_rings', 'ehed'];
+                        const HER_TAGS = ['ehed'];
+
+                        function tagsMatch(a, b) {
+                            return a.length === b.length && a.every(t => b.includes(t));
+                        }
+
+                        function isHisTags(tags) {
+                            return tagsMatch(tags, HIS_TAGS);
+                        }
+
+                        function isHerTags(tags) {
+                            return tagsMatch(tags, HER_TAGS);
+                        }
+
+                        function isWeddingTags(tags) {
+                            return isHisTags(tags) || isHerTags(tags);
+                        }
+
+                        function syncWeddingCheckboxes() {
+                            const tags = tagsFromInput();
+                            const hisActive = isHisTags(tags);
+                            const herActive = isHerTags(tags);
+                            weddingCheckboxes.forEach(cb => {
+                                cb.checked = cb.value === 'his' ? hisActive : herActive;
+                            });
+                        }
+
+                        function setWeddingFilterPanel(open) {
+                            if (filterSectionGold) filterSectionGold.style.display = open ? 'none' : '';
+                            if (filterSectionDiamonds) filterSectionDiamonds.style.display = open ? 'none' : '';
+                            if (filterSectionWedding) filterSectionWedding.style.display = open ? '' : 'none';
+
+                            if (open && filterSectionWedding) {
+                                const weddingList = document.getElementById('tagListWedding');
+                                const weddingToggle = filterSectionWedding.querySelector('.category-toggle');
+                                if (weddingList && !weddingList.classList.contains('show')) {
+                                    weddingList.classList.add('show');
+                                    if (weddingToggle) weddingToggle.textContent = '−';
+                                }
+                            }
+                        }
+
                         function syncBarBtnsFromTags() {
                             const tags = tagsFromInput();
                             document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
@@ -1110,6 +1241,8 @@
                                     && btnTags.every(t => tags.includes(t));
                                 btn.classList.toggle('active', active);
                             });
+                            syncWeddingCheckboxes();
+                            setWeddingFilterPanel(isWeddingTags(tags));
                         }
 
                         function syncUiFromTags() {
@@ -1252,10 +1385,35 @@
                                     fetchAndRender();
                                 });
                             });
+                            // His / Her live only in Sort & Filter
+                            weddingCheckboxes.forEach(cb => {
+                                cb.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    const selected = this;
+                                    const list = (selected.dataset.tags || '').split(',').map(s => s.trim()).filter(Boolean);
+                                    if (selected.checked) {
+                                        weddingCheckboxes.forEach(other => {
+                                            if (other !== selected) other.checked = false;
+                                        });
+                                        tagCheckboxes.forEach(other => { other.checked = false; });
+                                        if (tagsInput) tagsInput.value = list.join(',');
+                                        if (defaultsInput) defaultsInput.value = '0';
+                                        setWeddingFilterPanel(true);
+                                    } else {
+                                        if (tagsInput) tagsInput.value = '';
+                                        if (defaultsInput) defaultsInput.value = '1';
+                                        setWeddingFilterPanel(false);
+                                    }
+                                    syncCheckboxesFromTags();
+                                    syncBarBtnsFromTags();
+                                    removeFooterNow();
+                                    fetchAndRender();
+                                });
+                            });
                             syncBarBtnsFromTags();
                         }
 
-                        // Horizontal filter bar (combined tags; offcanvas unchanged)
+                        // Front filter bar stays: Rings / Earrings / Pendants / Bracelets / Wedding Bands
                         document.querySelectorAll('#osSubFilters .filter-tag-btn').forEach(btn => {
                             btn.addEventListener('click', function() {
                                 const list = barTagsFromBtn(this);
@@ -1415,19 +1573,22 @@
                  data-current="{{ $currentPageProducts }}"
                  data-per-page="{{ $products->perPage() }}"
                  data-current-page="{{ $products->currentPage() }}"
-                 style="font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1.5rem;">
-                SHOWING {{ $currentPageProducts }} OF {{ $totalFilteredProducts }} PRODUCTS
+                 data-showing-template="{{ __('site.showing_products', ['shown' => '__SHOWN__', 'total' => '__TOTAL__']) }}"
+                 style="font-size: 1rem; letter-spacing: {{ app()->getLocale() === 'ar' ? '0' : '0.2em' }}; margin-bottom: 1.5rem;">
+                {{ __('site.showing_products', ['shown' => $currentPageProducts, 'total' => $totalFilteredProducts]) }}
             </div>
         @endif
 
         @if($shouldShowLoadMore)
             <button id="loadMoreBtn"
-                    style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: 0.15em; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
+                    style="background: #e3e4e5; border: none; color: #222; font-size: 0.8rem; letter-spacing: {{ app()->getLocale() === 'ar' ? '0' : '0.15em' }}; padding: 0.8rem 2rem; border-radius: 8px; font-family: inherit; font-weight: 400; box-shadow: none; transition: background 0.2s;"
                     data-page="{{ $products->currentPage() + 1 }}"
                     data-last-page="{{ $products->lastPage() }}"
                     data-per-page="{{ $products->perPage() }}"
-                    data-total="{{ $totalFilteredProducts }}">
-                LOAD MORE
+                    data-total="{{ $totalFilteredProducts }}"
+                    data-load-more="{{ __('site.load_more') }}"
+                    data-loading="{{ __('site.loading') }}">
+                {{ __('site.load_more') }}
             </button>
         @endif
     </div>
@@ -1620,6 +1781,12 @@
                 }
             }
 
+            function formatShowingText(shown, total) {
+                const counter = document.querySelector('.products-counter');
+                const template = counter?.getAttribute('data-showing-template') || 'SHOWING __SHOWN__ OF __TOTAL__ PRODUCTS';
+                return template.replace('__SHOWN__', String(shown)).replace('__TOTAL__', String(total));
+            }
+
             function updateCounter() {
                 const totalShown = getShownCount();
                 const counter = document.querySelector('.products-counter');
@@ -1630,7 +1797,7 @@
                 counter.setAttribute('data-current', totalShown);
 
                 if (totalProducts > 0) {
-                    counter.textContent = `SHOWING ${totalShown} OF ${totalProducts} PRODUCTS`;
+                    counter.textContent = formatShowingText(totalShown, totalProducts);
                     counter.style.display = 'block';
                 } else {
                     counter.style.display = 'none';
@@ -1649,9 +1816,11 @@
 
             btn.addEventListener('click', function () {
                 const nextPage = parseInt(btn.getAttribute('data-page') || '2', 10);
+                const loadMoreLabel = btn.getAttribute('data-load-more') || 'LOAD MORE';
+                const loadingLabel = btn.getAttribute('data-loading') || 'Loading...';
 
                 btn.disabled = true;
-                btn.textContent = 'Loading...';
+                btn.textContent = loadingLabel;
 
                 const url = new URL(window.location.href);
                 url.searchParams.set('page', String(nextPage));
@@ -1687,7 +1856,7 @@
                     // Then update next page
                     btn.setAttribute('data-page', String(nextPage + 1));
                     btn.disabled = false;
-                    btn.textContent = 'LOAD MORE';
+                    btn.textContent = loadMoreLabel;
 
                     // Then update counter
                     updateCounter();
@@ -1708,7 +1877,7 @@
                 })
                 .catch(() => {
                     btn.disabled = false;
-                    btn.textContent = 'LOAD MORE';
+                    btn.textContent = loadMoreLabel;
 
                     try {
                         const url = new URL(window.location.href);
@@ -1729,7 +1898,8 @@
             if (grid) {
                 const totalShown = grid.querySelectorAll('.card.addToCartProductDetailsTop').length;
                 const totalProducts = parseInt(counter.getAttribute('data-total') || '0', 10);
-                counter.textContent = `SHOWING ${totalShown} OF ${totalProducts} PRODUCTS`;
+                const template = counter.getAttribute('data-showing-template') || 'SHOWING __SHOWN__ OF __TOTAL__ PRODUCTS';
+                counter.textContent = template.replace('__SHOWN__', String(totalShown)).replace('__TOTAL__', String(totalProducts));
             }
         }
     });

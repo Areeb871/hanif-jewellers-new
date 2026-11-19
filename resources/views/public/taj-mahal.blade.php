@@ -26,7 +26,7 @@
 @endif
 
 <section class="taj-mahal-campaign" aria-label="Taj Mahal campaign">
-    @foreach(range(1, 3) as $index)
+    @foreach(range(1, 4) as $index)
         <div class="taj-mahal-campaign__banner">
             <img
                 class="taj-mahal-campaign__image taj-mahal-campaign__image--desktop"
@@ -37,7 +37,7 @@
             >
             <img
                 class="taj-mahal-campaign__image taj-mahal-campaign__image--mobile"
-                src="{{ asset('assets/f_assets/image/Taj Mahal/mob' . $index . '.png') }}"
+                src="{{ asset('assets/f_assets/image/Taj Mahal/mob' . $index . '.jpeg') }}"
                 alt="Taj Mahal mobile campaign banner {{ $index }}"
                 loading="{{ $index === 1 ? 'eager' : 'lazy' }}"
                 decoding="async"
@@ -45,14 +45,14 @@
 
             @if($index === 1)
                 <div class="taj-mahal-campaign__content d-none d-md-flex">
-                    <h2 class="taj-mahal-campaign__title">TAJ MAHAL</h2>
-                    <p class="taj-mahal-campaign__copy">A Timeless Tradition of Magnificence with Modern Opulent Vibes. An Heirloom Jewels Collection from the House of Hanif, created with the perfect blend of Classic and Modern Aesthetics.</p>
+                    <h2 class="taj-mahal-campaign__title">{{ __('site.col_taj') }}</h2>
+                    <p class="taj-mahal-campaign__copy">{{ __('site.taj_copy') }}</p>
                     <x-book-appointment class="taj-mahal-campaign__button" />
                 </div>
 
                 <div class="taj-mahal-campaign__mobile-content d-md-none">
-                    <h2 class="taj-mahal-campaign__mobile-title">TAJ MAHAL</h2>
-                    <p class="taj-mahal-campaign__mobile-copy">A Timeless Tradition of Magnificence with Modern Opulent Vibes. An Heirloom Jewels Collection from the House of Hanif, created with the perfect blend of Classic and Modern Aesthetics.</p>
+                    <h2 class="taj-mahal-campaign__mobile-title">{{ __('site.col_taj') }}</h2>
+                    <p class="taj-mahal-campaign__mobile-copy">{{ __('site.taj_copy') }}</p>
                     <x-book-appointment />
                 </div>
             @endif
@@ -150,16 +150,18 @@ header .col,
 .taj-mahal-campaign__content{
     position: absolute;
     top: 50%;
-    left: clamp(24px, 7vw, 140px);
+    right: clamp(24px, 7vw, 140px);
+    left: auto;
     width: min(32vw, 470px);
     transform: translateY(-50%);
     flex-direction: column;
     align-items: flex-start;
-    color: #111;
+    color: #fff;
 }
 
 .taj-mahal-campaign__title{
     margin: 0 0 14px;
+    color: #fff;
     font-family: "Poppins", sans-serif;
     font-size: clamp(22px, 2vw, 34px);
     font-weight: 500;
@@ -168,14 +170,25 @@ header .col,
 
 .taj-mahal-campaign__copy{
     margin: 0 0 22px;
+    color: #fff;
     font-family: "Poppins", sans-serif;
     font-size: clamp(12px, 1vw, 16px);
     font-weight: 400;
     line-height: 1.7;
 }
 
-.taj-mahal-campaign__button{
+.taj-mahal-campaign__content .taj-mahal-campaign__button.book-appointment-btn{
     margin: 0 !important;
+    border: 1px solid #fff !important;
+    background: #fff !important;
+    color: #111 !important;
+}
+
+.taj-mahal-campaign__content .taj-mahal-campaign__button.book-appointment-btn:hover,
+.taj-mahal-campaign__content .taj-mahal-campaign__button.book-appointment-btn:focus{
+    border-color: #fff !important;
+    background: #fff !important;
+    color: #111 !important;
 }
 
 .taj-mahal-campaign__mobile-content{
@@ -306,81 +319,6 @@ margin:auto;
         <div class="container pb-0">
              <div class="swiper taj-mahal-looks-slider">
              <div class="swiper-wrapper taj-mahal-collection-grid">
-                <div class="col-md-4">
-                @php
-                       $navratanRedImages = [];
-                        for ($i = 1; $i <= 2; $i++) {
-                            $navratanRedImages[] = [
-                                'src' => asset('assets/f_assets/image/Taj Mahal/11/' . $i . '.png'),
-                                'alt' => 'taj-mahal-collection-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'tajMahalCarousel-11',
-                        'images' => $navratanRedImages,
-                    ])
-                </div>
-                <div class="col-md-4">
-                    @php
-                        $navratanBlueImages = [];
-                        for ($i = 1; $i <= 2; $i++) {
-                            $navratanBlueImages[] = [
-                                'src' => asset('assets/f_assets/image/Taj Mahal/15/' . $i . '.png'),
-                                'alt' => 'taj-mahal-collection-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'tajMahalCarousel-15',
-                        'images' => $navratanBlueImages,
-                    ])
-                </div>
-                <div class="col-md-4">
-                    @php
-                        $navratanLook3 = [];
-                        for ($i = 1; $i <= 2; $i++) {
-                            $navratanLook3[] = [
-                                'src' => asset('assets/f_assets/image/Taj Mahal/16/' . $i . '.png'),
-                                'alt' => 'taj-mahal-collection-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'tajMahalCarousel-16',
-                        'images' => $navratanLook3,
-                    ])
-                </div>
-                <div class="col-md-4">
-                @php
-                       $navratanRedImages = [];
-                        for ($i = 1; $i <= 3; $i++) {
-                            $navratanRedImages[] = [
-                                'src' => asset('assets/f_assets/image/Taj Mahal/17/' . $i . '.png'),
-                                'alt' => 'taj-mahal-collection-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'tajMahalCarousel-17',
-                        'images' => $navratanRedImages,
-                    ])
-                </div>
-                <div class="col-md-4">
-                    @php
-                        $navratanBlueImages = [];
-                        for ($i = 1; $i <= 2; $i++) {
-                            $navratanBlueImages[] = [
-                                'src' => asset('assets/f_assets/image/Taj Mahal/18/' . $i . '.png'),
-                                'alt' => 'taj-mahal-collection-' . $i,
-                            ];
-                        }
-                    @endphp
-                    @include('public.partials.carousel', [
-                        'id' => 'tajMahalCarousel-18',
-                        'images' => $navratanBlueImages,
-                    ])
-                </div>
                 <div class="col-md-4">
                 @php
                        $navratanRedImages = [];

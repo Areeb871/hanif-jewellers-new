@@ -8,8 +8,15 @@
     </section>
 
     <section class="">
+        @php $isAr = app()->getLocale() === 'ar'; @endphp
         <div class="container py-5 text-center"
-            style="font-family: 'Cinzel', serif; font-weight: 300; font-size: 20px; text-transform: uppercase; line-height: 1.6; margin-top:50px;">
+            style="font-family: {{ $isAr ? 'Cairo, sans-serif' : "'Cinzel', serif" }}; font-weight: 300; font-size: 20px; text-transform: {{ $isAr ? 'none' : 'uppercase' }}; line-height: 1.8; margin-top:50px;">
+            @if($isAr)
+            <p>حنيف يعني إيمان صادق بالأصالة، وإرث راقي من سنة ١٩٧٨.</p>
+            <p>التزام ثابت بالجودة، وعلاقات تبقى.</p>
+            <p>دار عائلية من بيت حنيف، على ثلاث أجيال، تصنع وتنتقي المجوهرات والساعات الفاخرة، ويثق فيها ملايين العملاء.</p>
+            <p>تجربة حقيقية للفن الخالص، ولمجوهرات تُصنع حسب الطلب.</p>
+            @else
             <p>
             <span style="font-size: 23px">H</span>ANIF means A <span style="font-size: 23px">T</span>rue <span style="font-size: 23px">B</span>elief in <span style="font-size: 23px">O</span>riginality and a<br>
             <span style="font-size: 23px">H</span>ERITAGE <span style="font-size: 23px">P</span>AR <span style="font-size: 23px">E</span>XCELLENCE <span style="font-size: 23px">S</span>INCE 1978.
@@ -26,6 +33,7 @@
             <span style="font-size: 23px">A</span> TRUE EXPERIENCE OF PURE ART <span style="font-size: 23px">&amp;</span> BESPOKE<br> HANDCRAFTED
             LUXURY.
             </p>
+            @endif
             <div style="width: 25%; border-bottom: 2px solid #000; margin: 30px auto 0 auto;"></div>
         </div>
     </section>

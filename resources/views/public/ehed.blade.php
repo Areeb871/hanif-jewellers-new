@@ -39,22 +39,22 @@
 /* ========== HERO ========== */
 .ehed-hero-section{
     display:flex;
+    flex-direction:column;
     align-items:stretch;
 }
 .ehed-video-container{
-    width:50%;
+    width:100%;
     position:relative;
     overflow:hidden;
     flex-shrink:0;
-    aspect-ratio:746 / 430;
-    background:#fff;
+    height:auto;
+    background:#000;
 }
 .ehed-video-container video,
 .ehed-media-cover{
-    position:absolute;
-    inset:0;
-    width:99.6%;
-    height:104%;
+    position:static;
+    width:100%;
+    height:auto;
     object-fit:contain;
     object-position:center center;
     display:block;
@@ -92,7 +92,7 @@
 h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 
 @media(min-width:48rem){
-    .hero__description{ max-width:40rem; font-size:110%; }
+    .hero__description{ max-width:40rem; font-size:100%; }
     .text-align--center .hero__description{ margin-left:auto; margin-right:auto; }
 }
 @media(min-width:699px){ .text-large{ font-size:2.5rem; letter-spacing:2px; } }
@@ -108,7 +108,6 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 @media(min-width:768px) and (max-width:1199.98px){
     .ehed-hero-section{ align-items:stretch; }
     .ehed-video-container{
-        aspect-ratio:746 / 430;
         min-height:0;
         height:auto;
     }
@@ -127,7 +126,7 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
 }
 @media(max-width:767.98px){
     .ehed-hero-section{ flex-direction:column; min-height:auto; }
-    .ehed-video-container{ width:100%; height:auto; aspect-ratio:746 / 430; }
+    .ehed-video-container{ width:100%; height:auto; }
     .ehed-content-container{ width:100%; padding:24px 20px; }
     .ehed-main-title{ font-size:48px; }
     .ehed-category-label{ font-size:12px; }
@@ -273,6 +272,27 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
     padding:2.5rem 0;
 }
 @media(max-width:767.98px){ .ehed-shop-spacing{ padding:1.5rem 0; } }
+
+.ehed-banners{display:flex;flex-direction:column;width:100%;margin:0;padding:0}
+.ehed-banners img{display:block;width:100%;height:auto}
+.ehed-banner{position:relative}
+.ehed-banner__panel{position:absolute;left:clamp(24px,4vw,72px);top:50%;right:auto;bottom:auto;transform:translateY(-50%);z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:clamp(260px,30vw,420px);max-width:calc(50% - 32px);box-sizing:border-box;color:#111;font-family:'Poppins',sans-serif;text-align:start}
+.ehed-banner__title{margin:0;color:inherit;font-family:'Poppins',sans-serif;font-size:clamp(20px,1.6vw,26px);font-weight:500;letter-spacing:.18em;line-height:1.2}
+.ehed-banner__copy{width:100%;max-width:40em;margin:10px 0 18px;color:inherit;font-family:'Poppins',sans-serif;font-size:clamp(12px,.78vw,14px);font-weight:400;letter-spacing:.02em;line-height:1.7}
+.ehed-banner__button{display:inline-block;padding:clamp(10px,.72vw,13px) clamp(16px,1.4vw,26px);background:#111;color:#fff;font-family:'Poppins',sans-serif;font-size:clamp(10px,.58vw,11px);letter-spacing:.16em;line-height:1.4;text-decoration:none;text-transform:uppercase}
+.ehed-banner__button:hover,.ehed-banner__button:focus{background:#2b2b2b;color:#fff}
+.ehed-banner__mobile-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;box-sizing:border-box;padding:32px 24px 36px;background:#fff;color:#111;font-family:'Poppins',sans-serif;text-align:center}
+.ehed-banner__mobile-panel .ehed-banner__title{width:100%;font-size:22px;text-align:center}
+.ehed-banner__mobile-panel .ehed-banner__copy{max-width:34em;margin:12px auto 20px;font-size:13px;text-align:center}
+.ehed-products{width:100%;margin-top:8px;overflow:hidden}
+.ehed-products__slider{width:100%;overflow:hidden}
+.ehed-products__slider .swiper-slide{height:auto;min-width:0}
+.ehed-products__prev,.ehed-products__next{width:44px;height:44px;margin-top:0;top:calc(50% - 22px);transform:translateY(-50%);z-index:5;border:0;border-radius:50%;background:#fff;color:#000;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.ehed-products__prev{left:10px}
+.ehed-products__next{right:10px}
+.ehed-products__prev::after,.ehed-products__next::after{color:#000;font-size:16px;font-weight:700}
+.ehed-products__prev.swiper-button-disabled,.ehed-products__next.swiper-button-disabled{opacity:.35;pointer-events:none}
+@media(max-width:575.98px){.ehed-products__prev,.ehed-products__next{display:none}}
 </style>
 
 {{-- ========== HERO SECTION ========== --}}
@@ -297,133 +317,80 @@ h1,h2,h3,h4,h5,h6{ margin-top:0; margin-bottom:0; }
             <img src="{{ $mobileBannerUrl }}" alt="Ehed Banner Mobile" class="ehed-media-cover">
         @endif
     </div>
-    <div class="ehed-content-container">
-        <h1 class="ehed-main-title">EHED</h1>
-        <div class="ehed-category-label">MEN & WOMEN</div>
-        <p class="ehed-body-text hero__description">
-            Ehed by Hanif is for all those unbreakable promises. Explore a whole world of possibilities elegantly handcrafted for all occasions.
-        </p>
-    </div>
 </section>
 
-<div class="ehed-cards">
-{{-- ========== TOP GALLERY ROW ========== --}}
-@if(isset($galleryImages) && $galleryImages->count() > 0)
-<div class="ehed-grid" id="qawsAlMatarGallery">
-    @foreach($galleryImages as $index => $image)
-        <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="qawsAlMatarGallery" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('qawsAlMatarGallery', {{ $loop->index }})">
-        </div>
-    @endforeach
-    @if($galleryImages->count() < 4)
-        @for($i = $galleryImages->count(); $i < 4; $i++)
-            <div class="col-6 col-md-3">
-                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
-                    <span class="text-muted">No image</span>
+<div class="ehed-banners">
+    @foreach([1, 2, 3] as $banner)
+        <div class="ehed-banner">
+            <img src="{{ asset('assets/f_assets/image/ehed/' . $banner . '.png') }}"
+                 alt="Ehed Banner {{ $banner }}"
+                 width="1920"
+                 height="1080"
+                 @if($banner > 1) loading="lazy" @endif
+                 decoding="async">
+            @if($banner === 1)
+                <div class="ehed-banner__panel d-none d-lg-flex">
+                    <h1 class="ehed-banner__title">{{ __('site.col_ehed') }}</h1>
+                    <p class="ehed-banner__copy">{{ __('site.ehed_copy') }}</p>
+                    <a class="ehed-banner__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
-            </div>
-        @endfor
-    @endif
-</div>
-@endif
-
-{{-- ========== PROMO: CAROUSEL + 2 PRODUCT IMAGES ========== --}}
-<div class="ehed-promo">
-    <div class="ehed-promo__row">
-        {{-- Carousel: spans 2 of 4 columns, both rows on desktop --}}
-        <div class="ehed-promo__carousel-col">
-            <div class="ehed-promo__carousel-wrap">
-                <div id="promoCarouselEhed" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner h-100">
-                        <div class="carousel-item active h-100 position-relative">
-                            <img src="{{ asset('assets/f_assets/image/ehed/male_ehed.png') }}" alt="Promotional Banner 1">
-                            <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn discover-btn" label="Shop Now" />
-                            </div>
-                        </div>
-                        <div class="carousel-item h-100 position-relative">
-                            <img src="{{ asset('assets/f_assets/image/ehed/female_ehed.png') }}" alt="Promotional Banner 2">
-                            <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                                <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn discover-btn" label="Shop Now" />
-                            </div>
-                        </div>
-                    </div>
+                <div class="ehed-banner__mobile-panel d-lg-none">
+                    <h1 class="ehed-banner__title">{{ __('site.col_ehed') }}</h1>
+                    <p class="ehed-banner__copy">{{ __('site.ehed_copy') }}</p>
+                    <a class="ehed-banner__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
-            </div>
-        </div>
-
-        {{-- Product tiles: each is a direct grid child (1 col each) --}}
-        @if(isset($productImages) && $productImages->count() > 0)
-            @foreach($productImages->take(2) as $index => $image)
-                @php $img = $image->image ?? null; @endphp
-                <a href="#" class="ehed-promo__tile">
-                    @if($img)
-                        <img src="{{ asset($img) }}" alt="Product {{ $index + 1 }}">
-                    @else
-                        <div style="width:100%;height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
-                            <span class="text-muted">No image</span>
-                        </div>
-                    @endif
-                </a>
-            @endforeach
-            @if($productImages->count() < 2)
-                @for($i = $productImages->count(); $i < 2; $i++)
-                    <a href="#" class="ehed-promo__tile">
-                        <div style="width:100%;height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
-                            <span class="text-muted">No image</span>
-                        </div>
-                    </a>
-                @endfor
             @endif
-        @endif
+        </div>
+    @endforeach
+</div>
+
+@if(isset($products) && $products->isNotEmpty())
+<section class="ehed-products" aria-label="{{ __('site.col_ehed') }}">
+    <div class="swiper ehed-products__slider">
+        <div class="swiper-wrapper">
+            @foreach($products as $product)
+                <div class="swiper-slide">
+                    @include('public.partials.simple-card', [
+                        'product' => $product,
+                        'storeContext' => true,
+                        'hideDetails' => true,
+                    ])
+                </div>
+            @endforeach
+        </div>
+        <button class="swiper-button-prev ehed-products__prev" type="button" aria-label="Previous"></button>
+        <button class="swiper-button-next ehed-products__next" type="button" aria-label="Next"></button>
     </div>
-</div>
-
-{{-- ========== BOTTOM GALLERY ROW 1 ========== --}}
-@if(isset($bottomImages) && $bottomImages->count() > 0)
-<div class="ehed-grid" id="bottomGallery">
-    @foreach($bottomImages as $index => $image)
-        <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGallery" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('bottomGallery', {{ $loop->index }})">
-        </div>
-    @endforeach
-    @if($bottomImages->count() < 4)
-        @for($i = $bottomImages->count(); $i < 4; $i++)
-            <div class="col-6 col-md-3">
-                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
-                    <span class="text-muted">No image</span>
-                </div>
-            </div>
-        @endfor
-    @endif
-</div>
+</section>
 @endif
 
-{{-- ========== BOTTOM GALLERY ROW 2 ========== --}}
-@if(isset($bottomImagesRow2) && $bottomImagesRow2->count() > 0)
-<div class="ehed-grid" id="bottomGalleryRow2">
-    @foreach($bottomImagesRow2 as $index => $image)
-        <div class="col-6 col-md-3">
-            <img src="{{ asset($image->image) }}" class="img-fluid ehed-grid-img" alt="Ehed Gallery Image" data-gallery="bottomGalleryRow2" data-index="{{ $loop->index }}" style="cursor:pointer;" onclick="openImageModal('bottomGalleryRow2', {{ $loop->index }})">
-        </div>
-    @endforeach
-    @if($bottomImagesRow2->count() < 4)
-        @for($i = $bottomImagesRow2->count(); $i < 4; $i++)
-            <div class="col-6 col-md-3">
-                <div class="ehed-grid-img d-flex align-items-center justify-content-center" style="background:#f5f5f5;">
-                    <span class="text-muted">No image</span>
-                </div>
-            </div>
-        @endfor
-    @endif
-</div>
-@endif
-</div>
-
-{{-- ========== SHOP NOW ========== --}}
 <div class="ehed-shop-spacing">
-    <x-shop-now :href="url('/collections/online-shopping-store?page=1&tags=ehed&use_defaults=0')" class="btn border btn-outline-dark px-5 py-2" />
+    <x-book-appointment class="btn border btn-outline-dark px-5 py-2" />
 </div>
 
-@include('public.partials.image-gallery-modal')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('.ehed-products__slider');
+    if (!slider || typeof Swiper === 'undefined') return;
+
+    new Swiper(slider, {
+        rtl: document.documentElement.getAttribute('dir') === 'rtl',
+        loop: false,
+        grabCursor: true,
+        watchOverflow: true,
+        observer: true,
+        observeParents: true,
+        navigation: {
+            nextEl: slider.querySelector('.ehed-products__next'),
+            prevEl: slider.querySelector('.ehed-products__prev')
+        },
+        breakpoints: {
+            0: { slidesPerView: 1, spaceBetween: 8 },
+            576: { slidesPerView: 2, spaceBetween: 8 },
+            768: { slidesPerView: 3, spaceBetween: 8 },
+            1200: { slidesPerView: 4, spaceBetween: 8 }
+        }
+    });
+});
+</script>
 @endsection

@@ -684,33 +684,42 @@ public function index()
             ->take($perCategory)
             ->get();
 
-        // Interleave: Jewellery, Watch, Jewellery, Watch
-        $products = collect();
-        $max = max($jewellery->count(), $mixedWatches->count());
+        $isUae = Products::currentMarket() === 'uae';
 
-        for ($i = 0; $i < $max; $i++) {
-            if (isset($jewellery[$i])) {
-                $products->push($jewellery[$i]);
+        // UAE: jewellery only (no watches). PK: interleave jewellery + watches.
+        if ($isUae) {
+            $products = $jewellery->values();
+            $watches = collect();
+        } else {
+            $products = collect();
+            $max = max($jewellery->count(), $mixedWatches->count());
+
+            for ($i = 0; $i < $max; $i++) {
+                if (isset($jewellery[$i])) {
+                    $products->push($jewellery[$i]);
+                }
+
+                if (isset($mixedWatches[$i])) {
+                    $products->push($mixedWatches[$i]);
+                }
             }
 
-            if (isset($mixedWatches[$i])) {
-                $products->push($mixedWatches[$i]);
-            }
+            $products = $products->values();
+
+            $watches = Products::with('category', 'subcategory')
+                ->where([
+                    ['status', 'published'],
+                    ['is_featured', 1],
+                    ['category_id', 3]
+                ])
+                ->get();
         }
 
-        // Reset keys
-        $products = $products->values();
+        $homeView = $isUae
+            ? 'public.index_dubai'
+            : 'public.index';
 
-        // All featured watches section
-        $watches = Products::with('category', 'subcategory')
-            ->where([
-                ['status', 'published'],
-                ['is_featured', 1],
-                ['category_id', 3]
-            ])
-            ->get();
-
-        return view('public.index', compact(
+        return view($homeView, compact(
             'categories',
             'products',
             'watchCategories',
@@ -2296,7 +2305,9 @@ public function Online_Shopping_Store(Request $request)
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
-        return view('public.locator', compact('categories', 'watchCategories'));
+        $market = \App\Models\Products::currentMarket();
+
+        return view('public.locator', compact('categories', 'watchCategories', 'market'));
     }
     public function assurance()
     {
@@ -2321,25 +2332,31 @@ public function Online_Shopping_Store(Request $request)
     {
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
+        $market = \App\Models\Products::currentMarket();
 
-        return view('public.social-links', compact('categories', 'watchCategories'));
+        return view('public.social-links', compact('categories', 'watchCategories', 'market'));
     }
 
     public function locationProfile($slug)
     {
         $locations = [
-            'dha' => ['name' => 'DHA Premium Store, Lahore', 'review_url' => 'https://g.page/r/CScW4gIKzKZPEAE/review'],
-            'mm-alam' => ['name' => 'MM Alam Flagship Store, Lahore', 'review_url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review'],
-            'f6-islamabad' => ['name' => 'F6 Flagship Store, Islamabad', 'review_url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review'],
-            'serena-islamabad' => ['name' => 'Serena Exclusive Store, Islamabad', 'review_url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review'],
-            'marriott-islamabad' => ['name' => 'Marriott Lifestyle Store, Islamabad', 'review_url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review'],
-            'dolmen-mall' => ['name' => 'Dolmen Premium Store, Lahore', 'review_url' => 'https://g.page/r/CYp_YF50r60TEAE/review'],
-            'dubai' => ['name' => 'Flagship Store, Dubai', 'review_url' => 'https://g.page/r/CbeYicQsEHflEAE/review'],
-            'franck-muller' => ['name' => 'Franck Muller Boutique, Lahore', 'review_url' => 'https://g.page/r/CViIXJGaBTPyEAE/review'],
-            'zartash-couture' => ['name' => 'Zartash Couture', 'review_url' => 'https://g.page/r/CWV3wNZpmaxFEAE/review'],
+            'dha' => ['name' => 'DHA Premium Store, Lahore', 'review_url' => 'https://g.page/r/CScW4gIKzKZPEAE/review', 'market' => 'pk'],
+            'mm-alam' => ['name' => 'MM Alam Flagship Store, Lahore', 'review_url' => 'https://g.page/r/CdiW7j5S5SMTEAE/review', 'market' => 'pk'],
+            'f6-islamabad' => ['name' => 'F6 Flagship Store, Islamabad', 'review_url' => 'https://g.page/r/CZ-bWf0KYjnDEAE/review', 'market' => 'pk'],
+            'serena-islamabad' => ['name' => 'Serena Exclusive Store, Islamabad', 'review_url' => 'https://g.page/r/CcQ6-lecmSrqEAE/review', 'market' => 'pk'],
+            'marriott-islamabad' => ['name' => 'Marriott Lifestyle Store, Islamabad', 'review_url' => 'https://g.page/r/CSJkqD4ZVsaTEAE/review', 'market' => 'pk'],
+            'dolmen-mall' => ['name' => 'Dolmen Premium Store, Lahore', 'review_url' => 'https://g.page/r/CYp_YF50r60TEAE/review', 'market' => 'pk'],
+            'dubai' => ['name' => 'Flagship Store, Dubai', 'review_url' => 'https://g.page/r/CbeYicQsEHflEAE/review', 'market' => 'uae'],
+            'franck-muller' => ['name' => 'Franck Muller Boutique, Lahore', 'review_url' => 'https://g.page/r/CViIXJGaBTPyEAE/review', 'market' => 'pk'],
+            'zartash-couture' => ['name' => 'Zartash Couture', 'review_url' => 'https://g.page/r/CWV3wNZpmaxFEAE/review', 'market' => 'pk'],
         ];
 
         if (!isset($locations[$slug])) {
+            abort(404);
+        }
+
+        $market = \App\Models\Products::currentMarket();
+        if (($locations[$slug]['market'] ?? 'pk') !== $market) {
             abort(404);
         }
 
@@ -2347,7 +2364,7 @@ public function Online_Shopping_Store(Request $request)
         $categories = Categories::with('subcategories')->where('name', 'not like', '%watch%')->get();
         $watchCategories = Categories::with('subcategories')->where('name', 'like', '%watch%')->get();
 
-        return view('public.location-profile', compact('location', 'categories', 'watchCategories'));
+        return view('public.location-profile', compact('location', 'categories', 'watchCategories', 'market'));
     }
     public function after_sale_services()
     {
@@ -2496,13 +2513,23 @@ public function Online_Shopping_Store(Request $request)
                   ->orWhereRaw('LOWER(name) = ?', ['ehed']);
             })
             ->first();
+
+        $products = Products::with(['category', 'subcategory', 'images', 'tags'])
+            ->where('status', 'published')
+            ->whereHas('subcategory', function ($q) {
+                $q->whereRaw('LOWER(name) = ?', ['ehed'])
+                  ->orWhereRaw('LOWER(slug) = ?', ['ehed']);
+            })
+            ->orderBy('id')
+            ->get();
         
         return view('public.ehed', compact(
             'galleryImages',
             'productImages',
             'bottomImages',
             'bottomImagesRow2',
-            'subcategory'
+            'subcategory',
+            'products'
         ));
     }
     public function cleopatra()

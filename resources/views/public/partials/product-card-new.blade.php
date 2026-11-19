@@ -3,8 +3,9 @@
     $hasImages = isset($product->images) && count($product->images) > 0;
     $displayImage = $hasImages ? asset($product->images->first()->image) : ($product->image ? asset($product->image) : asset('default.jpg'));
     $storeContext = $storeContext ?? false;
-    $cardName = $storeContext ? $product->storefrontName() : $product->name;
+    $cardName = $storeContext ? $product->storefrontName() : $product->displayName(false);
     $livePrice = $product->isSeleneProduct() ? 0 : ($storeContext ? $product->storefront_price : ($product->final_price ?? 0));
+    $cardCurrency = $product->displayCurrency($storeContext);
     $detailUrl = $storeContext
         ? route('product.details', $product->slug) . '?store=1'
         : route('product.details', $product->slug);
@@ -243,6 +244,19 @@
     .addToCartProductDetailsTop .carousel-control-next {
         z-index: 10;
     }
+
+    html[dir="rtl"] .addToCartProductDetailsTop .carousel-control-prev {
+        left: auto !important;
+        right: 8px !important;
+    }
+    html[dir="rtl"] .addToCartProductDetailsTop .carousel-control-next {
+        right: auto !important;
+        left: 8px !important;
+    }
+    html[dir="rtl"] .addToCartProductDetailsTop .carousel-control-prev-icon,
+    html[dir="rtl"] .addToCartProductDetailsTop .carousel-control-next-icon {
+        transform: scaleX(-1) !important;
+    }
     
     /* Fast carousel transitions */
     .addToCartProductDetailsTop .carousel-item {
@@ -429,7 +443,7 @@
     </div>
     <!-- <div class="card-img-overlay pe-none">New</div> -->
     @php
-        $roundedPrice = round($livePrice, -3);
+        $roundedPrice = \App\Models\Products::roundDisplayPrice($livePrice);
         $showCardPrice = $roundedPrice > 0;
     @endphp
     <div class="card-body text-center" style="background-color: #F6F4F2;">
@@ -443,14 +457,14 @@
 
         <p class="card-text{{ $showCardPrice ? '' : ' card-text--empty' }}">
             @if($showCardPrice)
-                PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+                {{ $cardCurrency }} {{ number_format($roundedPrice, 0, '.', ',') }}
             @else
                 &nbsp;
             @endif
         </p>
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
-            <a href="{{ $detailUrl }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">Discover More</a>
+            <a href="{{ $detailUrl }}" class="btn text-white bg-black addToCartProductDetails discover-more-btn">{{ __('site.discover_more') }}</a>
         @endif
     </div>
 </div>

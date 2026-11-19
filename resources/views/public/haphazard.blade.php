@@ -333,9 +333,9 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
 
     <div class="ehed-content-container">
         <!-- <div class="ehed-category-label">WOMEN</div> -->
-        <h1 class="ehed-main-title">HAPHAZARD</h1>
+        <h1 class="ehed-main-title">{{ __('site.col_haphazard') }}</h1>
         <p class="ehed-body-text hero__description font-family--serif">
-        From the dunes of  deserts.
+        {{ __('site.haphazard_copy') }}
         </p>
     </div>
 </section>
@@ -359,7 +359,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <span class="discover-more-btn">Discover More</span>
+                    <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                 </div>
 
             </a>
@@ -378,7 +378,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     Your browser does not support the video tag.
                 </video>
                 <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
+                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">{{ __('site.shop_now') }}</a>
                 </div>
             </div>
         </div>
@@ -394,7 +394,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                         </div>
                     @endif
                     <div class="discover-overlay">
-                        <span class="discover-more-btn">Discover More</span>
+                        <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                     </div>
                 </a>
             @endforeach
@@ -421,7 +421,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <span class="discover-more-btn">Discover More</span>
+                    <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                 </div>
             </a>
         </div>
@@ -447,7 +447,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                 @endif
 
                 <div class="discover-overlay">
-                    <span class="discover-more-btn">Discover More</span>
+                    <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                 </div>
             </a>
         </div>
@@ -470,7 +470,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                         </div>
                     @endif
                     <div class="discover-overlay">
-                        <span class="discover-more-btn">Discover More</span>
+                        <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                     </div>
                 </a>
             @endforeach
@@ -482,7 +482,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                     Your browser does not support the video tag.
                 </video>
                 <div class="discover-button-overlay position-absolute bottom-0 start-50 translate-middle-x w-100 text-center">
-                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">Shop Now</a>
+                    <a class="btn discover-btn" href="{{ route('collections.haphazard_new') }}">{{ __('site.shop_now') }}</a>
                 </div>
             </div>
         </div>
@@ -513,7 +513,7 @@ h1,h2,h3,h4,h5,h6 { margin:0; }
                         @endif
 
                         <div class="discover-overlay">
-                            <span class="discover-more-btn">Discover More</span>
+                            <span class="discover-more-btn">{{ __('site.discover_more') }}</span>
                         </div>
                     </a>
                 </div>

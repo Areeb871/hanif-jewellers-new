@@ -2,7 +2,7 @@
 <div class="mobile-contact-info">
     <div class="mobile-contact-item">
         <i class="fa-solid fa-phone"></i>
-        <span>+92 307 0222666</span>
+        <span dir="ltr" style="unicode-bidi: isolate; direction: ltr;">{{ $appointmentPhoneDisplay ?? '+92 307 0222666' }}</span>
     </div>
     <div class="mobile-contact-item">
         <i class="fa-solid fa-envelope"></i>

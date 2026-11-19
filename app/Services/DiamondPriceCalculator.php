@@ -8,9 +8,10 @@ use App\Models\Products;
 
 class DiamondPriceCalculator
 {
-    public static function calculateForProduct(Products $product): ?float
+    public static function calculateForProduct(Products $product, ?string $market = null): ?float
     {
-        $diamondPrice = (float) ($product->diamond_price ?? 0);
+        $market = $market ?? Products::currentMarket();
+        $diamondPrice = $product->marketDiamondPrice($market);
         if ($diamondPrice <= 0) {
             return null;
         }
@@ -18,15 +19,24 @@ class DiamondPriceCalculator
         return self::calculateFromDescription(
             $product->description ?? '',
             $diamondPrice,
-            filled($product->gold_weight) ? (float) $product->gold_weight : null
+            filled($product->marketGoldWeight($market)) ? (float) $product->marketGoldWeight($market) : null,
+            $market
         );
     }
 
-    public static function calculateFromDescription(?string $description, float $diamondPrice, ?float $goldWeight = null): ?float
-    {
+    public static function calculateFromDescription(
+        ?string $description,
+        float $diamondPrice,
+        ?float $goldWeight = null,
+        ?string $market = null
+    ): ?float {
         if (!$description) {
             return null;
         }
+
+        $market = in_array($market, ['pk', 'uae'], true)
+            ? $market
+            : Products::currentMarket();
 
         $description = self::normalizeText($description);
 
@@ -40,15 +50,17 @@ class DiamondPriceCalculator
             return null;
         }
 
-        $setting = DiamondRateSetting::where('karat', $karat)
+        $setting = DiamondRateSetting::forMarket($market)
+            ->where('karat', $karat)
             ->where('is_active', true)
             ->first();
 
-        if (!$setting) {
+        if (!$setting && $market !== 'uae') {
             return null;
         }
 
-        $goldRateSetting = GoldRateSetting::where('karat', $karat)
+        $goldRateSetting = GoldRateSetting::forMarket($market)
+            ->where('karat', $karat)
             ->where('is_active', true)
             ->first();
 
@@ -57,14 +69,14 @@ class DiamondPriceCalculator
         }
 
         $rate = (float) $goldRateSetting->gold_rate_per_gram;
-        $making = (float) $setting->making_charge;
-        $gstPercent = (float) $setting->gst_percent;
-        $dollarRate = (float) $setting->dollar_rate;
-        $discountPercent = (float) $setting->discount_percent;
+        $gstPercent = (float) ($setting?->gst_percent ?? 0);
+        $dollarRate = $setting ? (float) $setting->dollar_rate : 0.0;
+        $discountPercent = $setting ? (float) $setting->discount_percent : 0.0;
 
-        $value1 = ($rate + $making) * $grams;
+        $making = $market === 'uae' ? 0.0 : (float) ($setting->making_charge ?? 0);
+        $goldValue = ($rate + $making) * $grams;
         $value2 = ($dollarRate * $diamondPrice) * (1 - ($discountPercent / 100));
-        $subtotal = $value1 + $value2;
+        $subtotal = $goldValue + $value2;
         $final = $subtotal * (1 + ($gstPercent / 100));
 
         return round($final, 2);
@@ -93,6 +105,15 @@ class DiamondPriceCalculator
         }
 
         if (preg_match('/\b(18|21|22|24)\s*k/i', $description, $m)) {
+            return (int) $m[1];
+        }
+
+        $normalized = strtr($description, [
+            '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+            '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+        ]);
+
+        if (preg_match('/عيار\s*(18|21|22|24)/u', $normalized, $m)) {
             return (int) $m[1];
         }
 

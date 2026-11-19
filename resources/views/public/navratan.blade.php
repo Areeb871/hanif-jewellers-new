@@ -7,8 +7,8 @@
     $bannerIsVideo = $bannerUrl && Str::endsWith(strtolower($bannerUrl), ['.mp4', '.webm', '.ogg']);
     $bannerAlt = ($subcategory->name ?? 'Navratan collection') . ' banner';
     $mobileBannerUrl = 'assets/f_assets/image/Navratan Banner Mob View.mp4';
-    $navratanCopy = "A heritage bridal jewellery collection as timeless as the art of jewellery making itself, traditionally crafted with 'Nau Ratans', or 'Nine Gems'.";
-    $appointmentUrl = 'https://api.whatsapp.com/send?phone=923070222666&text=' . rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.');
+    $navratanCopy = __('site.navratan_copy');
+    $appointmentUrl = $appointmentWhatsappUrl;
 
     $campaignBanners = [
         ['desktop' => 'assets/f_assets/image/Navratan/desktop3.png', 'mobile' => 'assets/f_assets/image/Navratan/mob3.png', 'show_copy' => true],
@@ -53,15 +53,15 @@
 
             @if($banner['show_copy'])
                 <div class="navratan-campaign__panel d-none d-lg-flex">
-                    <h2 class="navratan-campaign__title">NAVRATAN</h2>
+                    <h2 class="navratan-campaign__title">{{ __('site.col_navratan') }}</h2>
                     <p class="navratan-campaign__copy">{{ $navratanCopy }}</p>
-                    <a class="navratan-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                    <a class="navratan-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
 
                 <div class="navratan-campaign__mobile-panel d-lg-none">
-                    <h2 class="navratan-campaign__title">NAVRATAN</h2>
+                    <h2 class="navratan-campaign__title">{{ __('site.col_navratan') }}</h2>
                     <p class="navratan-campaign__copy">{{ $navratanCopy }}</p>
-                    <a class="navratan-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                    <a class="navratan-campaign__button" href="{{ $appointmentUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
                 </div>
             @endif
         </div>

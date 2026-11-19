@@ -1,7 +1,11 @@
 @props([
-    'href' => 'https://api.whatsapp.com/send?phone=923070222666&text='.rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.'),
-    'label' => 'BOOK AN APPOINTMENT',
+    'href' => null,
+    'label' => null,
 ])
+
+@php
+    $appointmentHref = $href ?: ($appointmentWhatsappUrl ?? 'https://api.whatsapp.com/send?phone=923070222666&text='.rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.'));
+@endphp
 
 @once
     <style>
@@ -39,9 +43,9 @@
     </style>
 @endonce
 
-<a href="{{ $href }}" {{ $attributes->class(['book-appointment-btn']) }}>
+<a href="{{ $appointmentHref }}" {{ $attributes->class(['book-appointment-btn']) }}>
     @if ($slot->isEmpty())
-        {{ $label }}
+        {{ $label ?: __('site.book_appointment') }}
     @else
         {{ $slot }}
     @endif

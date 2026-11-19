@@ -3,8 +3,26 @@
 @section('content')
 <div class="container-fluid py-5">
     <div class="row mb-4">
-        <div class="col-12 d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">Gold Rate Settings</h1>
+        <div class="col-12 d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <h1 class="h3 mb-0">{{ $pageTitle ?? 'Gold Rate Settings' }}</h1>
+            <div class="btn-group" role="group" aria-label="Country gold rates">
+                <a href="{{ route('admin.gold-rates.index') }}"
+                   class="btn btn-sm {{ ($market ?? 'pk') === 'pk' ? 'btn-primary' : 'btn-light' }}">
+                    Pakistan
+                </a>
+                <a href="{{ route('admin.gold-rates-uae.index') }}"
+                   class="btn btn-sm {{ ($market ?? 'pk') === 'uae' ? 'btn-primary' : 'btn-light' }}">
+                    UAE / Dubai
+                </a>
+            </div>
+        </div>
+        <div class="col-12 mt-2">
+            <p class="text-muted mb-0">
+                Select country to manage that market’s gold rates and jewellery services separately.
+                {{ ($market ?? 'pk') === 'uae'
+                    ? 'Dubai jewellery uses a selling percent of the gold value. At 6 g or below, a fixed 650 AED is added instead.'
+                    : 'Pakistan jewellery services have their own weight thresholds and OC Final values in PKR.' }}
+            </p>
         </div>
     </div>
 
@@ -26,13 +44,19 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title mb-0">Configure Gold Rates</h3>
+            <h3 class="card-title mb-0">Configure Gold Rates {{ ($market ?? 'pk') === 'uae' ? '(UAE / AED)' : '(Pakistan / PKR)' }}</h3>
             <small class="d-block text-muted mt-1">
-                Price formula: <strong>(Gold Rate × Weight + OC Final) + VAT</strong>.
+                @if(($market ?? 'pk') === 'uae')
+                    Price formula: <strong>(Gold Rate × Weight + making) + VAT</strong>.
+                    Above 6 g, making is the gold value × Selling %. At 6 g or below, making is a fixed <strong>650 AED</strong>.
+                @else
+                    Price formula: <strong>(Gold Rate × Weight + OC Final) + VAT</strong>.
+                @endif
+                Currency: <strong>{{ $currencyLabel ?? 'PKR' }}</strong>.
             </small>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.gold-rates.update') }}" method="POST">
+            <form action="{{ $formAction ?? route('admin.gold-rates.update') }}" method="POST">
                 @csrf
 
                 <div class="table-responsive">
@@ -85,14 +109,74 @@
                 </div>
 
                 <div class="mt-5 mb-3">
-                    <h3 class="mb-1">Gold Jewellery Services</h3>
+                    <h3 class="mb-1">
+                        {{ ($market ?? 'pk') === 'uae' ? 'Dubai Jewellery Services' : 'Pakistan Gold Jewellery Services' }}
+                    </h3>
                     <p class="text-muted mb-0">
-                        For weights up to and including the threshold, OC Final per article is used.
-                        Above it, OC Final per gram is used. Enable Sale for a service to use its Sale Weight
-                        and Sale OC Final everywhere that service's regular calculated price is shown.
+                        Country: <strong>{{ ($market ?? 'pk') === 'uae' ? 'UAE / Dubai' : 'Pakistan' }}</strong>
+                        · Currency: <strong>{{ $currencyLabel ?? 'PKR' }}</strong>.
+                        @if(($market ?? 'pk') === 'uae')
+                            Selling % is the making charge on the gold value when the piece is above 6 g.
+                            At 6 g or below, every Dubai service adds a fixed 650 AED instead of the percent.
+                            Sale Selling % is used above 6 g when Sale is on.
+                        @else
+                            These limits and OC Final values are separate from the other country.
+                            For weights up to and including the threshold, OC Final per article is used.
+                            Above it, OC Final per gram is used. Enable Sale for a service to use its Sale Weight
+                            and Sale OC Final everywhere that service's regular calculated price is shown.
+                        @endif
                     </p>
                 </div>
 
+                @if(($market ?? 'pk') === 'uae')
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Service</th>
+                                <th>Selling %</th>
+                                <th>Sale Selling %</th>
+                                <th>Active</th>
+                                <th>Sale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($services as $service)
+                                <tr>
+                                    <td class="text-nowrap"><strong>{{ $service->name }}</strong></td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0" max="100"
+                                               name="services[{{ $service->id }}][selling_percent]"
+                                               value="{{ old("services.{$service->id}.selling_percent", $service->selling_percent) }}"
+                                               class="form-control" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0" max="100"
+                                               name="services[{{ $service->id }}][sale_selling_percent]"
+                                               value="{{ old("services.{$service->id}.sale_selling_percent", $service->sale_selling_percent) }}"
+                                               class="form-control" required>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="hidden" name="service_active[{{ $service->id }}]" value="0">
+                                        <input type="checkbox" name="service_active[{{ $service->id }}]"
+                                               value="1" @checked(old("service_active.{$service->id}", $service->is_active))>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="hidden" name="service_sale[{{ $service->id }}]" value="0">
+                                        <div class="form-check form-switch d-inline-block">
+                                            <input type="checkbox" id="gold-sale-{{ $service->id }}"
+                                                   name="service_sale[{{ $service->id }}]" value="1"
+                                                   class="form-check-input"
+                                                   @checked(old("service_sale.{$service->id}", $service->is_sale))>
+                                            <label class="form-check-label" for="gold-sale-{{ $service->id }}">Active</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle">
                         <thead class="table-light">
@@ -190,6 +274,7 @@
                         </tbody>
                     </table>
                 </div>
+                @endif
 
                 <div class="mt-4 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">

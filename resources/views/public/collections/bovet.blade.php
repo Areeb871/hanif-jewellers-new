@@ -703,7 +703,7 @@
 document.getElementById('bookAppointmentBtn').addEventListener('click', function (e) {
     e.preventDefault();
 
-    const phoneNumber = @json('923070222666');
+    const phoneNumber = @json($appointmentWhatsappPhone);
 
     const message = "Hello Hanif Jewellers, I would like to book an appointment for HANIF × BOVET | THE RECITAL 30, 'KARACHI' PAKISTAN LIMITED EDITION";
 

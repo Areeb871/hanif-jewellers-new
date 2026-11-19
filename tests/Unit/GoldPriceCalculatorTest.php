@@ -98,6 +98,57 @@ class GoldPriceCalculatorTest extends TestCase
         $this->assertTrue($breakdown['is_sale']);
     }
 
+    public function test_dubai_above_six_grams_uses_selling_percent(): void
+    {
+        $rate = new GoldRateSetting([
+            'market' => 'uae',
+            'gold_rate_per_gram' => 100,
+            'vat_percent' => 0,
+        ]);
+        $service = new GoldServiceSetting([
+            'market' => 'uae',
+            'selling_percent' => 15,
+            'sale_selling_percent' => 10,
+        ]);
+
+        $this->assertSame(1150.0, GoldPriceCalculator::calculateUsingSettings($rate, $service, 10));
+    }
+
+    public function test_dubai_at_or_below_six_grams_uses_fixed_650_aed(): void
+    {
+        $rate = new GoldRateSetting([
+            'market' => 'uae',
+            'gold_rate_per_gram' => 100,
+            'vat_percent' => 0,
+        ]);
+        $service = new GoldServiceSetting([
+            'market' => 'uae',
+            'selling_percent' => 15,
+            'sale_selling_percent' => 10,
+        ]);
+
+        $this->assertSame(1250.0, GoldPriceCalculator::calculateUsingSettings($rate, $service, 6));
+        $this->assertSame(1050.0, GoldPriceCalculator::calculateUsingSettings($rate, $service, 4));
+    }
+
+    public function test_dubai_sale_uses_sale_selling_percent_above_six_grams(): void
+    {
+        $rate = new GoldRateSetting([
+            'market' => 'uae',
+            'gold_rate_per_gram' => 100,
+            'vat_percent' => 5,
+        ]);
+        $service = new GoldServiceSetting([
+            'market' => 'uae',
+            'selling_percent' => 15,
+            'sale_selling_percent' => 10,
+            'is_sale' => true,
+        ]);
+
+        $this->assertSame(1155.0, GoldPriceCalculator::calculateUsingSettings($rate, $service, 10));
+        $this->assertSame(1312.5, GoldPriceCalculator::calculateUsingSettings($rate, $service, 6));
+    }
+
     public function test_weight_can_be_extracted_for_legacy_products_without_gold_weight(): void
     {
         $description = '<p>Metal: 21k<br>Gross Weight: 6.25g</p>';

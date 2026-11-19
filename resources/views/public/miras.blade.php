@@ -7,8 +7,8 @@
     $isDesktopVideo = \Illuminate\Support\Str::endsWith(strtolower($desktopBanner), ['.mp4', '.webm', '.ogg']);
     $desktopBannerSrc = filter_var($desktopBanner, FILTER_VALIDATE_URL) ? $desktopBanner : asset($desktopBanner);
     $stories = [
-        ['name' => 'Miras | ميراث - Inherited Faith', 'image' => 'assets/f_assets/image/miras/desktop2.jpg', 'mobile_image' => 'assets/f_assets/image/miras/mobile2.jpg', 'copy' => [
-           'Some things are not bought, they are inherited. Miras is a fine example of cultural art. Jewellery that carries the weight of what came before and the promise of what comes after. Crafted entirely in gold, built to move through hands and hearts for generations.',
+        ['name' => __('site.miras_title'), 'image' => 'assets/f_assets/image/miras/desktop2.jpg', 'mobile_image' => 'assets/f_assets/image/miras/mobile2.jpg', 'copy' => [
+           __('site.miras_copy'),
         ], 'side' => 'left'],
         ['name' => '', 'image' => 'assets/f_assets/image/miras/desktop1.jpg', 'mobile_image' => 'assets/f_assets/image/miras/mobile1.jpg', 'copy' => '', 'side' => 'left'],
     ];
@@ -82,7 +82,7 @@
                         <p class="hasht-story__copy">{{ $paragraph }}</p>
                     @endforeach
                 </div>
-                <a class="hasht-story__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="hasht-story__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>
@@ -99,7 +99,7 @@
                         <p class="hasht-mobile__copy">{{ $paragraph }}</p>
                     @endforeach
                 </div>
-                <a class="hasht-mobile__button" href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}" target="_blank" rel="noopener noreferrer">BOOK AN APPOINTMENT</a>
+                <a class="hasht-mobile__button" href="{{ $appointmentWhatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.book_appointment') }}</a>
             </div>
         @endif
     </section>

@@ -137,7 +137,7 @@
                         @if($item->discount_type === 'percentage')
                             {{ $item->discount_percentage }}% OFF
                         @else
-                            PKR {{ number_format((float)$item->discount_amount, 0, '.', ',') }} OFF
+                            {{ $order->currencyCode() }} {{ number_format((float)$item->discount_amount, 0, '.', ',') }} OFF
                         @endif
                     </small>
                 @endif
@@ -182,13 +182,13 @@
 
                     <!-- <div class="mb-1">
                         <strong>Variant Price:</strong>
-                        PKR {{ number_format((float)($options['variant_price'] ?? $item->unit_price), 0, '.', ',') }}
+                        {{ $order->currencyCode() }} {{ number_format((float)($options['variant_price'] ?? $item->unit_price), 0, '.', ',') }}
                     </div> -->
 
                     <!-- @if(!empty($options['old_price']))
                         <div class="mb-1">
                             <strong>Old Price:</strong>
-                            PKR {{ number_format((float)$options['old_price'], 0, '.', ',') }}
+                            {{ $order->currencyCode() }} {{ number_format((float)$options['old_price'], 0, '.', ',') }}
                         </div>
                     @endif -->
 
@@ -223,13 +223,13 @@
             <td>
                 @if((float)($item->original_price ?? 0) > (float)($item->unit_price ?? 0))
                     <span class="text-muted text-decoration-line-through">
-                        PKR {{ number_format(round((float)$item->original_price, -3), 0, '.', ',') }}
+                        {{ $order->currencyCode() }} {{ number_format(round((float)$item->original_price, -3), 0, '.', ',') }}
                     </span>
                     <br>
                 @endif
 
                 <strong>
-                    PKR {{ number_format(round((float)$item->unit_price, -3), 0, '.', ',') }}
+                    {{ $order->currencyCode() }} {{ number_format(round((float)$item->unit_price, -3), 0, '.', ',') }}
                 </strong>
             </td>
 
@@ -241,7 +241,7 @@
             {{-- Total --}}
             <td>
                 <strong>
-                    PKR {{ number_format(round((float)$item->total_price, -3), 0, '.', ',') }}
+                    {{ $order->currencyCode() }} {{ number_format(round((float)$item->total_price, -3), 0, '.', ',') }}
                 </strong>
             </td>
         </tr>
@@ -317,16 +317,16 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Subtotal:</span>
-                                        <span>PKR{{ number_format(round($order->subtotal,-3), 2) }}</span>
+                                        <span>{{ $order->currencyCode() }}{{ number_format(round($order->subtotal,-3), 2) }}</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Shipping:</span>
-                                        <span>PKR{{ number_format(round($order->shipping_cost,-3), 2) }}</span>
+                                        <span>{{ $order->currencyCode() }}{{ number_format(round($order->shipping_cost,-3), 2) }}</span>
                                     </div>
                                     <hr>
                                     <div class="d-flex justify-content-between">
                                         <strong>Total:</strong>
-                                        <strong>PKR{{ number_format(round($order->total_amount,-3), 2) }}</strong>
+                                        <strong>{{ $order->currencyCode() }}{{ number_format(round($order->total_amount,-3), 2) }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +337,7 @@
                                     <h5 class="card-title">Payment Information</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Method:</strong> {{ ucfirst(str_replace('bankTransfer', 'Bank Transfer', $order->payment_method)) }}</p>
+                                    <p><strong>Method:</strong> {{ ['bank_alfalah' => 'Bank Alfalah', 'bank_transfer' => 'Bank Transfer', 'bankTransfer' => 'Bank Transfer', 'contact' => 'Contact Us'][$order->payment_method] ?? ucfirst(str_replace('_', ' ', (string) $order->payment_method)) }}</p>
                                     <p><strong>Status:</strong> 
                                         @switch($order->payment_status)
                                             @case('pending')

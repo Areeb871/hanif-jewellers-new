@@ -333,7 +333,7 @@
      <div class="banner-content">
         <div class="banner-title">Tawoos</div>
         <div class="banner-location">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
         </div>
         <!-- <a href="{{ url('collections/haphazard') }}" class="banner-btn">Discover</a> -->
     </div>
@@ -349,10 +349,9 @@
 <section class="d-none d-lg-block">
 <div class="heroTextWrap">
   <div class="triangleText">
-    <span>An inspiration by the Peacock’s magnificent beauty and majestic presence,where every hue and feather narrates a tale of elegance.</span>
-       <span>Each piece reflects the rhythm of wings, 
-       the grace of motion, and the charm of nature,</span> 
-       <span>transforming elegance into refined Jewellery art.</span>
+    <span>{{ __('site.tawoos_tagline_1') }}</span>
+    <span>{{ __('site.tawoos_tagline_2') }}</span>
+    <span>{{ __('site.tawoos_tagline_3') }}</span>
   </div>
 </div>
 </section>
@@ -370,11 +369,11 @@
   <div class="heroOverlay">
     <h2 class="heroTitle">Tawoos</h2>
     <p class="heroText">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
     </p>
 @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="heroBtn">
-  DISCOVER
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>
@@ -394,11 +393,11 @@
    <div class="heroOverlay-left">
     <h2 class="heroTitle">Tawoos</h2>
     <p class="heroText">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
     </p>
     @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="heroBtn">
-  DISCOVER 
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>
@@ -413,11 +412,11 @@
    <div class="heroOverlay">
     <h2 class="heroTitle-last">Tawoos</h2>
     <p class="heroText-last">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
     </p>
     @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="heroBtn">
-  DISCOVER
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>
@@ -426,10 +425,9 @@
 <section class="d-lg-none mobileStackHero">
 <div class="heroTextWrap">
   <div class="triangleText">
-    <span>An inspiration by the Peacock’s magnificent beauty and majestic presence,where every hue and feather narrates a tale of elegance.</span>
-       Each piece reflects the rhythm of wings, 
-       the grace of motion, and the charm of nature,
-       transforming elegance into refined Jewellery art.</span>
+    <span>{{ __('site.tawoos_tagline_1') }}</span>
+    <span>{{ __('site.tawoos_tagline_2') }}</span>
+    <span>{{ __('site.tawoos_tagline_3') }}</span>
   </div>
 </div>
 </section>
@@ -447,11 +445,11 @@
     <h2 class="mobileTitle">TAWOOS</h2>
     <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
     <p class="mobileText">
-                Grace of Peacock
+                {{ __('site.tawoos_grace') }}
     </p>
     @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="mobileBtn">
-  DISCOVER
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>
@@ -470,11 +468,11 @@
     <h2 class="mobileTitle">TAWOOS</h2>
     <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
     <p class="mobileText">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
   </p>
      @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="mobileBtn">
-  DISCOVER
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>
@@ -493,11 +491,11 @@
     <h2 class="mobileTitle">TAWOOS</h2>
     <!-- <p class="mobileSub">Magnetic, ever-evolving, eternal.</p> -->
     <p class="mobileText">
-          Grace of Peacock
+          {{ __('site.tawoos_grace') }}
     </p>
      @if(isset($products[0]))
 <a href="{{ route('product.details', $products[0]->slug) }}" class="mobileBtn">
-  DISCOVER
+  {{ __('site.discover') }}
 </a>
 @endif
   </div>

@@ -257,7 +257,7 @@ data-kt-menu-trigger="click"
                                 </div>
                             </div>
 
-                             <div data-kt-menu-trigger="click" class="menu-item {{ request()->routeIs('admin.gold-rates.index') ? 'here show' : '' }} menu-accordion">
+                             <div data-kt-menu-trigger="click" class="menu-item {{ request()->routeIs('admin.gold-rates.*') || request()->routeIs('admin.gold-rates-uae.*') ? 'here show' : '' }} menu-accordion">
                                 <span class="menu-link">
                                     <span class="menu-icon">
                                         <i class="ki-outline ki-wallet fs-2"></i>
@@ -271,13 +271,21 @@ data-kt-menu-trigger="click"
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">Manage Gold Rates</span>
+                                            <span class="menu-title">Pakistan Gold Rates</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ request()->routeIs('admin.gold-rates-uae.index') ? 'active' : '' }}" href="{{ route('admin.gold-rates-uae.index') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Dubai Jewellery Services</span>
                                         </a>
                                     </div>
                                 </div>
                             </div>
 
-                             <div data-kt-menu-trigger="click" class="menu-item {{ request()->routeIs('admin.diamond-rates.index') ? 'here show' : '' }} menu-accordion">
+                             <div data-kt-menu-trigger="click" class="menu-item {{ request()->routeIs('admin.diamond-rates.*') || request()->routeIs('admin.diamond-rates-uae.*') ? 'here show' : '' }} menu-accordion">
                                 <span class="menu-link">
                                     <span class="menu-icon">
                                         <i class="ki-outline ki-star fs-2"></i>
@@ -291,7 +299,15 @@ data-kt-menu-trigger="click"
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">Manage Diamond Rates</span>
+                                            <span class="menu-title">Pakistan Diamond Rates</span>
+                                        </a>
+                                    </div>
+                                    <div class="menu-item">
+                                        <a class="menu-link {{ request()->routeIs('admin.diamond-rates-uae.index') ? 'active' : '' }}" href="{{ route('admin.diamond-rates-uae.index') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">Dubai Diamond Rates</span>
                                         </a>
                                     </div>
                                 </div>

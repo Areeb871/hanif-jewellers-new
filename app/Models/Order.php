@@ -25,6 +25,7 @@ class Order extends Model
         'zip_code',
         'delivery_option',
         'payment_method',
+        'currency',
         'payment_receipt',
         'payment_status',
         'order_notes',
@@ -60,6 +61,11 @@ class Order extends Model
     /**
      * Get the full name of the customer
      */
+    public function currencyCode(): string
+    {
+        return strtoupper((string) ($this->currency ?: 'PKR')) === 'AED' ? 'AED' : 'PKR';
+    }
+
     public function getFullNameAttribute(): string
     {
         $name = $this->first_name . ' ' . $this->last_name;

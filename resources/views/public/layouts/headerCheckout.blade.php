@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() === 'ar' ? 'ar-AE' : 'en' }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
 
@@ -62,7 +62,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <title>Hanif Jewellers</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ asset('assets/f_assets/image/favicon_hanif_32x32.jpg') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    @include('public.partials.locale-assets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -242,6 +242,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="px-md-3">
                 <div class="row pt-3 desktopLogos">
                     <div class="col">
+                        @include('public.partials.gold-prices-menu')
+                        @include('public.partials.language-switch')
                         <!-- <a class="text-white" href="/locator"><i class="fa-solid fa-location-dot"></i></a>
                         <a class="text-white px-4" href="/contact-us"><i class="fa-solid fa-phone-volume"></i></a>
                         <a class="text-white" href="http://"><i class="fa-solid fa-magnifying-glass"></i></a> -->
@@ -258,21 +260,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
                     <div class="col d-flex justify-content-end align-items-center gap-3">
                         <!-- <button class="btn btn-sm btn-outline-dark currency-toggle-btn" data-currency-toggle type="button">Show AED</button> -->
-                        <a class="text-white" href="tel:+923070222666"> <i class="fa-solid fa-phone-volume" style="padding-right: 10px; padding-top: 20px;"></i> +92 307 0222666</a>
-                        <!-- <a class="text-white" href="http://"><i class="fa-regular fa-heart"></i></a>
-                        <div id="cartHeader">
-                            @include('public.partials.cart-header')
-                        </div>
-                        <div class="dropdown" onmouseenter="this.classList.add('show'); this.querySelector('.dropdown-menu').classList.add('show');" onmouseleave="this.classList.remove('show'); this.querySelector('.dropdown-menu').classList.remove('show');">
-                            <a class="text-white" href="#" id="settingsDropdown" role="button" aria-expanded="false">
-                                <i class="fa-solid fa-gear"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end px-3 py-2" aria-labelledby="settingsDropdown" style="left: -140px; top: 40px; background: #ffffff;">
-                                <li class="mb-2"><a class="dropdown-item" href="/checkout"><i class="fa fa-check-circle px-2" aria-hidden="true"></i>Check Out</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li class="mb-2"><a class="dropdown-item" href="/wishlist"><i class="fa fa-heart px-2" aria-hidden="true"></i>Wishlist</a></li>
-                            </ul>
-                        </div> -->
+                        <a class="text-white" href="tel:+{{ $appointmentWhatsappPhone }}" dir="ltr" style="unicode-bidi: isolate;"> <i class="fa-solid fa-phone-volume" style="padding-right: 10px; padding-top: 20px;"></i> <span dir="ltr" style="direction: ltr; unicode-bidi: isolate;">{{ $appointmentPhoneDisplay }}</span></a>
                     </div>
                 </div>
             </div>
@@ -425,7 +413,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="{{ asset('assets/f_assets/image/HanifLogoBlack.png') }}" alt="Hanif Jewellers">
                         </div>
                         <form id="navSearchForm" class="nav-search-form">
-                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="Search collections or products" autocomplete="off">
+                            <input type="text" class="form-control nav-search-input" id="navSearchInput" placeholder="{{ __('site.search_placeholder') }}" autocomplete="off">
                             <button type="submit" class="nav-search-btn">SEARCH</button>
                         </form>
                         <div class="nav-search-results">
@@ -465,7 +453,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 if (searchCount) searchCount.textContent = '';
 
                 if (!normalized) {
-                    searchEmpty.textContent = 'Start typing to search collections or products.';
+                    searchEmpty.textContent = @json(__('site.search_start'));
                     return;
                 }
 
@@ -475,7 +463,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     ));
 
                 if (!matches.length) {
-                    searchEmpty.textContent = 'No results found.';
+                    searchEmpty.textContent = @json(__('site.no_results'));
                     return;
                 }
 

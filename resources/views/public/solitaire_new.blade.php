@@ -2,7 +2,8 @@
 
 @section('content')
    <link rel="stylesheet" href="{{ asset('assets/f_assets/css/solitaire.css') }}">
-       <script src="{{ asset('assets/f_assets/js/filter.js') }}"></script>
+   <script>window.HJ_CURRENCY_LABEL = @json(__('site.currency_pkr'));</script>
+       <script src="{{ asset('assets/f_assets/js/filter.js') }}?v={{ filemtime(public_path('assets/f_assets/js/filter.js')) }}"></script>
 
 
 <main class="hj-ring-page">
@@ -10,9 +11,9 @@
     <!-- HERO SECTION -->
     <section class="hj-ring-hero">
         <div class="hj-ring-hero-content">
-            <h1>Solitaire Engagement Rings</h1>
+            <h1>{{ __('site.solitaire_engagement_rings') }}</h1>
             <p>
-               Classic, sparkling and endlessly symbolic solitaire rings bring sleek style. Explore diamond solitaire engagement rings in round, oval and princess cut.
+               {{ __('site.solitaire_hero_text') }}
             </p>
         </div>
 
@@ -23,22 +24,22 @@
 
     <!-- BREADCRUMB -->
     <section class="hj-ring-breadcrumb">
-        <a href="#">Home</a>
+        <a href="#">{{ __('site.home') }}</a>
         <span>/</span>
-        <a href="#">Engagement Rings</a>
+        <a href="#">{{ __('site.engagement_rings') }}</a>
         <span>/</span>
-        <a href="#">Solitaire Engagement Rings</a>
+        <a href="#">{{ __('site.solitaire_engagement_rings') }}</a>
     </section>
 
 @php
     $sortLabels = [
-        'featured' => 'Sort: Best Selling',
-        'newest' => 'Sort: Newest first',
-        'price_low_high' => 'Sort: Price: low to high',
-        'price_high_low' => 'Sort: Price: high to low',
+        'featured' => __('site.sort_best_selling'),
+        'newest' => __('site.sort_newest'),
+        'price_low_high' => __('site.sort_price_low'),
+        'price_high_low' => __('site.sort_price_high'),
     ];
 
-    $activeSortLabel = $sortLabels[$selectedSort ?? 'featured'] ?? 'Sort: Best Selling';
+    $activeSortLabel = $sortLabels[$selectedSort ?? 'featured'] ?? __('site.sort_best_selling');
 
     $desktopMinPrice = $selectedMinPrice !== null && $selectedMinPrice !== '' ? $selectedMinPrice : 0;
     $desktopMaxPrice = $selectedMaxPrice !== null && $selectedMaxPrice !== '' ? $selectedMaxPrice : $maxFilterPrice;
@@ -57,21 +58,21 @@
         <div class="hj-filter-left">
 
             <button class="hj-filter-label" type="button">
-                Filters
+                {{ __('site.filters') }}
             </button>
 
             <button class="hj-filter-btn" id="shapeFilterBtn" type="button">
-                <span>Shapes</span>
+                <span>{{ __('site.shapes') }}</span>
                 <i class="hj-chevron"></i>
             </button>
 
             <button class="hj-filter-btn" id="materialFilterBtn" type="button">
-                <span>Material Type</span>
+                <span>{{ __('site.material_type') }}</span>
                 <i class="hj-chevron"></i>
             </button>
 
             <button class="hj-filter-btn" id="priceFilterBtn" type="button">
-                <span>Price Ranges</span>
+                <span>{{ __('site.price_ranges') }}</span>
                 <i class="hj-chevron"></i>
             </button>
 
@@ -84,10 +85,10 @@
             </button>
 
             <div class="hj-sort-dropdown" id="hjDesktopSortDropdown">
-                <button type="button" data-sort-value="featured" data-sort-label="Sort: Best Selling">Best Selling</button>
-                <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
-                <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
-                <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
+                <button type="button" data-sort-value="featured" data-sort-label="{{ __('site.sort_best_selling') }}">{{ __('site.best_selling') }}</button>
+                <button type="button" data-sort-value="newest" data-sort-label="{{ __('site.sort_newest') }}">{{ __('site.newest_first') }}</button>
+                <button type="button" data-sort-value="price_low_high" data-sort-label="{{ __('site.sort_price_low') }}">{{ __('site.price_low_to_high') }}</button>
+                <button type="button" data-sort-value="price_high_low" data-sort-label="{{ __('site.sort_price_high') }}">{{ __('site.price_high_to_low') }}</button>
             </div>
         </div>
 
@@ -104,7 +105,7 @@
                 <path d="M13 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 <path d="M11 15V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <span>Filters</span>
+            <span>{{ __('site.filters') }}</span>
         </button>
     </div>
 
@@ -112,20 +113,21 @@
     <div class="hj-shapes-panel" id="shapesPanel">
         <div class="hj-shapes-list">
             @foreach($availableShapes as $shapeValue => $shapeLabel)
+                @php $translatedShape = __('site.shape_' . $shapeValue); @endphp
                 <button 
                     class="hj-shape-item {{ request('shape') === $shapeValue ? 'active' : '' }}" 
                     type="button"
                     data-filter-shape="{{ $shapeValue }}"
                 >
-                    <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $shapeLabel }}">
-                    <span>{{ $shapeLabel }}</span>
+                    <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $translatedShape }}">
+                    <span>{{ $translatedShape }}</span>
                 </button>
             @endforeach
         </div>
 
         <button class="hj-clear-btn" type="button" data-clear-filter="shape">
             <span class="hj-clear-x">×</span>
-            <span>CLEAR ALL</span>
+            <span>{{ __('site.clear_all') }}</span>
         </button>
     </div>
 
@@ -166,7 +168,7 @@
             data-filter-metal="18k_white"
         >
             <span class="hj-material-circle silver">18K</span>
-            <span>18K Gold</span>
+            <span>{{ __('site.gold_18k') }}</span>
         </button>
 
         <button 
@@ -175,7 +177,7 @@
             data-filter-metal="18k_rose"
         >
             <span class="hj-material-circle rose">18K</span>
-            <span>18K Gold</span>
+            <span>{{ __('site.gold_18k') }}</span>
         </button>
 
         <button 
@@ -184,7 +186,7 @@
             data-filter-metal="18k_yellow"
         >
             <span class="hj-material-circle gold">18K</span>
-            <span>18K Gold</span>
+            <span>{{ __('site.gold_18k') }}</span>
         </button>
 
         <!-- <button 
@@ -200,7 +202,7 @@
 
     <button class="hj-clear-material-btn" type="button" data-clear-filter="metal">
         <span class="hj-clear-x">×</span>
-        <span>CLEAR ALL</span>
+        <span>{{ __('site.clear_all') }}</span>
     </button>
 </div>
 
@@ -211,11 +213,11 @@
 
         <div class="hj-price-label-row">
             <span id="desktopPriceMinTop">
-                PKR {{ number_format((float) $desktopMinPrice, 0) }}
+                {{ __('site.currency_pkr') }} {{ number_format((float) $desktopMinPrice, 0) }}
             </span>
 
             <span id="desktopPriceMaxTop">
-                PKR {{ number_format((float) $desktopMaxPrice, 0) }}
+                {{ __('site.currency_pkr') }} {{ number_format((float) $desktopMaxPrice, 0) }}
             </span>
         </div>
 
@@ -246,7 +248,7 @@
             <input 
                 type="text" 
                 id="desktopPriceMinText" 
-                value="PKR {{ number_format((float) $desktopMinPrice, 0) }}" 
+                value="{{ __('site.currency_pkr') }} {{ number_format((float) $desktopMinPrice, 0) }}" 
                 readonly 
                 class="hj-price-min"
             >
@@ -256,7 +258,7 @@
             <input 
                 type="text" 
                 id="desktopPriceMaxText" 
-                value="PKR {{ number_format((float) $desktopMaxPrice, 0) }}" 
+                value="{{ __('site.currency_pkr') }} {{ number_format((float) $desktopMaxPrice, 0) }}" 
                 readonly 
                 class="hj-price-max is-active"
             >
@@ -269,7 +271,7 @@
 
     <button class="hj-clear-price-btn" type="button" data-clear-filter="price">
         <span class="hj-clear-x">×</span>
-        <span>CLEAR ALL</span>
+        <span>{{ __('site.clear_all') }}</span>
     </button>
 </div>
 </div>
@@ -281,8 +283,8 @@
 <div class="hj-mobile-filter-drawer" id="hjMobileFilterDrawer">
 
     <div class="hj-mobile-filter-head">
-        <span>Filters</span>
-        <button type="button" id="hjCloseMobileFilters">Close</button>
+        <span>{{ __('site.filters') }}</span>
+        <button type="button" id="hjCloseMobileFilters">{{ __('site.close') }}</button>
     </div>
 
     <div class="hj-mobile-filter-content-area">
@@ -295,17 +297,17 @@
             </button>
 
             <div class="hj-modal-sort-dropdown" id="hjModalSortDropdown">
-                <button type="button" data-sort-value="featured" data-sort-label="Sort: Best Selling">Best Selling</button>
-                <button type="button" data-sort-value="newest" data-sort-label="Sort: Newest first">Newest first</button>
-                <button type="button" data-sort-value="price_low_high" data-sort-label="Sort: Price: low to high">Price: low to high</button>
-                <button type="button" data-sort-value="price_high_low" data-sort-label="Sort: Price: high to low">Price: high to low</button>
+                <button type="button" data-sort-value="featured" data-sort-label="{{ __('site.sort_best_selling') }}">{{ __('site.best_selling') }}</button>
+                <button type="button" data-sort-value="newest" data-sort-label="{{ __('site.sort_newest') }}">{{ __('site.newest_first') }}</button>
+                <button type="button" data-sort-value="price_low_high" data-sort-label="{{ __('site.sort_price_low') }}">{{ __('site.price_low_to_high') }}</button>
+                <button type="button" data-sort-value="price_high_low" data-sort-label="{{ __('site.sort_price_high') }}">{{ __('site.price_high_to_low') }}</button>
             </div>
         </div>
 
         <!-- METAL -->
       <div class="hj-mobile-filter-block active">
     <button type="button" class="hj-mobile-filter-title">
-        <span>Metal</span>
+        <span>{{ __('site.metal') }}</span>
         <i></i>
     </button>
 
@@ -345,7 +347,7 @@
                 data-value="18k_white"
             >
                 <span class="hj-mobile-metal-circle silver">18K</span>
-                <small>18K Gold</small>
+                <small>{{ __('site.gold_18k') }}</small>
             </button>
 
             <button 
@@ -354,7 +356,7 @@
                 data-value="18k_rose"
             >
                 <span class="hj-mobile-metal-circle rose">18K</span>
-                <small>18K Gold</small>
+                <small>{{ __('site.gold_18k') }}</small>
             </button>
 
             <button 
@@ -363,7 +365,7 @@
                 data-value="18k_yellow"
             >
                 <span class="hj-mobile-metal-circle gold">18K</span>
-                <small>18K Gold</small>
+                <small>{{ __('site.gold_18k') }}</small>
             </button>
 
             <!-- <button 
@@ -388,15 +390,15 @@
         <!-- PRICE -->
         <div class="hj-mobile-filter-block active">
             <button type="button" class="hj-mobile-filter-title">
-                <span>Price</span>
+                <span>{{ __('site.price') }}</span>
                 <i></i>
             </button>
 
             <div class="hj-mobile-filter-content">
 
                 <div class="hj-price-label-row">
-                    <span id="mobilePriceMinTop">PKR {{ number_format((float) $mobileMinPrice, 0) }}</span>
-                    <span id="mobilePriceMaxTop">PKR {{ number_format((float) $mobileMaxPrice, 0) }}</span>
+                    <span id="mobilePriceMinTop">{{ __('site.currency_pkr') }} {{ number_format((float) $mobileMinPrice, 0) }}</span>
+                    <span id="mobilePriceMaxTop">{{ __('site.currency_pkr') }} {{ number_format((float) $mobileMaxPrice, 0) }}</span>
                 </div>
 
                 <div class="hj-price-slider-wrap">
@@ -426,13 +428,13 @@
                     <input 
                         type="text" 
                         id="mobilePriceMinText" 
-                        value="PKR {{ number_format((float) $mobileMinPrice, 0) }}"
+                        value="{{ __('site.currency_pkr') }} {{ number_format((float) $mobileMinPrice, 0) }}"
                     >
 
                     <input 
                         type="text" 
                         id="mobilePriceMaxText" 
-                        value="PKR {{ number_format((float) $mobileMaxPrice, 0) }}"
+                        value="{{ __('site.currency_pkr') }} {{ number_format((float) $mobileMaxPrice, 0) }}"
                     >
                 </div>
 
@@ -445,20 +447,21 @@
         <!-- SHAPES -->
         <div class="hj-mobile-filter-block active">
             <button type="button" class="hj-mobile-filter-title">
-                <span>Shapes</span>
+                <span>{{ __('site.shapes') }}</span>
                 <i></i>
             </button>
 
             <div class="hj-mobile-filter-content">
                 <div class="hj-mobile-shapes-grid">
                     @foreach($availableShapes as $shapeValue => $shapeLabel)
+                        @php $translatedShape = __('site.shape_' . $shapeValue); @endphp
                         <button 
                             type="button" 
                             class="{{ request('shape') === $shapeValue ? 'active' : '' }}"
                             data-value="{{ $shapeValue }}"
                         >
-                            <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $shapeLabel }}">
-                            <span>{{ $shapeLabel }}</span>
+                            <img src="{{ asset('assets/f_assets/image/solitaire/' . $shapeValue . '.png') }}" alt="{{ $translatedShape }}">
+                            <span>{{ $translatedShape }}</span>
                         </button>
                     @endforeach
                 </div>
@@ -471,7 +474,7 @@
 
     <div class="hj-mobile-filter-bottom">
         <button type="button" class="hj-mobile-view-products" id="hjMobileViewProducts">
-            View Products ({{ $products->total() }})
+            {{ __('site.view_products', ['count' => $products->total()]) }}
         </button>
     </div>
 
@@ -537,10 +540,15 @@
             $mainImage = data_get($selectedMetalImageGroup, 'images.0.image_path')
                 ?: data_get($galleryImages->first(), 'image_path');
 
-            $currency = $product->currency ?? 'PKR';
+            $currency = $product->displayCurrency();
+            $displayName = $product->displayName();
+            $displayTag = $product->displayTag();
+            $displayShape = $product->displayShape();
+            $selectedMetalName = $product->displayMetalName($selectedMetal ?? []);
 
-            $price = $selectedVariant['price'] ?? null;
-            $oldPrice = $selectedVariant['old_price'] ?? null;
+            $presentedVariant = is_array($selectedVariant) ? $product->presentVariant($selectedVariant) : [];
+            $price = $presentedVariant['price'] ?? null;
+            $oldPrice = $presentedVariant['old_price'] ?? null;
             $discount = $selectedVariant['discount_percent'] ?? null;
 
             $formatMoney = function ($value) use ($currency) {
@@ -579,14 +587,19 @@
 
             $cardData = [
     'id' => $product->id,
-    'name' => $product->name,
+    'name' => $displayName,
     'slug' => $product->slug,
     'base_detail_url' => route('solitaire.details', $product->slug),
-    'shape' => $product->shape ?? 'Oval',
+    'shape' => $product->shape ?? 'oval',
+    'shape_label' => $displayShape,
+    'total_carat_label' => __('site.solitaire_total_carat'),
+    'solitaire_label' => __('site.solitaire_word'),
+    'unavailable_label' => __('site.unavailable'),
+    'off_label' => __('site.percent_off'),
     'currency' => $currency,
-    'metals' => $metals->toArray(),
+    'metals' => $metals->map(fn ($metal) => $product->presentMetal($metal))->values()->toArray(),
     'carats' => $carats->toArray(),
-    'variants' => $activeVariants->toArray(),
+    'variants' => $activeVariants->map(fn ($variant) => $product->presentVariant($variant))->values()->toArray(),
     'metal_images' => $metalImages->toArray(),
     'gallery_images' => $galleryImages->toArray(),
     'default_metal_code' => $selectedMetalCode,
@@ -606,21 +619,21 @@
 
             <div class="hj-product-image-box">
                 <span class="hj-product-badge">
-                    {{ $product->tag_label ?? 'Lab Created' }}
+                    {{ $displayTag }}
                 </span>
 
                 <img 
                     class="hj-product-main-img"
                     src="{{ $mainImage ? asset($mainImage) : asset('assets/f_assets/image/solitaire/ring10.jpeg') }}" 
-                    alt="{{ $product->name }}"
+                    alt="{{ $displayName }}"
                 >
             </div>
 
             <div class="hj-product-info">
-                <h3>{{ $product->name }}</h3>
+                <h3>{{ $displayName }}</h3>
 
                 <p class="hj-product-desc">
-                    {{ $selectedCaratValue }} Total Carat · {{ ucfirst($product->shape ?? 'Oval') }} · Solitaire · {{ data_get($selectedMetal, 'name', $selectedMetalCode) }}
+                    {{ $selectedCaratValue }} {{ __('site.solitaire_total_carat') }} · {{ $displayShape }} · {{ __('site.solitaire_word') }} · {{ $selectedMetalName }}
                 </p>
 
                 <div class="hj-metal-options">
@@ -668,7 +681,7 @@
                     </del>
 
                     <strong class="hj-new-price">
-                        {{ $price ? $formatMoney($price) : 'Unavailable' }}
+                        {{ $price ? $formatMoney($price) : __('site.unavailable') }}
                     </strong>
 
                     <span class="hj-discount-text">
@@ -742,25 +755,13 @@
     <!-- CONTENT BOX -->
 <section class="hj-info-section">
     <div class="hj-info-box">
-        <h2>SOLITAIRE DIAMOND ENGAGEMENT RING</h2>
+        <h2>{{ __('site.solitaire_info_title') }}</h2>
 
-        <p>
-            A perfect solitaire ring lets your gorgeous diamond take the center stage so everyone can admire it along with you.
-            Browse through our stylish solitaire rings in the latest couture designs and find the one that tells your love
-            story to perfection.
-        </p>
+        <p>{{ __('site.solitaire_info_p1') }}</p>
 
-        <p>
-            Can you do any better than perfection? Well, that’s a tough act to follow. The lady who is drawn to the
-            sophistication of a solitaire ring knows her mind. She knows what she likes, and reveals a confidence born
-            of a developed sense of style—you don’t follow—you lead the way with your effortless chic.
-        </p>
+        <p>{{ __('site.solitaire_info_p2') }}</p>
 
-        <p>
-            There are so many ways to personalize your solitaire ring. We’ll let you decide how you want to show your style.
-            Rose gold or platinum can be your heart’s desire. But so can princess cut diamonds, or a romantic heart shaped
-            stone. Your choice will be simply perfection.
-        </p>
+        <p>{{ __('site.solitaire_info_p3') }}</p>
     </div>
 </section>
 
@@ -948,14 +949,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (descEl) {
-                const shapeName = String(data.shape || 'Oval');
-                const shapeText = shapeName.charAt(0).toUpperCase() + shapeName.slice(1);
+                const shapeText = data.shape_label || String(data.shape || 'Oval');
                 const metalName = metal && metal.name ? metal.name : selectedMetalCode;
                 const caratLabel = carat && carat.label ? carat.label : selectedCarat;
 
                 descEl.textContent =
-                    caratLabel + ' Total Carat · ' +
-                    shapeText + ' · Solitaire · ' +
+                    caratLabel + ' ' + (data.total_carat_label || 'Total Carat') + ' · ' +
+                    shapeText + ' · ' + (data.solitaire_label || 'Solitaire') + ' · ' +
                     metalName;
             }
 
@@ -968,12 +968,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (newPriceEl) {
                 newPriceEl.textContent = variant && variant.price
                     ? formatMoney(variant.price, data.currency || 'PKR')
-                    : 'Unavailable';
+                    : (data.unavailable_label || 'Unavailable');
             }
 
             if (discountEl) {
                 discountEl.textContent = variant && variant.discount_percent
-                    ? variant.discount_percent + '% off'
+                    ? variant.discount_percent + (data.off_label || '% off')
                     : '';
             }
         }

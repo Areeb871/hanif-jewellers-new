@@ -6,8 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function formatPKR(value) {
         value = Number(value || 0);
+        const currency = window.HJ_CURRENCY_LABEL || "PKR";
 
-        return "PKR " + value.toLocaleString(undefined, {
+        return currency + " " + value.toLocaleString(undefined, {
             maximumFractionDigits: 0
         });
     }
@@ -174,8 +175,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const left = ((minVal - minLimit) / (maxLimit - minLimit)) * 100;
             const right = ((maxVal - minLimit) / (maxLimit - minLimit)) * 100;
+            const rtl = getComputedStyle(minRange).direction === "rtl";
 
-            fill.style.left = left + "%";
+            fill.style.left = rtl ? "auto" : left + "%";
+            fill.style.right = rtl ? left + "%" : "auto";
             fill.style.width = (right - left) + "%";
 
             if (minTop) minTop.textContent = formatPKR(minVal);

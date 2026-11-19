@@ -64,9 +64,9 @@
                                     </small>
                                 </td>
                                 <td>
-                                    <strong>PKR{{ number_format(round($order->total_amount,-3), 2) }}</strong>
+                                    <strong>{{ $order->currencyCode() }}{{ number_format(round($order->total_amount,-3), 2) }}</strong>
                                     @if($order->shipping_cost > 0)
-                                        <br><small class="text-muted">Shipping: PKR{{ number_format(round($order->shipping_cost,-3), 2) }}</small>
+                                        <br><small class="text-muted">Shipping: {{ $order->currencyCode() }}{{ number_format(round($order->shipping_cost,-3), 2) }}</small>
                                     @endif
                                 </td>
                                 <td>

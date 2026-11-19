@@ -95,12 +95,28 @@
         </div>
 
         <div class="mb-3">
-            <label>Short Description</label>
+            <label>Short Description (Pakistan)</label>
             <textarea 
                 name="short_description" 
                 class="form-control" 
                 rows="3"
             >{{ old('short_description', $product->short_description) }}</textarea>
+        </div>
+
+        <div class="border rounded p-3 mb-3" style="background:#f8f6f2;">
+            <h6 class="mb-3">UAE / Emirati Arabic</h6>
+            <div class="mb-3">
+                <label>Product Name (Arabic)</label>
+                <input type="text" name="uae_name" class="form-control" dir="rtl" value="{{ old('uae_name', $product->uae_name) }}" placeholder="خاتم سوليتير بيضاوي">
+            </div>
+            <div class="mb-3">
+                <label>Tag Label (Arabic)</label>
+                <input type="text" name="uae_tag_label" class="form-control" dir="rtl" value="{{ old('uae_tag_label', $product->uae_tag_label) }}" placeholder="ألماس مختبري">
+            </div>
+            <div class="mb-0">
+                <label>Short Description (Arabic)</label>
+                <textarea name="uae_short_description" class="form-control" dir="rtl" rows="3">{{ old('uae_short_description', $product->uae_short_description) }}</textarea>
+            </div>
         </div>
 
         <div class="mb-3">
@@ -197,6 +213,17 @@
                                 class="form-control" 
                                 value="{{ $metal['name'] ?? '' }}" 
                                 placeholder="14K White Gold"
+                            >
+                        </div>
+                        <div class="col-md-3">
+                            <label>Name (Arabic)</label>
+                            <input
+                                type="text"
+                                name="metals[{{ $index }}][name_ar]"
+                                class="form-control"
+                                dir="rtl"
+                                value="{{ $metal['name_ar'] ?? '' }}"
+                                placeholder="ذهب أبيض عيار 14"
                             >
                         </div>
 
@@ -615,13 +642,33 @@
                         </div>
 
                         <div class="col-md-1">
-                            <label>Price</label>
+                            <label>Price PKR</label>
                             <input 
                                 type="number" 
                                 step="0.01" 
                                 name="variants[{{ $index }}][price]" 
                                 class="form-control" 
                                 value="{{ $variant['price'] ?? '' }}"
+                            >
+                        </div>
+                        <div class="col-md-1">
+                            <label>Old AED</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="variants[{{ $index }}][old_price_aed]"
+                                class="form-control"
+                                value="{{ $variant['old_price_aed'] ?? '' }}"
+                            >
+                        </div>
+                        <div class="col-md-1">
+                            <label>Price AED</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="variants[{{ $index }}][price_aed]"
+                                class="form-control"
+                                value="{{ $variant['price_aed'] ?? '' }}"
                             >
                         </div>
 
@@ -804,8 +851,10 @@ function getCurrentVariantValues() {
             metal_code: metalCode,
             diamond_carat: carat,
             variant_sku: row.querySelector('[name*="[variant_sku]"]')?.value || '',
-            old_price: row.querySelector('[name*="[old_price]"]')?.value || '',
-            price: row.querySelector('[name*="[price]"]')?.value || '',
+            old_price: row.querySelector('[name*="[old_price]"]:not([name*="_aed"])')?.value || '',
+            price: row.querySelector('[name*="[price]"]:not([name*="_aed"])')?.value || '',
+            old_price_aed: row.querySelector('[name*="[old_price_aed]"]')?.value || '',
+            price_aed: row.querySelector('[name*="[price_aed]"]')?.value || '',
             discount_percent: row.querySelector('[name*="[discount_percent]"]')?.value || '',
             stock: row.querySelector('[name*="[stock]"]')?.value || 0,
             is_default: row.querySelector('[name*="[is_default]"]')?.checked || false,
@@ -865,7 +914,7 @@ function buildVariantRow(index, variant) {
                 </div>
 
                 <div class="col-md-1">
-                    <label>Price</label>
+                    <label>Price PKR</label>
                     <input 
                         type="number" 
                         step="0.01" 
@@ -873,6 +922,14 @@ function buildVariantRow(index, variant) {
                         class="form-control" 
                         value="${escapeAttr(variant.price)}"
                     >
+                </div>
+                <div class="col-md-1">
+                    <label>Old AED</label>
+                    <input type="number" step="0.01" name="variants[${index}][old_price_aed]" class="form-control" value="${escapeAttr(variant.old_price_aed || '')}">
+                </div>
+                <div class="col-md-1">
+                    <label>Price AED</label>
+                    <input type="number" step="0.01" name="variants[${index}][price_aed]" class="form-control" value="${escapeAttr(variant.price_aed || '')}">
                 </div>
 
                 <div class="col-md-1">
@@ -1255,6 +1312,10 @@ function addMetalRow() {
                 <div class="col-md-3">
                     <label>Name</label>
                     <input type="text" name="metals[${metalIndex}][name]" class="form-control" placeholder="14K White Gold">
+                </div>
+                <div class="col-md-3">
+                    <label>Name (Arabic)</label>
+                    <input type="text" name="metals[${metalIndex}][name_ar]" class="form-control" dir="rtl" placeholder="ذهب أبيض عيار 14">
                 </div>
 
                 <div class="col-md-2">

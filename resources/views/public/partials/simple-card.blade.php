@@ -462,7 +462,7 @@
                     <div class="hjDesc">{!! $product->description !!}</div>
                 @endunless
                 <a href="{{ $detailUrl }}" class="btn hjBtn">
-                    Discover More
+                    {{ __('site.discover_more') }}
                 </a>
             </div>
         </div>

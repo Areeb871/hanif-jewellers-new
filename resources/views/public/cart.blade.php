@@ -1,6 +1,9 @@
 @extends('public.layouts.headerCheckout')
 
 @section('content')
+@php
+    $cartCurrency = (app()->getLocale() === 'ar' || session('market') === 'uae') ? 'AED' : 'PKR';
+@endphp
 <style>
     /* Clean, Minimalist Design - Tiffany & Co. Style */
     body {
@@ -422,7 +425,7 @@
 
 <div class="cart-header">
     <div class="container" style="border-top: solid 1px #cdcdcd; border-bottom: solid 1px #cdcdcd; padding-top: 3rem; padding-bottom: 3rem;">
-        <p class="cart-title">Shopping Cart <span class="item-count">({{ $cartCount }})</span></p>
+        <p class="cart-title">{{ __('site.shopping_cart') }} <span class="item-count">({{ $cartCount }})</span></p>
     </div>
 </div>
 
@@ -513,13 +516,13 @@
                                     $hasDiscount = true;
 
                                     if ($basePrice > $cartProduct->discounted_price) {
-                                        $discountText = 'PKR ' . number_format($basePrice - $cartProduct->discounted_price) . ' OFF';
+                                        $discountText = $cartCurrency . ' ' . number_format($basePrice - $cartProduct->discounted_price) . ' OFF';
                                     }
                                 }
                             }
 
                             $price = max(0, $usesWatchPricing
-                                ? round($price, -3)
+                                ? \App\Models\Products::roundDisplayPrice($price)
                                 : round($price));
                             $subtotal = $price * $item->quantity;
                             $total += $subtotal;
@@ -535,7 +538,7 @@
                                     <div class="item-name">{{ $productName }}</div>
 
                                     <div class="item-price">
-                                        PKR {{ number_format(round($price, -3)) }}
+                                        {{ $cartCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($price)) }}
                                     </div>
 
                                     @if($isSolitaire)
@@ -605,34 +608,34 @@
                     <div class="order-summary-box">
 
                         <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span>PKR {{ number_format(round($total, -3)) }}</span>
+                            <span>{{ __('site.subtotal') }}</span>
+                            <span>{{ $cartCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($total)) }}</span>
                         </div>
 
                         <div class="summary-row shipping">
-                            <span>7-10 Business Days</span>
+                            <span>{{ __('site.business_days') }}</span>
                             <span></span>
                         </div>
 
                         <div class="summary-row">
-                            <span>Estimated Tax</span>
+                            <span>{{ __('site.estimated_tax') }}</span>
                             <span>-</span>
                         </div>
 
                         <div class="summary-row">
-                            <span class="action-link">Taxes and other shipping methods</span>
+                            <span class="action-link">{{ __('site.taxes_shipping') }}</span>
                             <span></span>
                         </div>
 
                         <div class="summary-row total">
-                            <span>Estimated Total</span>
-                            <span>PKR {{ number_format(round($total, -3)) }}</span>
+                            <span>{{ __('site.estimated_total') }}</span>
+                            <span>{{ $cartCurrency }} {{ number_format(\App\Models\Products::roundDisplayPrice($total)) }}</span>
                         </div>
 
-                        <div class="delivery-info">Complimentary Delivery & Returns</div>
+                        <div class="delivery-info">{{ __('site.complimentary') }}</div>
 
                         <button class="checkout-button" onclick="window.location.href='{{ route('checkout') }}'">
-                            Checkout
+                            {{ __('site.check_out') }}
                         </button>
 
                     </div>
@@ -644,9 +647,9 @@
 
             <!-- Empty Cart State -->
             <div class="empty-cart">
-                <h2>Your cart is empty</h2>
+                <h2>{{ __('site.empty_cart') }}</h2>
                 <p>Looks like you haven't added any items to your cart yet.</p>
-                <a href="{{ route('index') }}" class="start-shopping-btn">Start Shopping</a>
+                <a href="{{ route('index') }}" class="start-shopping-btn">{{ __('site.start_shopping') }}</a>
             </div>
 
         @endif
@@ -656,7 +659,7 @@
 
             <div class="recommended-section">
                 <div class="recommended-header">
-                    <h2>Recommended for You</h2>
+                    <h2>{{ __('site.recommended') }}</h2>
                 </div>
 
                 <div class="position-relative">
@@ -778,7 +781,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="card-img-overlay">New</div>
+                                        <div class="card-img-overlay">{{ __('site.new_badge') }}</div>
 
                                         <div class="card-body text-center" style="background-color: #F6F4F2;">
                                             <h5 class="card-title">{{ $product->name }}</h5>
@@ -786,19 +789,19 @@
                                             @if($product->show_price)
                                                 @php
                                                     $livePrice = $product->final_price ?? $recommendedPrice ?? 0;
-                                                    $roundedPrice = round($livePrice, -3);
+                                                    $roundedPrice = \App\Models\Products::roundDisplayPrice($livePrice);
                                                 @endphp
 
                                                 @if($roundedPrice > 0)
                                                     <p class="card-text">
-                                                        PKR {{ number_format($roundedPrice, 0, '.', ',') }}
+                                                        {{ $cartCurrency }} {{ number_format($roundedPrice, 0, '.', ',') }}
                                                     </p>
                                                 @endif
                                             @endif
 
                                             <button class="btn text-white bg-black addToCartProductDetails"
                                                     onclick="addToCartFromRecommendation({{ $product->id }})">
-                                                Add to Cart
+                                                {{ __('site.add_to_cart') }}
                                             </button>
                                         </div>
 

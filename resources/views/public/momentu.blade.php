@@ -2,7 +2,7 @@
 
 @section('content')
 @php
-    $whatsappNumber = '923070222666';
+    $whatsappNumber = $appointmentWhatsappPhone;
 @endphp
 
 <style>
@@ -86,9 +86,9 @@
     </section>
 
     <section class="momentu-intro">
-        <h1 class="momentu-title">MOMENTO</h1>
-        <p class="momentu-subtitle">Evermore Diamonds.</p>
-        <p class="momentu-copy">Every diamond, expertly cut and perfectly set, captures the effortless elegance of the tennis bracelet. Momento</p>
+        <h1 class="momentu-title">{{ __('site.col_momentu') }}</h1>
+        <p class="momentu-subtitle">{{ __('site.momentu_subtitle') }}</p>
+        <p class="momentu-copy">{{ __('site.momentu_copy') }}</p>
     </section>
 
     <section class="momentu-story-banner" aria-label="Momento diamond collection">
@@ -97,7 +97,7 @@
     </section>
 
     <section class="momentu-categories" aria-labelledby="momentu-categories-title">
-        <h2 class="momentu-section-title" id="momentu-categories-title">Choose your perfect match</h2>
+        <h2 class="momentu-section-title" id="momentu-categories-title">{{ __('site.momentu_match') }}</h2>
         <div class="momentu-category-grid">
             @forelse($products->take(3) as $featuredProduct)
                 @php
@@ -106,7 +106,7 @@
                     $featuredImage = $featuredProduct->images->isNotEmpty()
                         ? $featuredProduct->images->first()->image
                         : ($featuredProduct->image ?: 'default.jpg');
-                    $featuredPrice = round($featuredProduct->storefront_price, -3);
+                    $featuredPrice = \App\Models\Products::roundDisplayPrice($featuredProduct->storefront_price);
                 @endphp
                 <a class="momentu-category" href="{{ route('product.details', $featuredProduct->slug) }}?store=1" aria-label="View {{ $featuredName }} details">
                     <img class="momentu-category__image" src="{{ asset(ltrim($featuredImage, '/')) }}" alt="{{ $featuredName }}" loading="lazy">
@@ -117,12 +117,12 @@
                     <span class="momentu-category__content">
                         <span class="momentu-category__label">{{ $featuredName }}</span>
                         @if($featuredPrice > 0 && $featuredProduct->show_price)
-                            <span class="momentu-category__price">PKR {{ number_format($featuredPrice, 0, '.', ',') }}</span>
+                            <span class="momentu-category__price">{{ $featuredProduct->marketCurrency() }} {{ number_format($featuredPrice, 0, '.', ',') }}</span>
                         @endif
                     </span>
                 </a>
             @empty
-                <p class="momentu-products__empty">No Momento products are available right now.</p>
+                <p class="momentu-products__empty">{{ __('site.momentu_empty') }}</p>
             @endforelse
         </div>
     </section>
@@ -155,7 +155,7 @@
                     $displayImage = $product->images->isNotEmpty()
                         ? $product->images->first()->image
                         : ($product->image ?: 'default.jpg');
-                    $displayPrice = round($product->storefront_price, -3);
+                    $displayPrice = \App\Models\Products::roundDisplayPrice($product->storefront_price);
                     $detailUrl = route('product.details', $product->slug).'?store=1';
                 @endphp
                 <article class="momentu-product" data-momentu-product="{{ $productType }}">

@@ -502,27 +502,31 @@
     </div>
 
     @php
-        $displayPrice = !empty($product->show_price) ? round($product->final_price ?? 0, -3) : 0;
+        $cardCurrency = $product->displayCurrency(false);
+        $cardName = $product->displayName(false);
+        $displayPrice = !empty($product->show_price)
+            ? \App\Models\Products::roundDisplayPrice($product->final_price ?? 0)
+            : 0;
     @endphp
     <div class="card-body text-center {{ $displayPrice <= 0 ? 'no-price' : '' }}"
          style="background-color: #F6F4F2;">
 
 <h5 class="card-title product-name-fixed pb-5 pb-md-0">
     @php 
-        $nameParts = explode('-', $product->name); 
+        $nameParts = explode('-', $cardName); 
     @endphp
 
     {{ trim($nameParts[0]) }}
 </h5>
 
         @if($displayPrice > 0)
-            <p class="card-text">PKR {{ number_format($displayPrice, 0, '.', ',') }}</p>
+            <p class="card-text">{{ $cardCurrency }} {{ number_format($displayPrice, 0, '.', ',') }}</p>
         @endif
 
         @if(!(request()->routeIs('qaws-al-matar') || request()->routeIs('qaws-al-matar-collection-page')))
             <a href="{{ route('product.details', $product->slug) }}"
                class="btn text-white bg-black addToCartProductDetails discover-more-btn">
-                Discover More
+                {{ __('site.discover_more') }}
             </a>
         @endif
     </div>

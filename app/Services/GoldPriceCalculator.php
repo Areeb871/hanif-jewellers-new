@@ -15,12 +15,14 @@ class GoldPriceCalculator
     public static function calculateFromDescription(
         ?string $description,
         ?float $goldWeight = null,
-        ?int $goldServiceId = null
+        ?int $goldServiceId = null,
+        string $market = 'pk'
     ): ?float {
         $breakdown = self::calculateBreakdownFromDescription(
             $description,
             $goldWeight,
-            $goldServiceId
+            $goldServiceId,
+            $market
         );
 
         return $breakdown['final_price'] ?? null;
@@ -32,7 +34,8 @@ class GoldPriceCalculator
     public static function calculateBreakdownFromDescription(
         ?string $description,
         ?float $goldWeight = null,
-        ?int $goldServiceId = null
+        ?int $goldServiceId = null,
+        string $market = 'pk'
     ): ?array {
         if (!$description) {
             Log::warning('GoldPriceCalculator: empty description');
@@ -50,19 +53,22 @@ class GoldPriceCalculator
             Log::warning('GoldPriceCalculator: missing karat or gold weight', [
                 'karat' => $karat,
                 'grams' => $grams,
+                'market' => $market,
             ]);
             return null;
         }
 
-        $rateSetting = GoldRateSetting::where('karat', $karat)
+        $rateSetting = GoldRateSetting::forMarket($market)
+            ->where('karat', $karat)
             ->where('is_active', true)
             ->first();
-        $service = self::resolveService($goldServiceId);
+        $service = self::resolveService($goldServiceId, $market);
 
         if (!$rateSetting || !$service) {
             Log::warning('GoldPriceCalculator: active rate or service not found', [
                 'karat' => $karat,
                 'gold_service_id' => $goldServiceId,
+                'market' => $market,
             ]);
             return null;
         }
@@ -137,10 +143,40 @@ class GoldPriceCalculator
         float $grams,
         bool $isSale
     ): float {
+        $goldValue = (float) $rateSetting->gold_rate_per_gram * $grams;
+
+        if (strtolower((string) $service->market) === 'uae') {
+            $making = self::dubaiMaking($service, $goldValue, $grams, $isSale);
+            $subtotal = $goldValue + $making;
+
+            return round($subtotal * (1 + ((float) $rateSetting->vat_percent / 100)), 2);
+        }
+
         $ocFinal = self::ocFinal($service, $grams, $isSale);
-        $subtotal = ((float) $rateSetting->gold_rate_per_gram * $grams) + $ocFinal;
+        $subtotal = $goldValue + $ocFinal;
 
         return round($subtotal * (1 + ((float) $rateSetting->vat_percent / 100)), 2);
+    }
+
+    /**
+     * Dubai making charge: selling % of the gold value above 6 g.
+     * At 6 g or below, a fixed 650 AED replaces that percent.
+     */
+    private static function dubaiMaking(
+        GoldServiceSetting $service,
+        float $goldValue,
+        float $grams,
+        bool $isSale
+    ): float {
+        if ($grams <= 6) {
+            return 650.0;
+        }
+
+        $percent = $isSale
+            ? (float) ($service->sale_selling_percent ?? 0)
+            : (float) ($service->selling_percent ?? 0);
+
+        return $goldValue * ($percent / 100);
     }
 
     private static function ocFinal(
@@ -164,27 +200,48 @@ class GoldPriceCalculator
             : $grams * (float) $service->heavy_oc_final_per_gram;
     }
 
-    private static function resolveService(?int $goldServiceId): ?GoldServiceSetting
+    private static function resolveService(?int $goldServiceId, string $market = 'pk'): ?GoldServiceSetting
     {
+        $market = strtolower($market) === 'uae' ? 'uae' : 'pk';
+
         if ($goldServiceId) {
-            $service = GoldServiceSetting::whereKey($goldServiceId)
+            // Only accept a service that belongs to this country/market.
+            $service = GoldServiceSetting::forMarket($market)
+                ->whereKey($goldServiceId)
                 ->where('is_active', true)
                 ->first();
 
             if ($service) {
                 return $service;
             }
+
+            // Legacy: product may still store the other country's service id — map by slug.
+            $foreign = GoldServiceSetting::whereKey($goldServiceId)->first();
+            if ($foreign) {
+                $mapped = GoldServiceSetting::forMarket($market)
+                    ->where('slug', $foreign->slug)
+                    ->where('is_active', true)
+                    ->first();
+                if ($mapped) {
+                    return $mapped;
+                }
+            }
         }
 
-        return GoldServiceSetting::where('slug', 'fine')
+        return GoldServiceSetting::forMarket($market)
+            ->where('slug', 'fine')
             ->where('is_active', true)
             ->first()
-            ?? GoldServiceSetting::where('is_active', true)->orderBy('sort_order')->first();
+            ?? GoldServiceSetting::forMarket($market)
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->first();
     }
 
     private static function normalizeText(string $text): string
     {
         $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/[\x{FEFF}\x{200B}\x{200C}\x{200D}\x{2060}]/u', '', $text);
         $text = preg_replace('/<\/(p|div|li|h[1-6])>/i', ' ', $text);
         $text = preg_replace('/<(br|br\/)\s*>/i', ' ', $text);
         $text = strip_tags($text);
@@ -207,6 +264,20 @@ class GoldPriceCalculator
             return (float) $matches[1];
         }
 
+        $normalized = strtr($description, [
+            '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+            '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+        ]);
+
+        // Arabic: الوزن: 9.25 غرامًا / جرامًا / غرام / g
+        if (preg_match(
+            '/الوزن\s*:\s*(\d+(?:\.\d+)?)\s*(?:جرامًا?|غرامًا?|غ(?:رام)?|g|grams?)/u',
+            $normalized,
+            $matches
+        )) {
+            return (float) $matches[1];
+        }
+
         return null;
     }
 
@@ -217,6 +288,16 @@ class GoldPriceCalculator
         }
 
         if (preg_match('/\b(18|21|22|24)\s*k/i', $description, $matches)) {
+            return (int) $matches[1];
+        }
+
+        // Emirati / Arabic labels, e.g. "المعدن: ذهب عيار 21" or Eastern numerals.
+        $normalized = strtr($description, [
+            '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
+            '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
+        ]);
+
+        if (preg_match('/عيار\s*(18|21|22|24)/u', $normalized, $matches)) {
             return (int) $matches[1];
         }
 

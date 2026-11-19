@@ -1,9 +1,43 @@
 @extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+@php
+    $uaeSolitaire = app()->getLocale() === 'ar';
+    $uaeMarket = \App\Models\Products::currentMarket() === 'uae';
+    $hj = function (string $key) use ($uaeSolitaire) {
+        return $uaeSolitaire ? trans('site.'.$key, [], 'ar') : __('site.'.$key);
+    };
+    $hjNum = function ($number) use ($uaeSolitaire) {
+        $text = (string) $number;
+        if (!$uaeSolitaire) {
+            return $text;
+        }
+
+        return strtr($text, ['0' => '٠', '1' => '١', '2' => '٢', '3' => '٣', '4' => '٤', '5' => '٥', '6' => '٦', '7' => '٧', '8' => '٨', '9' => '٩', '.' => '٫']);
+    };
+@endphp
 <link rel="stylesheet" href="{{ asset('assets/f_assets/css/details.css') }}?v={{ filemtime(public_path('assets/f_assets/css/details.css')) }}">
 <script src="{{ asset('assets/f_assets/js/filter.js') }}?v={{ filemtime(public_path('assets/f_assets/js/filter.js')) }}" defer></script>
-<section class="hj-product-detail-page">
+<section class="hj-product-detail-page" dir="ltr">
+<style>
+.hj-product-detail-page[dir="ltr"],
+.hj-details-lower-container[dir="ltr"],
+.hj-review-section[dir="ltr"] { direction: ltr; text-align: start; }
+.hj-product-detail-page[dir="ltr"] .hj-breadcrumb,
+.hj-product-detail-page[dir="ltr"] .hj-breadcrumb a,
+.hj-product-detail-page[dir="ltr"] .hj-breadcrumb span {
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+a.hj-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+}
+</style>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const viewers = document.querySelectorAll('.hj-360-viewer');
@@ -302,12 +336,25 @@ document.addEventListener('DOMContentLoaded', function () {
             && number_format((float)($variant['diamond_carat'] ?? 0), 2, '.', '') === number_format((float)$selectedCarat, 2, '.', '');
     });
 
-    $certificateForCarat = static function ($carat): array {
+    $displayName = $product->displayName();
+    $displayTag = $product->displayTag();
+    $displayShape = $product->displayShape();
+    $currency = $product->displayCurrency();
+    $metals = $metals->map(fn ($metal) => $product->presentMetal($metal))->values();
+    $activeVariants = $activeVariants->map(fn ($variant) => $product->presentVariant($variant))->values();
+    if (is_array($selectedMetal)) {
+        $selectedMetal = $product->presentMetal($selectedMetal);
+    }
+    if (is_array($selectedVariant)) {
+        $selectedVariant = $product->presentVariant($selectedVariant);
+    }
+
+    $certificateForCarat = function ($carat) use ($hj): array {
         $value = (float) $carat;
 
         if ($value >= 1.00) {
             return [
-                'name' => 'HRD & GIA CERTIFICATES INCLUDED',
+                'name' => $hj('sd_cert_hrd_gia'),
                 'logos' => [
                     ['src' => asset('assets/f_assets/image/gem-cert.png'), 'alt' => 'GIA certificate logo'],
                 ],
@@ -316,14 +363,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if ($value >= 0.70) {
             return [
-                'name' => 'HRD CERTIFICATE INCLUDED',
+                'name' => $hj('sd_cert_hrd'),
                 'logos' => [],
             ];
         }
 
         if ($value >= 0.50) {
             return [
-                'name' => 'GIA CERTIFICATE INCLUDED',
+                'name' => $hj('sd_cert_gia'),
                 'logos' => [
                     ['src' => asset('assets/f_assets/image/gem-cert.png'), 'alt' => 'GIA certificate logo'],
                 ],
@@ -331,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         return [
-            'name' => 'IGI CERTIFICATE INCLUDED',
+            'name' => $hj('sd_cert_igi'),
             'logos' => [
                 ['src' => asset('assets/f_assets/image/igi logo.png'), 'alt' => 'IGI certificate logo'],
             ],
@@ -363,8 +410,6 @@ document.addEventListener('DOMContentLoaded', function () {
             ->values();
     }
 
-    $currency = $product->currency ?? 'AED';
-
     $formatMoney = function ($value) use ($currency) {
         if ($value === null || $value === '') {
             return '';
@@ -381,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hjMetalClass($metal)
     */
     $detailData = [
-        'name' => $product->name,
+        'name' => $displayName,
         'currency' => $currency,
         'metals' => $metals->toArray(),
         'carats' => $carats->toArray(),
@@ -424,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <ellipse cx="20" cy="16" rx="5.6" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.1"/>
                     <path d="M19.5 6.2c.2-2 1.7-3.5 3.6-3.5 2 0 3.7 1.7 3.7 3.7" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
                 </svg>
-                <span>Drag to spin</span>
+                <span>{{ $hj('sd_drag') }}</span>
             </div>
         </div>
     </div>
@@ -432,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function () {
     @foreach($detailImages as $index => $image)
         <div class="hj-gallery-item hj-product-image-item">
             @if($index === 0)
-                <span class="hj-badge">Ready for Sale</span>
+                <span class="hj-badge">{{ $hj('sd_ready') }}</span>
             @endif
 
             <img 
@@ -497,21 +542,21 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="hj-product-top">
 
     <div class="hj-breadcrumb">
-        <a href="{{ url('/') }}">Home</a>
+        <a href="{{ url('/') }}">{{ $hj('sd_home') }}</a>
         <span>/</span>
-        <a href="{{ route('collections.solitaire_new') }}">Solitaire Rings</a>
+        <a href="{{ route('collections.solitaire_new') }}">{{ $hj('sd_rings') }}</a>
         <span>/</span>
-        <span id="selectedMetalTitle">Solitaire Engagement Ring - {{ $selectedMetal['name'] ?? '14K White Gold' }}</span>
+        <span id="selectedMetalTitle">{{ $hj('sd_ring_title') }} - {{ $selectedMetal['name'] ?? '' }}</span>
     </div>
 
-    <h1>{{ $product->name ?? 'Julia Solitaire Ring' }}</h1>
+    <h1>{{ $displayName }}</h1>
 
     <p class="hj-sku">
         <span>SKU: {{ $product->sku ?? 'N/A' }}</span>
         <span class="hj-sku-sep" aria-hidden="true">|</span>
-        <span>{{ $product->tag_label ?? 'N/A' }}</span>
+        <span>{{ ($uaeSolitaire && $displayTag === 'Lab Created') ? $hj('sd_lab') : $displayTag }}</span>
         <span class="hj-sku-sep" aria-hidden="true">|</span>
-        <span class="js-certificate-summary">Gemological certificate included</span>
+        <span class="js-certificate-summary">{{ $hj('sd_certificate_included') }}</span>
     </p>
 
 </div>
@@ -544,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {{-- METAL --}}
 <div class="hj-row hj-metal-row">
-    <span class="hj-label">METAL</span>
+    <span class="hj-label">{{ $hj('sd_metal') }}</span>
 
     <div class="hj-metal-track-wrap">
         <div class="hj-metal-options" id="metalOptionsTrack">
@@ -569,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="hj-metal-btn-wrap">
         <span class="hj-value-badge" id="selectedMetalBtn" aria-live="polite">
-            {{ strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
+            {{ $uaeSolitaire ? ($selectedMetal['name'] ?? '') : strtoupper($selectedMetal['name'] ?? 'SELECT METAL') }}
         </span>
     </div>
 </div>
@@ -578,14 +623,14 @@ document.addEventListener('DOMContentLoaded', function () {
     {{-- CARAT --}}
     <div class="hj-row hj-carat-row">
         <span class="hj-label">
-            TOTAL CARAT
+            {{ $hj('sd_total_carat') }}
             <small id="caratPriceDiff"></small>
         </span>
 
         <div class="hj-middle hj-slider-box">
             <div class="hj-slider-text">
-                <span>{{ data_get($carats->first(), 'label', '0.25') }} Carat</span>
-                <span>{{ data_get($carats->last(), 'label', '1.00') }} Carat</span>
+                <span>{{ $hjNum(data_get($carats->first(), 'label', '0.25')) }} {{ $hj('sd_carat_word') }}</span>
+                <span>{{ $hjNum(data_get($carats->last(), 'label', '1.00')) }} {{ $hj('sd_carat_word') }}</span>
             </div>
 
             <input
@@ -605,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <div class="hj-carat-btn-wrap">
             <span class="hj-value-badge" id="caratBtn" aria-live="polite">
-                {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
+                {{ $hjNum(data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) }} {{ $hj('sd_carat_word') }}
             </span>
         </div>
     </div>
@@ -623,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function () {
             aria-haspopup="listbox"
             aria-controls="hjRingSizeDropdown"
         >
-            <span id="hjRingSizeSelected" class="hj-ring-size-placeholder">Please select</span>
+            <span id="hjRingSizeSelected" class="hj-ring-size-placeholder">{{ $hj('sd_please_select') }}</span>
             <span class="hj-ring-size-arrow" aria-hidden="true">
     <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
         <path 
@@ -642,11 +687,11 @@ document.addEventListener('DOMContentLoaded', function () {
             rel="noopener"
             aria-label="Open ring size guide PDF"
         >
-            Need help?
+            {{ $hj('sd_need_help') }}
         </a>
     </div>
 
-    <p class="hj-ring-size-error" id="hjRingSizeError" role="alert" hidden>Please select a ring size.</p>
+    <p class="hj-ring-size-error" id="hjRingSizeError" role="alert" hidden>{{ $hj('sd_select_size') }}</p>
 
     <div class="hj-ring-size-dropdown" id="hjRingSizeDropdown" role="listbox" aria-label="Ring sizes">
         @for($size = 4; $size <= 27; $size++)
@@ -657,7 +702,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 role="option"
                 aria-selected="false"
             >
-                {{ $size }}
+                {{ $hjNum($size) }}
             </button>
         @endfor
     </div>
@@ -684,30 +729,42 @@ document.addEventListener('DOMContentLoaded', function () {
     <input type="hidden" name="selected_image" id="cartSelectedImageInput" value="">
 
 
+    @php
+        $expertOnly = $uaeMarket && (float) ($selectedVariant['price'] ?? 0) <= 0;
+    @endphp
     <div class="hj-price-row">
-        <div class="hj-price-left">
+        <div class="hj-price-left" id="hjPriceBlock" @if($expertOnly) hidden @endif>
             <del id="detailOldPrice">
                 {{ $selectedVariant && !empty($selectedVariant['old_price']) ? $formatMoney($selectedVariant['old_price']) : '' }}
             </del>
 
             <strong id="detailNewPrice">
-                {{ $selectedVariant && !empty($selectedVariant['price']) ? $formatMoney($selectedVariant['price']) : 'Unavailable' }}
+                {{ $selectedVariant && !empty($selectedVariant['price']) ? $formatMoney($selectedVariant['price']) : $hj('sd_unavailable') }}
             </strong>
 
             <span id="detailSavingText">
-                {{ $selectedVariant && !empty($selectedVariant['discount_percent']) ? 'You save ' . $selectedVariant['discount_percent'] . ' %' : '' }}
+                {{ $selectedVariant && !empty($selectedVariant['discount_percent']) ? $hj('sd_you_save') . ' ' . $selectedVariant['discount_percent'] . ' %' : '' }}
             </span>
         </div>
 
-        <button type="submit" class="hj-cart-btn" id="hjCartSubmitBtn">
-            Buy Now
+        <a
+            id="hjTalkExpertBtn"
+            class="hj-cart-btn"
+            href="{{ $appointmentWhatsappUrl }}"
+            target="_blank"
+            rel="noopener"
+            @unless($expertOnly) hidden @endunless
+        >{{ $hj('sd_talk_expert') }}</a>
+
+        <button type="submit" class="hj-cart-btn" id="hjCartSubmitBtn" @if($expertOnly) hidden @endif>
+            {{ $hj('sd_buy_now') }}
         </button>
     </div>
 </form>
 
 <button type="button" class="hj-engraving" id="hjOpenInscription">
     <b>+</b>
-    <span id="hjInscriptionBtnText">Add Free Inscription</span>
+    <span id="hjInscriptionBtnText">{{ $hj('sd_add_inscription') }}</span>
 </button>
 
 <input type="hidden" name="inscription_text" id="hjInscriptionHidden" value="">
@@ -721,9 +778,9 @@ document.addEventListener('DOMContentLoaded', function () {
             ×
         </button>
 
-        <h3>Add Free Inscription</h3>
+        <h3>{{ $hj('sd_add_inscription') }}</h3>
 
-        <p>Add a short personal message inside your ring.</p>
+        <p>{{ $hj('sd_inscription_help') }}</p>
 
         <img
             class="hj-inscription-image"
@@ -736,7 +793,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 type="text" 
                 id="hjInscriptionInput" 
                 maxlength="15" 
-                placeholder="Enter text"
+                placeholder="{{ $hj('sd_enter_text') }}"
                 autocomplete="off"
             >
 
@@ -744,16 +801,16 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <small class="hj-inscription-note">
-            Maximum 15 characters allowed.
+            {{ $hj('sd_max_chars') }}
         </small>
 
         <div class="hj-inscription-actions">
             <button type="button" class="hj-inscription-cancel" id="hjCancelInscription">
-                Cancel
+                {{ $hj('sd_cancel') }}
             </button>
 
             <button type="button" class="hj-inscription-save" id="hjSaveInscription">
-                Save
+                {{ $hj('sd_save') }}
             </button>
         </div>
 
@@ -763,8 +820,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="hj-spec-card">
 
     <div class="hj-tabs">
-        <button type="button" class="hj-tab-btn active" data-tab="main-stone">MAIN STONE</button>
-        <button type="button" class="hj-tab-btn" data-tab="settings">SETTINGS</button>
+        <button type="button" class="hj-tab-btn active" data-tab="main-stone">{{ $hj('sd_main_stone') }}</button>
+        <button type="button" class="hj-tab-btn" data-tab="settings">{{ $hj('sd_settings') }}</button>
     </div>
 
     <!-- MAIN STONE TAB -->
@@ -774,65 +831,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Carat</small>
+                    <small>{{ $hj('sd_carat_word') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Carat refers to the weight of the diamond.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_carat') }}</div>
                 </div>
    <strong id="selectedCaratSpec">
-        {{ strtoupper((data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) . ' CARAT') }}
+        {{ $hjNum(data_get($carats[$selectedCaratIndex] ?? [], 'label', $selectedCarat)) }} {{ $hj('sd_carat_word') }}
     </strong>
 
-                <span>Standard measure</span>
+                <span>{{ $hj('sd_standard') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Color</small>
+                    <small>{{ $hj('sd_color') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Color shows how white or colorless the diamond appears.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_color') }}</div>
                 </div>
                 <strong>H</strong>
-                <span>Exceptional Near Colorless Brilliance</span>
+                <span>{{ $hj('sd_color_note') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Clarity</small>
+                    <small>{{ $hj('sd_clarity') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Clarity shows how clean the diamond is.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_clarity') }}</div>
                 </div>
                 <strong>VS1</strong>
-                <span>Perfectly Eye Clean</span>
+                <span>{{ $hj('sd_clarity_note') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Cut</small>
+                    <small>{{ $hj('sd_cut') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Cut affects the brilliance and sparkle.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_cut') }}</div>
                 </div>
-                <strong>EXCELLENT</strong>
-                <span>Perfect brilliance</span>
+                <strong>{{ $uaeSolitaire ? 'ممتاز' : 'EXCELLENT' }}</strong>
+                <span>{{ $hj('sd_cut_note') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Shape</small>
+                    <small>{{ $hj('sd_shape') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Shape refers to the diamond outline.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_shape') }}</div>
                 </div>
-                <strong>{{ strtoupper($product->shape ?: 'N/A') }}</strong>
-                <span>Preferred style</span>
+                <strong>{{ $uaeSolitaire ? trans('site.shape_'.strtolower((string) ($product->shape ?: 'oval')), [], 'ar') : strtoupper($product->shape ?: 'N/A') }}</strong>
+                <span>{{ $hj('sd_shape_note') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Stone Origin</small>
+                    <small>{{ $hj('sd_origin') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">{{ $product->tag_label }} stones are made in controlled conditions.</div>
+                    <div class="hj-help-dropdown">{{ $product->displayTag() }}</div>
                 </div>
-                <strong>{{ $product->tag_label}}</strong>
-                <span>Gemstone perfection</span>
+                <strong>{{ $product->displayTag() }}</strong>
+                <span>{{ $hj('sd_origin_note') }}</span>
             </div>
 
         </div>
@@ -846,9 +903,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 @endforeach
             </div>
             <div>
-                <small>Certification</small>
+                <small>{{ $hj('sd_certification') }}</small>
                 <strong class="js-certificate-name">{{ $selectedCertificate['name'] }}</strong>
-                <p>Guaranteed authenticity</p>
+                <p>{{ $hj('sd_guaranteed') }}</p>
             </div>
         </div>
 
@@ -883,70 +940,70 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <div class="hj-spec-item">
     <div class="hj-spec-head">
-        <small>Metal</small>
+        <small>{{ $hj('sd_metal') }}</small>
         <button class="hj-help-btn" type="button">?</button>
-        <div class="hj-help-dropdown">Metal defines the ring material.</div>
+        <div class="hj-help-dropdown">{{ $hj('sd_help_metal') }}</div>
     </div>
 
     <strong id="selectedMetalSpec">
-        {{ strtoupper($initialMetalName) }}
+        {{ $uaeSolitaire ? $initialMetalName : strtoupper($initialMetalName) }}
     </strong>
 
-    <span>Premium finish</span>
+    <span>{{ $hj('sd_premium') }}</span>
 </div>
 
 <div class="hj-spec-item">
     <div class="hj-spec-head">
-        <small>Metal Color</small>
+        <small>{{ $hj('sd_metal_color') }}</small>
         <button class="hj-help-btn" type="button">?</button>
-        <div class="hj-help-dropdown">The visible color tone of the ring.</div>
+        <div class="hj-help-dropdown">{{ $hj('sd_help_metal_color') }}</div>
     </div>
 
     <strong id="selectedMetalColorSpec">
-        {{ strtoupper($initialMetalColor) }}
+        {{ $uaeSolitaire ? $hj('sd_'.strtolower($initialMetalColor)) : strtoupper($initialMetalColor) }}
     </strong>
 
-    <span>Elegant appearance</span>
+    <span>{{ $hj('sd_elegant') }}</span>
 </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Setting Type</small>
+                    <small>{{ $hj('sd_setting_type') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Setting type holds the stone in place.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_setting') }}</div>
                 </div>
-                <strong>SOLITAIRE</strong>
-                <span>Classic style</span>
+                <strong>{{ $hj('sd_solitaire') }}</strong>
+                <span>{{ $hj('sd_classic') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Prong Style</small>
+                    <small>{{ $hj('sd_prong') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Prongs secure the diamond safely.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_prong') }}</div>
                 </div>
-                <strong>4 PRONG</strong>
-                <span>Secure diamond hold</span>
+                <strong>{{ $hj('sd_prong_val') }}</strong>
+                <span>{{ $hj('sd_secure') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Band Style</small>
+                    <small>{{ $hj('sd_band') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Band style defines the ring profile.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_band') }}</div>
                 </div>
-                <strong>PLAIN BAND</strong>
-                <span>Minimal design</span>
+                <strong>{{ $hj('sd_plain') }}</strong>
+                <span>{{ $hj('sd_minimal') }}</span>
             </div>
 
             <div class="hj-spec-item">
                 <div class="hj-spec-head">
-                    <small>Ring Size</small>
+                    <small>{{ $hj('sd_ring_size') }}</small>
                     <button class="hj-help-btn" type="button">?</button>
-                    <div class="hj-help-dropdown">Ring size can be selected before order.</div>
+                    <div class="hj-help-dropdown">{{ $hj('sd_help_size') }}</div>
                 </div>
-                <strong>CUSTOM</strong>
-                <span>Made to fit</span>
+                <strong>{{ $hj('sd_custom') }}</strong>
+                <span>{{ $hj('sd_made_fit') }}</span>
             </div>
 
         </div>
@@ -960,9 +1017,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 @endforeach
             </div>
             <div>
-                <small>Certification</small>
+                <small>{{ $hj('sd_certification') }}</small>
                 <strong class="js-certificate-name">{{ $selectedCertificate['name'] }}</strong>
-                <p>Guaranteed authenticity</p>
+                <p>{{ $hj('sd_guaranteed') }}</p>
             </div>
 </div>
 
@@ -976,19 +1033,17 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 
     <div class="hj-appointment-top">
-        <h4>SET A VIRTUAL APPOINTMENT</h4>
-        <small>Free of charge</small>
+        <h4>{{ $hj('sd_appointment') }}</h4>
+        <small>{{ $hj('sd_free') }}</small>
     </div>
 
     <div class="hj-appointment-bottom">
         <p>
-            Meet one of our experts who can help you Explore
-            engagement rings, Diamonds and fine jewellery
-            in person at your device
+            {{ $hj('sd_appointment_copy') }}
         </p>
 
         <a
-            href="https://api.whatsapp.com/send?phone=923070222666&text={{ rawurlencode('Hello Hanif Jewellers, I would like to book an appointment.') }}"
+            href="{{ $appointmentWhatsappUrl }}"
             target="_blank"
             rel="noopener"
             aria-label="Book appointment on WhatsApp"
@@ -997,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <rect x="4" y="5" width="16" height="15" rx="2"></rect>
                 <path d="M8 3v4M16 3v4M4 10h16"></path>
             </svg>
-            BOOK APPOINTMENT
+            {{ $hj('sd_book') }}
         </a>
     </div>
 
@@ -1007,7 +1062,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="hj-acc-item">
     <button type="button" class="hj-acc-btn">
-Size & Fit
+{{ $hj('sd_size_fit') }}
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1021,20 +1076,20 @@ Size & Fit
 
         <div class="hj-acc-content">
             <p>
-               Our ring size finder has been created to help you accurately identify your ring size. Please refer to our full-size chart
+               {{ $hj('sd_size_copy') }}
                <a
                     class="hj-acc-guide-link"
                     href="https://www.hanifjewellers.com/assets/f_assets/pdf/ring-size-guide.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                >View ring size guide</a>
+                >{{ $hj('sd_view_guide') }}</a>
             </p>
         </div>
     </div>
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-    Details & Care
+    {{ $hj('sd_details_care') }}
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1048,14 +1103,14 @@ Size & Fit
 
         <div class="hj-acc-content">
             <p>
-                Available in a variety of carat weights, every Hanif diamond is meticulously set by our master artisans. As a result, size, carat weight and stone quantities can vary slightly from one ring to another. For detailed information, please contact us or book an in-store appointment.
+                {{ $hj('sd_care_copy') }}
             </p>
         </div>
     </div>
 
     <div class="hj-acc-item">
         <button type="button" class="hj-acc-btn">
-   Secure Shopping
+   {{ $hj('sd_secure_title') }}
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1069,14 +1124,14 @@ Size & Fit
 
         <div class="hj-acc-content">
             <p>
-                We want to make sure your shopping experience exceeds your expectations, so we have taken measures to guarantee your orders will be safe and secure, from our door to yours
+                {{ $hj('sd_secure_copy') }}
             </p>
         </div>
     </div>
 
     <div class="hj-acc-item">
        <button type="button" class="hj-acc-btn">
-Free Shipping
+{{ $hj('sd_shipping') }}
     <span class="hj-acc-arrow">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
             <path 
@@ -1090,7 +1145,7 @@ Free Shipping
 
         <div class="hj-acc-content">
             <p>
-                We offer free shipping on every order.
+                {{ $hj('sd_shipping_copy') }}
             </p>
         </div>
     </div>
@@ -1107,7 +1162,7 @@ Free Shipping
     
 
 </section>
-<div class="hj-details-lower-container">
+<div class="hj-details-lower-container" dir="ltr">
 <section class="hj-handcrafted-banner">
     <div class="hj-handcrafted-container">
         <div class="hj-handcrafted-hero">
@@ -1123,8 +1178,8 @@ Free Shipping
                 <img class="hj-handcrafted-logo"
                     src="{{ asset('assets/f_assets/image/solitaire/emb1.png') }}"
                     alt="Hanif Jewellers">
-                <h2>Timeless Styles, Made to Last</h2>
-                <p>Each Piece Is A Celebration Of Your Love, Your<br> Life, And Everything In Between.</p>
+                <h2>{{ $hj('sd_timeless') }}</h2>
+                <p>{{ $hj('sd_timeless_copy') }}</p>
             </div>
         </div>
 
@@ -1141,11 +1196,11 @@ Free Shipping
 
             <div class="hj-handcrafted-copy">
                 <div>
-                    <h3>We're committed to making your entire experience a pleasant one</h3>
-                    <p>Every item we send comes in our signature Hanif packaging. The presentation box also secures your appraisal certificate and diamond grading report.</p>
+                    <h3>{{ $hj('sd_experience') }}</h3>
+                    <p>{{ $hj('sd_packaging') }}</p>
                 </div>
 
-                <a href="{{ route('collections.solitaire_new') }}">SHOP NOW</a>
+                <a href="{{ route('collections.solitaire_new') }}">{{ $hj('sd_shop_now') }}</a>
             </div>
         </div>
     </div>
@@ -1181,10 +1236,10 @@ Free Shipping
                     ?: data_get($relatedGalleryImages->toArray(), '0.image_path')
                     ?: null;
 
-                $currency = $relatedProduct->currency ?? 'PKR';
-
-                $oldPrice = $defaultVariant['old_price'] ?? null;
-                $price = $defaultVariant['price'] ?? null;
+                $currency = $relatedProduct->displayCurrency();
+                $relatedPresented = is_array($defaultVariant) ? $relatedProduct->presentVariant($defaultVariant) : [];
+                $oldPrice = $relatedPresented['old_price'] ?? null;
+                $price = $relatedPresented['price'] ?? null;
                 $discount = $defaultVariant['discount_percent'] ?? null;
 
                 $formatMoney = function ($value) use ($currency) {
@@ -1209,13 +1264,13 @@ Free Shipping
             <a href="{{ $detailUrl }}" class="hj-lab-product-card">
                 <div class="hj-lab-img-box">
                     <span class="hj-lab-tag">
-                        {{ $relatedProduct->tag_label ?? 'Lab Created' }}
+                        {{ $relatedProduct->displayTag() }}
                     </span>
 
                     @if($mainImage)
                         <img 
                             src="{{ asset($mainImage) }}" 
-                            alt="{{ $relatedProduct->name }}"
+                            alt="{{ $relatedProduct->displayName() }}"
                         >
                     @else
                         <div class="hj-no-image">
@@ -1226,11 +1281,11 @@ Free Shipping
 
                 <div class="hj-lab-product-info">
                     <h3>
-                        {{ $relatedProduct->name }}
+                        {{ $relatedProduct->displayName() }}
                     </h3>
 
                     <p>
-                        {{ $defaultCarat ?: '0.25' }} Total Carat · {{ $relatedProduct->shape ?? 'N/A' }} · Solitaire · {{ $defaultMetal['name'] ?? '14K White Gold' }}
+                        {{ $defaultCarat ?: '0.25' }} {{ __('site.solitaire_total_carat') }} · {{ $relatedProduct->displayShape() }} · {{ __('site.solitaire_word') }} · {{ $relatedProduct->displayMetalName(is_array($defaultMetal) ? $defaultMetal : []) }}
                     </p>
 
                     <div class="hj-lab-price-row">
@@ -1241,12 +1296,12 @@ Free Shipping
                         @endif
 
                         <span class="hj-new-price">
-                            {{ $price ? $formatMoney($price) : 'Unavailable' }}
+                            {{ $price ? $formatMoney($price) : __('site.unavailable') }}
                         </span>
 
                         @if($discount)
                             <span class="hj-discount">
-                                {{ $discount }}% off
+                                {{ $discount }}{{ $hj('percent_off') }}
                             </span>
                         @endif
                     </div>
@@ -1256,7 +1311,7 @@ Free Shipping
         @empty
 
             <div class="alert alert-warning">
-                No solitaire products found.
+                {{ $hj('sd_no_products') }}
             </div>
 
         @endforelse
@@ -1306,7 +1361,7 @@ Free Shipping
     }
 @endphp
 
-<section class="hj-review-section">
+<section class="hj-review-section" dir="ltr">
 
     <div class="hj-review-container">
 
@@ -1315,13 +1370,13 @@ Free Shipping
 
             {{-- SUMMARY --}}
             <div class="hj-review-summary">
-                <h2>Reviews</h2>
+                <h2>{{ $hj('sd_reviews') }}</h2>
 
                 <div class="hj-rating-number">5.0</div>
                 <div class="hj-rating-stars">★★★★★</div>
 
                 <div class="hj-rating-count">
-                    {{ $reviewCount }} {{ $reviewCount == 1 ? 'Review' : 'Reviews' }}
+                    {{ $reviewCount }} {{ $hj('sd_reviews') }}
                 </div>
             </div>
 
@@ -1355,7 +1410,7 @@ Free Shipping
                                 alt="{{ $image['alt_text'] }}"
                             >
                         @empty
-                            <p class="text-muted">No review images found.</p>
+                            <p class="text-muted">{{ $hj('sd_no_review_images') }}</p>
                         @endforelse
 
                     </div>
@@ -1369,7 +1424,7 @@ Free Shipping
         {{-- SORT --}}
         <div class="hj-review-sort">
             <button type="button">
-                Sort: Highest Rating <span>⌄</span>
+                {{ $hj('sd_sort') }} <span>⌄</span>
             </button>
         </div>
 
@@ -1425,7 +1480,7 @@ Free Shipping
             @empty
 
                 <div class="alert alert-warning">
-                    No reviews found.
+                    {{ $hj('sd_no_reviews') }}
                 </div>
 
             @endforelse
@@ -1437,7 +1492,7 @@ Free Shipping
         @if($reviews->count() > 3)
             <div class="hj-load-more" id="hjLoadMoreWrap">
                 <button type="button" id="hjLoadMoreReviews">
-                    Load More
+                    {{ $hj('sd_load_more') }}
                 </button>
             </div>
         @endif
@@ -1454,7 +1509,7 @@ Free Shipping
 
         <div class="hj-question-actions">
  <a 
-    href="https://wa.me/923070222666" 
+    href="https://wa.me/{{ $appointmentWhatsappPhone }}" 
     class="hj-question-btn" 
     target="_blank"
 >
@@ -1472,7 +1527,44 @@ Free Shipping
         alt="Hanif Jewellers"
     >
 </section>
+@php
+    $hjCopy = [
+        'carat' => $hj('sd_carat_word'),
+        'unavailable' => $hj('sd_unavailable'),
+        'youSave' => $hj('sd_you_save'),
+        'ready' => $hj('sd_ready'),
+        'ringTitle' => $hj('sd_ring_title'),
+        'inscription' => $hj('sd_inscription_prefix'),
+        'addInscription' => $hj('sd_add_inscription'),
+        'keepCase' => $uaeSolitaire,
+        'arabicDigits' => $uaeSolitaire,
+        'expertOnZero' => $uaeMarket,
+        'selectMetal' => $hj('sd_select_metal'),
+        'selectCarat' => $hj('sd_select_carat'),
+        'selectSize' => $hj('sd_select_size'),
+        'certIgi' => $hj('sd_cert_igi'),
+        'certHrd' => $hj('sd_cert_hrd'),
+        'certGia' => $hj('sd_cert_gia'),
+        'certBoth' => $hj('sd_cert_hrd_gia'),
+        'colors' => [
+            'WHITE' => $uaeSolitaire ? $hj('sd_white') : 'WHITE',
+            'YELLOW' => $uaeSolitaire ? $hj('sd_yellow') : 'YELLOW',
+            'ROSE' => $uaeSolitaire ? $hj('sd_rose') : 'ROSE',
+            'PLATINUM' => $uaeSolitaire ? $hj('sd_platinum') : 'PLATINUM',
+        ],
+    ];
+@endphp
 <script>
+    const hjCopy = @json($hjCopy);
+    function hjDigits(value) {
+        const text = String(value ?? '');
+        if (!hjCopy.arabicDigits) {
+            return text;
+        }
+        const map = { '0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤', '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩', '.': '٫' };
+        return text.replace(/[0-9.]/g, function (ch) { return map[ch] || ch; });
+    }
+
     /** Inscription Modal Script */
 document.addEventListener('DOMContentLoaded', function () {
     const openBtn = document.getElementById('hjOpenInscription');
@@ -1541,9 +1633,9 @@ document.addEventListener('DOMContentLoaded', function () {
         hiddenInput.value = value;
 
         if (value) {
-            btnText.textContent = 'Inscription: ' + value;
+            btnText.textContent = hjCopy.inscription + ': ' + value;
         } else {
-            btnText.textContent = 'Add Free Inscription';
+            btnText.textContent = hjCopy.addInscription;
         }
 
         closeModal();
@@ -1652,27 +1744,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCertificate(carat) {
         const value = Number(carat && carat.value ? carat.value : carat);
-        let name = 'IGI CERTIFICATE INCLUDED';
+        let name = hjCopy.certIgi;
         let logos = [
             { src: certificateLogoUrls.igi, alt: 'IGI certificate logo' }
         ];
 
         if (value >= 1.00) {
-            name = 'HRD & GIA CERTIFICATES INCLUDED';
+            name = hjCopy.certBoth;
             logos = [
                 { src: certificateLogoUrls.gia, alt: 'GIA certificate logo' }
             ];
         } else if (value >= 0.70) {
-            name = 'HRD CERTIFICATE INCLUDED';
+            name = hjCopy.certHrd;
             logos = [];
         } else if (value >= 0.50) {
-            name = 'GIA CERTIFICATE INCLUDED';
+            name = hjCopy.certGia;
             logos = [
                 { src: certificateLogoUrls.gia, alt: 'GIA certificate logo' }
             ];
         }
 
-        const summary = name.toLowerCase().replace(/\b\w/g, function (letter) {
+        const summary = hjCopy.keepCase ? name : name.toLowerCase().replace(/\b\w/g, function (letter) {
             return letter.toUpperCase();
         });
 
@@ -1760,7 +1852,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (metal.tone) {
-            return String(metal.tone).toUpperCase();
+            const tone = String(metal.tone).toUpperCase();
+            return hjCopy.colors[tone] || tone;
         }
 
         const metalText = String(metal.name || '').toLowerCase();
@@ -1878,7 +1971,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 html += `
                     <div class="hj-gallery-item hj-product-image-item">
-                        ${index === 0 ? '<span class="hj-badge">Ready for Sale</span>' : ''}
+                        ${index === 0 ? '<span class="hj-badge">' + hjCopy.ready + '</span>' : ''}
                         <img 
                             src="${imagePath}" 
                             alt="${image.alt_text || data.name || 'Product image'}"
@@ -1960,15 +2053,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const metalColor = getMetalColor(metal);
 
         if (selectedMetalBtn) {
-            selectedMetalBtn.textContent = metalName.toUpperCase();
+            selectedMetalBtn.textContent = hjCopy.keepCase ? metalName : metalName.toUpperCase();
         }
 
         if (selectedMetalTitle) {
-            selectedMetalTitle.textContent = 'Solitaire Engagement Ring - ' + metalName;
+            selectedMetalTitle.textContent = hjCopy.ringTitle + ' - ' + metalName;
         }
 
         if (selectedMetalSpec) {
-            selectedMetalSpec.textContent = metalName.toUpperCase();
+            selectedMetalSpec.textContent = hjCopy.keepCase ? metalName : metalName.toUpperCase();
         }
 
         if (selectedMetalColorSpec) {
@@ -1988,14 +2081,31 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (caratBtn) {
-            caratBtn.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
+            caratBtn.textContent = hjDigits(carat.label || carat.value) + ' ' + hjCopy.carat;
         }
 
         if (selectedCaratSpec) {
-            selectedCaratSpec.textContent = String((carat.label || carat.value) + ' CARAT').toUpperCase();
+            selectedCaratSpec.textContent = hjDigits(carat.label || carat.value) + ' ' + hjCopy.carat;
         }
 
         updateCertificate(carat);
+
+        function syncExpertOffer(variant) {
+            if (!hjCopy.expertOnZero) {
+                return;
+            }
+
+            const priced = !!(variant && Number(variant.price) > 0);
+            const priceBlock = document.getElementById('hjPriceBlock');
+            const buyBtn = document.getElementById('hjCartSubmitBtn');
+            const expertBtn = document.getElementById('hjTalkExpertBtn');
+
+            if (priceBlock) priceBlock.hidden = !priced;
+            if (buyBtn) buyBtn.hidden = !priced;
+            if (expertBtn) expertBtn.hidden = priced;
+        }
+
+        syncExpertOffer(variant);
 
         if (variant) {
             if (oldPriceEl) {
@@ -2007,12 +2117,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (newPriceEl) {
                 newPriceEl.textContent = variant.price
                     ? formatMoney(variant.price)
-                    : 'Unavailable';
+                    : hjCopy.unavailable;
             }
 
             if (savingTextEl) {
                 savingTextEl.textContent = variant.discount_percent
-                    ? 'You save ' + variant.discount_percent + ' %'
+                    ? hjCopy.youSave + ' ' + variant.discount_percent + ' %'
                     : '';
             }
 
@@ -2031,7 +2141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             if (oldPriceEl) oldPriceEl.textContent = '';
-            if (newPriceEl) newPriceEl.textContent = 'Unavailable';
+            if (newPriceEl) newPriceEl.textContent = hjCopy.unavailable;
             if (savingTextEl) savingTextEl.textContent = '';
             if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
         }
@@ -2209,7 +2319,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!selectedSize) return;
 
             if (sizeSelected) {
-                sizeSelected.textContent = selectedSize;
+                sizeSelected.textContent = this.textContent.trim();
                 sizeSelected.classList.remove('hj-ring-size-placeholder');
             }
 
@@ -2379,18 +2489,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!cartMetal || !cartMetal.value) {
-            showToast('error', 'Please select metal.');
+            showToast('error', hjCopy.selectMetal);
             return;
         }
 
         if (!cartCarat || !cartCarat.value) {
-            showToast('error', 'Please select carat.');
+            showToast('error', hjCopy.selectCarat);
             return;
         }
 
         if (!cartRingSize || !cartRingSize.value) {
             showRingSizeError();
-            showToast('error', 'Please select ring size.');
+            showToast('error', hjCopy.selectSize);
             if (sizeToggle) {
                 sizeToggle.focus();
             }
