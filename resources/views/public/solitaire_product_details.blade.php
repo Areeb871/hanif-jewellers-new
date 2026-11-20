@@ -4,6 +4,7 @@
 @php
     $uaeSolitaire = app()->getLocale() === 'ar';
     $uaeMarket = \App\Models\Products::currentMarket() === 'uae';
+    $hideSolitairePrice = $uaeMarket || $uaeSolitaire;
     $hj = function (string $key) use ($uaeSolitaire) {
         return $uaeSolitaire ? trans('site.'.$key, [], 'ar') : __('site.'.$key);
     };
@@ -624,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="hj-row hj-carat-row">
         <span class="hj-label">
             {{ $hj('sd_total_carat') }}
-            <small id="caratPriceDiff"></small>
+            <small id="caratPriceDiff" @if($hideSolitairePrice) hidden @endif></small>
         </span>
 
         <div class="hj-middle hj-slider-box">
@@ -730,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     @php
-        $expertOnly = $uaeMarket && (float) ($selectedVariant['price'] ?? 0) <= 0;
+        $expertOnly = $hideSolitairePrice || ($uaeMarket && (float) ($selectedVariant['price'] ?? 0) <= 0);
     @endphp
     <div class="hj-price-row">
         <div class="hj-price-left" id="hjPriceBlock" @if($expertOnly) hidden @endif>
@@ -1288,6 +1289,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         {{ $defaultCarat ?: '0.25' }} {{ __('site.solitaire_total_carat') }} · {{ $relatedProduct->displayShape() }} · {{ __('site.solitaire_word') }} · {{ $relatedProduct->displayMetalName(is_array($defaultMetal) ? $defaultMetal : []) }}
                     </p>
 
+                    @unless($hideSolitairePrice)
                     <div class="hj-lab-price-row">
                         @if($oldPrice)
                             <span class="hj-old-price">
@@ -1305,6 +1307,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </span>
                         @endif
                     </div>
+                    @endunless
                 </div>
             </a>
 
@@ -1539,6 +1542,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'keepCase' => $uaeSolitaire,
         'arabicDigits' => $uaeSolitaire,
         'expertOnZero' => $uaeMarket,
+        'hidePrices' => $hideSolitairePrice,
         'selectMetal' => $hj('sd_select_metal'),
         'selectCarat' => $hj('sd_select_carat'),
         'selectSize' => $hj('sd_select_size'),
@@ -2091,14 +2095,23 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCertificate(carat);
 
         function syncExpertOffer(variant) {
+            const priceBlock = document.getElementById('hjPriceBlock');
+            const buyBtn = document.getElementById('hjCartSubmitBtn');
+            const expertBtn = document.getElementById('hjTalkExpertBtn');
+
+            if (hjCopy.hidePrices) {
+                if (priceBlock) priceBlock.hidden = true;
+                if (buyBtn) buyBtn.hidden = true;
+                if (expertBtn) expertBtn.hidden = false;
+                if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
+                return;
+            }
+
             if (!hjCopy.expertOnZero) {
                 return;
             }
 
             const priced = !!(variant && Number(variant.price) > 0);
-            const priceBlock = document.getElementById('hjPriceBlock');
-            const buyBtn = document.getElementById('hjCartSubmitBtn');
-            const expertBtn = document.getElementById('hjTalkExpertBtn');
 
             if (priceBlock) priceBlock.hidden = !priced;
             if (buyBtn) buyBtn.hidden = !priced;
@@ -2106,6 +2119,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         syncExpertOffer(variant);
+
+        if (hjCopy.hidePrices) {
+            if (oldPriceEl) oldPriceEl.textContent = '';
+            if (newPriceEl) newPriceEl.textContent = '';
+            if (savingTextEl) savingTextEl.textContent = '';
+            if (caratPriceDiffEl) caratPriceDiffEl.textContent = '';
+            return;
+        }
 
         if (variant) {
             if (oldPriceEl) {

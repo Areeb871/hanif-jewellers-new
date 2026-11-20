@@ -245,6 +245,7 @@ class PagesController extends Controller
         try {
             $validated = $request->validate([
                 'description' => 'required|string',
+                'uae_description' => 'nullable|string',
             ]);
 
             $page = PageContent::firstOrCreate(
@@ -255,6 +256,7 @@ class PagesController extends Controller
             $page->update([
                 'title' => 'Privacy Policy',
                 'description' => $validated['description'],
+                'uae_description' => $validated['uae_description'] ?? null,
             ]);
 
             return redirect()->route('admin.privacy-policy.edit')->with('success', 'Privacy policy updated successfully.');
@@ -282,6 +284,7 @@ class PagesController extends Controller
         try {
             $validated = $request->validate([
                 'description' => 'required|string',
+                'uae_description' => 'nullable|string',
             ]);
 
             $page = RefundPolicy::firstOrCreate(
@@ -292,6 +295,7 @@ class PagesController extends Controller
             $page->update([
                 'title' => 'Refund Policy',
                 'description' => $validated['description'],
+                'uae_description' => $validated['uae_description'] ?? null,
             ]);
 
             return redirect()->route('admin.refund-policy.edit')->with('success', 'Refund policy updated successfully.');
@@ -319,6 +323,7 @@ class PagesController extends Controller
         try {
             $validated = $request->validate([
                 'description' => 'required|string',
+                'uae_description' => 'nullable|string',
             ]);
 
             $page = TermsService::firstOrCreate(
@@ -329,6 +334,7 @@ class PagesController extends Controller
             $page->update([
                 'title' => 'Terms of Service',
                 'description' => $validated['description'],
+                'uae_description' => $validated['uae_description'] ?? null,
             ]);
 
             return redirect()->route('admin.terms-service.edit')->with('success', 'Terms of Service updated successfully.');
@@ -356,6 +362,7 @@ class PagesController extends Controller
         try {
             $validated = $request->validate([
                 'description' => 'required|string',
+                'uae_description' => 'nullable|string',
             ]);
 
             $page = ShippingPolicy::firstOrCreate(
@@ -366,6 +373,7 @@ class PagesController extends Controller
             $page->update([
                 'title' => 'Shipping Policy',
                 'description' => $validated['description'],
+                'uae_description' => $validated['uae_description'] ?? null,
             ]);
 
             return redirect()->route('admin.shipping-policy.edit')->with('success', 'Shipping policy updated successfully.');

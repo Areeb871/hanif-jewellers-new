@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUaeDescription;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TermsService extends Model
 {
     use HasFactory;
+    use HasUaeDescription;
 
     protected $table = 'terms_service';
 
@@ -15,6 +17,7 @@ class TermsService extends Model
         'slug',
         'title',
         'description',
+        'uae_description',
     ];
 }
 

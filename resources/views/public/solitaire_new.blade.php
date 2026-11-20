@@ -1,6 +1,9 @@
 @extends('public.layouts.header_black_white_fixed')
 
 @section('content')
+@php
+    $hideSolitairePrice = \App\Models\Products::currentMarket() === 'uae';
+@endphp
    <link rel="stylesheet" href="{{ asset('assets/f_assets/css/solitaire.css') }}">
    <script>window.HJ_CURRENCY_LABEL = @json(__('site.currency_pkr'));</script>
        <script src="{{ asset('assets/f_assets/js/filter.js') }}?v={{ filemtime(public_path('assets/f_assets/js/filter.js')) }}"></script>
@@ -71,10 +74,12 @@
                 <i class="hj-chevron"></i>
             </button>
 
+            @unless($hideSolitairePrice)
             <button class="hj-filter-btn" id="priceFilterBtn" type="button">
                 <span>{{ __('site.price_ranges') }}</span>
                 <i class="hj-chevron"></i>
             </button>
+            @endunless
 
         </div>
 
@@ -208,6 +213,7 @@
 
     <!-- DESKTOP PRICE PANEL -->
     <!-- DESKTOP PRICE PANEL -->
+@unless($hideSolitairePrice)
 <div class="hj-price-panel" id="pricePanel">
     <div class="hj-price-range-box hj-desktop-price-range-box">
 
@@ -275,6 +281,7 @@
     </button>
 </div>
 </div>
+@endunless
 
 
 <!-- MOBILE FILTER MODAL -->
@@ -388,6 +395,7 @@
     </div>
 </div>
         <!-- PRICE -->
+        @unless($hideSolitairePrice)
         <div class="hj-mobile-filter-block active">
             <button type="button" class="hj-mobile-filter-title">
                 <span>{{ __('site.price') }}</span>
@@ -443,6 +451,7 @@
 
             </div>
         </div>
+        @endunless
 
         <!-- SHAPES -->
         <div class="hj-mobile-filter-block active">
@@ -675,6 +684,7 @@
                     @endforeach
                 </div>
 
+                @unless($hideSolitairePrice)
                 <div class="hj-price-row">
                     <del class="hj-old-price">
                         {{ $oldPrice ? $formatMoney($oldPrice) : '' }}
@@ -688,6 +698,7 @@
                         {{ $discount ? $discount . '% off' : '' }}
                     </span>
                 </div>
+                @endunless
             </div>
 
         </article>
@@ -960,9 +971,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (oldPriceEl) {
-                oldPriceEl.textContent = variant && variant.old_price
+                oldPriceEl.textContent = @json($hideSolitairePrice) ? '' : (variant && variant.old_price
                     ? formatMoney(variant.old_price, data.currency || 'PKR')
-                    : '';
+                    : '');
             }
 
             if (newPriceEl) {

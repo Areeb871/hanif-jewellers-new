@@ -26,10 +26,7 @@
 
                 <form method="POST" action="{{ route('admin.refund-policy.update') }}">
                     @csrf
-                    <div class="mb-5">
-                        <label for="description" class="form-label fw-semibold">Description</label>
-                        <textarea name="description" id="description" class="form-control" rows="10">{{ old('description', $page->description) }}</textarea>
-                    </div>
+                    @include('admin.pages.partials.policy-editors')
                     <div class="text-end">
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
@@ -41,14 +38,7 @@
 @endsection
 
 @section('jsfiles')
-<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#description'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
+@include('admin.pages.partials.policy-editors-js')
 @endsection
 
 
