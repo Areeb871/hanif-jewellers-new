@@ -264,10 +264,7 @@ class GoldPriceCalculator
             return (float) $matches[1];
         }
 
-        $normalized = strtr($description, [
-            '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
-            '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
-        ]);
+        $normalized = self::westernDigits($description);
 
         // Arabic: الوزن: 9.25 غرامًا / جرامًا / غرام / g
         if (preg_match(
@@ -281,21 +278,30 @@ class GoldPriceCalculator
         return null;
     }
 
-    private static function detectKarat(string $description): ?int
+    private static function westernDigits(string $text): string
     {
-        if (preg_match('/\bmetal\s*:\s*(18|21|22|24)\s*k/i', $description, $matches)) {
-            return (int) $matches[1];
-        }
-
-        if (preg_match('/\b(18|21|22|24)\s*k/i', $description, $matches)) {
-            return (int) $matches[1];
-        }
-
-        // Emirati / Arabic labels, e.g. "المعدن: ذهب عيار 21" or Eastern numerals.
-        $normalized = strtr($description, [
+        return strtr($text, [
             '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
             '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
         ]);
+    }
+
+    private static function detectKarat(string $description): ?int
+    {
+        $normalized = self::westernDigits($description);
+
+        if (preg_match('/\bmetal\s*:\s*(18|21|22|24)\s*k/i', $normalized, $matches)) {
+            return (int) $matches[1];
+        }
+
+        if (preg_match('/\b(18|21|22|24)\s*k/i', $normalized, $matches)) {
+            return (int) $matches[1];
+        }
+
+        // Emirati Arabic: ١٨ قيراط، ٢١ قيراط، ٢٢ قيراط، ٢٤ قيراط
+        if (preg_match('/(18|21|22|24)\s*قيراط/u', $normalized, $matches)) {
+            return (int) $matches[1];
+        }
 
         if (preg_match('/عيار\s*(18|21|22|24)/u', $normalized, $matches)) {
             return (int) $matches[1];

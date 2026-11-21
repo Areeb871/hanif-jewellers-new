@@ -16,8 +16,13 @@ class DiamondPriceCalculator
             return null;
         }
 
+        $description = $product->marketDescription($market);
+        if (Products::plainText($description) === '') {
+            $description = $product->description ?? '';
+        }
+
         return self::calculateFromDescription(
-            $product->description ?? '',
+            $description,
             $diamondPrice,
             filled($product->marketGoldWeight($market)) ? (float) $product->marketGoldWeight($market) : null,
             $market
@@ -94,24 +99,34 @@ class DiamondPriceCalculator
         return trim($text);
     }
 
-    private static function detectKarat(string $description): ?int
+    private static function westernDigits(string $text): string
     {
-        if (preg_match('/\bmetal\s*:\s*(?:rose|white|yellow)\s+gold\s+(18|21|22|24)\s*k/i', $description, $m)) {
-            return (int) $m[1];
-        }
-
-        if (preg_match('/\bmetal\s*:\s*(18|21|22|24)\s*k/i', $description, $m)) {
-            return (int) $m[1];
-        }
-
-        if (preg_match('/\b(18|21|22|24)\s*k/i', $description, $m)) {
-            return (int) $m[1];
-        }
-
-        $normalized = strtr($description, [
+        return strtr($text, [
             '٠' => '0', '١' => '1', '٢' => '2', '٣' => '3', '٤' => '4',
             '٥' => '5', '٦' => '6', '٧' => '7', '٨' => '8', '٩' => '9',
         ]);
+    }
+
+    private static function detectKarat(string $description): ?int
+    {
+        $normalized = self::westernDigits($description);
+
+        if (preg_match('/\bmetal\s*:\s*(?:rose|white|yellow)\s+gold\s+(18|21|22|24)\s*k/i', $normalized, $m)) {
+            return (int) $m[1];
+        }
+
+        if (preg_match('/\bmetal\s*:\s*(18|21|22|24)\s*k/i', $normalized, $m)) {
+            return (int) $m[1];
+        }
+
+        if (preg_match('/\b(18|21|22|24)\s*k/i', $normalized, $m)) {
+            return (int) $m[1];
+        }
+
+        // Emirati Arabic: ١٨ قيراط، ٢١ قيراط، ٢٢ قيراط، ٢٤ قيراط
+        if (preg_match('/(18|21|22|24)\s*قيراط/u', $normalized, $m)) {
+            return (int) $m[1];
+        }
 
         if (preg_match('/عيار\s*(18|21|22|24)/u', $normalized, $m)) {
             return (int) $m[1];

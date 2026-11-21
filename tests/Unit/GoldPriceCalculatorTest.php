@@ -163,6 +163,19 @@ class GoldPriceCalculatorTest extends TestCase
         $this->assertNull(GoldPriceCalculator::extractWeightFromDescription($description));
     }
 
+    public function test_emirati_arabic_karat_labels_are_detected(): void
+    {
+        $detect = new \ReflectionMethod(GoldPriceCalculator::class, 'detectKarat');
+        $detect->setAccessible(true);
+
+        $this->assertSame(18, $detect->invoke(null, 'المعدن: ذهب ١٨ قيراط'));
+        $this->assertSame(21, $detect->invoke(null, 'ذهب ٢١ قيراط'));
+        $this->assertSame(22, $detect->invoke(null, '٢٢ قيراط'));
+        $this->assertSame(24, $detect->invoke(null, 'ذهب عيار ٢٤ قيراط'));
+        $this->assertSame(21, $detect->invoke(null, 'المعدن: ذهب عيار 21'));
+        $this->assertSame(18, $detect->invoke(null, 'Metal: 18k'));
+    }
+
     private function fineService(): GoldServiceSetting
     {
         return new GoldServiceSetting([
