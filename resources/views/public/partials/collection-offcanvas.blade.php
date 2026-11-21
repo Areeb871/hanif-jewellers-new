@@ -40,6 +40,7 @@
                             'JEWELPHABETS' => __('site.col_jewelphabets'),
                             'MONA LISA' => __('site.col_mona'),
                             'SELENE' => __('site.col_selene'),
+                            'MIRAS' => __('site.col_miras'),
                         ];
                         $collectionLabel = $collectionLabels[$collectionName] ?? $collectionName;
                         if (app()->getLocale() !== 'ar') {

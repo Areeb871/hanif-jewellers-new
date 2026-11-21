@@ -945,6 +945,7 @@ $menus = [
         ['label' => __('site.col_marchisio'),        'url' => route('marchisio')],
         ['label' => __('site.col_divine'), 'url' => route('divine-treasures')],
         ['label' => 'MOMENTU',       'url' => url('/collections/momentu')],
+        ['label' => __('site.col_miras'), 'url' => route('miras')],
 
     ],
      'Festive' => [
@@ -956,9 +957,11 @@ $menus = [
 
 ];
 
-'img' => 'assets/f_assets/image/highend/9.png',    
-'btn' => __('site.explore_collection'),
+$card = [
+    'img' => 'assets/f_assets/image/highend/9.png',
+    'btn' => __('site.explore_collection'),
     'url' => url('collections/nagar'),
+];
 @endphp
 
 

@@ -411,6 +411,14 @@
         height: 34px;
         overflow: visible;
     }
+
+    header.mobile-header-main .hj-lang-mobile-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 4px 6px;
+        white-space: nowrap;
+    }
 }
 .mobile-nav-icon {
     font-size: 18px;
@@ -529,12 +537,11 @@
                 </a>
             </div>
 
-            <!-- Right: Search + Cart -->
+            <!-- Right: Gold + Search -->
             <div class="col-3">
                 <div class="mobile-nav-icons d-flex justify-content-end align-items-center gap-3">
 
                     @include('public.partials.gold-prices-menu')
-                    @include('public.partials.language-switch')
 
                     <!-- Search (same modal as desktop) -->
                     <a href="#"
@@ -567,6 +574,9 @@
             </div>
 
         </div>
+        <div class="hj-lang-mobile-bar">
+            @include('public.partials.language-switch')
+        </div>
     </div>
 </div>
 
@@ -589,7 +599,7 @@
         'TAJ MAHAL' => route('taj-mahal'),
         'GULPOSH' => route('gulposh'),
         'PURE LOCK' => route('pure-lock'),
-        'MOMENTU' => url('/collections/momentu'),
+        'MIRAS' => route('miras'),
     ];
     
     $jewelryCollections = \App\Models\Subcategory::where([['status', 'active'],['category_id', 1]])->get();
@@ -597,7 +607,7 @@
     $highEndCollections =  ['HASHT', 'QAWS-AL-MATAR','NAGAR', 'GULPOSH','GOHAR','HAPHAZARD'];
     $bridalCollections = [ 'GEHNAWA', 'NAVRATAN', 'TAJ MAHAL', 'HERITAGE','BREATHTAKING','CLEOPATRA','DIVINE TREASURES','MARCHISIO','TIMLESS JEWELS'];
     $seasonalCollections = ['EID PAR SONY KI CHORIYAN', 'VALENTINE JEWELS', 'WINTER JEWELS'];
-    $lifestyleCollections = ['EHED', 'JEWELPHABETS', 'MONA LISA', 'PURE LOCK', 'SELENE', 'MOMENTU'];
+    $lifestyleCollections = ['EHED', 'JEWELPHABETS', 'MONA LISA', 'PURE LOCK', 'SELENE', 'MIRAS'];
 @endphp
 
 <!-- Mobile Offcanvas Menu -->
@@ -626,7 +636,7 @@
      href="#jewelryMenu"
      role="button">
 
-     {{ __('site.jewelry') }}
+     {{ __('site.jewellery') }}
      <span class="mobile-arrow">▲</span>
 
   </a>
@@ -658,6 +668,7 @@
 <li><a href="/collections/selene">{{ __('site.col_selene') }}</a></li>
 <li><a href="{{ url('/collections/divine-treasures') }}">{{ __('site.col_divine') }}</a></li>
 <li><a href="{{ url('/collections/marchisio') }}">{{ __('site.col_marchisio') }}</a></li>
+<li><a href="{{ route('miras') }}">{{ __('site.col_miras') }}</a></li>
     </ul>
     
      <!-- <div class="menu-section-title">

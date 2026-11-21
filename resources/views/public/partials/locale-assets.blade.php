@@ -50,6 +50,22 @@
     color: #111;
     margin-inline-end: 4px;
 }
+.hj-lang-mobile-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 8px 8px;
+    color: #111;
+}
+.hj-lang-mobile-bar .hj-lang-switch {
+    gap: 10px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+.hj-lang-mobile-bar .hj-lang-switch button {
+    padding: 6px 2px;
+    min-height: 32px;
+}
 html[dir="rtl"] body {
     font-family: "Cairo", "Helvetica Neue", Arial, sans-serif !important;
 }
@@ -80,13 +96,23 @@ html:not([dir="rtl"]) .luxury-header .header-left a,
 html:not([dir="rtl"]) .luxury-header .header-right,
 html:not([dir="rtl"]) .luxury-header .header-static-tools,
 html:not([dir="rtl"]) .luxury-header .hj-lang-switch,
-html:not([dir="rtl"]) .luxury-header .hj-lang-switch button,
-html:not([dir="rtl"]) header.mobile-header-main .hj-lang-switch,
-html:not([dir="rtl"]) header.mobile-header-main .hj-lang-switch button {
+html:not([dir="rtl"]) .luxury-header .hj-lang-switch button {
     font-family: "Argent CF", Georgia, serif !important;
     font-weight: 100 !important;
     font-size: 14px !important;
     font-synthesis: none !important;
+}
+html:not([dir="rtl"]) header.mobile-header-main .hj-lang-switch,
+html:not([dir="rtl"]) header.mobile-header-main .hj-lang-switch button {
+    font-family: "Argent CF", Georgia, serif !important;
+    font-weight: 100 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.7px !important;
+    font-synthesis: none !important;
+}
+html:not([dir="rtl"]) header.mobile-header-main .hj-lang-switch button[lang="ar"] {
+    font-size: 12px !important;
+    letter-spacing: 0 !important;
 }
 html[dir="rtl"] .mega-menu .mega-heading::after,
 html[dir="rtl"] .menu-section-title::after {

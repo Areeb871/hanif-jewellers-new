@@ -491,6 +491,7 @@ return [
     'col_marchisio' => 'MARCHISIO',
     'col_divine' => 'DIVINE TREASURES',
     'col_momentu' => 'MOMENTO',
+    'col_miras' => 'MIRAS',
     'col_nagar' => 'NAGAR',
     'col_revealed_soon' => 'Collections Revealed Soon!.',
     'high_jewellery' => 'High Jewellery',
