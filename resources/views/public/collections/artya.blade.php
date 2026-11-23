@@ -222,12 +222,12 @@
     text-align: center;
 }
 
-.watchland-text-top p{
+/* .watchland-text-top p{
     margin: 0;
     font-size: 14px;
     line-height: 1.8;
     color: #222;
-}
+} */
 
 /* ArtyA typography and visually balanced spacing. */
 .watchland-text-top{
@@ -236,6 +236,7 @@
 
 .watchland-text-top p{
     max-width:700px;
+    padding:10px;
     margin:0 auto;
     font-family:"Poppins", sans-serif;
     font-size:13px;
@@ -416,7 +417,7 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('artyaSeriesList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Series <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="artyaSeriesList">
-                @php $series = ['purity','Complexity','aqua','russian-roulette']; @endphp
+                    @php $series = ['purity','Complexity','aqua','russian-roulette']; @endphp
                     @foreach($series as $s)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox artya-filter" data-group="series" value="{{ $s }}" {{ $selectedTags->contains($s) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ ucwords(str_replace(['-'], [' '], $s)) }}</span></li>
                     @endforeach
@@ -425,7 +426,7 @@ Explore a world of limitless watchmaking creativity with ArtyA, the Geneva-based
             <div class="mt-3">
                 <div class="filter-section-title" onclick="toggleCategory('artyaSizeList', this.querySelector('.category-toggle'))" style="font-size: 14px !important;">Case Size <span class="category-toggle">+</span></div>
                 <ul class="category-list collapsible" id="artyaSizeList">
-                         @php $sizes = ['40','41','42','43','44']; @endphp
+                    @php $sizes = ['40','41','42','43','44']; @endphp
                     @foreach($sizes as $sz)
                         <li><input type="checkbox" class="form-check-input filter-tag-checkbox artya-filter" data-group="size" value="{{ $sz }}" {{ $selectedTags->contains($sz) ? 'checked' : '' }} onclick="event.stopPropagation();"> <span class="subcat-label">{{ $sz }}mm</span></li>
                     @endforeach

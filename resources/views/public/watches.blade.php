@@ -405,7 +405,7 @@ section{
         font-weight: 400;
     }
     .ehed-main-title-perrelet {
-        font-size: 3rem;
+        font-size: 2.5rem;
         color: #000;
         font-family: Walbaum;
         margin-bottom: 36px;
@@ -668,7 +668,7 @@ section{
         height: auto !important;
         object-fit: contain !important;
         display: block;
-        margin-top:0px;
+        margin-top:70px;
     }
 }
 </style>

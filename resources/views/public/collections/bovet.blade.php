@@ -67,7 +67,7 @@
     $desktopAsset = $bovetSubcategory->banner_url ?? null;
 
     // Mobile asset (custom Bovet mobile video fallback)
-    $mobileAsset = 'assets/f_assets/image/watches mobile view/Bovet-mob-view.avif';
+    $mobileAsset = 'assets/f_assets/image/watches mobile view/bovet_mobile_view.mp4';
 
     // Detect types
     $desktopIsVideo = $desktopAsset && Str::endsWith($desktopAsset, ['.mp4', '.webm', '.ogg']);
