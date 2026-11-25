@@ -55,13 +55,16 @@ Route::post('/locale', function (Request $request) {
         default => ['en', 'pk'],
     };
 
+    $isAuto = $request->input('source') === 'auto';
+
     $request->session()->put('locale', $locale);
     $request->session()->put('market', $market);
-    $request->session()->put('market_source', 'manual');
+    $request->session()->put('market_source', $isAuto ? 'geo' : 'manual');
     $request->session()->save();
 
     $region = $choice === 'ar' ? 'ar' : ($choice === 'uae' ? 'uae' : 'pk');
     $referer = (string) $request->headers->get('referer', '');
+    $autoQuery = $isAuto ? '&auto=1' : '';
 
     // Always land on a region URL so live/CDN caches of "/" cannot keep
     // serving the Pakistan homepage after UAE or Arabic is selected.
@@ -73,11 +76,14 @@ Route::post('/locale', function (Request $request) {
         } else {
             $target = preg_replace('/([?&])region=[^&]*/', '${1}region='.$region, $target) ?: $target;
         }
+        if ($isAuto && ! str_contains($target, 'auto=')) {
+            $target .= (str_contains($target, '?') ? '&' : '?').'auto=1';
+        }
 
         return redirect()->to($target);
     }
 
-    return redirect()->to(url('/').'?region='.$region);
+    return redirect()->to(url('/').'?region='.$region.$autoQuery);
 })->name('locale.set');
 Route::get('/collections/online-shopping-store', [HomeController::class, 'Online_Shopping_Store']);
 Route::get('/pages/contact-us', [HomeController::class, 'contact_us'])->name('contact-us');

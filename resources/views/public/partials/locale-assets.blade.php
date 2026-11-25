@@ -270,3 +270,115 @@ document.addEventListener('DOMContentLoaded', function () {
 }, true);
 </script>
 @endif
+<script>
+window.__HJ_REGION = {
+    market: @json(session('market', app()->getLocale() === 'ar' ? 'uae' : 'pk')),
+    source: @json(session('market_source', 'geo'))
+};
+(function () {
+    var cfg = window.__HJ_REGION || {};
+
+    function readCookie(name) {
+        var parts = ('; ' + document.cookie).split('; ' + name + '=');
+        if (parts.length < 2) {
+            return '';
+        }
+        return parts.pop().split(';').shift();
+    }
+
+    function writeCookie(name, value) {
+        document.cookie = name + '=' + value + ';path=/;max-age=15552000;SameSite=Lax';
+    }
+
+    function browserLocation() {
+        var timezone = '';
+        try {
+            timezone = String(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+        } catch (e) {}
+        var language = String(navigator.language || navigator.userLanguage || '').toLowerCase();
+        var offset = new Date().getTimezoneOffset();
+        var utc = offset === 0 ? 'UTC' : ('UTC' + (offset > 0 ? '-' : '+') + Math.abs(offset / 60));
+
+        return {
+            timezone: timezone,
+            language: language,
+            offsetMinutes: offset,
+            utc: utc
+        };
+    }
+
+    function detectRegion(info) {
+        var zone = String(info.timezone || '').toLowerCase();
+        var language = info.language || '';
+        var offset = info.offsetMinutes;
+
+        if (zone === 'asia/dubai' || zone.indexOf('dubai') !== -1 || zone.indexOf('abu_dhabi') !== -1 || zone.indexOf('abudhabi') !== -1) {
+            return 'uae';
+        }
+        if (zone === 'asia/karachi' || zone.indexOf('karachi') !== -1) {
+            return 'pk';
+        }
+        if (language.indexOf('-ae') !== -1) {
+            return 'uae';
+        }
+        if (language.indexOf('-pk') !== -1) {
+            return 'pk';
+        }
+        if (offset === -240) {
+            return 'uae';
+        }
+        if (offset === -300) {
+            return 'pk';
+        }
+        return null;
+    }
+
+    function regionCheck() {
+        var info = browserLocation();
+        var detected = detectRegion(info);
+        var result = {
+            timezone: info.timezone,
+            utc: info.utc,
+            language: info.language,
+            detected: detected || 'unknown',
+            currentSite: cfg.market === 'uae' ? 'uae' : 'pk',
+            source: cfg.source || 'geo',
+            cookie: readCookie('hj_browser_region') || '(none)',
+            url: window.location.href
+        };
+        console.log('[Hanif region]', result);
+        return result;
+    }
+
+    window.hjRegionCheck = regionCheck;
+
+    var info = browserLocation();
+    var detected = detectRegion(info);
+    regionCheck();
+
+    if (cfg.source === 'manual') {
+        return;
+    }
+
+    if (!detected) {
+        return;
+    }
+
+    if (readCookie('hj_browser_region') !== detected) {
+        writeCookie('hj_browser_region', detected);
+    }
+
+    var current = cfg.market === 'uae' ? 'uae' : 'pk';
+    var params = new URLSearchParams(window.location.search);
+    if (detected === current && (params.get('region') === detected || !params.get('region'))) {
+        return;
+    }
+    if (params.get('region') === detected && params.get('auto') === '1') {
+        return;
+    }
+
+    params.set('region', detected);
+    params.set('auto', '1');
+    window.location.replace(window.location.pathname + '?' + params.toString() + window.location.hash);
+})();
+</script>

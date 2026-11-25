@@ -731,7 +731,7 @@ public function index()
             ))
             ->header('Cache-Control', 'private, no-store, no-cache, must-revalidate')
             ->header('Pragma', 'no-cache')
-            ->header('Vary', 'Cookie');
+            ->header('Vary', 'Cookie, CF-IPCountry, CloudFront-Viewer-Country');
 
     } catch (\Throwable $th) {
         return response()->json([
